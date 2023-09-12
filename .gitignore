@@ -1,0 +1,8 @@
+node_modules/
+.idea/
+*.bak
+profiler/
+app/public/js/
+api/vendor
+www/*
+data/mysql
