@@ -28,9 +28,10 @@ class Database
         return $query->fetch(); // Récupérer un enregistrement
     }
 
-    protected function executeReq(string $req, array $params = []): void
-    {
-        $query = $this->db->prepare($req);
+    protected function executeReq(string $req, array $params = []): mixed
+    {        
+        $query = $this->db->prepare($req);        
         $query->execute($params);
+        return $query->fetch(\PDO::FETCH_ASSOC);        
     }
 }
