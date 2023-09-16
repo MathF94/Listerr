@@ -47,10 +47,6 @@ CREATE TABLE IF NOT EXISTS `user` (
 -- Déchargement des données de la table `user`
 --
 
-INSERT INTO `user` (`id`, `login`, `password`, `name`, `email`, `role_id`, `created_at`, `updated_at`) VALUES
-(37, 'user_1', '87eMKwAnDvZw2', 'userone', 'user1@hotmail.com', 1, '2023-09-15 12:10:33', '2023-09-15 12:10:33'),
-(38, 'user_2', '87pZSvn68W702', 'usertwo', 'user2@hotmail.com', 1, '2023-09-15 12:12:47', '2023-09-15 12:12:47'),
-(39, 'user_3', '87PKvDy543r9k', 'userthree', 'user3@hotmail.com', 1, '2023-09-15 12:13:12', '2023-09-15 12:13:12');
 
 --
 -- Contraintes pour les tables déchargées

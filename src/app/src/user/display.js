@@ -1,9 +1,9 @@
- function fetchUser() {
-    const url = 'http://localhost/listerr/src/api/?route=user:display';
+async function fetchUser() {
+    const url = 'http://localhost/listerr/src/api/?route=user:display&login=user_3';
     try {
-        const response =  fetch(url, {method: 'GET', headers: {'Content-Type': 'application/json'}})
-        if (response){
-            return  response.json();
+        const response =  await fetch(url, {method: 'GET', headers: {'Content-Type': 'application/json'}})
+        if (await response){
+            return response.json();
         } else {
             console.error('Réponse HTTP non OK :', response.status);
             return null;

@@ -6,12 +6,12 @@ use Services\Database;
 
 class Sessions extends Database
 {
-    public function create(): mixed
+    public function create(string $login, string $id_session): mixed
     {
         try {
             $sql = "INSERT INTO `session_user` (`login`, `id_session`) 
-                    VALUES ('". $_SESSION['login'] ."', 
-                            '" . $_SESSION['id_session'] . "')";                        
+                    VALUES ('{$login}',
+                            '{$id_session}')";                        
             $this->executeReq($sql);
                 return true;
 
@@ -40,17 +40,16 @@ class Sessions extends Database
     {
         try {
             $req = "SELECT `id`, `login`, `id_session`
-                    FROM `session_user`";
+                    FROM `session_user` ";
 
-            $hasWhere = true;
+            $hasWhere = false;
             
-            foreach($params as $key => $value){
-                $andWhere = $hasWhere?'WHERE':'AND';
-                $req.= "$andWhere" . ' ' . $key . ' ' . '= $value' . ' ';
+            foreach(array_keys($params) as $key){
+                $andWhere = $hasWhere?'AND':'WHERE';
+                $req.= "{$andWhere} {$key} = :{$key} ";
                 $hasWhere = true;
             }
-            $params = [];
-            
+
             return $this->findOne($req, $params);
 
         } catch (\Exception $e) {

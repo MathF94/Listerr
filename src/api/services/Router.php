@@ -4,28 +4,23 @@ namespace Services;
 
 use Controllers\UserController;
 
-Class Router
+class Router
 {
-    public function routing()
+    public function routing(): void
     {
-        if(array_key_exists('route', $_GET)): // on vérifie que la route existe dans l'URL
-    
-            switch ($_GET['route']) {                
-                case 'user:index':
+        if (array_key_exists('route', $_GET)) : // on vérifie que la route existe dans l'URL
+
+            switch ($_GET['route']) {
+                case 'user:register':
                     $user = new UserController();
-                    echo $user->index();
+                    echo $user->register(); // create
                     break;
-                    
-                    case 'user:register':
-                        $user = new UserController();
-                        echo $user->register(); // create
-                        break;
-                        
+
                 case 'user:login':
                     $user = new UserController();
                     echo $user->login(); // readOne
                     break;
-                    
+
                 case 'user:display':
                     $user = new UserController();
                     echo $user->display(); // readAll
@@ -42,13 +37,13 @@ Class Router
                     break;
 
                 default:
-                header('Location: index.php'); // on renvoie vers l'index
-                exit;
-                break;
+                    header('Location: index.php'); // on renvoie vers l'index
+                    exit;
+                    break;
             }
-        else: 
+        else :
             header('Location: index.php'); // on renvoie vers l'index
             exit;
-        endif;    
+        endif;
     }
 }

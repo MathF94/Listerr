@@ -25,11 +25,11 @@ Class Users extends Database
         try {
             $password = crypt($params['password'], $this->salt);
             $req = "INSERT INTO `user` (`login`, `password`, `name`, `email`, `role_id`) 
-                    VALUES ('". $params['login'] ."',
-                            '". $password ."',
-                            '". $params['name'] ."',
-                            '". $params['email'] ."',
-                            '". $params['role_id'] ."')";
+                    VALUES ('{$params['login']}',
+                            '{$password}',
+                            '{$params['name']}',
+                            '{$params['email']}',
+                            '{$params['role_id']}')";
                 $this->executeReq($req);
                 return true;
 

@@ -16,22 +16,50 @@ class Database
 
     protected function findAll(string $req, array $params = []): array
     {
-        $query = $this->db->prepare($req);
-        $query->execute($params);
-        return $query->fetchAll(); // Récupérer un jeu d'enregistrements
+        try {
+            $query = $this->db->prepare($req);
+            $query->execute($params);
+            return $query->fetchAll(); // Récupérer un jeu d'enregistrements
+
+        } catch (\Exception $e) {
+            return json_encode([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
     protected function findOne(string $req, array $params = []): array
     {
-        $query = $this->db->prepare($req);
-        $query->execute($params);
-        return $query->fetch(); // Récupérer un enregistrement
+        try {
+            $query = $this->db->prepare($req);
+            $query->execute($params);
+            $result = $query->fetch(); // Récupérer un enregistrement
+            if (empty($result)) {
+                return [];
+            }
+            return $result;
+
+        } catch (\Exception $e) {
+            return json_encode([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
     protected function executeReq(string $req, array $params = []): mixed
     {        
-        $query = $this->db->prepare($req);        
-        $query->execute($params);
-        return $query->fetch(\PDO::FETCH_ASSOC);        
+        try {
+            $query = $this->db->prepare($req);        
+            $query->execute($params);
+            return $query->fetch(\PDO::FETCH_ASSOC);        
+
+        } catch (\Exception $e) {
+            return json_encode([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 }
