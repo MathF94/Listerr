@@ -3,6 +3,8 @@
 namespace Services;
 
 use Controllers\UserController;
+use Controllers\WishController;
+use Controllers\TodoController;
 
 class Router
 {
@@ -33,7 +35,17 @@ class Router
 
                 case 'user:logout':
                     $user = new UserController();
-                    echo $user->logout(); // delete
+                    echo $user->logout($_POST['token_user']); // delete
+                    break;
+
+                case 'wish:index':
+                    $wish = new WishController();
+                    echo $wish->index();
+                    break;
+
+                case 'user:logout':
+                    $todo = new TodoController();
+                    echo $todo->index();
                     break;
 
                 default:

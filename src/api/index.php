@@ -6,10 +6,7 @@ spl_autoload_register(function($class) {                            // $class = 
     require_once lcfirst(str_replace('\\','/', $class)) . '.php';   // require_once controllers/HomeController.php
 });
 
-// use Services\Router;
-use Services\Session;
-
-Session::startSession();
+session_start();
 
 $router = new Services\Router();
 $router->routing();

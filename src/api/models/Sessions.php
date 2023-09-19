@@ -6,12 +6,13 @@ use Services\Database;
 
 class Sessions extends Database
 {
-    public function create(string $login, string $id_session): mixed
+    public function create(string $login, string $token_user, mixed $expired_at_formatted): mixed
     {
         try {
-            $sql = "INSERT INTO `session_user` (`login`, `id_session`) 
+            $sql = "INSERT INTO `session_user` (`login`, `token_user`, `expired_at`) 
                     VALUES ('{$login}',
-                            '{$id_session}')";                        
+                            '{$token_user}',
+                            '{$expired_at_formatted}')";
             $this->executeReq($sql);
                 return true;
 
@@ -24,7 +25,7 @@ class Sessions extends Database
     public function readAll()
     {
         try {
-            $req = "SELECT `id`, `login`, `id_session`
+            $req = "SELECT `id`, `login`, `token_user`, `expired_at`
                     FROM `session_user`
                     ORDER BY `created_at` 
                     DESC"; 
@@ -39,7 +40,7 @@ class Sessions extends Database
     public function readBy(array $params)
     {
         try {
-            $req = "SELECT `id`, `login`, `id_session`
+            $req = "SELECT `id`, `login`, `token_user`, `expired_at`
                     FROM `session_user` ";
 
             $hasWhere = false;
@@ -49,7 +50,7 @@ class Sessions extends Database
                 $req.= "{$andWhere} {$key} = :{$key} ";
                 $hasWhere = true;
             }
-
+            
             return $this->findOne($req, $params);
 
         } catch (\Exception $e) {
@@ -61,7 +62,7 @@ class Sessions extends Database
     public function readOne(int $id)
     {
         try {
-            $req = "SELECT `id`, `login`, `id_session` 
+            $req = "SELECT `id`, `login`, `token_user`,`expired_at`
                     FROM `session_user`
                     WHERE `id` = :id 
                     ORDER BY `created_at`
@@ -79,7 +80,7 @@ class Sessions extends Database
     {
         try {
             $sql = "UPDATE `session_user` 
-                    SET `login` = :login, id_session` = :id_session
+                    SET `login` = :login, token_user` = :token_user, `expired_at` = :expired_at
                     WHERE `id` = :id" ;
             return $this->executeReq($sql);
 
@@ -89,13 +90,13 @@ class Sessions extends Database
         }
     }
 
-    public function delete(string $login)
+    public function delete(string $token_user)
     {
         try {
             $sql = "DELETE FROM `session_user` 
-                    WHERE `login` = :login";
+                    WHERE `token_user` = :token_user";
             return $this->executeReq($sql, [
-                ':login' => $login
+                ':token_user' => $token_user
                 ]);
 
         } catch (\Exception $e) {

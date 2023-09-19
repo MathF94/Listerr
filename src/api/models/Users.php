@@ -24,10 +24,11 @@ Class Users extends Database
     {
         try {
             $password = crypt($params['password'], $this->salt);
-            $req = "INSERT INTO `user` (`login`, `password`, `name`, `email`, `role_id`) 
+            $req = "INSERT INTO `user` (`login`, `password`, `name`, `firstname`, `email`, `role_id`) 
                     VALUES ('{$params['login']}',
                             '{$password}',
                             '{$params['name']}',
+                            '{$params['firstname']}',
                             '{$params['email']}',
                             '{$params['role_id']}')";
                 $this->executeReq($req);
@@ -44,7 +45,7 @@ Class Users extends Database
         try {
             $password = crypt($password, $this->salt);
             
-            $req = "SELECT `id`, `login`, `password`, `name`, `email`, `role_id`
+            $req = "SELECT `id`, `login`, `password`, `name`, `firstname`, `email`, `role_id`
                     FROM `user` 
                     WHERE `login` = :login 
                     AND `password` = :password";
@@ -62,7 +63,7 @@ Class Users extends Database
     public function readAll(): array
     {
         try {
-            $req = "SELECT `id`, `login`, `password`, `name`, `email`, `role_id`
+            $req = "SELECT `id`, `login`, `password`, `name`, `firstname`, `email`, `role_id`
                     FROM `user` 
                     WHERE `id` = :id 
                     ORDER BY created_at 
@@ -78,7 +79,7 @@ Class Users extends Database
     public function readOne(int $id): array
     {
         try {
-            $req = "SELECT `id`, `login`, `password`, `name`, `email`, `role_id`
+            $req = "SELECT `id`, `login`, `password`, `name`, `firstname`, `email`, `role_id`
                     FROM `user` 
                     WHERE `id` = :id 
                     ORDER BY created_at 

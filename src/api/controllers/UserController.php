@@ -2,9 +2,9 @@
 
 namespace Controllers;
 
+use DateTime;
 use Models\Users;
 use Models\Sessions;
-use Services\Session;
 
 class UserController
 {
@@ -12,7 +12,6 @@ class UserController
     {
         try {
             $params = $_POST;
-
             if (
                 !empty(trim($params['login']))
                 && strlen($params['login']) <= 20
@@ -20,17 +19,19 @@ class UserController
                 && filter_var($params['email'], FILTER_VALIDATE_EMAIL)
                 && !empty(trim($params['password']))
                 && !empty(trim($params['name']))
+                && !empty(trim($params['firstname']))
                 && preg_match("/^[A-Za-z '-]+$/", $params['name'])
-                && strlen($params['name']) <= 20
+                && preg_match("/^[A-Za-z '-]+$/", $params['firstname'])
+                && strlen($params['name']) > 2 || strlen($params['name']) <= 20
+                && strlen($params['firstname']) > 2 || strlen($params['firstname']) <= 20
             ) {
-                $params['role_id'] = 1;
+                $params['role_id'] = 2;
 
                 $model = new Users();
                 $model->create($params);
                 return json_encode(['status' => 'success']);
             }
             return json_encode(['status' => 'fail']);
-            
         } catch (\Exception $e) {
             return json_encode([
                 'status' => 'error',
@@ -43,25 +44,37 @@ class UserController
     {
         try {
             if (!empty($_POST)) {
+
                 $model = new Users();
                 $user = $model->auth($_POST['login'], $_POST['password']); // $user récupère les résultats de la fonction auth()
 
                 if (empty($user)) {
                     return json_encode(['status' => 'failed']);
                 }
+                // création d'un jeton pour remplacer la gestion de session
+                $token_user = hash_hmac('sha512', $user['login'], $user['password']);
 
-                if (Session::isActive()) {
+                if (!empty($token_user)) {
                     $model = new Sessions();
-                    $session = $model->readBy(['login'=>$_POST['login']]);
-                    if (empty($session)) {
-                        $model->create($user['login'], session_id()); // crée une ligne dns la table session_user avec le login et le session_id
-                    } 
+                    $session = $model->readBy(['login' => $_POST['login']]);
 
+                    // Création une ligne dns la table session_user avec le login et le token_user
+                    if (empty($session)) {
+                        // Création de date d'expiration pour la session
+                        date_default_timezone_set('Europe/Paris');
+                        $expired_at = new DateTime();
+                        $expired_at->modify('+1 day');
+                        $expired_at_formatted = $expired_at->format('Y-m-d H:i:s');
+                        $model->create($user['login'], $token_user, $expired_at_formatted);
+                    }
+
+                    // Retour du token en JSON
                     return json_encode([
                         'status' => 'success',
-                        'connected' => Session::isActive(),
-                        'login' => $user['login']
+                        'connected' => true,
+                        'token' => $token_user
                     ]);
+
                 }
                 return json_encode(['status' => 'fail', 'message' => 'session failed']);
             }
@@ -74,21 +87,19 @@ class UserController
         }
     }
 
-    public function logout(): string
+    public function logout($token_user)
     {
         try {
-            if (Session::isActive() && Session::isConnected()) {
-                
-                $modelSession = new Sessions();
-                $session = $modelSession->readBy(['login'=>$_POST['login']]);
-                if (!empty($session)){
-                    $modelSession->delete($session['id']); // delete la ligne de la table session_user
+            $modelSession = new Sessions();
+            $modelSession->delete($token_user); // delete une ligne ciblée de la table session_user
+            session_destroy(); // supprime la session de l'user ainsi que
 
-                    Session::destroy(); // supprime la session de l'user ainsi que $_SESSION avec id_session et login
-                }
-            }
-            return json_encode(['status' => 'disconnect',
-                                'connected' => Session::isConnected()]);
+            // EVOLUTION : SI date expiration = new Date() ALORS $modelSession->delete($token_user)
+
+            return json_encode([
+                'status' => 'disconnect',
+                'connected' => false
+            ]);
 
         } catch (\Exception $e) {
             return json_encode([
@@ -98,40 +109,40 @@ class UserController
         }
     }
 
-    public function display() // fonction en GET 
+    public function display() // @TODO - fonction en GET
     {
         try {
-            if (Session::isConnected()) {                
-                $modelSession = new Sessions();
-                $session = $modelSession->readBy(['login'=>$_GET['login']]);
+            // if (Session::isConnected()) {
+            //     $modelSession = new Sessions();
+            //     $session = $modelSession->readBy(['login' => $_GET['login']]);
 
-                // header('Content-Type: application/json');
-                // return json_encode([
-                //     'connected'=>Session::isConnected(),
-                //     '$user'=>$user,
-                //     '$user_id'=>$user['id'],
-                //     '$_SESSION[id_session]'=>$_SESSION['id_session']
-                // ]);
-                header('Content-Type: application/json');
-                return json_encode([
-                    'connected' => Session::isConnected(),
-                    '$login' => $session['login'],
-                    // '$user_id'=>$user['id'],
-                    '$session[id_session]' => $session['id_session']
-                ]);
+            // header('Content-Type: application/json');
+            // return json_encode([
+            //     'connected'=>Session::isConnected(),
+            //     '$user'=>$user,
+            //     '$user_id'=>$user['id'],
+            //     '$_SESSION[id_session]'=>$_SESSION['id_session']
+            // ]);
+            // header('Content-Type: application/json');
+            // return json_encode([
+            //     'connected' => Session::isConnected(),
+            //     '$login' => $session['login'],
+            // '$user_id'=>$user['id'],
+            // '$session[id_session]' => $session['id_session']
+            // ]);
 
-                // return json_encode($_SESSION['login'], JSON_FORCE_OBJECT);
-            }
+            // return json_encode($_SESSION['login'], JSON_FORCE_OBJECT);
+            // }
             // die;
             // $model = new Sessions();
             // $session = $model->readOne($_SESSION['login']);
 
             // if($session['id']){
-            //     $model = new Users(); 
+            //     $model = new Users();
             //     $user = $model->readOne($_SESSION['user_id']);
 
             //     return json_encode($user, JSON_FORCE_OBJECT);
-            // var_dump($_SESSION['user_id']); // 33         
+            // var_dump($_SESSION['user_id']); // 33
 
             // return json_encode($user, JSON_FORCE_OBJECT);
             // print(json_encode([$user=>JSON_PRETTY_PRINT]));
@@ -139,9 +150,6 @@ class UserController
             // return json_encode(['var_dump'=>"$_SESSION['user_id']"]);
 
             // }
-
-
-
             // return json_encode(['connected'=>Session::isConnected(), 'message'=>'pourquoi tu te lies pas ?']);
 
         } catch (\Exception $e) {
@@ -152,7 +160,7 @@ class UserController
         }
     }
 
-    public function update()
+    public function update() // @TODO - fonction en POST
     {
         try {
             //code...
