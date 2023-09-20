@@ -10,18 +10,15 @@ function navigation(template) {
     ahref2.setAttribute('href', 'http://localhost/listerr/src/app/src/user/login.html');
     ahref2.innerText = 'Connexion';
     const ahref3 = document.createElement('a')
-    ahref3.setAttribute('href', 'http://localhost/listerr/src/app/src/list/todo.html');
-    ahref3.innerText = 'Liste de tâches';
-    const ahref4 = document.createElement('a')
-    ahref4.setAttribute('href', 'http://localhost/listerr/src/app/src/list/wish.html');
-    ahref4.innerText = 'Liste de souhaits';
+    ahref3.setAttribute('href', 'http://localhost/listerr/src/app/src/user/display.html');
+    ahref3.innerText = 'Profil utilisateur';
 
     template.appendChild(nav)
 
     nav.appendChild(ahref1);
     nav.appendChild(ahref2);
     nav.appendChild(ahref3);
-    nav.appendChild(ahref4);
+
 }
 
 export default navigation;

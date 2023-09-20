@@ -3,7 +3,7 @@
 namespace Models;
 
 use Services\Database;
-Class Users extends Database 
+Class Users extends Database
 {
     // faire le crud avec fonction read, update, delete, create
     // fonction avec code SQL pour le select insert etc...
@@ -14,40 +14,44 @@ Class Users extends Database
      * https://www.php.net/manual/fr/function.crypt.php
      * https://duckduckgo.com/?t=lm&q=uuid&ia=answer
      */
-    public function __construct() 
+    public function __construct()
     {
         parent::__construct();
-        $this->salt = hash('sha512', '29fe0e32-526e-11ee-b6e4-63b796ba64f4'); 
+        $this->salt = hash('sha512', '29fe0e32-526e-11ee-b6e4-63b796ba64f4');
     }
 
     public function create(array $params): bool
     {
         try {
-            $password = crypt($params['password'], $this->salt);
-            $req = "INSERT INTO `user` (`login`, `password`, `name`, `firstname`, `email`, `role_id`) 
-                    VALUES ('{$params['login']}',
-                            '{$password}',
-                            '{$params['name']}',
-                            '{$params['firstname']}',
-                            '{$params['email']}',
-                            '{$params['role_id']}')";
-                $this->executeReq($req);
-                return true;
+            $req = "INSERT INTO `user` (`login`, `password`, `name`, `firstname`, `email`, `role_id`)
+            VALUES (:login, :password, :name, :firstname, :email, :role_id)";
+
+            $params = [
+                ':login' => $params['login'],
+                ':password' => crypt($params['password'], $this->salt),
+                ':name' => $params['name'],
+                ':firstname' => $params['firstname'],
+                ':email' => $params['email'],
+                ':role_id' => $params['role_id']
+            ];
+
+            $this->executeReq($req, $params);
+            return true;
 
         } catch (\Exception $e) {
             echo $e->getMessage();
             return false;
-        }        
+        }
     }
 
     public function auth(string $login, string $password): array
     {
         try {
             $password = crypt($password, $this->salt);
-            
+
             $req = "SELECT `id`, `login`, `password`, `name`, `firstname`, `email`, `role_id`
-                    FROM `user` 
-                    WHERE `login` = :login 
+                    FROM `user`
+                    WHERE `login` = :login
                     AND `password` = :password";
             return $this->findOne($req, [
                 ':login'    => $login,
@@ -64,28 +68,28 @@ Class Users extends Database
     {
         try {
             $req = "SELECT `id`, `login`, `password`, `name`, `firstname`, `email`, `role_id`
-                    FROM `user` 
-                    WHERE `id` = :id 
-                    ORDER BY created_at 
+                    FROM `user`
+                    WHERE `id` = :id
+                    ORDER BY created_at
                     DESC";
             return $this->findAll($req);
-            
+
         } catch (\Exception $e) {
             echo $e->getMessage();
             return [];
         }
     }
-    
+
     public function readOne(int $id): array
     {
         try {
             $req = "SELECT `id`, `login`, `password`, `name`, `firstname`, `email`, `role_id`
-                    FROM `user` 
-                    WHERE `id` = :id 
-                    ORDER BY created_at 
+                    FROM `user`
+                    WHERE `id` = :id
+                    ORDER BY created_at
                     DESC";
             return $this->findOne($req, ['id' => $id]);
-            
+
         } catch (\Exception $e) {
             echo $e->getMessage();
             return [];

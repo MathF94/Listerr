@@ -18,20 +18,23 @@ class UserController
                 && !empty(trim($params['email']))
                 && filter_var($params['email'], FILTER_VALIDATE_EMAIL)
                 && !empty(trim($params['password']))
+                && strlen($params['password']) < 11
+                && !preg_match('/^(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).{12,}$/', $params['password'])
                 && !empty(trim($params['name']))
-                && !empty(trim($params['firstname']))
-                && preg_match("/^[A-Za-z '-]+$/", $params['name'])
-                && preg_match("/^[A-Za-z '-]+$/", $params['firstname'])
                 && strlen($params['name']) > 2 || strlen($params['name']) <= 20
+                && preg_match("/^[A-Za-z '-]+$/", $params['name'])
+                && !empty(trim($params['firstname']))
                 && strlen($params['firstname']) > 2 || strlen($params['firstname']) <= 20
-            ) {
-                $params['role_id'] = 2;
+                && preg_match("/^[A-Za-z '-]+$/", $params['firstname'])
+                ) {
+                    $params['role_id'] = 2;
+                    $model = new Users();
+                    $model->create($params);
 
-                $model = new Users();
-                $model->create($params);
                 return json_encode(['status' => 'success']);
             }
             return json_encode(['status' => 'fail']);
+
         } catch (\Exception $e) {
             return json_encode([
                 'status' => 'error',

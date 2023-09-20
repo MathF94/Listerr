@@ -8,7 +8,7 @@ if (!defined('DB_HOST')) {
 }
 
 /**
- * CORS est une instruction permet d'établir des critères de sécurités afinde contrôler 
+ * CORS est une instruction permet d'établir des critères de sécurités afinde contrôler
  * les entrées sur le serveur de domaines inconnus
  * et donc pour accepter des requêtes venues de l'extérieur
  */
@@ -29,21 +29,22 @@ function cors()
         'http://listerr.local',
         'http://localhost',
         'http://127.0.0.1',
+        'https://mathieufagot.ide.3wa.io'
     ];
-        
+
     if(!empty($_SERVER['HTTP_REFERER'])) {
         $domain = $_SERVER['REQUEST_SCHEME'] . '://' . parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
     }
 
-    if(!empty($_SERVER['REQUEST_SCHEME']) && !empty($_SERVER['HTTP_ORIGIN'])) { 
+    if(!empty($_SERVER['REQUEST_SCHEME']) && !empty($_SERVER['HTTP_ORIGIN'])) {
         $domain = $_SERVER['REQUEST_SCHEME'] . '://' . parse_url($_SERVER['HTTP_ORIGIN'], PHP_URL_HOST);
     }
-    
+
     if(!empty($_SERVER['REQUEST_SCHEME']) && !empty($_SERVER['HTTP_HOST'])) {
         $domain = $_SERVER['REQUEST_SCHEME'] . '://' . parse_url($_SERVER['HTTP_HOST'], PHP_URL_HOST);
     }
 
-    if (in_array($domain, $allowedDomains, true)) {    
+    if (in_array($domain, $allowedDomains, true)) {
         header("Access-Control-Allow-Origin: {$domain}");
         header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
         header('Access-Control-Allow-Headers: X-PINGARUNER');

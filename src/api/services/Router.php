@@ -3,8 +3,7 @@
 namespace Services;
 
 use Controllers\UserController;
-use Controllers\WishController;
-use Controllers\TodoController;
+use Controllers\ListController;
 
 class Router
 {
@@ -13,39 +12,34 @@ class Router
         if (array_key_exists('route', $_GET)) : // on vérifie que la route existe dans l'URL
 
             switch ($_GET['route']) {
-                case 'user:register':
+                case 'user_register':
                     $user = new UserController();
                     echo $user->register(); // create
                     break;
 
-                case 'user:login':
+                case 'user_login':
                     $user = new UserController();
                     echo $user->login(); // readOne
                     break;
 
-                case 'user:display':
+                case 'user_display':
                     $user = new UserController();
                     echo $user->display(); // readAll
                     break;
 
-                case 'user:update':
+                case 'user_update':
                     $user = new UserController();
                     echo $user->update(); // update
                     break;
 
-                case 'user:logout':
+                case 'user_logout':
                     $user = new UserController();
                     echo $user->logout($_POST['token_user']); // delete
                     break;
 
-                case 'wish:index':
-                    $wish = new WishController();
-                    echo $wish->index();
-                    break;
-
-                case 'user:logout':
-                    $todo = new TodoController();
-                    echo $todo->index();
+                case 'list_index':
+                    $list = new ListController();
+                    echo $list->index();
                     break;
 
                 default:

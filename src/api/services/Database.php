@@ -57,11 +57,11 @@ class Database
     }
 
     protected function executeReq(string $req, array $params = []): mixed
-    {        
+    {
         try {
-            $query = $this->db->prepare($req);        
+            $query = $this->db->prepare($req);
             $query->execute($params);
-            return $query->fetch(\PDO::FETCH_ASSOC);        
+            return $query->fetch(\PDO::FETCH_ASSOC);
 
         } catch (\Exception $e) {
             return json_encode([

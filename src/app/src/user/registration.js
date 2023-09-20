@@ -2,7 +2,7 @@
 
 async function fetchRegister(form) {
     try {
-        const url = 'http://localhost/listerr/src/api/?route=user:register';
+        const url = 'http://localhost/listerr/src/api/?route=user_register';
         return await fetch(url, {
             method: 'POST',
             body: new FormData(form)
@@ -32,15 +32,14 @@ function registration() {
             if(response.status === 'success') {
                 msg.innerHTML = `
                 <p>Bonjour ${firstname} ${name}</p>
-                <p>Votre compte lié à l'adresse ${email} est maintenant créé</p>
-                <p>sous le login ${login} </p>
+                <p>Votre compte lié à l'adresse ${email} est maintenant créé sous le login ${login}.</p>
                 <p>Vous allez être redirigé dans quelques secondes vers la page de connexion...</p>
                 `
                 wrapper.append(msg);
 
-                window.setTimeout(function() {
-                window.location.href = "http://localhost/listerr/src/app/src/user/login.html"
-                }, 5000)
+                // window.setTimeout(function() {
+                // window.location.href = "http://localhost/listerr/src/app/src/user/login.html"
+                // }, 5000)
             } else {
                 msg.innerHTML = `L'inscription s'est mal passée.`
             }
