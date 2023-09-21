@@ -16,8 +16,10 @@ async function fetchRegister(form) {
 
 function registration() {
     const form = document.querySelector('form');
+
     form.addEventListener('submit', function(e){
         e.preventDefault();
+
         const name = e.target.children.name.value;
         const firstname = e.target.children.firstname.value;
         const login = e.target.children.login.value;
@@ -37,11 +39,11 @@ function registration() {
                 `
                 wrapper.append(msg);
 
-                // window.setTimeout(function() {
-                // window.location.href = "http://localhost/listerr/src/app/src/user/login.html"
-                // }, 5000)
+                window.setTimeout(function() {
+                window.location.href = "http://localhost/listerr/src/app/src/user/login.html"
+                }, 5000)
             } else {
-                msg.innerHTML = `L'inscription s'est mal passée.`
+                msg.innerHTML = `L'inscription s'est mal passée.`;
             }
         })
     })

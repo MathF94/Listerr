@@ -72,14 +72,6 @@ CREATE TABLE IF NOT EXISTS `role` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Déchargement des données de la table `role`
---
-
-INSERT INTO `role` (`id`, `name`) VALUES
-(1, 'User'),
-(2, 'Admin');
-
 -- --------------------------------------------------------
 
 --

@@ -80,15 +80,15 @@ Class Users extends Database
         }
     }
 
-    public function readOne(int $id): array
+    public function readOne(string $login): array
     {
         try {
             $req = "SELECT `id`, `login`, `password`, `name`, `firstname`, `email`, `role_id`
                     FROM `user`
-                    WHERE `id` = :id
+                    WHERE `login` = :login
                     ORDER BY created_at
                     DESC";
-            return $this->findOne($req, ['id' => $id]);
+            return $this->findOne($req, ['login' => $login]);
 
         } catch (\Exception $e) {
             echo $e->getMessage();
