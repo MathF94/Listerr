@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listerr</title>
+    <script type="module" src="../layout/header.js"></script>
+    <script type="module" src="../layout/section.js"></script>
+    <script type="module" src="./actions.js"></script>
+    <script type="module" src="./profil.js"></script>
+    <script type="module" src="./logout.js"></script>
+    <script type="module" src="./delete.js"></script>
+</head>
+<body>
+    <form action="?route=user_delete" method="post">
+        <button id="update" type="submit" value="update">Modifier</button>
+        <button id="delete" type="submit" value="delete">Supprimer</button>
+    </form>
+</body>
+</html>

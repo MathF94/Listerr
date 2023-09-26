@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listerr</title>
     <script type="module" src="../layout/header.js"></script>
-    <script src="login.js"></script>
+    <script type="module" src="./actions.js"></script>
+    <script type="module" src="login.js"></script>
 </head>
 <body>
     <div>
-        <h1>Connexion</h1>
-        <form action="?route=user_display" method="post">
+        <h2>Connexion</h2>
+        <form action="?route=user_profil" method="post">
             <label for="login">Votre login</label>
             <input type="text" name="login" id="login" placeholder="Votre login" required>
 

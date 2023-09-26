@@ -1,18 +1,6 @@
 'use strict';
 
-async function fetchRegister(form) {
-    try {
-        const url = 'http://localhost/listerr/src/api/?route=user_register';
-        return await fetch(url, {
-            method: 'POST',
-            body: new FormData(form)
-        }).then(response => response.json());
-
-    } catch (error) {
-        console.error('Erreur lors de la requête fetch :', error);
-        return null;
-    }
-}
+import { fetchRegister } from "./actions";
 
 function registration() {
     const form = document.querySelector('form');
@@ -52,3 +40,4 @@ function registration() {
 document.addEventListener("DOMContentLoaded", () => {
     registration();
 })
+

@@ -3,21 +3,23 @@
 namespace Models;
 
 use Services\Database;
-Class Users extends Database
+use Services\Encryption;
+class Users extends Database
 {
-    // faire le crud avec fonction read, update, delete, create
-    // fonction avec code SQL pour le select insert etc...
-    private $salt;
-
     /**
-     * this function allows to bring the Database's construct and to add an argument salt (unique id) used to the password crypt($string, $salt)
-     * https://www.php.net/manual/fr/function.crypt.php
      * https://duckduckgo.com/?t=lm&q=uuid&ia=answer
      */
+    private const KEY = '4f8005a0-516c-4c93-b829-aad0153e6809';
+    private const IV = '-1e15-40c7-adb2-5';
+
+    private $encryption;
+
     public function __construct()
     {
         parent::__construct();
-        $this->salt = hash('sha512', '29fe0e32-526e-11ee-b6e4-63b796ba64f4');
+        $this->encryption = new Encryption();
+        $this->encryption->setKey(self::KEY)
+                        ->setIv(self::IV);
     }
 
     public function create(array $params): bool
@@ -28,7 +30,7 @@ Class Users extends Database
 
             $params = [
                 ':login' => $params['login'],
-                ':password' => crypt($params['password'], $this->salt),
+                ':password' => $params['password'],
                 ':name' => $params['name'],
                 ':firstname' => $params['firstname'],
                 ':email' => $params['email'],
@@ -44,11 +46,35 @@ Class Users extends Database
         }
     }
 
+    public function update(array $parameters): bool
+    {
+        $req = "UPDATE `user`
+                SET `name`= :name, `firstname` = :firstname, `email` = :email
+                WHERE `login` = :login";
+        $query = $this->db->prepare($req);
+        return $query->execute($parameters);
+    }
+
+    public function updatePassword(array $parameters):bool
+    {
+        $req = "UPDATE `user`
+                SET `password`= :password
+                WHERE `login` = :login" ;
+        $query = $this->db->prepare($req);
+        return $query->execute($parameters);
+    }
+
+    public function delete(string $login): bool
+    {
+        $req = "DELETE FROM `user`
+                WHERE `login` = :login";
+        $query = $this->db->prepare($req);
+        return $query->execute(['login' => $login]);
+    }
+
     public function auth(string $login, string $password): array
     {
         try {
-            $password = crypt($password, $this->salt);
-
             $req = "SELECT `id`, `login`, `password`, `name`, `firstname`, `email`, `role_id`
                     FROM `user`
                     WHERE `login` = :login
@@ -70,8 +96,7 @@ Class Users extends Database
             $req = "SELECT `id`, `login`, `password`, `name`, `firstname`, `email`, `role_id`
                     FROM `user`
                     WHERE `id` = :id
-                    ORDER BY created_at
-                    DESC";
+                    ORDER BY created_at DESC";
             return $this->findAll($req);
 
         } catch (\Exception $e) {
@@ -86,8 +111,7 @@ Class Users extends Database
             $req = "SELECT `id`, `login`, `password`, `name`, `firstname`, `email`, `role_id`
                     FROM `user`
                     WHERE `login` = :login
-                    ORDER BY created_at
-                    DESC";
+                    ORDER BY created_at DESC";
             return $this->findOne($req, ['login' => $login]);
 
         } catch (\Exception $e) {

@@ -1,26 +1,27 @@
 import navigation from './nav.js';
 
-function initLayout() {
-    const template = document.createElement('header')
-    template.id = "mainWrapper";
-    template.className = "mainWrapper";
+function header() {
+    const header = document.createElement('header')
+    header.id = "mainWrapper";
+    header.className = "mainWrapper";
 
     const title = document.createElement('h1')
     title.id = "mainTitle";
     title.className = "mainTitle";
     title.innerText = 'Listerr';
-    template.appendChild(title)
+    title.style.textAlign = 'Center';
+    header.appendChild(title)
 
-    navigation(template);
+    navigation(header);
 
     const msg = document.createElement('div')
     msg.id = "mainMessage";
     msg.className = "mainMessage";
 
-    template.appendChild(msg)
-    document.body.prepend(template);
+    header.appendChild(msg)
+    document.body.prepend(header);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    initLayout();
+    header();
 })

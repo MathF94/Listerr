@@ -1,4 +1,3 @@
-<?php
 
 namespace Models;
 
@@ -6,13 +5,12 @@ use Services\Database;
 
 class Sessions extends Database
 {
-    public function create(string $login, string $tokenUser, mixed $expiredAtFormatted): mixed
+    public function create(string $login, string $tokenUser): mixed
     {
         try {
-            $sql = "INSERT INTO `session_user` (`login`, `token_user`, `expired_at`)
+            $sql = "INSERT INTO `session_user` (`login`, `token_user`)
                     VALUES ('{$login}',
-                            '{$tokenUser}',
-                            '{$expiredAtFormatted}')";
+                            '{$tokenUser}')";
             $this->executeReq($sql);
                 return true;
 
@@ -25,7 +23,7 @@ class Sessions extends Database
     public function readAll(): array
     {
         try {
-            $req = "SELECT `id`, `login`, `token_user`, `expired_at`
+            $req = "SELECT `id`, `login`, `token_user`
                     FROM `session_user`
                     ORDER BY `created_at`
                     DESC";
@@ -40,7 +38,7 @@ class Sessions extends Database
     public function readBy(array $params): array
     {
         try {
-            $req = "SELECT `id`, `login`, `token_user`, `expired_at`
+            $req = "SELECT `id`, `login`, `token_user`
                     FROM `session_user` ";
 
             $hasWhere = false;
@@ -62,7 +60,7 @@ class Sessions extends Database
     public function readOne(string $tokenUser): array
     {
         try {
-            $req = "SELECT `id`, `login`, `token_user`,`expired_at`
+            $req = "SELECT `id`, `login`, `token_user`
                     FROM `session_user`
                     WHERE `token_user` = :tokenUser
                     ORDER BY `created_at`
@@ -80,7 +78,7 @@ class Sessions extends Database
     {
         try {
             $sql = "UPDATE `session_user`
-                    SET `login` = :login, token_user` = :token_user, `expired_at` = :expired_at
+                    SET `login` = :login, token_user` = :token_user
                     WHERE `id` = :id" ;
             return $this->executeReq($sql);
 

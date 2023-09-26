@@ -5,7 +5,6 @@ namespace Services;
 use Controllers\UserController;
 use Controllers\ListController;
 
-
 class Router
 {
     public function routing(): void
@@ -23,36 +22,39 @@ class Router
                 case 'user_login':
                     if ($this->isAllowedMethod('POST')) {
                         $user = new UserController();
-                        echo $user->login(); // readOne
-                    }
-                    break;
-
-                case 'user_display':
-                    if ($this->isAllowedMethod('GET')) {
-                        $user = new UserController();
-                        $headers = getallheaders();
-                        echo $user->display($headers['Authorization']); // readAll
-                    }
-                    break;
-
-                case 'user_update':
-                    if ($this->isAllowedMethod('POST')) {
-                        $user = new UserController();
-                        echo $user->update(); // update
+                        echo $user->login();
                     }
                     break;
 
                 case 'user_logout':
-                    if ($this->isAllowedMethod('POST')) {
+                    if ($this->isAllowedMethod('GET')) {
                         $user = new UserController();
-                        echo $user->logout($_POST['tokenUser']); // delete
+                        $headers = getallheaders();
+                        echo $user->logout($headers['Authorization']);
                     }
                     break;
 
-                case 'list_index':
+                case 'user_profil':
                     if ($this->isAllowedMethod('GET')) {
-                        $list = new ListController();
-                        echo $list->index();
+                        $user = new UserController();
+                        $headers = getallheaders();
+                        echo $user->read($headers['Authorization']); // readAll
+                    }
+                    break;
+
+                case 'user_update':
+                    if ($this->isAllowedMethod('GET') || $this->isAllowedMethod('POST')) {
+                        $user = new UserController();
+                        $headers = getallheaders();
+                        echo $user->update($headers['Authorization']); // update
+                    }
+                    break;
+
+                case 'user_delete':
+                    if ($this->isAllowedMethod('GET')) {
+                        $user = new UserController();
+                        $headers = getallheaders();
+                        echo $user->delete($headers['Authorization']); // delete
                     }
                     break;
 
