@@ -27,7 +27,7 @@ class Session
         $tokenUser = [
             'login' => $login,
             'password' => $password,
-            'expired_at' => (new DateTime())->modify('+1 hour')->format('Y-m-d H:i:s'),
+            'expired_at' => (new DateTime())->modify('+1 min')->format('Y-m-d H:i:s'),
         ];
 
         return $this->encryption->encrypt(json_encode($tokenUser));
@@ -47,7 +47,7 @@ class Session
             return true;
         }
 
-        if (strtotime($tokenData['expired_at']) < time()) {
+        if (strtotime($tokenData['expired_at']) > time()) {
             return true;
         }
         return false;

@@ -29,7 +29,7 @@ function logout() {
                 const btnSubmit = e.submitter;
 
             if (confirm('Voulez-vous vraiment vous déconnecter ?') === true) {
-                if(response.status === 'connect') {
+                if(response.status === 'connected') {
                     console.log(localStorage.token); // token présent
                     localStorage.removeItem('token'); // suppression du token
                     console.log(localStorage.token); // token undefined

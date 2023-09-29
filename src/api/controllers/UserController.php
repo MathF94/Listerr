@@ -24,17 +24,26 @@ class UserController
 
     public function register(): string
     {
-        try { // mettre en place le array_key_exists() pour les formulaires
-            if ($this->validator->isValidParams($_POST, Validator::CONTEXT_REGISTER)) {
+        try {
+            $errors = [];
+            $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_REGISTER, $errors);
+            if (count($errors) === 0) {
                 $params = $_POST;
                 $params['password'] = $this->encryption->encrypt($params['password']);
                 $params['role_id'] = 2;
                 $model = new Users();
                 $model->create($params);
 
-                return json_encode(['status' => 'success']);
+                return json_encode([
+                    'status' => 'success'
+                ]);
             }
-            return json_encode(['status' => 'fail']);
+            $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_REGISTER, $errors);
+            return json_encode([
+                'status' => 'fail',
+                'errors' => $errors
+            ]);
+
         } catch (\Exception $e) {
             return json_encode([
                 'status' => 'error',
@@ -45,19 +54,20 @@ class UserController
 
     public function login(): string
     {
-        try { // mettre en place le array_key_exists() pour les formulaires
-            if ($this->validator->isValidParams($_POST, Validator::CONTEXT_LOGIN)) {
+        try {
+            $errors = [];
+            $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_LOGIN, $errors);
+            if (count($errors) === 0) {
                 $encrytedPassword = $this->encryption->encrypt($_POST['password']);
                 $model = new Users();
                 $user = $model->auth($_POST['login'], $encrytedPassword);
-
+                
                 if (empty($user)) {
                     return json_encode([
-                        'status' => 'failed',
-                        'message' => 'Identifiant ou mot de passe incorrect'
+                        'status' => 'fail_data',
+                        'message' => 'Votre identifiant ou votre mot de passe est incorrect'
                     ]);
                 }
-
                 $session = new Session();
                 $encryptToken = $session->encrypt($user['login'], $encrytedPassword);
 
@@ -66,8 +76,52 @@ class UserController
                     'connected' => true,
                     'token' => $encryptToken
                 ]);
+            }
+            // var_dump('coucou login');
+            return json_encode([
+                'status' => 'fail',
+                'errors' => $errors]);
 
-                return json_encode(['status' => 'fail', 'message' => 'session failed']);
+        } catch (\Exception $e) {
+            return json_encode([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function read($tokenUser): string
+    {
+        try {
+            if (!empty($tokenUser)) {
+
+                $session = new Session();
+                $decrypt = $session->decrypt($tokenUser);
+                $login = $decrypt['login'];
+                $modelUser = new Users();
+                $user = $modelUser->readOne($login);
+                if (empty($user)) {
+                    return json_encode([
+                        'status' => 'unknown user'
+                    ]);
+                }
+                if (!$session->isExpired($decrypt, $user)) {
+                    return json_encode([
+                        'status' => 'connected',
+                        'Nom' => $user['name'],
+                        'Prénom' => $user['firstname'],
+                        'E-mail' => $user['email'],
+                        'Login' => $user['login'],
+                    ]);
+                } else {
+                    $users = new Users();
+                    $users->delete($user['login']);
+
+                    return json_encode([
+                        'status' => 'disconnected',
+                        'message' => 'La connexion a été perdue, merci de vous reconnecter'
+                    ]);
+                }
             }
 
             return json_encode(['status' => 'fail', 'message' => 'body is empty']);
@@ -95,13 +149,12 @@ class UserController
             }
 
             $isExpired = $session->isExpired($decryptToken, $user);
-
             // si false = pas expiré = encore connecté => on peut logout
             if (!$isExpired) {
                 return json_encode([
-                    'status' => 'connect',
+                    'status' => 'connected',
                     'connected' => true,
-                    'message' => 'Vous allez être déconnecté(e).',
+                    'message' => 'still connected.',
                     'token' => $tokenUser,
                     'login' => $decryptToken['login'],
                 ]);
@@ -117,48 +170,8 @@ class UserController
                     'token' => $tokenUser,
                     'login' => $decryptToken['login'],
                 ]);
+
             }
-        } catch (\Exception $e) {
-            return json_encode([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ]);
-        }
-    }
-
-    public function read($tokenUser): string
-    {
-        try {
-            if (!empty($tokenUser)) {
-                $session = new Session();
-                $decrypt = $session->decrypt($tokenUser);
-
-                $login = $decrypt['login'];
-                $modelUser = new Users();
-                $user = $modelUser->readOne($login);
-
-                if (empty($user)) {
-                    return json_encode([
-                        'status' => 'unknown user'
-                    ]);
-                }
-                if (!$session->isExpired($decrypt, $user)) {
-                    return json_encode([
-                        'status' => 'connected',
-                        'Nom' => $user['name'],
-                        'Prénom' => $user['firstname'],
-                        'E-mail' => $user['email'],
-                        'Login' => $user['login'],
-                    ]);
-                } else {
-                    return json_encode([
-                        'status' => 'disconnected',
-                        'message' => 'La connexion a été perdue, merci de vous reconnecter'
-                    ]);
-                }
-            }
-
-            return json_encode(['status' => 'fail', 'message' => 'body is empty']);
         } catch (\Exception $e) {
             return json_encode([
                 'status' => 'error',
@@ -169,8 +182,9 @@ class UserController
 
     public function update($tokenUser) // @TODO
     {
-        try { // mettre en place le array_key_exists() pour les formulaires
-            if ($this->validator->isValidParams($_POST, Validator::CONTEXT_UPDATE_USER)) {
+        try {
+            $errors = [];
+            if ($this->validator->isValidParams($_POST, Validator::CONTEXT_UPDATE_USER, $errors)) {
                 // récupérer le user grâce au readOne($_POST) pour vérifier qu'il existe en base
                 // s'il n'existe pas, on renvoie un json_encode qui renvoie une erreur
 
