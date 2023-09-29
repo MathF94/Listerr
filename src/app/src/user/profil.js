@@ -1,67 +1,67 @@
 'use strict';
 
-import { fetchRead } from "./actions";
+import { fetchRead } from "./actions.js";
+import { redirect, dialog } from "../services/utils.js";
 
 function read() {
 
     fetchRead()
     .then(response => {const dataUser = response
-        console.log(response.status);
-        const form = document.querySelector('form');
-        const mainSection = document.getElementById('mainSection');
+        const mainSection = document.createElement('section');
+        mainSection.id = "mainSection";
+        mainSection.className = "mainSection";
+        document.body.appendChild(mainSection);
         const section = document.createElement('section');
-        section.id = "secondSection";
+        const form = document.querySelector('form');
+        const div = document.querySelector('#profilWrapper');
+        section.id = "contentSection";
 
-        const title = document.createElement('h2');
-        title.id = "mainTitle";
-        title.className = "mainTitle";
-        title.innerText = 'Profil utilisateur de ${index}';
-        title.style.textAlign = 'center';
+        const mainTitle = document.createElement('h2');
+        mainTitle.id = "mainTitle";
+        mainTitle.className = "mainTitle";
 
         const ul = document.createElement('ul');
         const deleteBtn = document.querySelector('#delete');
         const updateBtn = document.querySelector('#update');
         const p = document.createElement('p');
-        p.style.textAlign = 'center';
 
         if (response.status === 'disconnected') {
-            mainSection.appendChild(title);
-            title.innerText = `Profil utilisateur`;
+            console.log('bye');
+            mainSection.appendChild(mainTitle);
+            mainTitle.innerText = `Profil utilisateur`;
             deleteBtn.classList.add('hide');
             updateBtn.classList.add('hide');
         }
 
         if (response.status === 'connected' && localStorage.token) {
-            mainSection.appendChild(title);
-            mainSection.append(section);
+            mainSection.appendChild(mainTitle);
+            mainSection.appendChild(section);
+            mainTitle.innerText = `Profil utilisateur`;
             deleteBtn.classList.remove('hide');
             updateBtn.classList.remove('hide');
 
-            for(const index in dataUser) {
+            for (const index in dataUser) {
                 const li = document.createElement('li');
                 const column = dataUser[index];
 
-                if (index === 'status') {
+                if (['status', 'id'].includes(index))  {
                     continue;
                 }
-
-                if (index === 'Login') {
-                    title.innerText = `Profil utilisateur de ${column}`;
-                }
-
-                li.innerText = `${index} : ${column}`;
-                li.style.margin = '5px auto';
-                li.style.listStyleType = 'none';
-                ul.style.padding = '5px 0';
-                li.style.textAlign = 'center';
+                li.innerText = `${column.label} : ${column.value}`;
 
                 ul.appendChild(li);
+                section.append(ul);
+                section.append(div);
             }
-            section.append(ul);
-            section.append(form);
-        }
+
+            updateBtn.addEventListener('click', function(e){
+                redirect("http://localhost/listerr/src/app/src/user/update.html", 0);
+
+            }); // form.addEventListener('submit', function(e)
+        }; // (response.status === 'connected' && localStorage.token)
     });
-}
+};
+
 document.addEventListener("DOMContentLoaded", () => {
     read();
-})
+});

@@ -27,7 +27,7 @@ class Session
         $tokenUser = [
             'login' => $login,
             'password' => $password,
-            'expired_at' => (new DateTime())->modify('+1 min')->format('Y-m-d H:i:s'),
+            'expired_at' => (new DateTime())->modify('+30 min')->format('Y-m-d H:i:s'),
         ];
 
         return $this->encryption->encrypt(json_encode($tokenUser));
@@ -40,14 +40,14 @@ class Session
 
     public function isExpired($tokenData, $user): bool
     {
+        date_default_timezone_set('Europe/Paris');
+        
         if (empty($user['login'])
         || empty($user['password'])
         || $tokenData['login'] !== $user['login']
-        || $tokenData['password'] !== $user['password']){
-            return true;
-        }
-
-        if (strtotime($tokenData['expired_at']) > time()) {
+        || $tokenData['password'] !== $user['password']
+        || strtotime($tokenData['expired_at']) < time()
+        ){
             return true;
         }
         return false;

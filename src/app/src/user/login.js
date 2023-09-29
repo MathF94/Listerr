@@ -1,6 +1,6 @@
 'use strict';
 
-import { fetchLogin } from "./actions";
+import { fetchLogin } from "./actions.js";
 
 function login() {
     const form = document.querySelector('form');
@@ -13,11 +13,9 @@ function login() {
         .then(response => {
 
             localStorage.setItem('token', response.token);
-            console.log(response.token);
             const wrapper = document.getElementById('wrapper');
             const msg = document.createElement('div');
             const errors = response.errors;
-            console.log(response.errors);
 
             if (response.status === 'success') {
                 msg.innerHTML = `

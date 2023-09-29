@@ -1,6 +1,6 @@
 'use strict';
 
-import { fetchDelete } from "./actions";
+import { fetchDelete } from "./actions.js";
 
 function deleteUser() {
     const form = document.querySelector('form');

@@ -46,12 +46,16 @@ class Users extends Database
         }
     }
 
-    public function update(array $parameters): bool
+    public function update(array $parameters, int $id): bool
     {
         $req = "UPDATE `user`
-                SET `name`= :name, `firstname` = :firstname, `email` = :email
-                WHERE `login` = :login";
+                SET `login`= :login,
+                    `name`= :name,
+                    `firstname` = :firstname,
+                    `email` = :email
+                WHERE `id` = :id";
         $query = $this->db->prepare($req);
+        $parameters['id'] = $id;
         return $query->execute($parameters);
     }
 
@@ -75,7 +79,12 @@ class Users extends Database
     public function auth(string $login, string $password): array
     {
         try {
-            $req = "SELECT `id`, `login`, `password`, `name`, `firstname`, `email`, `role_id`
+            $req = "SELECT `id`,
+                        `login`,
+                        `password`,
+                        `name`,
+                        `firstname`,
+                        `email`, `role_id`
                     FROM `user`
                     WHERE `login` = :login
                     AND `password` = :password";

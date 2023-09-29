@@ -25,8 +25,7 @@ class UserController
     public function register(): string
     {
         try {
-            $errors = [];
-            $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_REGISTER, $errors);
+            $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_REGISTER);
             if (count($errors) === 0) {
                 $params = $_POST;
                 $params['password'] = $this->encryption->encrypt($params['password']);
@@ -38,7 +37,7 @@ class UserController
                     'status' => 'success'
                 ]);
             }
-            $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_REGISTER, $errors);
+            $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_REGISTER);
             return json_encode([
                 'status' => 'fail',
                 'errors' => $errors
@@ -55,13 +54,12 @@ class UserController
     public function login(): string
     {
         try {
-            $errors = [];
-            $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_LOGIN, $errors);
+            $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_LOGIN);
             if (count($errors) === 0) {
                 $encrytedPassword = $this->encryption->encrypt($_POST['password']);
                 $model = new Users();
                 $user = $model->auth($_POST['login'], $encrytedPassword);
-                
+
                 if (empty($user)) {
                     return json_encode([
                         'status' => 'fail_data',
@@ -77,7 +75,6 @@ class UserController
                     'token' => $encryptToken
                 ]);
             }
-            // var_dump('coucou login');
             return json_encode([
                 'status' => 'fail',
                 'errors' => $errors]);
@@ -100,6 +97,7 @@ class UserController
                 $login = $decrypt['login'];
                 $modelUser = new Users();
                 $user = $modelUser->readOne($login);
+
                 if (empty($user)) {
                     return json_encode([
                         'status' => 'unknown user'
@@ -108,15 +106,13 @@ class UserController
                 if (!$session->isExpired($decrypt, $user)) {
                     return json_encode([
                         'status' => 'connected',
-                        'Nom' => $user['name'],
-                        'Prénom' => $user['firstname'],
-                        'E-mail' => $user['email'],
-                        'Login' => $user['login'],
+                        'id' => ['label' => 'id', 'value' => $user['id']],
+                        'name' => ['label' => 'Nom', 'value' => $user['name']],
+                        'firstname' => ['label' =>'Prénom', 'value' => $user['firstname']],
+                        'email' => ['label' =>'E-mail', 'value' => $user['email']],
+                        'login' => ['label' =>'Login', 'value' => $user['login']],
                     ]);
                 } else {
-                    $users = new Users();
-                    $users->delete($user['login']);
-
                     return json_encode([
                         'status' => 'disconnected',
                         'message' => 'La connexion a été perdue, merci de vous reconnecter'
@@ -183,68 +179,22 @@ class UserController
     public function update($tokenUser) // @TODO
     {
         try {
-            $errors = [];
-            if ($this->validator->isValidParams($_POST, Validator::CONTEXT_UPDATE_USER, $errors)) {
-                // récupérer le user grâce au readOne($_POST) pour vérifier qu'il existe en base
-                // s'il n'existe pas, on renvoie un json_encode qui renvoie une erreur
-
-                //
-            }
-
-            var_dump($tokenUser);
-            var_dump('test modif');
-            // $modelSession = new Sessions();
-            // $session = $modelSession->readOne($tokenUser);
-
-            $user = new Users();
-            // $data = $user->readOne($session['login']);
-
-            $id = null;
-            $name = null;
-            $firstname = null;
-            $email = null;
-
-            if (!empty($data['id'])) {
-                $id = $data['id'];
-                $name = $data['name'];
-                $firstname = $data['firstname'];
-                $login = $data['login'];
-                $email = $data['email'];
-                // var_dump($data);
-
-                return json_encode([
-                    'status' => 'update',
-                    'name' =>  $name,
-                    'firstname' =>  $firstname,
-                    'login' =>  $login,
-                    'email' =>  $email,
-                ]);
-            }
-
-            if (!empty($_POST)) {
-                var_dump($_POST);
-
+            $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_UPDATE_USER);
+            if (count($errors) === 0) {
                 $id = $_POST['id'];
                 $params = [
                     'name' => $_POST['name'],
                     'firstname' => $_POST['firstname'],
-                    'login' => $_POST['firstname'],
+                    'login' => $_POST['login'],
                     'email' => $_POST['email']
                 ];
+                $modelUser = new Users();
+                $modelUser->update($params, $id);
 
-                if (
-                    !empty($params['name'])
-                    && !empty($params['firstname'])
-                    && !empty($params['login'])
-                    && !empty($params['email'])
-                ) {
-
-                    $modelUser = new Users();
-                    $modelUser->update($params, $id);
-                    var_dump($params);
-                    die();
-                }
+                return json_encode(['status' => 'success']);
             }
+            return json_encode(['status' => 'fail']);
+
         } catch (\Exception $e) {
             return json_encode([
                 'status' => 'error',
@@ -252,29 +202,6 @@ class UserController
             ]);
         }
     }
-
-    // public function update(array $params, int $id): mixed
-    // {
-    //     if (!empty($_POST)) {
-    //         var_dump($_POST);
-
-    //         $id = $_POST['id'];
-    //         $params = [
-    //             'name' => $_POST['name'],
-    //             'firstname' => $_POST['firstname'],
-    //             'login' => $_POST['firstname'],
-    //             'email' => $_POST['email']
-    //         ];
-    //         if (!empty($params['name'])
-    //         && !empty($params['firstname'])
-    //         && !empty($params['login'])
-    //         && !empty($params['email'])) {
-
-    //         $modelUser = new Users();
-    //         $modelUser->update($params, $id);
-    //         }
-    //     }
-    // }
 
     public function delete($tokenUser): string
     {

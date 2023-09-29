@@ -7,7 +7,11 @@ function registration() {
 
     form.addEventListener('submit', function(e){
         e.preventDefault();
-
+        const section = document.createElement('section');
+        section.id = "mainSection";
+        section.className = "mainSection";
+        document.body.appendChild(section);
+        
         const name = e.target.children.name.value;
         const firstname = e.target.children.firstname.value;
         const login = e.target.children.login.value;
@@ -25,14 +29,14 @@ function registration() {
                 <p>Votre compte lié à l'adresse ${email} est maintenant créé sous le login ${login}.</p>
                 <p>Vous allez être redirigé dans quelques secondes vers la page de connexion...</p>
                 `
-                wrapper.append(msg);
+                mainSection.append(msg);
 
                 window.setTimeout(function() {
                     window.location.href = "http://localhost/listerr/src/app/src/user/login.html"
                 }, 5000)
             } else {
                 msg.innerHTML = `L'inscription s'est mal passée.`;
-                wrapper.append(msg);
+                mainSection.append(msg);
             }
 
             if(response.status === 'fail') {
@@ -43,8 +47,8 @@ function registration() {
                     li.innerText = `${column}`;
                     msg.innerHTML = `<p>Merci de respecter les champs du formulaire.</p>`
                     ul.append(li);
-                    wrapper.append(ul);
-                    wrapper.append(msg);
+                    mainSection.append(ul);
+                    mainSection.append(msg);
                     window.setTimeout(function() {
                         window.location.href = `http://localhost/listerr/src/app/src/user/registration.html`
                         }, 3000)

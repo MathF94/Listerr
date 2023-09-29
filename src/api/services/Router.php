@@ -43,7 +43,7 @@ class Router
                     break;
 
                 case 'user_update':
-                    if ($this->isAllowedMethod('GET') || $this->isAllowedMethod('POST')) {
+                    if ($this->isAllowedMethod('POST')) {
                         $user = new UserController();
                         $headers = getallheaders();
                         echo $user->update($headers['Authorization']); // update
