@@ -19,7 +19,7 @@ const template = (name, templateFunction) => {
 };
 
 const resolveRoute = (route) => {
-    console.log('fonction resolveRoute()', {route, selectedRoute:routes[route]});
+    console.log('fonction resolveRoute()', {route, selectedRoute:routes[route], routes});
     try {
         return routes[route];
     } catch (e) {

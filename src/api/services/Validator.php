@@ -64,7 +64,7 @@ class Validator
             $errors[] = 'Le champ "Nom" est requis.';
         } elseif (strlen($params['name']) < 3 || strlen($params['name']) > 20) {
             $errors[] = 'Le champ "Nom" doit comporter entre 3 et 20 caractères.';
-        } elseif (!preg_match("/^[A-Za-z '-]+$/", $params['name'])) {
+        } elseif (!preg_match("/^[[A-Za-zÀ-ÿ '-]+$/", $params['name'])) {
             $errors[] = 'Le champ "Nom" ne peut contenir que des lettres, des espaces, des tirets et des apostrophes.';
         }
 
@@ -72,7 +72,7 @@ class Validator
             $errors[] = 'Le champ "Prénom" est requis.';
         } elseif (strlen($params['firstname']) < 3 || strlen($params['firstname']) > 20) {
             $errors[] = 'Le champ "Prénom" doit comporter entre 3 et 20 caractères.';
-        } elseif (!preg_match("/^[A-Za-z '-]+$/", $params['firstname'])) {
+        } elseif (!preg_match("/^[A-Za-zÀ-ÿ '-]+$/", $params['firstname'])) {
             $errors[] = 'Le champ "Prénom" ne peut contenir que des lettres, des espaces, des tirets et des apostrophes.';
         }
 
@@ -140,7 +140,7 @@ class Validator
             $errors[] = 'Le champ "Nom" est requis.';
         } elseif (strlen($params['name']) < 3 || strlen($params['name']) > 20) {
             $errors[] = 'Le champ "Nom" doit comporter entre 3 et 20 caractères.';
-        } elseif (!preg_match("/^[A-Za-z '-]+$/", $params['name'])) {
+        } elseif (!preg_match("/^[A-Za-zÀ-ÿ '-]+$/", $params['name'])) {
             $errors[] = 'Le champ "Nom" ne peut contenir que des lettres, des espaces, des tirets et des apostrophes.';
         }
 
@@ -148,7 +148,7 @@ class Validator
             $errors[] = 'Le champ "Prénom" est requis.';
         } elseif (strlen($params['firstname']) < 3 || strlen($params['firstname']) > 20) {
             $errors[] = 'Le champ "Prénom" doit comporter entre 3 et 20 caractères.';
-        } elseif (!preg_match("/^[A-Za-z '-]+$/", $params['firstname'])) {
+        } elseif (!preg_match("/^[A-Za-zÀ-ÿ '-]+$/", $params['firstname'])) {
             $errors[] = 'Le champ "Prénom" ne peut contenir que des lettres, des espaces, des tirets et des apostrophes.';
         }
 

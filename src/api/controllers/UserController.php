@@ -193,7 +193,7 @@ class UserController
 
                 return json_encode(['status' => 'success']);
             }
-            return json_encode(['status' => 'fail']);
+            return json_encode(['status' => 'fail', 'errors' => $errors]);
 
         } catch (\Exception $e) {
             return json_encode([

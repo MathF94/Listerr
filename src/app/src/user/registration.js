@@ -1,64 +1,38 @@
-'use strict';
+"use strict";
 
 import { fetchRegister } from "./actions";
+import { redirect, dialog } from "../services/utils.js";
 
 function registration() {
-    const form = document.querySelector('form');
-
-    form.addEventListener('submit', function(e){
+    const form = document.querySelector("form");
+    form.addEventListener("submit", function(e){
         e.preventDefault();
-        const section = document.createElement('section');
-        section.id = "mainSection";
-        section.className = "mainSection";
-        document.body.appendChild(section);
-        
-        const name = e.target.children.name.value;
-        const firstname = e.target.children.firstname.value;
-        const login = e.target.children.login.value;
-        const email = e.target.children.email.value;
 
         fetchRegister(form)
         .then(response => {
-            const wrapper = document.getElementById('wrapper');
-            const msg = document.createElement('div');
-            const errors = response.errors;
-
-            if (response.status === 'success') {
-                msg.innerHTML = `
-                <p>Bonjour ${firstname} ${name}</p>
-                <p>Votre compte lié à l'adresse ${email} est maintenant créé sous le login ${login}.</p>
-                <p>Vous allez être redirigé dans quelques secondes vers la page de connexion...</p>
-                `
-                mainSection.append(msg);
-
-                window.setTimeout(function() {
-                    window.location.href = "http://localhost/listerr/src/app/src/user/login.html"
-                }, 5000)
-            } else {
-                msg.innerHTML = `L'inscription s'est mal passée.`;
-                mainSection.append(msg);
+            if (response.status === "success") {
+                const name = e.target.children.name.value;
+                const firstname = e.target.children.firstname.value;
+                const login = e.target.children.login.value;
+                const email = e.target.children.email.value;
+                dialog({title: `<p>Bienvenue !</p>`,
+                        content: `<p>Bonjour ${firstname} ${name}.</p>
+                            <p>Votre compte lié à l"adresse ${email} est maintenant créé sous le login ${login}.</p>
+                            <p>Vous allez être redirigé dans quelques secondes vers la page de connexion...</p>
+                `});
+                redirect("http://localhost/listerr/src/app/src/user/login.html", 5000)
             }
 
-            if(response.status === 'fail') {
-                for(const index in errors){
-                    const ul = document.createElement('ul');
-                    const li = document.createElement('li');
-                    const column = errors[index];
-                    li.innerText = `${column}`;
-                    msg.innerHTML = `<p>Merci de respecter les champs du formulaire.</p>`
-                    ul.append(li);
-                    mainSection.append(ul);
-                    mainSection.append(msg);
-                    window.setTimeout(function() {
-                        window.location.href = `http://localhost/listerr/src/app/src/user/registration.html`
-                        }, 3000)
-                }
-            }
-        })
-    })
-}
+            if (response.status === "fail") {
+                const errors = response.errors;
+                dialog({title: "Erreurs", content: errors, hasTimeOut: true});
+                redirect("http://localhost/listerr/src/app/src/user/registration.html", 3000)
+            };
+        });
+    });
+};
 
 document.addEventListener("DOMContentLoaded", () => {
     registration();
-})
+});
 
