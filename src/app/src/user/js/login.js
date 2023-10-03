@@ -10,6 +10,7 @@ function login() {
 
         fetchLogin(form)
         .then(response => {
+            console.log(response);
             localStorage.setItem('token', response.token);
             localStorage.setItem('user', JSON.stringify({
                 id: response.user_id,

@@ -60,6 +60,7 @@ class UserController
                 $encrytedPassword = $this->encryption->encrypt($_POST['password']);
                 $model = new Users();
                 $user = $model->auth($_POST['login'], $encrytedPassword);
+                
 
                 if (empty($user)) {
                     return json_encode([
@@ -69,7 +70,6 @@ class UserController
                 }
                 $session = new Session();
                 $encryptToken = $session->encrypt($user->login, $encrytedPassword);
-
                 return json_encode([
                     'status' => 'success',
                     'connected' => true,

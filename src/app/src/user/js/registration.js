@@ -1,6 +1,6 @@
 "use strict";
 
-import { fetchRegister } from "./actions";
+import { fetchRegister } from "./actions.js";
 import { redirect, dialog } from "../../services/utils.js";
 
 function registration() {

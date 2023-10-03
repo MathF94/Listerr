@@ -7,7 +7,8 @@ function updateUser() {
     const form = document.querySelector('form');
 
     fetchRead()
-    .then(response => {const dataUser = response;
+    .then(response => {
+        const dataUser = response;
         for (const index in dataUser) {
             const column = dataUser[index];
             const input = document.querySelector(`input#${index}`)
@@ -24,6 +25,7 @@ function updateUser() {
         .then(response => {
             if (response.status === 'success') {
                 dialog({content: 'Votre profil a bien été mis à jour.'});
+
                 redirect('http://localhost/listerr/src/app/src/user/pages/profil.html', 3000);
             };
 

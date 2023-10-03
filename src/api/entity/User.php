@@ -22,7 +22,7 @@ class User
 
     public function setIsAdmin(bool $value): User
     {
-        $this->isAdmin = $value;
+        $this->isAdmin = $value ;
         return $this;
     }
 

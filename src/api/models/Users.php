@@ -85,14 +85,19 @@ class Users extends Database
                         `password`,
                         `name`,
                         `firstname`,
-                        `email`, `role_id`
+                        `email`,
+                        `role_id`
                     FROM `user`
                     WHERE `login` = :login
                     AND `password` = :password";
+
             $result = $this->findOne($req, [
                 ':login'    => $login,
                 ':password' => $password,
             ]);
+            if (empty($result)){
+                return null;
+            }
             $user = new User();
             $user->populate($result);
             return $user;
