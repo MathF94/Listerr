@@ -1,7 +1,7 @@
 'use strict';
 
 import { fetchDelete } from "./actions.js";
-import { redirect, dialog } from "../services/utils.js";
+import { redirect, dialog } from "../../services/utils.js";
 
 function deleteUser() {
     const form = document.querySelector('form');
@@ -16,7 +16,7 @@ function deleteUser() {
                     dialog({title: "Suppresion de compte",
                             content: `<p>Votre compte a bien été supprimé.</p>
                                     <p>Vous allez nous manquer et être redirigé(e) dans quelques instants vers l'inscription pour vous réinscrire car vous nous aimez !</p>`});
-                    redirect('http://localhost/listerr/src/app/src/user/registration.html', 5000);
+                    redirect('http://localhost/listerr/src/app/src/user/pages/registration.html', 5000);
                 });
             };
         };

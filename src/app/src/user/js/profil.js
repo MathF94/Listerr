@@ -1,7 +1,7 @@
 'use strict';
 
 import { fetchRead } from "./actions.js";
-import { redirect } from "../services/utils.js";
+import { redirect } from "../../services/utils.js";
 
 function read() {
 
@@ -11,7 +11,6 @@ function read() {
         const updateBtn = document.querySelector('#update');
 
         if (response.status === 'disconnected') {
-            console.log('bye');
             deleteBtn.classList.add('hide');
             updateBtn.classList.add('hide');
         }
@@ -26,17 +25,17 @@ function read() {
                 const li = document.createElement('li');
                 const column = response[index];
 
-                if (['status', 'id'].includes(index))  {
+                if (['status', 'id'].includes(index)) {
                     continue;
                 }
-                li.innerText = `${column.label} : ${column.value}`;
 
+                li.innerText = `${column.label} : ${column.value}`;
                 ul.appendChild(li);
             }
             div.prepend(ul);
 
             updateBtn.addEventListener('click', function(e){
-                redirect("http://localhost/listerr/src/app/src/user/update.html", 0);
+                redirect("http://localhost/listerr/src/app/src/user/pages/update.html", 0);
             });
         };
     });

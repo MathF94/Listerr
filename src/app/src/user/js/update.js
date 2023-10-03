@@ -1,7 +1,7 @@
 'use strict';
 
 import { fetchRead, fetchUpdate } from "./actions.js";
-import { redirect, dialog } from "../services/utils.js";
+import { redirect, dialog } from "../../services/utils.js";
 
 function updateUser() {
     const form = document.querySelector('form');
@@ -24,12 +24,12 @@ function updateUser() {
         .then(response => {
             if (response.status === 'success') {
                 dialog({content: 'Votre profil a bien été mis à jour.'});
-                redirect('http://localhost/listerr/src/app/src/user/profil.html', 3000);
+                redirect('http://localhost/listerr/src/app/src/user/pages/profil.html', 3000);
             };
 
             if (response.status === 'fail') {
                 dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
-                redirect('http://localhost/listerr/src/app/src/user/login.html', 3000);
+                redirect('http://localhost/listerr/src/app/src/user/pages/login.html', 3000);
             };
         });
     });

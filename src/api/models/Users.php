@@ -2,6 +2,7 @@
 
 namespace Models;
 
+use Entity\User;
 use Services\Database;
 use Services\Encryption;
 class Users extends Database
@@ -76,7 +77,7 @@ class Users extends Database
         return $query->execute(['login' => $login]);
     }
 
-    public function auth(string $login, string $password): array
+    public function auth(string $login, string $password): ?User
     {
         try {
             $req = "SELECT `id`,
@@ -88,40 +89,64 @@ class Users extends Database
                     FROM `user`
                     WHERE `login` = :login
                     AND `password` = :password";
-            return $this->findOne($req, [
+            $result = $this->findOne($req, [
                 ':login'    => $login,
                 ':password' => $password,
             ]);
+            $user = new User();
+            $user->populate($result);
+            return $user;
 
         } catch (\Exception $e) {
             echo $e->getMessage();
-            return [];
+            return null;
+        }
+    }
+
+    public function readOne(string $login): ?User
+    {
+        try {
+            $req = "SELECT `id`,
+                            `login`,
+                            `password`,
+                            `name`,
+                            `firstname`,
+                            `email`,
+                            `role_id`
+                    FROM `user`
+                    WHERE `login` = :login
+                    ORDER BY created_at DESC";
+            $result = $this->findOne($req, ['login' => $login]);
+            $user = new User();
+            $user->populate($result);
+            return $user;
+
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return null;
         }
     }
 
     public function readAll(): array
     {
         try {
-            $req = "SELECT `id`, `login`, `password`, `name`, `firstname`, `email`, `role_id`
+            $req = "SELECT `id`,
+                            `login`,
+                            `name`,
+                            `firstname`,
+                            `email`,
+                            `password`,
+                            `role_id`
                     FROM `user`
-                    WHERE `id` = :id
-                    ORDER BY created_at DESC";
-            return $this->findAll($req);
-
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-            return [];
-        }
-    }
-
-    public function readOne(string $login): array
-    {
-        try {
-            $req = "SELECT `id`, `login`, `password`, `name`, `firstname`, `email`, `role_id`
-                    FROM `user`
-                    WHERE `login` = :login
-                    ORDER BY created_at DESC";
-            return $this->findOne($req, ['login' => $login]);
+                    ORDER BY created_at ASC";
+            $results = $this->findAll($req);
+            $usersArray = [];
+            foreach($results as $result){
+                $user = new User();
+                $user->populate($result);
+                $usersArray[] = $user;
+            }
+            return $usersArray;
 
         } catch (\Exception $e) {
             echo $e->getMessage();

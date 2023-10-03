@@ -1,7 +1,7 @@
 'use strict';
 
 import { fetchLogout } from "./actions.js";
-import { redirect, dialog } from "../services/utils.js";
+import { redirect, dialog } from "../../services/utils.js";
 
 function logout() {
     const anchorLogout = document.querySelector('#logout');
@@ -14,7 +14,7 @@ function logout() {
                     content: `<p>Votre session n'est pas ou plus active.</p>
                     <p>Vous allez être redirigé(e) dans quelques instants vers la page de connexion...</p>`
                 });
-            redirect('http://localhost/listerr/src/app/src/user/login.html', 5000);
+            redirect('http://localhost/listerr/src/app/src/user/pages/login.html', 5000);
         }
 
         anchorLogout.addEventListener('click', function(e) {
@@ -23,10 +23,11 @@ function logout() {
             if (confirm('Voulez-vous vraiment vous déconnecter ?') === true) {
                 if(response.status === 'connected') {
                     localStorage.removeItem('token');
+                    localStorage.removeItem('user');
                     dialog({title: `A bientôt ${response.login} !`,
                             content: "Vous allez être redirigé(e) dans quelques instants vers la page de connexion..."
                         });
-                    redirect('http://localhost/listerr/src/app/src/user/login.html', 5000);
+                    redirect('http://localhost/listerr/src/app/src/user/pages/login.html', 5000);
                 };
             };
         });
@@ -37,4 +38,4 @@ document.addEventListener("DOMContentLoaded", () => {
     logout();
 })
 
-export default logout;
+export { logout };

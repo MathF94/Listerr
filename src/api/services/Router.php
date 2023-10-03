@@ -58,6 +58,13 @@ class Router
                     }
                     break;
 
+                case 'admin_read_user':
+                    if ($this->isAllowedMethod('GET')) {
+                        $user = new UserController();
+                        echo $user->readUsers(); // read
+                    }
+                    break;
+
                 default:
                     header('Location: index.php'); // on renvoie vers l'index
                     exit;

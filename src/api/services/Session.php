@@ -3,6 +3,7 @@
 namespace Services;
 
 use DateTime;
+use Entity\User;
 use Services\Encryption;
 
 class Session
@@ -33,19 +34,19 @@ class Session
         return $this->encryption->encrypt(json_encode($tokenUser));
     }
 
-    public function decrypt($encryptedData): array
+    public function decrypt(string $encryptedData): array
     {
         return json_decode(json_decode($this->encryption->decrypt($encryptedData), true), true);
     }
 
-    public function isExpired($tokenData, $user): bool
+    public function isExpired(array $tokenData, User $user): bool
     {
         date_default_timezone_set('Europe/Paris');
-        
-        if (empty($user['login'])
-        || empty($user['password'])
-        || $tokenData['login'] !== $user['login']
-        || $tokenData['password'] !== $user['password']
+
+        if (empty($user->login)
+        || empty($user->password)
+        || $tokenData['login'] !== $user->login
+        || $tokenData['password'] !== $user->password
         || strtotime($tokenData['expired_at']) < time()
         ){
             return true;

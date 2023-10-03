@@ -2,6 +2,7 @@
 
 namespace Controllers;
 
+use Entity\User;
 use Models\Users;
 use Services\Session;
 use Services\Encryption;
@@ -29,7 +30,7 @@ class UserController
             if (count($errors) === 0) {
                 $params = $_POST;
                 $params['password'] = $this->encryption->encrypt($params['password']);
-                $params['role_id'] = 2;
+                $params['role_id'] = User::ROLE_USER;
                 $model = new Users();
                 $model->create($params);
 
@@ -67,14 +68,16 @@ class UserController
                     ]);
                 }
                 $session = new Session();
-                $encryptToken = $session->encrypt($user['login'], $encrytedPassword);
+                $encryptToken = $session->encrypt($user->login, $encrytedPassword);
 
                 return json_encode([
                     'status' => 'success',
                     'connected' => true,
-                    'token' => $encryptToken
+                    'token' => $encryptToken,
+                    'user_id' => $user->id,
+                    'user_isAdmin' => $user->isAdmin,
                 ]);
-            }
+            };
             return json_encode([
                 'status' => 'fail',
                 'errors' => $errors]);
@@ -84,7 +87,7 @@ class UserController
                 'status' => 'error',
                 'message' => $e->getMessage()
             ]);
-        }
+        };
     }
 
     public function read($tokenUser): string
@@ -102,31 +105,55 @@ class UserController
                     return json_encode([
                         'status' => 'unknown user'
                     ]);
-                }
+                };
+
                 if (!$session->isExpired($decrypt, $user)) {
                     return json_encode([
                         'status' => 'connected',
-                        'id' => ['label' => 'id', 'value' => $user['id']],
-                        'name' => ['label' => 'Nom', 'value' => $user['name']],
-                        'firstname' => ['label' =>'Prénom', 'value' => $user['firstname']],
-                        'email' => ['label' =>'E-mail', 'value' => $user['email']],
-                        'login' => ['label' =>'Login', 'value' => $user['login']],
+                        'id' => ['label' => 'id', 'value' => $user->id],
+                        'name' => ['label' => 'Nom', 'value' => $user->name],
+                        'firstname' => ['label' =>'Prénom', 'value' => $user->firstname],
+                        'email' => ['label' =>'E-mail', 'value' => $user->email],
+                        'login' => ['label' =>'Login', 'value' => $user->login],
                     ]);
+
                 } else {
                     return json_encode([
                         'status' => 'disconnected',
                         'message' => 'La connexion a été perdue, merci de vous reconnecter'
                     ]);
-                }
-            }
+                };
+            };
+            return json_encode([
+                'status' => 'fail',
+                'message' => 'body is empty'
+            ]);
 
-            return json_encode(['status' => 'fail', 'message' => 'body is empty']);
         } catch (\Exception $e) {
             return json_encode([
                 'status' => 'error',
                 'message' => $e->getMessage()
             ]);
-        }
+        };
+    }
+
+    public function readUsers(): string
+    {
+        try {
+            $model = new Users();
+            $usersList = $model->readAll();
+
+            return json_encode([
+                'status' => 'success',
+                'data' => $usersList
+            ]);
+
+        } catch (\Exception $e) {
+            return json_encode([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        };
     }
 
     public function logout($tokenUser): string
@@ -142,10 +169,9 @@ class UserController
                     'status' => 'error',
                     'message' => "unknown user : {$decryptToken['login']}"
                 ]);
-            }
+            };
 
             $isExpired = $session->isExpired($decryptToken, $user);
-            // si false = pas expiré = encore connecté => on peut logout
             if (!$isExpired) {
                 return json_encode([
                     'status' => 'connected',
@@ -154,8 +180,7 @@ class UserController
                     'token' => $tokenUser,
                     'login' => $decryptToken['login'],
                 ]);
-            }
-            // si true = expiré = déjà déconnecté
+            };
             if ($isExpired) {
                 $session = new Session();
                 $decryptToken = $session->decrypt($tokenUser);
@@ -166,14 +191,14 @@ class UserController
                     'token' => $tokenUser,
                     'login' => $decryptToken['login'],
                 ]);
+            };
 
-            }
         } catch (\Exception $e) {
             return json_encode([
                 'status' => 'error',
                 'message' => $e->getMessage()
             ]);
-        }
+        };
     }
 
     public function update($tokenUser) // @TODO
@@ -190,17 +215,20 @@ class UserController
                 ];
                 $modelUser = new Users();
                 $modelUser->update($params, $id);
-
                 return json_encode(['status' => 'success']);
-            }
-            return json_encode(['status' => 'fail', 'errors' => $errors]);
+            };
+
+            return json_encode([
+                'status' => 'fail',
+                'errors' => $errors
+            ]);
 
         } catch (\Exception $e) {
             return json_encode([
                 'status' => 'error',
                 'message' => $e->getMessage()
             ]);
-        }
+        };
     }
 
     public function delete($tokenUser): string
@@ -211,16 +239,20 @@ class UserController
             $users = new Users();
             $user = $users->readOne($decryptToken['login']); // donnée de l'utilisateur (login, password... de la table)
             if (!empty($user)) {
-                $users->delete($user['login']);
+                $users->delete($user->login);
 
-                return json_encode(['status' => 'unsubscribed', 'message' => 'le compte a bien été supprimé']);
-            }
+                return json_encode([
+                    'status' => 'unsubscribed',
+                    'message' => 'le compte a bien été supprimé.'
+                ]);
+            };
             return json_encode(['status' => 'fail']);
+
         } catch (\Exception $e) {
             return json_encode([
                 'status' => 'error',
                 'message' => $e->getMessage()
             ]);
-        }
+        };
     }
 }
