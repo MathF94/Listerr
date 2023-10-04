@@ -14,11 +14,6 @@ function header() {
 
     navigation(header);
 
-    const msg = document.createElement('div')
-    msg.id = "mainMessage";
-    msg.className = "mainMessage";
-
-    header.appendChild(msg)
     document.body.prepend(header);
 }
 

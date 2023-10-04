@@ -60,12 +60,11 @@ class UserController
                 $encrytedPassword = $this->encryption->encrypt($_POST['password']);
                 $model = new Users();
                 $user = $model->auth($_POST['login'], $encrytedPassword);
-                
 
                 if (empty($user)) {
                     return json_encode([
                         'status' => 'fail_data',
-                        'message' => 'Votre identifiant ou votre mot de passe est incorrect'
+                        'message' => 'Votre identifiant ou votre mot de passe est incorrect.'
                     ]);
                 }
                 $session = new Session();
@@ -75,6 +74,7 @@ class UserController
                     'connected' => true,
                     'token' => $encryptToken,
                     'user_id' => $user->id,
+                    'user_login' => $user->login,
                     'user_isAdmin' => $user->isAdmin,
                 ]);
             };

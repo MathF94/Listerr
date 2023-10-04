@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 import { fetchRead } from "./actions.js";
 import { redirect } from "../../services/utils.js";
@@ -7,25 +7,26 @@ function read() {
 
     fetchRead()
     .then(response => {
-        const deleteBtn = document.querySelector('#delete');
-        const updateBtn = document.querySelector('#update');
+        localStorage.removeItem("token_user");
+        const deleteBtn = document.querySelector("#delete");
+        const updateBtn = document.querySelector("#update");
 
-        if (response.status === 'disconnected') {
-            deleteBtn.classList.add('hide');
-            updateBtn.classList.add('hide');
+        if (response.status === "disconnected") {
+            deleteBtn.classList.add("hide");
+            updateBtn.classList.add("hide");
         }
 
-        if (response.status === 'connected' && localStorage.token) {
-            deleteBtn.classList.remove('hide');
-            updateBtn.classList.remove('hide');
-            const div = document.querySelector('#profilWrapper');
-            const ul = document.createElement('ul');
+        if (response.status === "connected" && localStorage.token && localStorage.user) {
+            deleteBtn.classList.remove("hide");
+            updateBtn.classList.remove("hide");
+            const div = document.querySelector("#profilWrapper");
+            const ul = document.createElement("ul");
 
             for (const index in response) {
-                const li = document.createElement('li');
+                const li = document.createElement("li");
                 const column = response[index];
 
-                if (['status', 'id'].includes(index)) {
+                if (["status", "id"].includes(index)) {
                     continue;
                 }
 
@@ -34,7 +35,7 @@ function read() {
             }
             div.prepend(ul);
 
-            updateBtn.addEventListener('click', function(e){
+            updateBtn.addEventListener("click", function(e){
                 redirect("http://localhost/listerr/src/app/src/user/pages/update.html", 0);
             });
         };
