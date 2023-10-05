@@ -22,43 +22,7 @@ class User
 
     public function setIsAdmin(bool $value): User
     {
-        $this->isAdmin = $value ;
-        return $this;
-    }
-
-    public function setId(int $value): User
-    {
-        $this->id = $value;
-        return $this;
-    }
-
-    public function setName(string $value): User
-    {
-        $this->name = $value;
-        return $this;
-    }
-
-    public function setFirstname(string $value): User
-    {
-        $this->firstname = $value;
-        return $this;
-    }
-
-    public function setLogin(string $value): User
-    {
-        $this->login = $value;
-        return $this;
-    }
-
-    public function setEmail(string $value): User
-    {
-        $this->email = $value;
-        return $this;
-    }
-
-    public function setPassword(string $value): User
-    {
-        $this->password = $value;
+        $this->isAdmin = (int)$value === self::ROLE_ADMIN;
         return $this;
     }
 
@@ -70,13 +34,14 @@ class User
 
     public function populate(array $params): void
     {
-        $this->setId($params['id'])
-            ->setName($params['name'])
-            ->setFirstname($params['firstname'])
-            ->setLogin($params['login'])
-            ->setEmail($params['email'])
-            ->setPassword($params['password'])
-            ->setRole($params['role_id'])
-            ->setIsAdmin((int)$params['role_id'] === self::ROLE_ADMIN);
+        $this->id = $params['id'];
+        $this->name = $params['name'];
+        $this->firstname = $params['firstname'];
+        $this->login=$params['login'];
+        $this->email=$params['email'];
+        $this->password=$params['password'];
+
+        $this->setRole($params['role_id'])
+            ->setIsAdmin($params['role_id']);
     }
 }

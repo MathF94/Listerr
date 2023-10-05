@@ -27,7 +27,7 @@ class UserController
     {
         try {
             $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_REGISTER);
-            if (count($errors) === 0) {
+            if (empty(count($errors))) {
                 $params = $_POST;
                 $params['password'] = $this->encryption->encrypt($params['password']);
                 $params['role_id'] = User::ROLE_USER;
@@ -56,7 +56,7 @@ class UserController
     {
         try {
             $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_LOGIN);
-            if (count($errors) === 0) {
+            if (empty(count($errors))) {
                 $encrytedPassword = $this->encryption->encrypt($_POST['password']);
                 $model = new Users();
                 $user = $model->auth($_POST['login'], $encrytedPassword);
@@ -205,7 +205,7 @@ class UserController
     {
         try {
             $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_UPDATE_USER);
-            if (count($errors) === 0) {
+            if (empty(count($errors))) {
                 $id = $_POST['id'];
                 $params = [
                     'name' => $_POST['name'],

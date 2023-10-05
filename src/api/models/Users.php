@@ -30,12 +30,12 @@ class Users extends Database
             VALUES (:login, :password, :name, :firstname, :email, :role_id)";
 
             $params = [
-                ':login' => $params['login'],
-                ':password' => $params['password'],
-                ':name' => $params['name'],
-                ':firstname' => $params['firstname'],
-                ':email' => $params['email'],
-                ':role_id' => $params['role_id']
+                'login' => $params['login'],
+                'password' => $params['password'],
+                'name' => $params['name'],
+                'firstname' => $params['firstname'],
+                'email' => $params['email'],
+                'role_id' => $params['role_id']
             ];
 
             $this->executeReq($req, $params);
@@ -92,8 +92,8 @@ class Users extends Database
                     AND `password` = :password";
 
             $result = $this->findOne($req, [
-                ':login'    => $login,
-                ':password' => $password,
+                'login'    => $login,
+                'password' => $password,
             ]);
             if (empty($result)){
                 return null;
@@ -121,7 +121,9 @@ class Users extends Database
                     FROM `user`
                     WHERE `login` = :login
                     ORDER BY created_at DESC";
+
             $result = $this->findOne($req, ['login' => $login]);
+
             $user = new User();
             $user->populate($result);
             return $user;
@@ -144,8 +146,10 @@ class Users extends Database
                             `role_id`
                     FROM `user`
                     ORDER BY created_at ASC";
+
             $results = $this->findAll($req);
             $usersArray = [];
+
             foreach($results as $result){
                 $user = new User();
                 $user->populate($result);

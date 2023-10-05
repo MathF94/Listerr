@@ -9,13 +9,14 @@ function login() {
         e.preventDefault();
 
         fetchLogin(form)
-        .then(response => {;
+        .then(response => {
             localStorage.setItem("token", response.token);
             localStorage.setItem("user", JSON.stringify({
                 id: response.user_id,
                 login: response.user_login,
                 is_admin: response.user_isAdmin
             }))
+            localStorage.getItem("token")
 
             if (response.status === "success") {
                 const login = e.target.children.login.value;

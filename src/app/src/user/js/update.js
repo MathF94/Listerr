@@ -20,7 +20,7 @@ function updateUser() {
 
     form.addEventListener("submit", function(e) {
         e.preventDefault();
-        const userForm = e.target.login.value;
+        const userLogin = e.target.login.value;
 
         fetchUpdate(form)
         .then(response => {
@@ -28,7 +28,7 @@ function updateUser() {
             const user = JSON.parse(localStorage.getItem("user"));
 
             if (response.status === "success") {
-                if (userForm !== user.login) {
+                if (userLogin !== user.login) {
                     localStorage.removeItem("token");
                     localStorage.removeItem("user");
 

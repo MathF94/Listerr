@@ -6,7 +6,7 @@ import { redirect, dialog } from "../../services/utils.js";
 function logout() {
     const anchorLogout = document.querySelector("#logout");
     localStorage.getItem("token");
-
+    
     fetchLogout()
     .then(response => {
         if (response.status === "disconnect") {
