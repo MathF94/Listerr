@@ -13,4 +13,4 @@ async function fetchReadAll() {
     }
 };
 
-export {fetchReadAll};
+export { fetchReadAll };

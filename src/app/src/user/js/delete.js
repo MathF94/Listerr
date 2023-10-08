@@ -1,6 +1,6 @@
 'use strict';
 
-import { fetchDelete } from "./actions.js";
+import { fetchDelete } from "./actions_user.js";
 import { redirect, dialog } from "../../services/utils.js";
 
 function deleteUser() {
@@ -26,3 +26,5 @@ function deleteUser() {
 document.addEventListener("DOMContentLoaded", () => {
     deleteUser();
 });
+
+export default deleteUser;

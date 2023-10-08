@@ -1,12 +1,12 @@
 "use strict";
 
-import { fetchLogout } from "./actions.js";
+import { fetchLogout } from "./actions_user.js";
 import { redirect, dialog } from "../../services/utils.js";
 
 function logout() {
     const anchorLogout = document.querySelector("#logout");
     localStorage.getItem("token");
-    
+
     fetchLogout()
     .then(response => {
         if (response.status === "disconnect") {

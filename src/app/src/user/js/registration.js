@@ -1,6 +1,6 @@
 "use strict";
 
-import { fetchRegister } from "./actions.js";
+import { fetchRegister } from "./actions_user.js";
 import { redirect, dialog } from "../../services/utils.js";
 
 function registration() {
@@ -36,3 +36,4 @@ document.addEventListener("DOMContentLoaded", () => {
     registration();
 });
 
+export default registration;

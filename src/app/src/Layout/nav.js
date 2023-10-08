@@ -10,7 +10,7 @@ function navigation(template) {
         const dataUser = JSON.parse(user);
         if (dataUser.is_admin){
             const links = [
-                {text: "Liste d'utilisateurs", href: "http://localhost/listerr/src/app/src/admin/pages/profils.html", id: "usersProfil"},
+                {text: "Liste d'utilisateurs", href: "http://localhost/listerr/src/app/src/admin/pages/profils_users.html", id: "usersProfil"},
             ];
             addLinks(links);
         };
@@ -26,7 +26,7 @@ function navigation(template) {
 
     if (user !== undefined && user !== null) {
         const links = [
-            {text: "Votre profil", href: "http://localhost/listerr/src/app/src/user/pages/profil.html", id: "profil"},
+            {text: "Votre profil", href: "http://localhost/listerr/src/app/src/user/pages/profil_user.html", id: "profil"},
             {text: "Listes", href: "http://localhost/listerr/src/app/src/list/pages/list.html", id: "list"},
             {text: "Déconnexion", id: "logout"},
         ];
@@ -57,4 +57,4 @@ function navigation(template) {
     }
 };
 
-export default navigation;
+export { navigation };

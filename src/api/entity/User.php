@@ -22,26 +22,26 @@ class User
 
     public function setIsAdmin(bool $value): User
     {
-        $this->isAdmin = (int)$value === self::ROLE_ADMIN;
+        $this   ->isAdmin = (int)$value === self::ROLE_ADMIN;
         return $this;
     }
 
     public function setRole(int $value): User
     {
-        $this->role = self::ROLES[$value];
+        $this   ->role = self::ROLES[$value];
         return $this;
     }
 
     public function populate(array $params): void
     {
-        $this->id = $params['id'];
-        $this->name = $params['name'];
-        $this->firstname = $params['firstname'];
-        $this->login=$params['login'];
-        $this->email=$params['email'];
-        $this->password=$params['password'];
+        $this   ->  id        = $params['id'];
+        $this   ->  name      = $params['name'];
+        $this   ->  firstname = $params['firstname'];
+        $this   ->  login     = $params['login'];
+        $this   ->  email     = $params['email'];
+        $this   ->  password  = $params['password'];
 
-        $this->setRole($params['role_id'])
-            ->setIsAdmin($params['role_id']);
+        $this   ->setRole($params['role_id'])
+                ->setIsAdmin($params['role_id']);
     }
 }

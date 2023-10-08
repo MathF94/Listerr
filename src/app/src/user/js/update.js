@@ -1,6 +1,6 @@
 "use strict";
 
-import { fetchRead, fetchUpdate } from "./actions.js";
+import { fetchRead, fetchUpdate } from "./actions_user.js";
 import { redirect, dialog } from "../../services/utils.js";
 
 function updateUser() {
@@ -39,7 +39,7 @@ function updateUser() {
                     redirect("http://localhost/listerr/src/app/src/user/pages/login.html", 3000);
                 } else {
                     dialog({content: "Votre profil a bien été mis à jour."});
-                    redirect("http://localhost/listerr/src/app/src/user/pages/profil.html", 3000);
+                    redirect("http://localhost/listerr/src/app/src/user/pages/profil_user.html", 3000);
                 }
             };
 
@@ -54,3 +54,5 @@ function updateUser() {
 document.addEventListener("DOMContentLoaded", () => {
     updateUser();
 })
+
+export default updateUser;

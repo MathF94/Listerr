@@ -29,6 +29,7 @@ function cors()
         'http://listerr.local',
         'http://localhost',
         'http://127.0.0.1',
+        // 'http://127.0.0.1:5500',
         'https://mathieufagot.ide.3wa.io'
     ];
 

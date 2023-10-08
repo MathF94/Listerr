@@ -1,4 +1,4 @@
-import navigation from './nav.js';
+import { navigation } from './nav.js';
 
 function header() {
     const header = document.createElement('header')
@@ -20,3 +20,5 @@ function header() {
 document.addEventListener("DOMContentLoaded", () => {
     header();
 })
+
+export { header } ;

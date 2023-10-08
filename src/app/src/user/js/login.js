@@ -1,6 +1,6 @@
 "use strict";
 
-import { fetchLogin } from "./actions.js";
+import { fetchLogin } from "./actions_user.js";
 import { redirect, dialog } from "../../services/utils.js";
 
 function login() {
@@ -21,7 +21,7 @@ function login() {
             if (response.status === "success") {
                 const login = e.target.children.login.value;
                 dialog({title: `<p>Bonjour ${login} !</p>`, content: `<p>Vous êtes bien connecté(e).</p>`});
-                redirect("http://localhost/listerr/src/app/src/user/pages/profil.html", 3000);
+                redirect("http://localhost/listerr/src/app/src/user/pages/profil_user.html", 3000);
             };
 
             if (response.status === "fail_data") {
@@ -41,4 +41,4 @@ document.addEventListener("DOMContentLoaded", () => {
     login();
 });
 
-
+export default login;
