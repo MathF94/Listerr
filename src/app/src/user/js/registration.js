@@ -1,14 +1,20 @@
 "use strict";
 
-import { fetchRegister } from "./actions_user.js";
+import { fetchRegister } from "./actions.js";
 import { redirect, dialog } from "../../services/utils.js";
 
+console.log("registration");
+
 function registration() {
+    const content = document.querySelector("#content");
+    console.log(content);
     const form = document.querySelector("form");
+    console.log(form);
+
     form.addEventListener("submit", function(e){
         e.preventDefault();
 
-        fetchRegister(form)
+        return fetchRegister(form)
         .then(response => {
             if (response.status === "success") {
                 const name = e.target.children.name.value;
@@ -20,20 +26,20 @@ function registration() {
                             <p>Votre compte lié à l'adresse ${email} est maintenant créé sous le login ${login}.</p>
                             <p>Vous allez être redirigé dans quelques secondes vers la page de connexion...</p>
                 `});
-                redirect("http://localhost/listerr/src/app/src/user/pages/login.html", 5000)
+                redirect("#/login.html", 5000)
             }
 
             if (response.status === "fail") {
                 const errors = response.errors;
                 dialog({title: "Erreurs", content: errors, hasTimeOut: true});
-                redirect("http://localhost/listerr/src/app/src/user/pages/registration.html", 3000)
+                // redirect("http://localhost/#/registration.html", 3000)
             };
         });
+
     });
 };
 
 document.addEventListener("DOMContentLoaded", () => {
     registration();
 });
-
 export default registration;

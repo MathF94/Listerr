@@ -48,4 +48,5 @@ function dialog({title, content, hasTimeOut}) {
     };
 };
 
+console.log("utils");
 export { redirect, dialog };

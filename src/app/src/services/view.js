@@ -2,18 +2,18 @@ class View {
     #wrapperTarget;
 
     constructor() {
-        this.#wrapperTarget = 'main';
+        this.#wrapperTarget = 'content';
     }
-    
+
     setWrapperTarget (value) {
         this.#wrapperTarget = value
     }
-    
+
     load (viewPath) {
-        console.log('fonction load()', {viewPath})
-        
+        // console.log('fonction load()', {viewPath})
+
         const wrapper = document.getElementById(this.#wrapperTarget);
-        
+
         fetch(`${viewPath}.html`,{
             headers: {
                 'Content-Type': 'application/text',
@@ -21,9 +21,9 @@ class View {
         })
         .then(response => response.text())
         .then(html => {
-            console.log({html})
+            // console.log({html})
             wrapper.innerHTML = html
-            console.log(wrapper)
+            // console.log(wrapper)
         })
         .catch(e => console.error(e));
     }

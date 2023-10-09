@@ -10,7 +10,7 @@ function navigation(template) {
         const dataUser = JSON.parse(user);
         if (dataUser.is_admin){
             const links = [
-                {text: "Liste d'utilisateurs", href: "http://localhost/listerr/src/app/src/admin/pages/profils_users.html", id: "usersProfil"},
+                {text: "Liste d'utilisateurs", href: "#/admin/profils.html", id: "nav_usersProfil"},
             ];
             addLinks(links);
         };
@@ -18,17 +18,17 @@ function navigation(template) {
 
     if (token === undefined || token === null || user === null || user === undefined) {
         const links = [
-            {text: "Inscription", href: "http://localhost/listerr/src/app/src/user/pages/registration.html", id: "register"},
-            {text: "Connexion", href: "http://localhost/listerr/src/app/src/user/pages/login.html", id: "login"},
+            {text: "Inscription", href: "#/registration.html", id: "nav_register"},
+            {text: "Connexion", href: "#/login.html", id: "nav_login"},
         ];
         addLinks(links);
     };
 
     if (user !== undefined && user !== null) {
         const links = [
-            {text: "Votre profil", href: "http://localhost/listerr/src/app/src/user/pages/profil_user.html", id: "profil"},
-            {text: "Listes", href: "http://localhost/listerr/src/app/src/list/pages/list.html", id: "list"},
-            {text: "Déconnexion", id: "logout"},
+            {text: "Votre profil", href: "#/profil.html", id: "nav_profil"},
+            {text: "Listes", href: "#/list.html", id: "nav_list"},
+            {text: "Déconnexion", id: "nav_logout"},
         ];
         addLinks(links);
     };
