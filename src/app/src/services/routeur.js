@@ -36,9 +36,9 @@ const resolveRoute = (path) => {
 const router = (evt) => {
     let path = window.location.hash.slice(1) || '/';
     let route = resolveRoute(path);
-    // console.log("fonction router()", {evt, route, path});
+     console.log("fonction router()", {evt, route, routes, templates, path});
     route();
 };
 
-console.log("route");
+//console.log("route");
 export {route, template, router};

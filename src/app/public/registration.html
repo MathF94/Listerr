@@ -1,6 +1,6 @@
-<section class="register">
+<head><script defer src="./js/layout.bundle.js"></script><script defer src="./js/user.bundle.js"></script><script defer src="./js/admin.bundle.js"></script></head><section class="register">
     <h2>Nouvelle inscription</h2>
-    <form id="form" action="?route=user_register" method="post">
+    <form id="form">
         <label for="name">Votre nom</label>
         <input type="text" name="name" id="name" placeholder="Votre nom" required />
 
@@ -40,7 +40,6 @@
             required
         />
 
-        <button type="submit">Valider</button>
+        <button id="submit-registration" type="submit">Valider</button>
     </form>
 </section>
-<script defer src="./js/user.bundle.js"></script><script defer src="./js/admin.bundle.js"></script>

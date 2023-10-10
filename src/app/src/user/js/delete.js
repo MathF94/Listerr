@@ -1,11 +1,9 @@
 'use strict';
 
 import { fetchDelete } from "./actions.js";
-import { redirect, dialog } from "../../services/utils.js";
+import { redirect, dialog, waitForElm } from "../../services/utils.js";
 
-function deleteUser() {
-    const form = document.querySelector('form');
-
+function deleteUser(form) {
     form.addEventListener('submit', function(e){
         e.preventDefault();
 
@@ -23,8 +21,8 @@ function deleteUser() {
     });
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-    deleteUser();
+waitForElm('#form').then((elm) => {
+    deleteUser(elm);
 });
 
 export default deleteUser;

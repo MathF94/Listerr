@@ -25,9 +25,9 @@ services:
       context: ..
     container_name: www-listerr
     volumes:
-      - ../src:/listerr/app/private
-    working_dir: /listerr/app/private
-    command: php -S 0.0.0.0:80 -t /listerr/app/public
+      - ../src:/listerr/private
+    working_dir: /listerr/private
+    command: php -S 0.0.0.0:80 -t /listerr/public
     links:
       - database.listerr.lan
     ports:

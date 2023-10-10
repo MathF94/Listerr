@@ -1,10 +1,9 @@
 "use strict";
 
 import { fetchLogin } from "./actions.js";
-import { redirect, dialog } from "../../services/utils.js";
+import { redirect, dialog, waitForElm } from "../../services/utils.js";
 
-function login() {
-    const form = document.querySelector("form");
+function login(form) {
     form.addEventListener("submit", function(e){
         e.preventDefault();
 
@@ -37,8 +36,8 @@ function login() {
     });
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-    login();
+waitForElm('#form').then((elm) => {
+    login(elm);
 });
 console.log("login");
 

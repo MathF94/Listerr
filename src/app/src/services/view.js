@@ -21,7 +21,7 @@ class View {
         })
         .then(response => response.text())
         .then(html => {
-            // console.log({html})
+             console.log({html})
             wrapper.innerHTML = html
             // console.log(wrapper)
         })

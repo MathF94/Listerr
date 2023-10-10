@@ -1,11 +1,9 @@
 "use strict";
 
 import { fetchRead, fetchUpdate } from "./actions.js";
-import { redirect, dialog } from "../../services/utils.js";
+import { redirect, dialog, waitForElm } from "../../services/utils.js";
 
-function updateUser() {
-    const form = document.querySelector("form");
-
+function updateUser(form) {
     fetchRead()
     .then(response => {
         const dataUser = response;
@@ -51,8 +49,8 @@ function updateUser() {
     });
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-    updateUser();
+waitForElm('#form').then((elm) => {
+    updateUser(elm);
 })
 
 export default updateUser;

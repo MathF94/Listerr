@@ -17,8 +17,4 @@ function header() {
     document.body.prepend(header);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    header();
-})
-
 export { header } ;
