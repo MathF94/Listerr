@@ -11,7 +11,6 @@ class View {
 
     load (viewPath) {
         // console.log('fonction load()', {viewPath})
-
         const wrapper = document.getElementById(this.#wrapperTarget);
 
         fetch(`${viewPath}.html`,{
@@ -21,7 +20,6 @@ class View {
         })
         .then(response => response.text())
         .then(html => {
-            // console.log({html})
             wrapper.innerHTML = html
             // console.log(wrapper)
         })

@@ -43,46 +43,37 @@ let config = {
             template: "./src/app/src/index.html",
             filename: "index.html",
             chunks: ["layout", "routes", "user", "admin"],
-            async: ["user", "admin"],
+            inject: "head",
         }),
         new HtmlWebpackPlugin({
             template: "./src/app/src/home/pages/home.html",
             filename: "home.html",
-            chunks: ["user", "admin"],
-            async: ["user", "admin"],
-            inject: "body",
+            chunks: [],
         }),
         new HtmlWebpackPlugin({
             template: "./src/app/src/user/pages/registration.html",
             filename: "registration.html",
-            chunks: ["user", "admin"],
-            
-            inject: "body",
-
+            chunks: [],
         }),
         new HtmlWebpackPlugin({
             template: "./src/app/src/user/pages/login.html",
             filename: "login.html",
-            chunks: ["user", "admin"],
-
+            chunks: [],
         }),
         new HtmlWebpackPlugin({
             template: "./src/app/src/user/pages/profil.html",
             filename: "profil.html",
-            chunks: ["user", "admin"],
-
+            chunks: [],
         }),
         new HtmlWebpackPlugin({
             template: "./src/app/src/user/pages/update.html",
             filename: "update.html",
-            chunks: ["user", "admin"],
-
+            chunks: [],
         }),
         new HtmlWebpackPlugin({
             template: "./src/app/src/admin/pages/profils.html",
             filename: "profils.html",
-            chunks: ["user", "admin"],
-
+            chunks: [],
         }),
     ],
 

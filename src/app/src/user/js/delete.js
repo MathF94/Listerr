@@ -1,11 +1,9 @@
 'use strict';
 
 import { fetchDelete } from "./actions.js";
-import { redirect, dialog } from "../../services/utils.js";
+import { redirect, dialog, uploadElement } from "../../services/utils.js";
 
-function deleteUser() {
-    const form = document.querySelector('form');
-
+function deleteUser(form) {
     form.addEventListener('submit', function(e){
         e.preventDefault();
 
@@ -23,8 +21,9 @@ function deleteUser() {
     });
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-    deleteUser();
-});
+uploadElement('#deleteForm')
+.then(form => {
+    deleteUser(form);
+})
 
 export default deleteUser;

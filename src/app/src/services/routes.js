@@ -8,6 +8,12 @@ template("index", function(){
 // fonction route (path, template) => {}
 route("/", "index");
 
+// route home
+template("home", function(){
+    View.load("./home");
+});
+route("/home.html", "home");
+
 // route registration
 template("registration", function(){
     View.load("./registration"); //
@@ -30,7 +36,7 @@ route("/profil.html", "profil");
 template("users", function(){
     View.load("./profils"); //
 });
-route("/users.html", "users");
+route("/profils.html", "users");
 
 // route update user
 template("update", function(){

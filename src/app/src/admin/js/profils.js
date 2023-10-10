@@ -1,13 +1,14 @@
 "use strict";
 
 import { fetchReadAll } from "./actions.js";
+import { uploadElement } from "../../services/utils.js";
 
-function readAdmin() {
+function readAdmin(tbody) {
 
     fetchReadAll()
     .then(response => {
         const data = response.data;
-        const tbody = document.querySelector("tbody");
+        const tbody = document.querySelector("#profilsTbody");
 
         for (const index in data) {
             const column = data[index];
@@ -51,8 +52,6 @@ function readAdmin() {
 
             const tdDeleteBtn = document.createElement("td");
             const deleteForm = document.createElement("form");
-            deleteForm.action = "?route=admin_delete_user";
-            deleteForm.method = "post";
             const deleteBtn = document.createElement("button");
             deleteBtn.type = "submit";
             deleteBtn.value = "delete";
@@ -66,8 +65,9 @@ function readAdmin() {
     });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    readAdmin();
-});
+uploadElement('#profilsTbody')
+.then(tbody => {
+    readAdmin(tbody);
+})
 
-export default readAdmin;
+export { readAdmin };

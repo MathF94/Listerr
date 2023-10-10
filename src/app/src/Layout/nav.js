@@ -10,7 +10,7 @@ function navigation(template) {
         const dataUser = JSON.parse(user);
         if (dataUser.is_admin){
             const links = [
-                {text: "Liste d'utilisateurs", href: "#/admin/profils.html", id: "nav_usersProfil"},
+                {text: "Liste d'utilisateurs", href: "#/profils.html", id: "nav_usersProfil"},
             ];
             addLinks(links);
         };

@@ -1,16 +1,9 @@
 "use strict";
 
 import { fetchRegister } from "./actions.js";
-import { redirect, dialog } from "../../services/utils.js";
+import { redirect, dialog, uploadElement } from "../../services/utils.js";
 
-console.log("registration");
-
-function registration() {
-    const content = document.querySelector("#content");
-    console.log(content);
-    const form = document.querySelector("form");
-    console.log(form);
-
+function registration(form) {
     form.addEventListener("submit", function(e){
         e.preventDefault();
 
@@ -32,14 +25,16 @@ function registration() {
             if (response.status === "fail") {
                 const errors = response.errors;
                 dialog({title: "Erreurs", content: errors, hasTimeOut: true});
-                // redirect("http://localhost/#/registration.html", 3000)
+                redirect("#/registration.html", 3000)
             };
         });
 
     });
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-    registration();
-});
+uploadElement('#registrationForm')
+.then(form => {
+    registration(form);
+})
+
 export default registration;

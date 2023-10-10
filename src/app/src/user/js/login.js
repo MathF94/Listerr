@@ -1,10 +1,9 @@
 "use strict";
 
 import { fetchLogin } from "./actions.js";
-import { redirect, dialog } from "../../services/utils.js";
+import { redirect, dialog, uploadElement } from "../../services/utils.js";
 
-function login() {
-    const form = document.querySelector("form");
+function login(form) {
     form.addEventListener("submit", function(e){
         e.preventDefault();
 
@@ -21,25 +20,25 @@ function login() {
             if (response.status === "success") {
                 const login = e.target.children.login.value;
                 dialog({title: `<p>Bonjour ${login} !</p>`, content: `<p>Vous êtes bien connecté(e).</p>`});
-                redirect("http://localhost/#/profil.html", 3000);
+                redirect("#/home.html", 3000);
             };
 
             if (response.status === "fail_data") {
                 dialog({title: "Erreurs de données", content: response.message, hasTimeOut: true});
-                redirect("http://localhost/#/login.html", 3000);
+                redirect("#/login.html", 3000);
             };
 
             if (response.status === "fail") {
                 dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
-                redirect("http://localhost/#/login.html", 3000);
+                redirect("#/login.html", 3000);
             };
         });
     });
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-    login();
-});
-console.log("login");
+uploadElement('#loginForm')
+.then(form => {
+    login(form);
+})
 
 export default login;

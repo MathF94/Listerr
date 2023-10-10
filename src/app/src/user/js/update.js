@@ -1,11 +1,9 @@
 "use strict";
 
 import { fetchRead, fetchUpdate } from "./actions.js";
-import { redirect, dialog } from "../../services/utils.js";
+import { redirect, dialog, uploadElement } from "../../services/utils.js";
 
-function updateUser() {
-    const form = document.querySelector("form");
-
+function updateUser(form) {
     fetchRead()
     .then(response => {
         const dataUser = response;
@@ -17,7 +15,7 @@ function updateUser() {
             };
         };
     });
-
+    form = document.querySelector("#updateForm");
     form.addEventListener("submit", function(e) {
         e.preventDefault();
         const userLogin = e.target.login.value;
@@ -36,23 +34,24 @@ function updateUser() {
                             content: `<p>Votre login a bien été modifié.</p>
                                     <p>Vous allez être redirigé(e) vers la page de connexion, afin de vous reconnecter avec votre nouveau login.</p>`
                                 })
-                    redirect("http://localhost/#/login.html", 3000);
+                    redirect("#/login.html", 3000);
                 } else {
                     dialog({content: "Votre profil a bien été mis à jour."});
-                    redirect("http://localhost/#/profil.html", 3000);
+                    redirect("#/profil.html", 3000);
                 }
             };
 
             if (response.status === "fail") {
                 dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
-                redirect("http://localhost/#/login.html", 3000);
+                redirect("#/login.html", 3000);
             };
         });
     });
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-    updateUser();
+uploadElement('#updateForm')
+.then(form => {
+    updateUser(form);
 })
 
 export default updateUser;

@@ -6,7 +6,8 @@ async function fetchRegister(form) {
         return await fetch(url, {
             method: "POST",
             body: new FormData(form)
-        }).then(response => response.json());
+        }).then(response =>
+            response.json());
 
     } catch (error) {
         console.error("Erreur lors de la requête fetch :", error);
@@ -35,7 +36,8 @@ async function fetchRead() {
         return await fetch(url, {
             method: "GET",
             headers: {"Authorization": token},
-            }).then(response => response.json());
+            }).then(response => {
+                response.json()});
 
     } catch (error) {
         console.error("Erreur lors de la requête fetch :", error);

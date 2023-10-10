@@ -7,7 +7,6 @@ function read() {
 
     fetchRead()
     .then(response => {
-        localStorage.removeItem("token_user");
         const deleteBtn = document.querySelector("#delete");
         const updateBtn = document.querySelector("#update");
 
@@ -36,7 +35,7 @@ function read() {
             div.prepend(ul);
 
             updateBtn.addEventListener("click", function(e){
-                redirect("http://localhost/#/update.html", 0);
+                redirect("#/update.html", 0);
             });
         };
     });
