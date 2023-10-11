@@ -40,6 +40,9 @@ const template = (name, templateFunction) => {
  * Fonction qui retrouve la route et la retourne en fonction du path de la fonction route sinon retourne une erreur
  * return routes[path] = retourne le template Cf. ligne 8 ave routes[path] = template
  */
+
+
+
 const resolveRoute = (path) => {
     // console.log('fonction resolveRoute()', {path, selectedRoute:routes[path], routes});
     try {
@@ -61,9 +64,11 @@ const resolveRoute = (path) => {
 
 const router = (evt) => {
     let path = window.location.hash.slice(1) || '/';
-    let templateFunction = resolveRoute(path);
-    // console.log("fonction router()", {evt, route, path});
-    templateFunction();
+    let route = resolveRoute(path);
+    console.log("fonction router()", {evt, route, path});
+
+    route();
+    
 };
 
 export {route, template, router};

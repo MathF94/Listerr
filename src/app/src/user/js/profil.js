@@ -1,48 +1,56 @@
 "use strict";
 
 import { fetchRead } from "./actions.js";
-import { redirect } from "../../services/utils.js";
+import { redirect, uploadElement } from "../../services/utils.js";
 
-function read() {
+function read(div) {
+    const user = localStorage.getItem('user');
+    const token = localStorage.getItem('token');
+    const deleteBtn = document.querySelector("#delete");
+    const updateBtn = document.querySelector("#update");
 
-    fetchRead()
-    .then(response => {
-        const deleteBtn = document.querySelector("#delete");
-        const updateBtn = document.querySelector("#update");
-
-        if (response.status === "disconnected") {
-            deleteBtn.classList.add("hide");
-            updateBtn.classList.add("hide");
-        }
-
-        if (response.status === "connected" && localStorage.token && localStorage.user) {
-            deleteBtn.classList.remove("hide");
-            updateBtn.classList.remove("hide");
-            const div = document.querySelector("#profilWrapper");
-            const ul = document.createElement("ul");
-
-            for (const index in response) {
-                const li = document.createElement("li");
-                const column = response[index];
-
-                if (["status", "id"].includes(index)) {
-                    continue;
-                }
-
-                li.innerText = `${column.label} : ${column.value}`;
-                ul.appendChild(li);
+    if (token === null || user === null) {
+        fetchRead()
+        .then(response => {
+            if (response.status === "disconnected") {
+                deleteBtn.classList.add("hide");
+                updateBtn.classList.add("hide");
             }
-            div.prepend(ul);
+        })
+    }
 
-            updateBtn.addEventListener("click", function(e){
-                redirect("#/update.html", 0);
-            });
-        };
-    });
-};
+    if (token !== undefined || token !== null || user !== null || user !== undefined) {
+        fetchRead()
+        .then(response => {
+            if (response.status === "connected" && token !== null && user !== null) {
+                deleteBtn.classList.remove("hide");
+                updateBtn.classList.remove("hide");
+                const ul = document.createElement("ul");
 
-document.addEventListener("DOMContentLoaded", () => {
-    read();
-});
+                for (const index in response) {
+                    const li = document.createElement("li");
+                    const column = response[index];
 
-export default read;
+                    if (["status", "id"].includes(index)) {
+                        continue;
+                    }
+
+                    li.innerText = `${column.label} : ${column.value}`;
+                    ul.appendChild(li);
+                }
+                div.prepend(ul);
+
+                updateBtn.addEventListener("click", function(e){
+                    redirect("#/update.html", 0);
+                });
+            };
+        });
+    };
+}
+
+uploadElement('#profilWrapper')
+.then(div => {
+    read(div);
+})
+
+export { read };

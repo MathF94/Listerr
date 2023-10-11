@@ -6,18 +6,10 @@ function navigation(template) {
     nav.className = "mainNav";
     const ul = document.createElement("ul");
 
-    if(user){
-        const dataUser = JSON.parse(user);
-        if (dataUser.is_admin){
-            const links = [
-                {text: "Liste d'utilisateurs", href: "#/profils.html", id: "nav_usersProfil"},
-            ];
-            addLinks(links);
-        };
-    };
 
     if (token === undefined || token === null || user === null || user === undefined) {
         const links = [
+            {text: "Accueil", href: "#/home.html", id: "nav_home"},
             {text: "Inscription", href: "#/registration.html", id: "nav_register"},
             {text: "Connexion", href: "#/login.html", id: "nav_login"},
         ];
@@ -26,11 +18,23 @@ function navigation(template) {
 
     if (user !== undefined && user !== null) {
         const links = [
-            {text: "Votre profil", href: "#/profil.html", id: "nav_profil"},
-            {text: "Listes", href: "#/list.html", id: "nav_list"},
+            {text: "Accueil", href: "#/home.html", id: "nav_home"},
             {text: "Déconnexion", id: "nav_logout"},
+            {text: "Votre profil", href: "#/profil.html", id: "nav_profil"},
+            {text: "Listes de souhaits", href: "#/wish.html", id: "nav_wishlist"},
+            {text: "Listes de tâches", href: "#/todo.html", id: "nav_todolist"},
         ];
         addLinks(links);
+    };
+
+    if(user){
+        const dataUser = JSON.parse(user);
+        if (dataUser.is_admin){
+            const links = [
+                {text: "Liste d'utilisateurs", href: "#/profils.html", id: "nav_usersProfil"},
+            ];
+            addLinks(links);
+        };
     };
 
     function addLinks(links) {

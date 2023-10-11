@@ -28,13 +28,12 @@ function registration(form) {
                 redirect("#/registration.html", 3000)
             };
         });
-
     });
 };
+export default registration;
 
 uploadElement('#registrationForm')
 .then(form => {
     registration(form);
 })
 
-export default registration;

@@ -36,8 +36,7 @@ async function fetchRead() {
         return await fetch(url, {
             method: "GET",
             headers: {"Authorization": token},
-            }).then(response => {
-                response.json()});
+            }).then(response => response.json());
 
     } catch (error) {
         console.error("Erreur lors de la requête fetch :", error);

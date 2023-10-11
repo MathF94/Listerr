@@ -17,7 +17,6 @@ function readAdmin(tbody) {
             };
 
             const tr = document.createElement("tr");
-
             const tdLogin = document.createElement("td");
             tdLogin.innerHTML = `${column["login"]}`;
             tr.appendChild(tdLogin);

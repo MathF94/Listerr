@@ -1,14 +1,17 @@
 "use strict";
 
 import { fetchLogout } from "./actions.js";
-import { redirect, dialog } from "../../services/utils.js";
+import { redirect, dialog, uploadElement } from "../../services/utils.js";
 
-function logout() {
-    const anchorLogout = document.querySelector("#nav_logout");
+function logout(anchorLogout) {
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
+
     localStorage.getItem("token");
 
     fetchLogout()
     .then(response => {
+        const anchorLogout = document.querySelector("#nav_logout");
         if (response.status === "disconnect") {
             dialog({title: `A bientôt ${response.login} !`,
                     content: `<p>Votre session n'est pas ou plus active.</p>
@@ -34,10 +37,11 @@ function logout() {
             };
         });
     });
-};
+}
 
-document.addEventListener("DOMContentLoaded", () => {
-    logout();
+uploadElement('#nav_logout')
+.then(anchorLogout => {
+    logout(anchorLogout);
 })
 
 export default logout;

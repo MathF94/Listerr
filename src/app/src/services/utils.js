@@ -36,10 +36,10 @@ function dialog({title, content, hasTimeOut}) {
             const column = content[index];
             li.innerText = column;
             ul.appendChild(li);
-            };
-            dialog.appendChild(ul);
-            dialogSection.appendChild(dialog);
         };
+        dialog.appendChild(ul);
+        dialogSection.appendChild(dialog);
+    };
 
     if (hasTimeOut) {
         const msg = document.createElement('div');
@@ -59,15 +59,15 @@ function uploadElement(selector) {
 
         const observer = new MutationObserver(() => {
             if (document.querySelector(selector)) {
-                resolve(document.querySelector(selector));
                 observer.disconnect();
+                resolve(document.querySelector(selector));
             }
         });
-
         observer.observe(document.body, {
             subtree: true,
             childList: true,
         });
+
     });
 }
 

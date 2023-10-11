@@ -75,6 +75,16 @@ let config = {
             filename: "profils.html",
             chunks: [],
         }),
+        new HtmlWebpackPlugin({
+            template: "./src/app/src/list/pages/wish.html",
+            filename: "wish.html",
+            chunks: [],
+        }),
+        new HtmlWebpackPlugin({
+            template: "./src/app/src/list/pages/todo.html",
+            filename: "todo.html",
+            chunks: [],
+        }),
     ],
 
     optimization: {
