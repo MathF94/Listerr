@@ -4,6 +4,7 @@ import { fetchLogin } from "./actions.js";
 import { redirect, dialog, uploadElement } from "../../services/utils.js";
 
 function login(form) {
+    console.log("coucou");
     form.addEventListener("submit", function(e){
         e.preventDefault();
 
@@ -36,9 +37,14 @@ function login(form) {
     });
 };
 
-uploadElement('#loginForm')
-.then(form => {
-    login(form);
-})
+function getForm() {
+    uploadElement('#loginForm')
+    .then(form => {
+        login(form);
+    })
+}
+
+window.addEventListener("load", getForm());
+window.addEventListener("hashchange", getForm());
 
 export default login;

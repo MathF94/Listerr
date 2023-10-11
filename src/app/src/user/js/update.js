@@ -49,9 +49,14 @@ function updateUser(form) {
     });
 };
 
-uploadElement('#updateForm')
-.then(form => {
-    updateUser(form);
-})
+function getForm() {
+    uploadElement('#updateForm')
+    .then(form => {
+        updateUser(form);
+    })
+}
+
+window.addEventListener("load", getForm());
+window.addEventListener("hashchange", getForm());
 
 export default updateUser;

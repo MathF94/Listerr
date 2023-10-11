@@ -1,13 +1,14 @@
 function navigation(template) {
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("user");
+
     const nav = document.createElement("nav");
     nav.id = "mainNav";
     nav.className = "mainNav";
     const ul = document.createElement("ul");
 
-
     if (token === undefined || token === null || user === null || user === undefined) {
+
         const links = [
             {text: "Accueil", href: "#/home.html", id: "nav_home"},
             {text: "Inscription", href: "#/registration.html", id: "nav_register"},
@@ -17,6 +18,7 @@ function navigation(template) {
     };
 
     if (user !== undefined && user !== null) {
+
         const links = [
             {text: "Accueil", href: "#/home.html", id: "nav_home"},
             {text: "Déconnexion", id: "nav_logout"},
@@ -27,7 +29,7 @@ function navigation(template) {
         addLinks(links);
     };
 
-    if(user){
+    if (user !== undefined && user !== null) {
         const dataUser = JSON.parse(user);
         if (dataUser.is_admin){
             const links = [
@@ -37,8 +39,10 @@ function navigation(template) {
         };
     };
 
-    function addLinks(links) {
 
+    function addLinks(links) {
+        console.log(token);
+        console.log(user);
         links.forEach(linkData => {
             const a = document.createElement("a");
             const li = document.createElement("li");

@@ -63,7 +63,8 @@ function uploadElement(selector) {
                 resolve(document.querySelector(selector));
             }
         });
-        observer.observe(document.body, {
+
+        observer.observe(document.querySelector("#content"), {
             subtree: true,
             childList: true,
         });

@@ -30,10 +30,16 @@ function registration(form) {
         });
     });
 };
-export default registration;
 
-uploadElement('#registrationForm')
-.then(form => {
-    registration(form);
-})
+function getForm() {
+    uploadElement('#registrationForm')
+    .then(form => {
+        registration(form);
+    })
+}
+
+window.addEventListener("load", getForm());
+window.addEventListener("hashchange", getForm());
+
+export default registration;
 

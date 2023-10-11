@@ -21,9 +21,16 @@ function deleteUser(form) {
     });
 };
 
-uploadElement('#deleteForm')
-.then(form => {
-    deleteUser(form);
-})
+
+function getForm() {
+    uploadElement('#deleteForm')
+    .then(form => {
+        deleteUser(form);
+    })
+}
+
+window.addEventListener("load", getForm());
+window.addEventListener("hashchange", getForm());
+
 
 export default deleteUser;

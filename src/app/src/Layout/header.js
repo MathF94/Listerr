@@ -1,6 +1,7 @@
 import { navigation } from './nav.js';
+import { uploadElement } from "../services/utils.js";
 
-function header() {
+function header(mainWrapper) {
     const header = document.createElement('header')
     header.id = "mainWrapper";
     header.className = "mainWrapper";
@@ -16,6 +17,12 @@ function header() {
 
     document.body.prepend(header);
 }
+
+// uploadElement('#mainWrapper')
+// .then(mainWrapper => {
+//     console.log("coucou");
+//     header(mainWrapper);
+// })
 
 document.addEventListener("DOMContentLoaded", () => {
     header();

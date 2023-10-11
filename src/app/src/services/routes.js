@@ -2,11 +2,11 @@ import View from "./view.js";
 import {route, template, router} from "./routeur.js"
 
 // fonction template (name, templateFunction) => {}
-// template("index", function(){
-//     View.load("./index"); //  View.load(nom de fichier sans extension)
-// });
+template("index", function(){
+    View.load("./index"); //  View.load(nom de fichier sans extension)
+});
 // fonction route (path, template) => {}
-// route("/", "index");
+route("/", "index");
 
 // route home
 template("home", function(){
@@ -56,5 +56,5 @@ template("todo", function(){
 });
 route("/todo.html", "todo");
 
-window.addEventListener("hashchange", router);
 window.addEventListener("load", router);
+window.addEventListener("hashchange", router);

@@ -32,7 +32,7 @@ const route = (path, template) => {
 const template = (name, templateFunction) => {
     templates[name] = templateFunction;
     // console.log('fonction template', {name, templateFunction, template: templates[name]})
-    // return templates;
+    return templates;
 };
 
 // les deux fonctions du bas permettent de retrouver les routes qui ont été stockées
@@ -40,15 +40,12 @@ const template = (name, templateFunction) => {
  * Fonction qui retrouve la route et la retourne en fonction du path de la fonction route sinon retourne une erreur
  * return routes[path] = retourne le template Cf. ligne 8 ave routes[path] = template
  */
-
-
-
-const resolveRoute = (path) => {
-    // console.log('fonction resolveRoute()', {path, selectedRoute:routes[path], routes});
+const resolveRoute = (route) => {
+    // console.log('fonction resolveRoute()', {route, selectedRoute:routes[route], routes});
     try {
-        return routes[path];
+        return routes[route];
     } catch (e) {
-        throw new Error(`Route ${path} not found`); // possible de retourner vers E404
+        throw new Error(`Route ${route} not found`); // possible de retourner vers E404
     };
 };
 
@@ -61,14 +58,11 @@ const resolveRoute = (path) => {
  * evt = window.addEventListener("load", router);
  *       window.addEventListener("hashchange", router);
  */
-
 const router = (evt) => {
-    let path = window.location.hash.slice(1) || '/';
-    let route = resolveRoute(path);
-    console.log("fonction router()", {evt, route, path});
-
+    let url = window.location.hash.slice(1) || '/';
+    let route = resolveRoute(url);
+    console.log("fonction router()", {evt, route, url});
     route();
-    
 };
 
 export {route, template, router};

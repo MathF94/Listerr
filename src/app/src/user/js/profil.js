@@ -23,6 +23,7 @@ function read(div) {
         fetchRead()
         .then(response => {
             if (response.status === "connected" && token !== null && user !== null) {
+                div.replaceChildren();
                 deleteBtn.classList.remove("hide");
                 updateBtn.classList.remove("hide");
                 const ul = document.createElement("ul");
@@ -48,9 +49,13 @@ function read(div) {
     };
 }
 
-uploadElement('#profilWrapper')
-.then(div => {
-    read(div);
-})
+function getAnchor() {
+    uploadElement('#profilWrapperContent')
+    .then(form => {
+        read(form);
+    })
+}
+
+document.addEventListener('DOMSubtreeModified', getAnchor());
 
 export { read };

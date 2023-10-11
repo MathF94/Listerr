@@ -3,14 +3,18 @@
 import { fetchReadAll } from "./actions.js";
 import { uploadElement } from "../../services/utils.js";
 
-function readAdmin(tbody) {
+function readAdmin(table) {
 
     fetchReadAll()
     .then(response => {
+        const tbody = table.tBodies[0];
+        tbody.replaceChildren();
+        console.log({tbody});
         const data = response.data;
-        const tbody = document.querySelector("#profilsTbody");
+        console.log({data});
 
         for (const index in data) {
+
             const column = data[index];
             if (["id"].includes(column[index])) {
                 continue;
@@ -64,9 +68,13 @@ function readAdmin(tbody) {
     });
 }
 
-uploadElement('#profilsTbody')
-.then(tbody => {
-    readAdmin(tbody);
-})
+function getTable() {
+    uploadElement('#profilsTable')
+    .then(table => {
+        readAdmin(table);
+    })
+}
+    
+document.addEventListener('DOMSubtreeModified', getTable());
 
 export { readAdmin };
