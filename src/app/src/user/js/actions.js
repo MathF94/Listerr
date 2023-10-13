@@ -58,6 +58,23 @@ async function fetchLogout() {
     }
 };
 
+async function fetchUpdate(form) {
+    try {
+        const url = "http://localhost/listerr/src/api/?route=user_update";
+        const token = localStorage.getItem("token");
+        const user = localStorage.getItem("user");
+        return await fetch(url, {
+            method: "POST",
+            body: new FormData(form),
+            headers: {"Authorization": token, user},
+            }).then(response => response.json());
+
+    } catch (error) {
+        console.error("Erreur lors de la requête fetch :", error);
+        return null;
+    }
+};
+
 async function fetchDelete() {
     try {
         const url = "http://localhost/listerr/src/api/?route=user_delete";
@@ -73,29 +90,11 @@ async function fetchDelete() {
     }
 };
 
-async function fetchUpdate(form) {
-    try {
-        const url = "http://localhost/listerr/src/api/?route=user_update";
-        const token = localStorage.getItem("token");
-        const user = localStorage.getItem("user");
-
-        return await fetch(url, {
-            method: "POST",
-            body: new FormData(form),
-            headers: {"Authorization": token, user},
-            }).then(response => response.json());
-
-    } catch (error) {
-        console.error("Erreur lors de la requête fetch :", error);
-        return null;
-    }
-};
-
 export {
     fetchRegister,
     fetchLogin,
     fetchRead,
     fetchLogout,
-    fetchDelete,
     fetchUpdate,
+    fetchDelete,
 };

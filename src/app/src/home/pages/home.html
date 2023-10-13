@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listerr</title>
+    <script type="module" src="../../layout/header.js"></script>
+    <script type="module" src="../../home/js/actions_home.js"></script>
+    <script type="module" src="../../home/js/home.js"></script>
+    <script type="module" src="../../user/js/logout.js"></script>
+</head>
+<body>
+    <section class="home">
+        <h2>Bienvenue sur Listerr !</h2>
+        <div>
+            <button id="newList" type="button" value="newList">Créer une nouvelle liste</button>
+        </div>
+        <p>Le bouton renvoie vers la page des listes ou la connexion, si non connecté.</p>
+    </section>
+    <section id="AllListSection">
+        <h3>Voici les listes de tous les utilisateurs</h3>
+        <div id="AllListWrapper">
+            <p>ici sont affichées toutes les listes de tous les utilisateurs !</p>
+        </div>
+
+    </section>
+</body>
+</html>

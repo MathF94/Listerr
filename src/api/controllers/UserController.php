@@ -62,20 +62,22 @@ class UserController
                 $user = $model->auth($_POST['login'], $encrytedPassword);
 
                 if (empty($user)) {
+                    
                     return json_encode([
                         'status' => 'fail_data',
-                        'message' => 'Votre identifiant ou votre mot de passe est incorrect.'
+                        'message' => 'Votre identifiant n\'existe pas ou votre mot de passe est incorrect.'
                     ]);
                 }
+
                 $session = new Session();
-                $encryptToken = $session->encrypt($user->login, $encrytedPassword);
+                $encryptToken = $session->encrypt($user->id, $user->login, $encrytedPassword);
                 return json_encode([
                     'status' => 'success',
                     'connected' => true,
                     'token' => $encryptToken,
                     'user_id' => $user->id,
                     'user_login' => $user->login,
-                    'user_isAdmin' => $user->isAdmin,
+                    'user_role' => $user->role,
                 ]);
             };
             return json_encode([
@@ -115,6 +117,7 @@ class UserController
                         'firstname' => ['label' =>'Prénom', 'value' => $user->firstname],
                         'email' => ['label' =>'E-mail', 'value' => $user->email],
                         'login' => ['label' =>'Login', 'value' => $user->login],
+                        'role' => ['label' =>'Role', 'value' => $user->role],
                     ]);
 
                 } else {
@@ -201,7 +204,7 @@ class UserController
         };
     }
 
-    public function update($tokenUser) // @TODO
+    public function update($tokenUser)
     {
         try {
             $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_UPDATE_USER);
@@ -235,9 +238,9 @@ class UserController
     {
         try {
             $session = new Session();
-            $decryptToken = $session->decrypt($tokenUser); // login, password et expired_at du token
+            $decryptToken = $session->decrypt($tokenUser);
             $users = new Users();
-            $user = $users->readOne($decryptToken['login']); // donnée de l'utilisateur (login, password... de la table)
+            $user = $users->readOne($decryptToken['login']);
             if (!empty($user)) {
                 $users->delete($user->login);
 

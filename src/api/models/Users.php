@@ -47,36 +47,6 @@ class Users extends Database
         }
     }
 
-    public function update(array $parameters, int $id): bool
-    {
-        $req = "UPDATE `user`
-                SET `login`= :login,
-                    `name`= :name,
-                    `firstname` = :firstname,
-                    `email` = :email
-                WHERE `id` = :id";
-        $query = $this->db->prepare($req);
-        $parameters['id'] = $id;
-        return $query->execute($parameters);
-    }
-
-    public function updatePassword(array $parameters):bool
-    {
-        $req = "UPDATE `user`
-                SET `password`= :password
-                WHERE `login` = :login" ;
-        $query = $this->db->prepare($req);
-        return $query->execute($parameters);
-    }
-
-    public function delete(string $login): bool
-    {
-        $req = "DELETE FROM `user`
-                WHERE `login` = :login";
-        $query = $this->db->prepare($req);
-        return $query->execute(['login' => $login]);
-    }
-
     public function auth(string $login, string $password): ?User
     {
         try {
@@ -98,6 +68,7 @@ class Users extends Database
             if (empty($result)){
                 return null;
             }
+
             $user = new User();
             $user->populate($result);
             return $user;
@@ -161,5 +132,35 @@ class Users extends Database
             echo $e->getMessage();
             return [];
         }
+    }
+
+    public function update(array $parameters, int $id): bool
+    {
+        $req = "UPDATE `user`
+                SET `login`= :login,
+                    `name`= :name,
+                    `firstname` = :firstname,
+                    `email` = :email
+                WHERE `id` = :id";
+        $query = $this->db->prepare($req);
+        $parameters['id'] = $id;
+        return $query->execute($parameters);
+    }
+
+    public function updatePassword(array $parameters):bool
+    {
+        $req = "UPDATE `user`
+                SET `password`= :password
+                WHERE `login` = :login" ;
+        $query = $this->db->prepare($req);
+        return $query->execute($parameters);
+    }
+
+    public function delete(string $login): bool
+    {
+        $req = "DELETE FROM `user`
+                WHERE `login` = :login";
+        $query = $this->db->prepare($req);
+        return $query->execute(['login' => $login]);
     }
 }

@@ -38,7 +38,7 @@ class Router
                     if ($this->isAllowedMethod('GET')) {
                         $user = new UserController();
                         $headers = getallheaders();
-                        echo $user->read($headers['Authorization']); // readAll
+                        echo $user->read($headers['Authorization']); // readOne
                     }
                     break;
 
@@ -58,12 +58,93 @@ class Router
                     }
                     break;
 
-                case 'admin_read_user':
+                case 'admin_read_users':
                     if ($this->isAllowedMethod('GET')) {
                         $user = new UserController();
-                        echo $user->readUsers(); // read
+                        echo $user->readUsers(); // readAll
                     }
                     break;
+
+                // @TODO
+                // case 'admin_update_user':
+                //     if ($this->isAllowedMethod('GET')) {
+                //         $user = new UserController();
+                //         echo $user->update($headers['Authorization']); // update
+                //     }
+                //     break;
+
+                // case 'admin_delete_user':
+                //     if ($this->isAllowedMethod('GET')) {
+                //         $user = new UserController();
+                //         echo $user->delete($headers['Authorization']); // delete
+                //     }
+                //     break;
+
+                case 'create_list':
+                    if ($this->isAllowedMethod('POST')) {
+                        $list = new ListController();
+                        $headers = getallheaders();
+                        echo $list->create($headers['Authorization']); // create
+                    }
+                    break;
+
+                case 'read_list': // pour l'utilisateur
+                    if ($this->isAllowedMethod('GET')) {
+                        $list = new ListController();
+                        $headers = getallheaders();
+                        echo $list->readListByUser($headers['Authorization']); // readOne
+                    }
+                    break;
+
+                case 'read_all_lists': // pour l'admin
+                    if ($this->isAllowedMethod('GET')) {
+                        $list = new ListController();
+                        $headers = getallheaders();
+                        echo $list->readAll($headers['Authorization']); // readAll
+                    }
+                    break;
+
+                case 'update_list':
+                    if ($this->isAllowedMethod('POST')) {
+                        // $list = new ListController();
+                        // echo $list->update(); // update
+                    }
+                    break;
+
+                case 'delete_list':
+                    if ($this->isAllowedMethod('GET')) {
+                        // $list = new ListController();
+                        // echo $list->delete(); // delete
+                    }
+                    break;
+
+                // case 'create_card':
+                //     if ($this->isAllowedMethod('POST')) {
+                //         // $card = new CardController();
+                //         // echo $card->create(); // create
+                //     }
+                //     break;
+
+                // case 'read_card':
+                //     if ($this->isAllowedMethod('GET')) {
+                //         // $user = new CardController();
+                //         // echo $card->read(); // readOne
+                //     }
+                //     break;
+
+                // case 'update_card':
+                //     if ($this->isAllowedMethod('POST')) {
+                //         // $card = new CardController();
+                //         // echo $card->update(); // update
+                //     }
+                //     break;
+
+                // case 'delete_card':
+                //     if ($this->isAllowedMethod('GET')) {
+                //         // $card = new CardController();
+                //         // echo $card->delete(); // delete
+                //     }
+                //     break;
 
                 default:
                     header('Location: index.php'); // on renvoie vers l'index
@@ -73,6 +154,7 @@ class Router
         else :
             header('Location: index.php'); // on renvoie vers l'index
             exit;
+
         endif;
     }
 

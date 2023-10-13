@@ -6,18 +6,9 @@ function navigation(template) {
     nav.className = "mainNav";
     const ul = document.createElement("ul");
 
-    if(user){
-        const dataUser = JSON.parse(user);
-        if (dataUser.is_admin){
-            const links = [
-                {text: "Liste d'utilisateurs", href: "http://localhost/listerr/src/app/src/admin/pages/profils.html", id: "usersProfil"},
-            ];
-            addLinks(links);
-        };
-    };
-
     if (token === undefined || token === null || user === null || user === undefined) {
         const links = [
+            {text: "Accueil", href: "http://localhost/listerr/src/app/src/home/pages/home.html", id: "home"},
             {text: "Inscription", href: "http://localhost/listerr/src/app/src/user/pages/registration.html", id: "register"},
             {text: "Connexion", href: "http://localhost/listerr/src/app/src/user/pages/login.html", id: "login"},
         ];
@@ -26,11 +17,22 @@ function navigation(template) {
 
     if (user !== undefined && user !== null) {
         const links = [
-            {text: "Votre profil", href: "http://localhost/listerr/src/app/src/user/pages/profil.html", id: "profil"},
-            {text: "Listes", href: "http://localhost/listerr/src/app/src/list/pages/list.html", id: "list"},
+            {text: "Accueil", href: "http://localhost/listerr/src/app/src/home/pages/home.html", id: "home"},
             {text: "Déconnexion", id: "logout"},
+            {text: "Votre profil", href: "http://localhost/listerr/src/app/src/user/pages/profil.html", id: "profil"},
+            {text: "Listes de souhaits et de tâches", href: "http://localhost/listerr/src/app/src/list/pages/list.html", id: "listist"},
         ];
         addLinks(links);
+    };
+
+    if(user){
+        const dataUser = JSON.parse(user);
+        if (dataUser.role === "Admin"){
+            const links = [
+                {text: "Liste d'utilisateurs", href: "http://localhost/listerr/src/app/src/admin/pages/profils.html", id: "usersProfil"},
+            ];
+            addLinks(links);
+        };
     };
 
     function addLinks(links) {

@@ -7,6 +7,7 @@ class Validator
     public const CONTEXT_REGISTER = 'register';
     public const CONTEXT_LOGIN = 'login';
     public const CONTEXT_UPDATE_USER = 'user_update';
+    public const CONTEXT_CREATE_LIST = 'create_list';
 
     public function isValidParams(array $params, string $context): array
     {
@@ -23,6 +24,11 @@ class Validator
 
             case self::CONTEXT_UPDATE_USER:
                 $errors = $this->isValidUpdateUserParams($params);
+                return $errors;
+                break;
+
+            case self::CONTEXT_CREATE_LIST:
+                $errors = $this->isValidCreateListParams($params);
                 return $errors;
                 break;
         }
@@ -150,6 +156,31 @@ class Validator
             $errors[] = 'Le champ "Prénom" doit comporter entre 3 et 20 caractères.';
         } elseif (!preg_match("/^[A-Za-zÀ-ÿ '-]+$/", $params['firstname'])) {
             $errors[] = 'Le champ "Prénom" ne peut contenir que des lettres, des espaces, des tirets et des apostrophes.';
+        }
+
+        return $errors;
+    }
+
+    private function isValidCreateListParams(array $params): array
+    {
+        $errors = [];
+        $expectedKeys = ['type', 'title', 'description'];
+        $paramKeys = array_keys($params);
+
+        if (!empty(array_diff($expectedKeys, $paramKeys))) {
+            $changedKey = array_diff($expectedKeys, $paramKeys);
+            $errors[] = "Le/les champs suivante(s) a/ont été modifiée(s) : " . implode(', ', $changedKey) . ". Merci de ne pas y toucher, merci !";
+            return $errors;
+        }
+
+        if (empty(trim($params['title']))) {
+            $errors[] = 'Le champ "title" est requis.';
+        } elseif (strlen($params['title']) > 50) {
+            $errors[] = 'Le champ "titre" ne doit pas dépasser 20 caractères.';
+        }
+
+        if (strlen($params['description']) > 100) {
+            $errors[] = 'La description ne doit pas dépasser 100 caractères.';
         }
 
         return $errors;

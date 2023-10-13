@@ -1,6 +1,6 @@
 "use strict";
 
-import { fetchReadAll } from "../js/actions_admin.js";
+import { fetchReadAll } from "./actions.js";
 
 function readAdmin() {
 

@@ -43,6 +43,7 @@ class Database
             $query = $this->db->prepare($req);
             $query->execute($params);
             $result = $query->fetch(); // Récupérer un enregistrement
+
             if (empty($result)) {
                 return [];
             }

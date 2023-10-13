@@ -7,15 +7,14 @@ function read() {
 
     fetchRead()
     .then(response => {
-        localStorage.removeItem("token_user");
         const deleteBtn = document.querySelector("#delete");
         const updateBtn = document.querySelector("#update");
+        const listBtn = document.querySelector("#listsUser");
 
         if (response.status === "disconnected") {
             deleteBtn.classList.add("hide");
             updateBtn.classList.add("hide");
         }
-
         if (response.status === "connected" && localStorage.token && localStorage.user) {
             deleteBtn.classList.remove("hide");
             updateBtn.classList.remove("hide");
@@ -35,6 +34,9 @@ function read() {
             }
             div.prepend(ul);
 
+            listBtn.addEventListener("click", function(e){
+                redirect("http://localhost/listerr/src/app/src/list/pages/list.html", 0);
+            });
             updateBtn.addEventListener("click", function(e){
                 redirect("http://localhost/listerr/src/app/src/user/pages/update.html", 0);
             });

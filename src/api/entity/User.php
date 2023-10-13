@@ -7,8 +7,8 @@ class User
     const ROLE_ADMIN = 1;
     const ROLE_USER = 2;
     const ROLES = [
-        self::ROLE_ADMIN => 'admin',
-        self::ROLE_USER => 'user',
+        self::ROLE_ADMIN => 'Admin',
+        self::ROLE_USER => 'User',
     ];
 
     public int $id;
@@ -37,9 +37,9 @@ class User
         $this->id = $params['id'];
         $this->name = $params['name'];
         $this->firstname = $params['firstname'];
-        $this->login=$params['login'];
-        $this->email=$params['email'];
-        $this->password=$params['password'];
+        $this->login = $params['login'];
+        $this->email = $params['email'];
+        $this->password = $params['password'];
 
         $this->setRole($params['role_id'])
             ->setIsAdmin($params['role_id']);

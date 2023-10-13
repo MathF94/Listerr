@@ -2,7 +2,7 @@
 
 async function fetchReadAll() {
     try {
-        const url = "http://localhost/listerr/src/api/?route=admin_read_user";
+        const url = "http://localhost/listerr/src/api/?route=admin_read_users";
         return await fetch(url, {
             method: "GET",
             }).then(response => response.json());
