@@ -13,7 +13,6 @@ class Database
                 \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC, // retourne un tableau indexé par le nom de la colonne
                 \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION // lance PDOExeptions
             ]);
-
         } catch (\Exception $e) {
             return json_encode([
                 'status' => 'error',
@@ -25,8 +24,12 @@ class Database
     protected function findAll(string $req, array $params = []): array
     {
         try {
+            // var_dump($params);
+            // var_dump($req);
             $query = $this->db->prepare($req);
             $query->execute($params);
+            // var_dump($query->execute($params));die();
+
             return $query->fetchAll(); // Récupérer un jeu d'enregistrements
 
         } catch (\Exception $e) {
@@ -48,7 +51,6 @@ class Database
                 return [];
             }
             return $result;
-
         } catch (\Exception $e) {
             return json_encode([
                 'status' => 'error',
@@ -63,7 +65,6 @@ class Database
             $query = $this->db->prepare($req);
             $query->execute($params);
             return $query->fetch(\PDO::FETCH_ASSOC);
-
         } catch (\Exception $e) {
             return json_encode([
                 'status' => 'error',

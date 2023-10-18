@@ -2,39 +2,38 @@
 
 namespace Controllers;
 
-use Entity\Lister;
-use Entity\User;
 use Models\Lists;
+use Models\Users;
 use Services\Session;
 use Services\Validator;
 
 class ListController
 {
     private $validator;
+    private $user;
 
-    public function __construct()
+    public function __construct($tokenUser)
     {
         $this->validator = new Validator();
+        $session = new Session();
+        $decrypt = $session->decrypt($tokenUser);
+        $model = new Users();
+        $this->user = $model->auth($decrypt["login"], $decrypt["password"]);
     }
 
-    public function create($tokenUser)
+    public function create()
     {
         try {
-            if (!empty($tokenUser)) {
+            if (!empty($this->user)) {
                 $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_CREATE_LIST);
 
                 if (empty(count($errors))) {
                     $params = $_POST;
-
-                    $session = new Session();
-                    $decrypt = $session->decrypt($tokenUser);
-                    $userId = $decrypt['id'];
                     $model = new Lists();
-                    $model->create($params, $userId);
+                    $model->create($params, $this->user->id);
 
                     return json_encode([
                         'status' => 'success'
-
                     ]);
                 }
 
@@ -52,17 +51,13 @@ class ListController
         }
     }
 
-    public function readListByUser($tokenUser): string
+    // liste par utilisateur
+    public function readListByUser(): string
     {
         try {
-            if (!empty($tokenUser)) {
-                $session = new Session();
-                $decrypt = $session->decrypt($tokenUser);
-                $userId = $decrypt['id'];
-
+            if (!empty($this->user)) {
                 $model = new Lists();
-                $type = $model->readOne($userId)->type;
-                $list = $model->listByUser($userId, $type);
+                $list = $model->listByUser($this->user->id);
 
                 if (empty($list)) {
                     return json_encode([
@@ -74,13 +69,11 @@ class ListController
                     'status' => 'read',
                     'data' => $list
                 ]);
-
             };
             return json_encode([
                 'status' => 'fail',
                 'message' => 'body is empty'
             ]);
-
         } catch (\Exception $e) {
             return json_encode([
                 'status' => 'error',
@@ -89,16 +82,13 @@ class ListController
         };
     }
 
-
-    public function readAll($tokenUser): string
+    // liste pour l'admin avec login utilisateur
+    public function readAllByUser(): string
     {
         try {
-            if (!empty($tokenUser)) {
-                $session = new Session();
-                $decrypt = $session->decrypt($tokenUser);
-
+            if (!empty($this->user)) {
                 $model = new Lists();
-                $list = $model->readAll();
+                $list = $model->readAllByUser();
 
                 if (empty($list)) {
                     return json_encode([
@@ -110,19 +100,16 @@ class ListController
                     'status' => 'read',
                     'data' => $list,
                 ]);
-
             };
             return json_encode([
                 'status' => 'fail',
                 'message' => 'body is empty'
             ]);
-
         } catch (\Exception $e) {
             return json_encode([
                 'status' => 'error',
                 'message' => $e->getMessage()
             ]);
-        };
+        }
     }
-
 }

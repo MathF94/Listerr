@@ -26,7 +26,6 @@ function list() {
     .then(response => {
         const user = localStorage.getItem("user");
         const data = response.data;
-        console.log(data);
         if (response.status === "read"){
             const list = document.querySelector('#listWrapper');
 
@@ -39,7 +38,7 @@ function list() {
                 for (const key in column){
                     const li = document.createElement("li");
 
-                    if (["status", "id", "userId"].includes(`${key}`)) {
+                    if (["status", "id", "userId", "user"].includes(`${key}`)) {
                         continue;
                     }
 

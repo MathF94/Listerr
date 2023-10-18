@@ -4,7 +4,6 @@ namespace Models;
 
 use Entity\Lister;
 use Services\Database;
-use Services\Encryption;
 
 class Lists extends Database
 {
@@ -29,37 +28,25 @@ class Lists extends Database
         }
     }
 
-    public function readOne(string $id): ?Lister
+    // toutes les listes pour un utilisateur
+    public function listByUser(int $userId): array
     {
         try {
-            $req = "SELECT `id`,
-                            `type`,
-                            `title`,
-                            `description`,
-                            `user_id`
-                    FROM `list`
-                    WHERE `user_id` = :user_id
-                    ORDER BY created_at DESC";
-            $result = $this->findOne($req, ['user_id' => $id]);
-
-            $lister = new Lister();
-            $lister->populate($result);
-            return $lister;
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-            return null;
-        }
-    }
-
-    public function listByUser(int $userId, string $type): array
-    {
-        try {
-            $req = "SELECT `id`,
-                            `type`,
-                            `title`,
-                            `description`,
-                            `user_id`
-                    FROM `list`
+            $req = "SELECT `l`.`id` AS `list_id`,
+                            `l`.`type`,
+                            `l`.`title`,
+                            `l`.`description`,
+                            `u`.`id` AS `user_id`,
+                            `u`.`name`,
+                            `u`.`firstname`,
+                            `u`.`login`,
+                            `u`.`email`,
+                            `u`.`role_id`,
+                            '' AS `password`,
+                            `l`.`created_at`,
+                            `l`.`updated_at`
+                    FROM `list` `l`
+                    INNER JOIN `user` `u` ON `u`.`id` = `l`.`user_id`
                     WHERE `user_id` = :user_id
                     ORDER BY created_at ASC";
 
@@ -80,47 +67,61 @@ class Lists extends Database
         }
     }
 
-    public function readAll(): array
+    // retourne une liste en fonction de son id
+    public function readOne(string $id): ?Lister
     {
         try {
-            $req = "SELECT `id`,
-                            `type`,
-                            `title`,
-                            `description`,
-                            `user_id`
-                    FROM `list`
-                    ORDER BY created_at ASC";
+            $req = "SELECT `l`.`id` AS `list_id`,
+                            `l`.`type`,
+                            `l`.`title`,
+                            `l`.`description`,
+                            `u`.`id` AS `user_id`,
+                            `u`.`name`,
+                            `u`.`firstname`,
+                            `u`.`login`,
+                            `u`.`email`,
+                            `u`.`role_id`,
+                            '' AS `password`,
+                            `l`.`created_at`,
+                            `l`.`updated_at`
+                    FROM `list` `l`
+                    INNER JOIN `user` `u` ON `u`.`id` = `l`.`user_id`
+                    WHERE `id` = :id
+                    ORDER BY created_at DESC";
+            $result = $this->findOne($req, ['id' => $id]);
 
-            $results = $this->findAll($req);
-            $listsArray = [];
-
-            foreach ($results as $result) {
-                $lister = new Lister();
-                $lister->populate($result);
-                $listsArray[] = $lister;
-            }
-            return $listsArray;
+            $lister = new Lister();
+            $lister->populate($result);
+            return $lister;
         } catch (\Exception $e) {
             echo $e->getMessage();
-            return [];
+            return null;
         }
     }
 
+    /**
+     * [ADMIN] retourne toutes les listes de tous les utilisateurs avec login
+     */
     public function readAllByUser(): array
     {
         try {
-            $req = "SELECT `l.id`,
-                            `l.type`,
-                            `l.title`,
-                            `l.description`,
-                            `u.login`,
-                            `l.created_at`,
-                            `l.updated_at`
-                    FROM list l
-                    INNER JOIN `user` u ON `u.id` = `l.user_id`
-                    ORDER BY `l.updated_at` ASC";
+            $req = "SELECT `l`.`id` AS `list_id`,
+                            `l`.`type`,
+                            `l`.`title`,
+                            `l`.`description`,
+                            `u`.`id` AS `user_id`,
+                            `u`.`name`,
+                            `u`.`firstname`,
+                            `u`.`login`,
+                            `u`.`email`,
+                            `u`.`role_id`,
+                            '' AS `password`,
+                            `l`.`created_at`,
+                            `l`.`updated_at`
+                    FROM `list` `l`
+                    INNER JOIN `user` `u` ON `u`.`id` = `l`.`user_id`
+                    ORDER BY `l`.`updated_at` ASC";
             $results = $this->findAll($req);
-            
             $listsArray = [];
 
             foreach ($results as $result) {

@@ -3,7 +3,7 @@
 // redirection vers la page Listes pour la création de liste
 // affichage de toutes les listes des utilisateurs == profils.js mais pour les listes
 
-import { fetchAllLists } from "./actions_home.js";
+import { fetchAllListsByUser } from "./actions_home.js";
 import { dialog, redirect } from "../../services/utils.js";
 
 function readAllLists() {
@@ -12,10 +12,11 @@ function readAllLists() {
     const listBtn = document.querySelector("#newList");
 
     if (token === undefined || token === null || user === null || user === undefined) {
-        listBtn.addEventListener("click", function(e){
+        listBtn.addEventListener("click", function(e) {
             dialog({title:"Vous n'êtes pas encore connecté ?", content: "Vous allez être redirigé(e) vers la page de connexion", hasTimeOut: true})
             redirect("http://localhost/listerr/src/app/src/user/pages/login.html");
         });
+        return;
     }
 
     if (user !== undefined && user !== null) {
@@ -24,26 +25,43 @@ function readAllLists() {
         });
     }
 
-    fetchAllLists()
+
+    fetchAllListsByUser()
     .then(response => {
         const data = response.data;
         if (response.status === "read"){
             const list = document.querySelector('#AllListWrapper');
 
             for (const index in data) {
-                const column = data[index]
+                const object = data[index]
                 const div = document.createElement("div");
                 div.classList.add("list");
                 const ul = document.createElement("ul");
-
                 const h3 = document.createElement("h3");
-                for (const key in column){
+
+                for (const key in object) {
+                    const value = object[key];
                     const li = document.createElement("li");
 
-                    if (["status", "id", "userId"].includes(`${key}`)) {
+                    if (key === "type") {
+                        h3.innerText = object.type
+                    }
+                    if (["status", "id", "userId", "type"].includes(`${key}`)) {
                         continue;
                     }
-                    li.innerText = `${column[key]}`;
+
+                    if (key === "user" && typeof(value) === "object") {
+                        li.innerText = `par ${object[key].login}`;
+                    } else {
+                        if (key === "createdAt") {
+                            li.innerText = `créée le ${object[key]}`;
+                        } else if (key === "updatedAt")  {
+                            li.innerText = `modifiée le ${object[key]}`;
+                        } else {
+                            li.innerText = `${object[key]}`;
+                        }
+                    }
+
                     ul.appendChild(li);
                     div.appendChild(h3);
                     div.appendChild(ul);

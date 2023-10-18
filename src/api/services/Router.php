@@ -11,6 +11,7 @@ class Router
     {
         if (array_key_exists('route', $_GET)) : // on vérifie que la route existe dans l'URL
 
+            $headers = getallheaders();
             switch ($_GET['route']) {
                 case 'user_register':
                     if ($this->isAllowedMethod('POST')) {
@@ -29,7 +30,6 @@ class Router
                 case 'user_logout':
                     if ($this->isAllowedMethod('GET')) {
                         $user = new UserController();
-                        $headers = getallheaders();
                         echo $user->logout($headers['Authorization']);
                     }
                     break;
@@ -37,7 +37,6 @@ class Router
                 case 'user_profil':
                     if ($this->isAllowedMethod('GET')) {
                         $user = new UserController();
-                        $headers = getallheaders();
                         echo $user->read($headers['Authorization']); // readOne
                     }
                     break;
@@ -45,7 +44,6 @@ class Router
                 case 'user_update':
                     if ($this->isAllowedMethod('POST')) {
                         $user = new UserController();
-                        $headers = getallheaders();
                         echo $user->update($headers['Authorization']); // update
                     }
                     break;
@@ -53,7 +51,6 @@ class Router
                 case 'user_delete':
                     if ($this->isAllowedMethod('GET')) {
                         $user = new UserController();
-                        $headers = getallheaders();
                         echo $user->delete($headers['Authorization']); // delete
                     }
                     break;
@@ -82,25 +79,22 @@ class Router
 
                 case 'create_list':
                     if ($this->isAllowedMethod('POST')) {
-                        $list = new ListController();
-                        $headers = getallheaders();
-                        echo $list->create($headers['Authorization']); // create
+                        $list = new ListController($headers['Authorization']);
+                        echo $list->create(); // create
                     }
                     break;
 
-                case 'read_list': // pour l'utilisateur
+                case 'read_list': // Liste par utilisateur
                     if ($this->isAllowedMethod('GET')) {
-                        $list = new ListController();
-                        $headers = getallheaders();
-                        echo $list->readListByUser($headers['Authorization']); // readOne
+                        $list = new ListController($headers['Authorization']);
+                        echo $list->readListByUser(); // readOne
                     }
                     break;
 
-                case 'read_all_lists': // pour l'admin
+                case 'read_all_lists_by_user': // liste pour l'admin avec login utilisateur
                     if ($this->isAllowedMethod('GET')) {
-                        $list = new ListController();
-                        $headers = getallheaders();
-                        echo $list->readAll($headers['Authorization']); // readAll
+                        $list = new ListController($headers['Authorization']);
+                        echo $list->readAllByUser(); // readAll
                     }
                     break;
 

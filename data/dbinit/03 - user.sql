@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : ven. 15 sep. 2023 à 14:08
+-- Généré le : mer. 18 oct. 2023 à 20:49
 -- Version du serveur : 8.0.31
 -- Version de PHP : 8.0.26
 
@@ -30,9 +30,10 @@ SET time_zone = "+00:00";
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `login` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `login` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `firstname` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `email` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
   `role_id` int NOT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -41,11 +42,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `login` (`login`),
   UNIQUE KEY `email` (`email`),
   KEY `role_id_idx` (`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Déchargement des données de la table `user`
---
+) ENGINE=InnoDB AUTO_INCREMENT=323 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 --

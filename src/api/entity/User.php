@@ -34,13 +34,14 @@ class User
 
     public function populate(array $params): void
     {
-        $this->id = $params['id'];
+        $id = !empty($params['user_id']) ? $params['user_id'] : $params['id'];
+        
+        $this->id = $id;
         $this->name = $params['name'];
         $this->firstname = $params['firstname'];
         $this->login = $params['login'];
         $this->email = $params['email'];
         $this->password = $params['password'];
-
         $this->setRole($params['role_id'])
             ->setIsAdmin($params['role_id']);
     }
