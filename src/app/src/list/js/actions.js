@@ -17,7 +17,7 @@ async function fetchCreateList(form) {
     }
 };
 
-async function fetchReadList() {
+async function fetchReadAllList() {
     try {
         const url = "http://localhost/listerr/src/api/?route=read_list";
         const token = localStorage.getItem("token");
@@ -66,7 +66,7 @@ async function fetchDeleteList() {
 
 export {
     fetchCreateList,
-    fetchReadList,
+    fetchReadAllList,
     fetchUpdateList,
     fetchDeleteList
 };

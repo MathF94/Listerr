@@ -35,35 +35,32 @@ function readAllLists() {
             for (const index in data) {
                 const object = data[index]
                 const div = document.createElement("div");
+                div.id = "homeList";
                 div.classList.add("list");
                 const ul = document.createElement("ul");
                 const h3 = document.createElement("h3");
 
                 for (const key in object) {
                     const value = object[key];
+
                     const li = document.createElement("li");
 
                     if (key === "type") {
-                        h3.innerText = object.type
+                        h3.innerText = object.type;
                     }
-                    if (["status", "id", "userId", "type"].includes(`${key}`)) {
+                    if (key === "user" && typeof(value) === "object") {
+                        li.innerText = `Créée par ${object[key].login}, le ${object.createdAt}. Dernière modification : ${object.updatedAt}.`;
+                    }
+                    else {
+                        li.innerText = `${object[key]}.`;
+                    }
+
+                    if (["status", "id", "userId", "type", "createdAt", "updatedAt"].includes(`${key}`)) {
                         continue;
                     }
 
-                    if (key === "user" && typeof(value) === "object") {
-                        li.innerText = `par ${object[key].login}`;
-                    } else {
-                        if (key === "createdAt") {
-                            li.innerText = `créée le ${object[key]}`;
-                        } else if (key === "updatedAt")  {
-                            li.innerText = `modifiée le ${object[key]}`;
-                        } else {
-                            li.innerText = `${object[key]}`;
-                        }
-                    }
-
-                    ul.appendChild(li);
                     div.appendChild(h3);
+                    ul.appendChild(li);
                     div.appendChild(ul);
                     list.append(div);
                 }

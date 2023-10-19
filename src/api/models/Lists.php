@@ -86,8 +86,9 @@ class Lists extends Database
                             `l`.`updated_at`
                     FROM `list` `l`
                     INNER JOIN `user` `u` ON `u`.`id` = `l`.`user_id`
-                    WHERE `id` = :id
+                    WHERE `u`.`id` = :id
                     ORDER BY created_at DESC";
+
             $result = $this->findOne($req, ['id' => $id]);
 
             $lister = new Lister();
@@ -147,11 +148,12 @@ class Lists extends Database
         return $query->execute($parameters);
     }
 
-    public function delete(string $userId): bool
+    public function delete(int $id): bool
     {
         $req = "DELETE FROM `list`
-                WHERE `user_id` = :user_id";
+                WHERE `id` = :id";
+
         $query = $this->db->prepare($req);
-        return $query->execute(['user_id' => $userId]);
+        return $query->execute(['id' => $id]);
     }
 }

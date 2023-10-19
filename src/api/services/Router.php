@@ -107,8 +107,8 @@ class Router
 
                 case 'delete_list':
                     if ($this->isAllowedMethod('GET')) {
-                        // $list = new ListController();
-                        // echo $list->delete(); // delete
+                        $list = new ListController($headers['Authorization']);
+                        echo $list->delete(); // delete
                     }
                     break;
 

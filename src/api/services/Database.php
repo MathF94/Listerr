@@ -24,11 +24,8 @@ class Database
     protected function findAll(string $req, array $params = []): array
     {
         try {
-            // var_dump($params);
-            // var_dump($req);
             $query = $this->db->prepare($req);
             $query->execute($params);
-            // var_dump($query->execute($params));die();
 
             return $query->fetchAll(); // Récupérer un jeu d'enregistrements
 

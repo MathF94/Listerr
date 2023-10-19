@@ -62,7 +62,7 @@ class UserController
                 $user = $model->auth($_POST['login'], $encrytedPassword);
 
                 if (empty($user)) {
-                    
+
                     return json_encode([
                         'status' => 'fail_data',
                         'message' => 'Votre identifiant n\'existe pas ou votre mot de passe est incorrect.'
@@ -242,6 +242,7 @@ class UserController
             $users = new Users();
             $user = $users->readOne($decryptToken['login']);
             if (!empty($user)) {
+
                 $users->delete($user->login);
 
                 return json_encode([

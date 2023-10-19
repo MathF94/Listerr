@@ -21,7 +21,7 @@ class ListController
         $this->user = $model->auth($decrypt["login"], $decrypt["password"]);
     }
 
-    public function create()
+    public function create(): string
     {
         try {
             if (!empty($this->user)) {
@@ -111,5 +111,30 @@ class ListController
                 'message' => $e->getMessage()
             ]);
         }
+    }
+
+    public function delete(): string
+    {
+        try {
+            if (!empty($this->user)) {
+                $model = new Lists();
+                $list = $model->readOne($this->user->id);
+
+                if (!empty($list)) {
+                    $list = $model->delete($list->id);
+
+                    return json_encode([
+                        'status' => 'deleted',
+                        'message' => 'la liste a bien été supprimée.'
+                    ]);
+                };
+                return json_encode(['status' => 'fail']);
+            }
+        } catch (\Exception $e) {
+            return json_encode([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        };
     }
 }

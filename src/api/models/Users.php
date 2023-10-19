@@ -5,6 +5,7 @@ namespace Models;
 use Entity\User;
 use Services\Database;
 use Services\Encryption;
+
 class Users extends Database
 {
     /**
@@ -20,7 +21,7 @@ class Users extends Database
         parent::__construct();
         $this->encryption = new Encryption();
         $this->encryption->setKey(self::KEY)
-                        ->setIv(self::IV);
+            ->setIv(self::IV);
     }
 
     public function create(array $params): bool
@@ -40,7 +41,6 @@ class Users extends Database
 
             $this->executeReq($req, $params);
             return true;
-
         } catch (\Exception $e) {
             echo $e->getMessage();
             return false;
@@ -65,14 +65,13 @@ class Users extends Database
                 'login'    => $login,
                 'password' => $password,
             ]);
-            if (empty($result)){
+            if (empty($result)) {
                 return null;
             }
 
             $user = new User();
             $user->populate($result);
             return $user;
-
         } catch (\Exception $e) {
             echo $e->getMessage();
             return null;
@@ -98,7 +97,6 @@ class Users extends Database
             $user = new User();
             $user->populate($result);
             return $user;
-
         } catch (\Exception $e) {
             echo $e->getMessage();
             return null;
@@ -121,13 +119,12 @@ class Users extends Database
             $results = $this->findAll($req);
             $usersArray = [];
 
-            foreach($results as $result){
+            foreach ($results as $result) {
                 $user = new User();
                 $user->populate($result);
                 $usersArray[] = $user;
             }
             return $usersArray;
-
         } catch (\Exception $e) {
             echo $e->getMessage();
             return [];
@@ -136,31 +133,43 @@ class Users extends Database
 
     public function update(array $parameters, int $id): bool
     {
-        $req = "UPDATE `user`
+        try {
+            $req = "UPDATE `user`
                 SET `login`= :login,
                     `name`= :name,
                     `firstname` = :firstname,
                     `email` = :email
                 WHERE `id` = :id";
-        $query = $this->db->prepare($req);
-        $parameters['id'] = $id;
-        return $query->execute($parameters);
+            $query = $this->db->prepare($req);
+            $parameters['id'] = $id;
+            return $query->execute($parameters);
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return [];
+        }
     }
 
-    public function updatePassword(array $parameters):bool
+    public function updatePassword(array $parameters): bool
     {
         $req = "UPDATE `user`
                 SET `password`= :password
-                WHERE `login` = :login" ;
+                WHERE `login` = :login";
         $query = $this->db->prepare($req);
         return $query->execute($parameters);
     }
 
     public function delete(string $login): bool
     {
-        $req = "DELETE FROM `user`
-                WHERE `login` = :login";
-        $query = $this->db->prepare($req);
-        return $query->execute(['login' => $login]);
+        try {
+            $req = "DELETE FROM `user`
+                    WHERE `login` = :login";
+                    
+            $query = $this->db->prepare($req);
+            return $query->execute(['login' => $login]);
+
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return [];
+        }
     }
 }
