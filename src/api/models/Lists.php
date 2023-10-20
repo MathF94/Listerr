@@ -28,8 +28,45 @@ class Lists extends Database
         }
     }
 
-    // toutes les listes pour un utilisateur
-    public function listByUser(int $userId): array
+    /**
+     * retourne une liste d'un utilisateur en fonction de son id
+     */
+    public function oneListOneUser(string $id): ?Lister
+    {
+        try {
+            $req = "SELECT `l`.`id` AS `list_id`,
+                            `l`.`type`,
+                            `l`.`title`,
+                            `l`.`description`,
+                            `u`.`id` AS `user_id`,
+                            `u`.`name`,
+                            `u`.`firstname`,
+                            `u`.`login`,
+                            `u`.`email`,
+                            `u`.`role_id`,
+                            '' AS `password`,
+                            `l`.`created_at`,
+                            `l`.`updated_at`
+                    FROM `list` `l`
+                    INNER JOIN `user` `u` ON `u`.`id` = `l`.`user_id`
+                    WHERE `u`.`id` = :id
+                    ORDER BY created_at DESC";
+
+            $result = $this->findOne($req, ['id' => $id]);
+
+            $lister = new Lister();
+            $lister->populate($result);
+            return $lister;
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return null;
+        }
+    }
+
+    /**
+     * Toutes les listes d'un utilisateur
+     */
+    public function listsOneUser(int $userId): array
     {
         try {
             $req = "SELECT `l`.`id` AS `list_id`,
@@ -67,43 +104,10 @@ class Lists extends Database
         }
     }
 
-    // retourne une liste en fonction de son id
-    public function readOne(string $id): ?Lister
-    {
-        try {
-            $req = "SELECT `l`.`id` AS `list_id`,
-                            `l`.`type`,
-                            `l`.`title`,
-                            `l`.`description`,
-                            `u`.`id` AS `user_id`,
-                            `u`.`name`,
-                            `u`.`firstname`,
-                            `u`.`login`,
-                            `u`.`email`,
-                            `u`.`role_id`,
-                            '' AS `password`,
-                            `l`.`created_at`,
-                            `l`.`updated_at`
-                    FROM `list` `l`
-                    INNER JOIN `user` `u` ON `u`.`id` = `l`.`user_id`
-                    WHERE `u`.`id` = :id
-                    ORDER BY created_at DESC";
-
-            $result = $this->findOne($req, ['id' => $id]);
-
-            $lister = new Lister();
-            $lister->populate($result);
-            return $lister;
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-            return null;
-        }
-    }
-
     /**
-     * [ADMIN] retourne toutes les listes de tous les utilisateurs avec login
+     * Toutes les listes de tous les utilisateurs avec login
      */
-    public function readAllByUser(): array
+    public function listsByUsers(): array
     {
         try {
             $req = "SELECT `l`.`id` AS `list_id`,

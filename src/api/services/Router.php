@@ -62,20 +62,20 @@ class Router
                     }
                     break;
 
-                // @TODO
-                // case 'admin_update_user':
-                //     if ($this->isAllowedMethod('GET')) {
-                //         $user = new UserController();
-                //         echo $user->update($headers['Authorization']); // update
-                //     }
-                //     break;
+                    // @TODO
+                    // case 'admin_update_user':
+                    //     if ($this->isAllowedMethod('GET')) {
+                    //         $user = new UserController();
+                    //         echo $user->update($headers['Authorization']); // update
+                    //     }
+                    //     break;
 
-                // case 'admin_delete_user':
-                //     if ($this->isAllowedMethod('GET')) {
-                //         $user = new UserController();
-                //         echo $user->delete($headers['Authorization']); // delete
-                //     }
-                //     break;
+                    // case 'admin_delete_user':
+                    //     if ($this->isAllowedMethod('GET')) {
+                    //         $user = new UserController();
+                    //         echo $user->delete($headers['Authorization']); // delete
+                    //     }
+                    //     break;
 
                 case 'create_list':
                     if ($this->isAllowedMethod('POST')) {
@@ -84,17 +84,25 @@ class Router
                     }
                     break;
 
-                case 'read_list': // Liste par utilisateur
+                case 'read_one_list_one_user': // Toutes les listes d'un utilisateur sur lists.html
                     if ($this->isAllowedMethod('GET')) {
                         $list = new ListController($headers['Authorization']);
-                        echo $list->readListByUser(); // readOne
+                        echo $list->oneListOneUser(); // readOne
                     }
                     break;
 
-                case 'read_all_lists_by_user': // liste pour l'admin avec login utilisateur
+
+                case 'read_lists_one_user': // Toutes les listes d'un utilisateur sur lists.html
                     if ($this->isAllowedMethod('GET')) {
                         $list = new ListController($headers['Authorization']);
-                        echo $list->readAllByUser(); // readAll
+                        echo $list->readListsOneUser(); // readOne
+                    }
+                    break;
+
+                case 'read_all_by_users': // Toutes les listes de tous les utilisateurs sur home.html
+                    if ($this->isAllowedMethod('GET')) {
+                        $list = new ListController($headers['Authorization']);
+                        echo $list->readAllByUsers(); // readAll
                     }
                     break;
 
@@ -112,33 +120,33 @@ class Router
                     }
                     break;
 
-                // case 'create_card':
-                //     if ($this->isAllowedMethod('POST')) {
-                //         // $card = new CardController();
-                //         // echo $card->create(); // create
-                //     }
-                //     break;
+                    // case 'create_card':
+                    //     if ($this->isAllowedMethod('POST')) {
+                    //         // $card = new CardController();
+                    //         // echo $card->create(); // create
+                    //     }
+                    //     break;
 
-                // case 'read_card':
-                //     if ($this->isAllowedMethod('GET')) {
-                //         // $user = new CardController();
-                //         // echo $card->read(); // readOne
-                //     }
-                //     break;
+                    // case 'read_card':
+                    //     if ($this->isAllowedMethod('GET')) {
+                    //         // $user = new CardController();
+                    //         // echo $card->read(); // readOne
+                    //     }
+                    //     break;
 
-                // case 'update_card':
-                //     if ($this->isAllowedMethod('POST')) {
-                //         // $card = new CardController();
-                //         // echo $card->update(); // update
-                //     }
-                //     break;
+                    // case 'update_card':
+                    //     if ($this->isAllowedMethod('POST')) {
+                    //         // $card = new CardController();
+                    //         // echo $card->update(); // update
+                    //     }
+                    //     break;
 
-                // case 'delete_card':
-                //     if ($this->isAllowedMethod('GET')) {
-                //         // $card = new CardController();
-                //         // echo $card->delete(); // delete
-                //     }
-                //     break;
+                    // case 'delete_card':
+                    //     if ($this->isAllowedMethod('GET')) {
+                    //         // $card = new CardController();
+                    //         // echo $card->delete(); // delete
+                    //     }
+                    //     break;
 
                 default:
                     header('Location: index.php'); // on renvoie vers l'index

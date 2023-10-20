@@ -17,9 +17,26 @@ async function fetchCreateList(form) {
     }
 };
 
-async function fetchReadAllList() {
+async function fetchReadOneListOneUser() {
     try {
-        const url = "http://localhost/listerr/src/api/?route=read_list";
+        const url = "http://localhost/listerr/src/api/?route=read_lists_one_user";
+        const token = localStorage.getItem("token");
+        return await fetch(url, {
+            method: "GET",
+            // body: ,
+            headers: {"Authorization": token},
+            }).then(response => response.json());
+
+    } catch (error) {
+        console.error("Erreur lors de la requête fetch :", error);
+        return null;
+    }
+};
+
+
+async function fetchReadAllLists() {
+    try {
+        const url = "http://localhost/listerr/src/api/?route=read_lists_one_user";
         const token = localStorage.getItem("token");
         return await fetch(url, {
             method: "GET",
@@ -66,7 +83,8 @@ async function fetchDeleteList() {
 
 export {
     fetchCreateList,
-    fetchReadAllList,
+    fetchReadOneListOneUser,
+    fetchReadAllLists,
     fetchUpdateList,
     fetchDeleteList
 };

@@ -1,9 +1,9 @@
 "use strict";
 
-import { fetchCreateList, fetchReadAllList, fetchDeleteList } from "./actions.js";
+import { fetchCreateList, fetchReadAllLists, fetchDeleteList } from "./actions.js";
 import { redirect, dialog } from "../../services/utils.js";
 
-function list() {
+function lists() {
     const form = document.querySelector("form");
     form.addEventListener("submit", function(e){
         e.preventDefault();
@@ -22,7 +22,7 @@ function list() {
         })
     })
 
-    fetchReadAllList()
+    fetchReadAllLists()
     .then(response => {
         const data = response.data;
         if (response.status === "read"){
@@ -57,18 +57,24 @@ function list() {
                 for (const key in object) {
                     const value = object[key];
                     const item = document.createElement("li");
-
+                    
                     if (key === "type") {
                         titleH3.innerText = object.type;
                     }
+                    if (["status", "id", "userId", "type"].includes(`${key}`)) {
+                        continue;
+                    }
                     if (key === "user" && typeof(value) === "object") {
-                        item.innerText = `Créée par ${object[key].login}, le ${object.createdAt}. Dernière modification : ${object.updatedAt}.`;
+                        item.innerText = `Par ${object[key].login}.`;
                     }
                     else {
-                        item.innerText = `${object[key]}.`;
-                    }
-                    if (["status", "id", "userId", "type", "createdAt", "updatedAt"].includes(`${key}`)) {
-                        continue;
+                        if (key === "createdAt") {
+                            item.innerText = `Créée le ${object[key]}`;
+                        } else if (key === "updatedAt")  {
+                            item.innerText = `Modifiée le ${object[key]}`;
+                        } else {
+                            item.innerText = `${object[key]}`;
+                        }
                     }
 
                     contentList.appendChild(titleH3);
@@ -108,5 +114,5 @@ function list() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    list();
+    lists();
 });

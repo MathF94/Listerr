@@ -51,13 +51,50 @@ class ListController
         }
     }
 
-    // liste par utilisateur
-    public function readListByUser(): string
+    /**
+     * retourne une liste d'un utilisateur en fonction de son id
+     */
+    public function oneListOneUser() {
+        try {
+            if (!empty($this->user)) {
+                $model = new Lists();
+                $list = $model->oneListOneUser($this->user->id);
+                var_dump($list);die();
+
+                if (empty($list)) {
+                    return json_encode([
+                        'status' => 'unknown user'
+                    ]);
+                };
+
+                return json_encode([
+                    'status' => 'read',
+                    'data' => $list
+                ]);
+            };
+
+            return json_encode([
+                'status' => 'fail',
+                'message' => 'body is empty'
+            ]);
+            
+        } catch (\Exception $e) {
+            return json_encode([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * Toutes les listes d'un utilisateur
+     */
+    public function readListsOneUser(): string
     {
         try {
             if (!empty($this->user)) {
                 $model = new Lists();
-                $list = $model->listByUser($this->user->id);
+                $list = $model->listsOneUser($this->user->id);
 
                 if (empty($list)) {
                     return json_encode([
@@ -82,13 +119,15 @@ class ListController
         };
     }
 
-    // liste pour l'admin avec login utilisateur
-    public function readAllByUser(): string
+    /**
+     * Toutes les listes de tous les utilisateurs avec login
+     */
+    public function readAllByUsers(): string
     {
         try {
             if (!empty($this->user)) {
                 $model = new Lists();
-                $list = $model->readAllByUser();
+                $list = $model->listsByUsers();
 
                 if (empty($list)) {
                     return json_encode([
@@ -118,7 +157,7 @@ class ListController
         try {
             if (!empty($this->user)) {
                 $model = new Lists();
-                $list = $model->readOne($this->user->id);
+                $list = $model->oneListOneUser($this->user->id);
 
                 if (!empty($list)) {
                     $list = $model->delete($list->id);

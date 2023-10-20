@@ -3,7 +3,7 @@
 // redirection vers la page Listes pour la création de liste
 // affichage de toutes les listes des utilisateurs == profils.js mais pour les listes
 
-import { fetchAllListsByUser } from "./actions_home.js";
+import { fetchAllListsByUsers } from "./actions_home.js";
 import { dialog, redirect } from "../../services/utils.js";
 
 function readAllLists() {
@@ -26,7 +26,7 @@ function readAllLists() {
     }
 
 
-    fetchAllListsByUser()
+    fetchAllListsByUsers()
     .then(response => {
         const data = response.data;
         if (response.status === "read"){
@@ -42,25 +42,29 @@ function readAllLists() {
 
                 for (const key in object) {
                     const value = object[key];
-
                     const item = document.createElement("li");
 
                     if (key === "type") {
-                        titleH3.innerText = object.type;
+                        titleH3.innerText = object.type
                     }
-                    if (key === "user" && typeof(value) === "object") {
-                        item.innerText = `Créée par ${object[key].login}, le ${object.createdAt}. Dernière modification : ${object.updatedAt}.`;
-                    }
-                    else {
-                        item.innerText = `${object[key]}.`;
-                    }
-
-                    if (["status", "id", "userId", "type", "createdAt", "updatedAt"].includes(`${key}`)) {
+                    if (["status", "id", "userId", "type"].includes(`${key}`)) {
                         continue;
                     }
 
-                    content.appendChild(titleH3);
+                    if (key === "user" && typeof(value) === "object") {
+                        item.innerText = `Par ${object[key].login}`;
+                    } else {
+                        if (key === "createdAt") {
+                            item.innerText = `Créée le ${object[key]}`;
+                        } else if (key === "updatedAt")  {
+                            item.innerText = `Modifiée le ${object[key]}`;
+                        } else {
+                            item.innerText = `${object[key]}`;
+                        }
+                    }
+
                     list.appendChild(item);
+                    content.appendChild(titleH3);
                     content.appendChild(list);
                     AllListWrapper.append(content);
                 }
