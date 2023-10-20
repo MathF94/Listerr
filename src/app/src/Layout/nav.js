@@ -20,7 +20,7 @@ function navigation(template) {
             {text: "Accueil", href: "http://localhost/listerr/src/app/src/home/pages/home.html", id: "home"},
             {text: "Déconnexion", id: "logout"},
             {text: "Votre profil", href: "http://localhost/listerr/src/app/src/user/pages/profil.html", id: "profil"},
-            {text: "Listes de souhaits et de tâches", href: "http://localhost/listerr/src/app/src/list/pages/list.html", id: "listist"},
+            {text: "Listes de souhaits et de tâches", href: "http://localhost/listerr/src/app/src/list/pages/lists.html", id: "lists"},
         ];
         addLinks(links);
     };

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listerr</title>
+    <script type="module" src="../../layout/header.js"></script>
+    <script type="module" src="../js/actions.js"></script>
+    <script type="module" src="../js/lists.js"></script>
+    <script type="module" src="../../user/js/logout.js"></script>
+</head>
+<body>
+    <section class="list">
+        <h2>Vos listes sont listées dans cette page de listes de Listerr</h2>
+        <div>
+            <button id="listCreater" type="button" value="newList">Créer une nouvelle liste</button>
+        </div>
+        <div id="listForm" class="hiddenForm">
+            <form action="?route=create_list" method="post">
+                <h3>Formulaire de création de listes</h3>
+                <input type="radio" name="type" id="wish" value="WishList" checked/>
+                <label for="wish">WishList</label>
+                <input type="radio" name="type" id="todo" value="TodoList"/>
+                <label for="todo">TodoList</label>
+                <label for="title">Titre de la liste</label>
+                <input type="text" name="title" id="title" placeholder="Votre titre" required/>
+                <label for="description">Description (facultative)</label>
+                <input type="text" name="description" id="description" placeholder="Votre description">
+
+                <button type="submit">Valider</button>
+            </form>
+        </div>
+    </section>
+    <section id="listSection">
+        <h3>Affichage des listes de souhaits et de tâches</h3>
+        <div id="listWrapper"></div>
+    </section>
+</body>
+</html>

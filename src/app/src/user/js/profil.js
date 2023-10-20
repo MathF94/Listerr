@@ -35,7 +35,7 @@ function read() {
             div.prepend(ul);
 
             listBtn.addEventListener("click", function(e){
-                redirect("http://localhost/listerr/src/app/src/list/pages/list.html", 0);
+                redirect("http://localhost/listerr/src/app/src/list/pages/lists.html", 0);
             });
             updateBtn.addEventListener("click", function(e){
                 redirect("http://localhost/listerr/src/app/src/user/pages/update.html", 0);

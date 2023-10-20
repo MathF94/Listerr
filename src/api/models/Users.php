@@ -151,11 +151,17 @@ class Users extends Database
 
     public function updatePassword(array $parameters): bool
     {
-        $req = "UPDATE `user`
-                SET `password`= :password
-                WHERE `login` = :login";
-        $query = $this->db->prepare($req);
-        return $query->execute($parameters);
+        try {
+            $req = "UPDATE `user`
+                    SET `password`= :password
+                    WHERE `login` = :login";
+            $query = $this->db->prepare($req);
+            return $query->execute($parameters);
+            
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return [];
+        }
     }
 
     public function delete(string $login): bool
@@ -163,7 +169,7 @@ class Users extends Database
         try {
             $req = "DELETE FROM `user`
                     WHERE `login` = :login";
-                    
+
             $query = $this->db->prepare($req);
             return $query->execute(['login' => $login]);
 

@@ -64,6 +64,9 @@ function readAllLists() {
                     div.appendChild(ul);
                     list.append(div);
                 }
+                div.addEventListener("click", function(){
+                    redirect("http://localhost/listerr/src/app/src/list/pages/list.html", 0);
+                })
             }
         }
     })
