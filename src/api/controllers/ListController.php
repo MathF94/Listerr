@@ -54,12 +54,11 @@ class ListController
     /**
      * retourne une liste d'un utilisateur en fonction de son id
      */
-    public function oneListOneUser() {
+    public function readOneListOneUser() {
         try {
             if (!empty($this->user)) {
                 $model = new Lists();
                 $list = $model->oneListOneUser($this->user->id);
-                var_dump($list);die();
 
                 if (empty($list)) {
                     return json_encode([

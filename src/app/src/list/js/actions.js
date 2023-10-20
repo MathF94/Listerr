@@ -17,13 +17,13 @@ async function fetchCreateList(form) {
     }
 };
 
-async function fetchReadOneListOneUser() {
+async function fetchReadOneListOneUser(id) {
     try {
-        const url = "http://localhost/listerr/src/api/?route=read_lists_one_user";
+        const url = "http://localhost/listerr/src/api/?route=read_one_list_one_user";
         const token = localStorage.getItem("token");
-        return await fetch(url, {
+
+        return await fetch(`${url}&id=${id}`, {
             method: "GET",
-            // body: ,
             headers: {"Authorization": token},
             }).then(response => response.json());
 
@@ -32,7 +32,6 @@ async function fetchReadOneListOneUser() {
         return null;
     }
 };
-
 
 async function fetchReadAllLists() {
     try {

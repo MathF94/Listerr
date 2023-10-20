@@ -87,7 +87,7 @@ class Router
                 case 'read_one_list_one_user': // Toutes les listes d'un utilisateur sur lists.html
                     if ($this->isAllowedMethod('GET')) {
                         $list = new ListController($headers['Authorization']);
-                        echo $list->oneListOneUser(); // readOne
+                        echo $list->readOneListOneUser(); // readOne
                     }
                     break;
 
