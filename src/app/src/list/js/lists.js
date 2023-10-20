@@ -26,7 +26,7 @@ function lists() {
     .then(response => {
         const data = response.data;
         if (response.status === "read"){
-            const listWrapper = document.querySelector('#listWrapper');
+            const listWrapper = document.querySelector('#listsWrapper');
 
             for (const index in data) {
                 const object = data[index]

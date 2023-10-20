@@ -31,7 +31,7 @@ class Lists extends Database
     /**
      * retourne une liste d'un utilisateur en fonction de son id
      */
-    public function oneListOneUser(string $id): ?Lister
+    public function oneListOneUser(int $id): ?Lister
     {
         try {
             $req = "SELECT `l`.`id` AS `list_id`,
@@ -52,8 +52,7 @@ class Lists extends Database
                     WHERE `u`.`id` = :id
                     ORDER BY created_at DESC";
 
-            $result = $this->findOne($req, ['id' => $id]);
-
+            $result = $this->findOne($req, ['list_id' => $id]);
             $lister = new Lister();
             $lister->populate($result);
             return $lister;

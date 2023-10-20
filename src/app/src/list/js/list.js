@@ -4,15 +4,15 @@ import { fetchReadOneListOneUser } from "./actions.js";
 
 function list() {
     const urlParams = new URLSearchParams(document.location.search);
-    const id = urlParams.get("id");
-    
-    fetchReadOneListOneUser(id)
-    .then(response => {
-        if (urlParams.has("id")) {
-        
-        }
+    if (urlParams.has("id")) {
+        const id = urlParams.get("id");
 
-    })
+        fetchReadOneListOneUser(id)
+        .then(response => {
+            console.log(response);
+        })
+    }
+    
 
 }
 

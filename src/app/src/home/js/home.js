@@ -30,7 +30,7 @@ function readAllLists() {
     .then(response => {
         const data = response.data;
         if (response.status === "read"){
-            const AllListWrapper = document.querySelector('#AllListWrapper');
+            const AllListWrapper = document.querySelector('#AllListsWrapper');
 
             for (const index in data) {
                 const object = data[index]

@@ -57,8 +57,9 @@ class ListController
     public function readOneListOneUser() {
         try {
             if (!empty($this->user)) {
+                $id = $_GET['id'];
                 $model = new Lists();
-                $list = $model->oneListOneUser($this->user->id);
+                $list = $model->oneListOneUser($id);
 
                 if (empty($list)) {
                     return json_encode([
