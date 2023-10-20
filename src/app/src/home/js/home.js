@@ -30,42 +30,44 @@ function readAllLists() {
     .then(response => {
         const data = response.data;
         if (response.status === "read"){
-            const list = document.querySelector('#AllListWrapper');
+            const AllListWrapper = document.querySelector('#AllListWrapper');
 
             for (const index in data) {
                 const object = data[index]
-                const div = document.createElement("div");
-                div.id = "homeList";
-                div.classList.add("list");
-                const ul = document.createElement("ul");
-                const h3 = document.createElement("h3");
+                const content = document.createElement("div");
+                content.id = "homeList";
+                content.classList.add("homeList");
+                const list = document.createElement("ul");
+                const titleH3 = document.createElement("h3");
 
                 for (const key in object) {
                     const value = object[key];
 
-                    const li = document.createElement("li");
+                    const item = document.createElement("li");
 
                     if (key === "type") {
-                        h3.innerText = object.type;
+                        titleH3.innerText = object.type;
                     }
                     if (key === "user" && typeof(value) === "object") {
-                        li.innerText = `Créée par ${object[key].login}, le ${object.createdAt}. Dernière modification : ${object.updatedAt}.`;
+                        item.innerText = `Créée par ${object[key].login}, le ${object.createdAt}. Dernière modification : ${object.updatedAt}.`;
                     }
                     else {
-                        li.innerText = `${object[key]}.`;
+                        item.innerText = `${object[key]}.`;
                     }
 
                     if (["status", "id", "userId", "type", "createdAt", "updatedAt"].includes(`${key}`)) {
                         continue;
                     }
 
-                    div.appendChild(h3);
-                    ul.appendChild(li);
-                    div.appendChild(ul);
-                    list.append(div);
+                    content.appendChild(titleH3);
+                    list.appendChild(item);
+                    content.appendChild(list);
+                    AllListWrapper.append(content);
                 }
-                div.addEventListener("click", function(){
-                    redirect("http://localhost/listerr/src/app/src/list/pages/list.html", 0);
+                content.addEventListener("click", function(){
+                    if (object.type === "WishList") {
+                        redirect(`http://localhost/listerr/src/app/src/list/pages/list.html?id=${object.id}`, 0);
+                        }
                 })
             }
         }

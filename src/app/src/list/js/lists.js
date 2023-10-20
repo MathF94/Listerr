@@ -38,7 +38,7 @@ function list() {
                 contentList.id = "contentList";
                 contentList.classList.add("contentList");
 
-                const h3 = document.createElement("h3");
+                const titleH3 = document.createElement("h3");
                 const list = document.createElement("ul");
 
                 const formDelete = document.createElement("form");
@@ -59,7 +59,7 @@ function list() {
                     const item = document.createElement("li");
 
                     if (key === "type") {
-                        h3.innerText = object.type;
+                        titleH3.innerText = object.type;
                     }
                     if (key === "user" && typeof(value) === "object") {
                         item.innerText = `Créée par ${object[key].login}, le ${object.createdAt}. Dernière modification : ${object.updatedAt}.`;
@@ -71,7 +71,7 @@ function list() {
                         continue;
                     }
 
-                    contentList.appendChild(h3);
+                    contentList.appendChild(titleH3);
                     list.appendChild(item);
                     contentList.appendChild(list);
                     profilList.appendChild(contentList);

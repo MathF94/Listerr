@@ -4,7 +4,7 @@ function navigation(template) {
     const nav = document.createElement("nav");
     nav.id = "mainNav";
     nav.className = "mainNav";
-    const ul = document.createElement("ul");
+    const list = document.createElement("ul");
 
     if (token === undefined || token === null || user === null || user === undefined) {
         const links = [
@@ -38,23 +38,23 @@ function navigation(template) {
     function addLinks(links) {
 
         links.forEach(linkData => {
-            const a = document.createElement("a");
-            const li = document.createElement("li");
+            const link = document.createElement("a");
+            const item = document.createElement("li");
 
             if(linkData.href !== undefined) {
-                a.setAttribute("href", linkData.href);
-                a.id = linkData.id;
-                a.innerText = linkData.text;
+                link.setAttribute("href", linkData.href);
+                link.id = linkData.id;
+                link.innerText = linkData.text;
             } else {
                 const a = document.createElement("div");
                 a.id = linkData.id;
                 a.innerText = linkData.text;
-                li.appendChild(a);
+                item.appendChild(a);
             };
-            li.appendChild(a);
-            ul.appendChild(li);
+            item.appendChild(link);
+            list.appendChild(item);
         });
-        nav.appendChild(ul);
+        nav.appendChild(list);
         template.appendChild(nav);
     }
 };
