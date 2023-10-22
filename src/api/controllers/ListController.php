@@ -55,12 +55,11 @@ class ListController
      * retourne une liste d'un utilisateur en fonction de l'id de la liste sélectionnée
      */
     public function readOneListById() {
-        try {
+        try {            
             if (!empty($_GET['id'])) {
                 $id = $_GET['id'];
                 $model = new Lists();
                 $list = $model->oneListById((int)$id);
-
                 if (empty($list)) {
                     return json_encode([
                         'status' => 'no list'
@@ -69,6 +68,7 @@ class ListController
 
                 return json_encode([
                     'status' => 'readOneList',
+                    'user_id' => $this->user->id,
                     'data' => $list
                 ]);
             };
@@ -158,6 +158,7 @@ class ListController
             if (!empty($this->user->id)) {
                 $model = new Lists();
                 $list = $model->oneList((int)$id);
+                var_dump($list);die();
                 
                 if (!empty($list)) {
                     $listId = (int)$list['id'];

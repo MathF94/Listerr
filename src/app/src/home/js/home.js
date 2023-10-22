@@ -21,7 +21,7 @@ function readAllLists() {
 
     if (user !== undefined && user !== null) {
         listBtn.addEventListener("click", function(e){
-            redirect("http://localhost/listerr/src/app/src/list/pages/list.html", 0);
+            redirect("http://localhost/listerr/src/app/src/list/pages/lists.html", 0);
         });
     }
 
@@ -30,7 +30,7 @@ function readAllLists() {
     .then(response => {
         const data = response.data;
         if (response.status === "read"){
-            const allListWrapper = document.querySelector('#AllListsWrapper');
+            const allListWrapper = document.querySelector('#allListsWrapper');
 
             for (const index in data) {
                 const object = data[index]

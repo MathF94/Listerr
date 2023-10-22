@@ -5,6 +5,7 @@ async function fetchCreateList(form) {
         const url = "http://localhost/listerr/src/api/?route=create_list";
         const token = localStorage.getItem("token");
         const user = localStorage.getItem("user");
+        
         return await fetch(url, {
             method: "POST",
             body: new FormData(form),
@@ -17,14 +18,15 @@ async function fetchCreateList(form) {
     }
 };
 
-async function fetchReadOneListOneUser(id) {
+async function fetchReadOneListById(id) {
     try {
         const url = "http://localhost/listerr/src/api/?route=read_one_list_by_id";
         const token = localStorage.getItem("token");
-
+        const user = localStorage.getItem("user");
+        // console.log(user);
         return await fetch(`${url}&id=${id}`, {
             method: "GET",
-            headers: {"Authorization": token},
+            headers: {"Authorization": token, user},
             }).then(response => response.json());
 
     } catch (error) {
@@ -37,9 +39,11 @@ async function fetchReadAllLists() {
     try {
         const url = "http://localhost/listerr/src/api/?route=read_lists_one_user";
         const token = localStorage.getItem("token");
+        const user = localStorage.getItem("user");
+
         return await fetch(url, {
             method: "GET",
-            headers: {"Authorization": token},
+            headers: {"Authorization": token, user},
             }).then(response => response.json());
 
     } catch (error) {
@@ -53,6 +57,7 @@ async function fetchUpdateList(form) {
         const url = "http://localhost/listerr/src/api/?route=update_list";
         const token = localStorage.getItem("token");
         const user = localStorage.getItem("user");
+
         return await fetch(url, {
             method: "POST",
             body: new FormData(form),
@@ -69,10 +74,11 @@ async function fetchDeleteList(id) {
     try {
         const url = "http://localhost/listerr/src/api/?route=delete_list";
         const token = localStorage.getItem("token");
+        const user = localStorage.getItem("user");
         
         return await fetch(url, {
             method: "GET",
-            headers: {"Authorization": token, id},
+            headers: {"Authorization": token, id, user},
             }).then(response => response.json());
 
     } catch (error) {
@@ -83,7 +89,7 @@ async function fetchDeleteList(id) {
 
 export {
     fetchCreateList,
-    fetchReadOneListOneUser,
+    fetchReadOneListById,
     fetchReadAllLists,
     fetchUpdateList,
     fetchDeleteList
