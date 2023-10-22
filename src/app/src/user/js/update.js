@@ -20,6 +20,9 @@ function updateUser() {
 
     form.addEventListener("submit", function(e) {
         e.preventDefault();
+        console.log(e);
+        console.log(e.target);
+        console.log(e.target.login);
         const userLogin = e.target.login.value;
 
         fetchUpdate(form)
@@ -36,10 +39,10 @@ function updateUser() {
                             content: `<p>Votre login a bien été modifié.</p>
                                     <p>Vous allez être redirigé(e) vers la page de connexion, afin de vous reconnecter avec votre nouveau login.</p>`
                                 })
-                    redirect("http://localhost/listerr/src/app/src/user/pages/login.html", 3000);
+                    // redirect("http://localhost/listerr/src/app/src/user/pages/login.html", 3000);
                 } else {
                     dialog({content: "Votre profil a bien été mis à jour."});
-                    redirect("http://localhost/listerr/src/app/src/user/pages/profil.html", 3000);
+                    // redirect("http://localhost/listerr/src/app/src/user/pages/profil.html", 3000);
                 }
             };
 

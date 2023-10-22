@@ -29,11 +29,11 @@ class Lists extends Database
     }
 
     /**
-     * retourne une liste d'un utilisateur en fonction de son id
+     * retourne une liste d'un utilisateur en fonction de l'id de la liste sélectionnée
      */
-    public function oneListOneUser(int $id): ?Lister
+    public function oneListById(int $id): ?Lister
     {
-        try {
+        try {        
             $req = "SELECT `l`.`id` AS `list_id`,
                             `l`.`type`,
                             `l`.`title`,
@@ -49,13 +49,35 @@ class Lists extends Database
                             `l`.`updated_at`
                     FROM `list` `l`
                     INNER JOIN `user` `u` ON `u`.`id` = `l`.`user_id`
-                    WHERE `u`.`id` = :id
-                    ORDER BY created_at DESC";
-
-            $result = $this->findOne($req, ['list_id' => $id]);
+                    WHERE `l`.`id` = :id";
+                    
+            $result = $this->findOne($req, ['id' => $id]);            
             $lister = new Lister();
-            $lister->populate($result);
+            $lister->populate($result);            
             return $lister;
+            
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return null;
+        }
+    }
+
+    public function oneList(int $id): array
+    {
+        try {        
+            $req = "SELECT `id`,
+                            `type`,
+                            `title`,
+                            `description`,
+                            `user_id`,
+                            `created_at`,
+                            `updated_at`
+                    FROM `list` 
+                    WHERE `id` = :id";
+                    
+            $result = $this->findOne($req, ['id' => $id]);
+            return $result;
+            
         } catch (\Exception $e) {
             echo $e->getMessage();
             return null;
@@ -151,12 +173,18 @@ class Lists extends Database
         return $query->execute($parameters);
     }
 
-    public function delete(int $id): bool
+    public function deleteList(int $id): bool
     {
-        $req = "DELETE FROM `list`
-                WHERE `id` = :id";
+        try {
+            $req = "DELETE FROM `list`
+                    WHERE `id` = :id";
 
-        $query = $this->db->prepare($req);
-        return $query->execute(['id' => $id]);
+            $query = $this->db->prepare($req);            
+            return $query->execute(['id' => $id]);
+
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return [];
+        }
     }
 }

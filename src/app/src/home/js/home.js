@@ -30,12 +30,12 @@ function readAllLists() {
     .then(response => {
         const data = response.data;
         if (response.status === "read"){
-            const AllListWrapper = document.querySelector('#AllListsWrapper');
+            const allListWrapper = document.querySelector('#AllListsWrapper');
 
             for (const index in data) {
                 const object = data[index]
                 const content = document.createElement("div");
-                content.id = "homeList";
+                content.id = `homeList-${object.id}`;
                 content.classList.add("homeList");
                 const list = document.createElement("ul");
                 const titleH3 = document.createElement("h3");
@@ -66,7 +66,7 @@ function readAllLists() {
                     list.appendChild(item);
                     content.appendChild(titleH3);
                     content.appendChild(list);
-                    AllListWrapper.append(content);
+                    allListWrapper.append(content);
                 }
                 content.addEventListener("click", function(){
                     if (object.type === "WishList") {

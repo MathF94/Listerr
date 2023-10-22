@@ -31,28 +31,28 @@ function lists() {
             for (const index in data) {
                 const object = data[index]
                 const profilList = document.createElement("div");
-                profilList.id = "profilList";
+                profilList.id = `profilList-${object.id}`;
                 profilList.classList.add("profilList");
 
                 const contentList = document.createElement("div");
-                contentList.id = "contentList";
+                contentList.id = `contentList-${object.id}`;
                 contentList.classList.add("contentList");
 
                 const titleH3 = document.createElement("h3");
                 const list = document.createElement("ul");
 
                 const formDelete = document.createElement("form");
-                formDelete.id = "deleteForm";
-                formDelete.action = "?route=delete_list";
+                formDelete.id = `deleteForm-${object.id}`;
+                formDelete.action = `?route=delete_list`;
                 formDelete.method = "post";
-
+                
                 const deleteBtn = document.createElement("button");
-                deleteBtn.id = "deleteProfilList";
+                deleteBtn.id = `deleteProfilList-${object.id}`;
+                deleteBtn.name = "deleteProfilList";
                 deleteBtn.type = "submit";
-                deleteBtn.textContent = "Supprimer";
                 deleteBtn.value = `${object.id}`;
+                deleteBtn.textContent = "Supprimer";
                 deleteBtn.classList.add("deleteProfilList");
-
 
                 for (const key in object) {
                     const value = object[key];
@@ -81,23 +81,23 @@ function lists() {
                     list.appendChild(item);
                     contentList.appendChild(list);
                     profilList.appendChild(contentList);
-                    profilList.appendChild(formDelete);
+                    profilList.appendChild(formDelete);                
                     formDelete.appendChild(deleteBtn);
                     listWrapper.append(profilList);
                 }
-
+                
                 formDelete.addEventListener("submit", function(e){
                     e.preventDefault();
-
-                    if (e.submitter.value !== deleteBtn.value) {
+                    const btnId = parseInt(e.target.deleteProfilList.value);
+                    
+                    if (btnId !== object.id) {
                         console.warn("pas touche");
                         return;
                     } else if (confirm('Voulez-vous vraiment vous supprimer la liste ?') === true) {
-                        fetchDeleteList()
-                        .then(response => {
+                        fetchDeleteList(object.id)
+                        .then(response => {                            
                             dialog({title: "Suppression de la liste",
-                            content: `<p>Votre liste a bien été supprimée.</p>`,
-
+                            content: `<p>Votre liste a bien été supprimée.</p>`
                             });
                             redirect('http://localhost/listerr/src/app/src/list/pages/lists.html', 2000);
                         });

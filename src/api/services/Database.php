@@ -39,16 +39,17 @@ class Database
 
     protected function findOne(string $req, array $params = []): array
     {
-        try {
-            $query = $this->db->prepare($req);
-            $query->execute($params);
+        try {            
+            $query = $this->db->prepare($req);            
+            $query->execute($params);            
             $result = $query->fetch(); // Récupérer un enregistrement
 
             if (empty($result)) {
                 return [];
             }
             return $result;
-        } catch (\Exception $e) {
+
+        } catch (\Exception $e) {            
             return json_encode([
                 'status' => 'error',
                 'message' => $e->getMessage()
@@ -62,6 +63,7 @@ class Database
             $query = $this->db->prepare($req);
             $query->execute($params);
             return $query->fetch(\PDO::FETCH_ASSOC);
+            
         } catch (\Exception $e) {
             return json_encode([
                 'status' => 'error',

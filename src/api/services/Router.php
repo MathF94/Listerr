@@ -84,10 +84,10 @@ class Router
                     }
                     break;
 
-                case 'read_one_list_one_user': // Toutes les listes d'un utilisateur sur lists.html
+                case 'read_one_list_by_id': // Toutes les listes d'un utilisateur sur lists.html
                     if ($this->isAllowedMethod('GET')) {
                         $list = new ListController($headers['Authorization']);
-                        echo $list->readOneListOneUser(); // readOne
+                        echo $list->readOneListById(); // readOne
                     }
                     break;
 
@@ -116,7 +116,7 @@ class Router
                 case 'delete_list':
                     if ($this->isAllowedMethod('GET')) {
                         $list = new ListController($headers['Authorization']);
-                        echo $list->delete(); // delete
+                        echo $list->deleteList($headers['id']); // delete
                     }
                     break;
 

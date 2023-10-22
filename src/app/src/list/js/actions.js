@@ -19,7 +19,7 @@ async function fetchCreateList(form) {
 
 async function fetchReadOneListOneUser(id) {
     try {
-        const url = "http://localhost/listerr/src/api/?route=read_one_list_one_user";
+        const url = "http://localhost/listerr/src/api/?route=read_one_list_by_id";
         const token = localStorage.getItem("token");
 
         return await fetch(`${url}&id=${id}`, {
@@ -65,13 +65,14 @@ async function fetchUpdateList(form) {
     }
 };
 
-async function fetchDeleteList() {
+async function fetchDeleteList(id) {
     try {
         const url = "http://localhost/listerr/src/api/?route=delete_list";
         const token = localStorage.getItem("token");
+        
         return await fetch(url, {
             method: "GET",
-            headers: {"Authorization": token},
+            headers: {"Authorization": token, id},
             }).then(response => response.json());
 
     } catch (error) {

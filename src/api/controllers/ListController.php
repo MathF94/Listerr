@@ -52,23 +52,23 @@ class ListController
     }
 
     /**
-     * retourne une liste d'un utilisateur en fonction de son id
+     * retourne une liste d'un utilisateur en fonction de l'id de la liste sélectionnée
      */
-    public function readOneListOneUser() {
+    public function readOneListById() {
         try {
-            if (!empty($this->user)) {
+            if (!empty($_GET['id'])) {
                 $id = $_GET['id'];
                 $model = new Lists();
-                $list = $model->oneListOneUser($id);
+                $list = $model->oneListById((int)$id);
 
                 if (empty($list)) {
                     return json_encode([
-                        'status' => 'unknown user'
+                        'status' => 'no list'
                     ]);
                 };
 
                 return json_encode([
-                    'status' => 'read',
+                    'status' => 'readOneList',
                     'data' => $list
                 ]);
             };
@@ -152,16 +152,17 @@ class ListController
         }
     }
 
-    public function delete(): string
+    public function deleteList(int $id): string
     {
-        try {
-            if (!empty($this->user)) {
+        try {            
+            if (!empty($this->user->id)) {
                 $model = new Lists();
-                $list = $model->oneListOneUser($this->user->id);
-
+                $list = $model->oneList((int)$id);
+                
                 if (!empty($list)) {
-                    $list = $model->delete($list->id);
-
+                    $listId = (int)$list['id'];
+                    $model->deleteList($listId);
+                    
                     return json_encode([
                         'status' => 'deleted',
                         'message' => 'la liste a bien été supprimée.'
