@@ -33,7 +33,7 @@ class Lists extends Database
      */
     public function oneListById(int $id): ?Lister
     {
-        try {        
+        try {
             $req = "SELECT `l`.`id` AS `list_id`,
                             `l`.`type`,
                             `l`.`title`,
@@ -50,34 +50,12 @@ class Lists extends Database
                     FROM `list` `l`
                     INNER JOIN `user` `u` ON `u`.`id` = `l`.`user_id`
                     WHERE `l`.`id` = :id";
-                    
-            $result = $this->findOne($req, ['id' => $id]);            
-            $lister = new Lister();
-            $lister->populate($result);            
-            return $lister;
-            
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-            return null;
-        }
-    }
 
-    public function oneList(int $id): array
-    {
-        try {        
-            $req = "SELECT `id`,
-                            `type`,
-                            `title`,
-                            `description`,
-                            `user_id`,
-                            `created_at`,
-                            `updated_at`
-                    FROM `list` 
-                    WHERE `id` = :id";
-                    
             $result = $this->findOne($req, ['id' => $id]);
-            return $result;
-            
+            $lister = new Lister();
+            $lister->populate($result);
+            return $lister;
+
         } catch (\Exception $e) {
             echo $e->getMessage();
             return null;
@@ -162,7 +140,7 @@ class Lists extends Database
         }
     }
 
-    public function update(array $parameters, int $id): bool
+    public function update(array $params, int $id): bool
     {
         $req = "UPDATE `list`
                 SET `title`= :title,
@@ -179,7 +157,7 @@ class Lists extends Database
             $req = "DELETE FROM `list`
                     WHERE `id` = :id";
 
-            $query = $this->db->prepare($req);            
+            $query = $this->db->prepare($req);
             return $query->execute(['id' => $id]);
 
         } catch (\Exception $e) {

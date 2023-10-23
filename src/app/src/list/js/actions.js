@@ -5,7 +5,7 @@ async function fetchCreateList(form) {
         const url = "http://localhost/listerr/src/api/?route=create_list";
         const token = localStorage.getItem("token");
         const user = localStorage.getItem("user");
-        
+
         return await fetch(url, {
             method: "POST",
             body: new FormData(form),
@@ -75,9 +75,9 @@ async function fetchDeleteList(id) {
         const url = "http://localhost/listerr/src/api/?route=delete_list";
         const token = localStorage.getItem("token");
         const user = localStorage.getItem("user");
-        
+
         return await fetch(url, {
-            method: "GET",
+            method: "POST",
             headers: {"Authorization": token, id, user},
             }).then(response => response.json());
 

@@ -48,7 +48,7 @@ async function fetchLogout() {
         const url = "http://localhost/listerr/src/api/?route=user_logout";
         const token = localStorage.getItem("token");
         return await fetch(url, {
-            method: "GET",
+            method: "POST",
             headers: {"Authorization": token},
         }).then(response => response.json());
 
@@ -80,7 +80,7 @@ async function fetchDelete() {
         const url = "http://localhost/listerr/src/api/?route=user_delete";
         const token = localStorage.getItem("token");
         return await fetch(url, {
-            method: "GET",
+            method: "POST",
             headers: {"Authorization": token},
             }).then(response => response.json());
 

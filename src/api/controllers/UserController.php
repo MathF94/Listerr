@@ -38,7 +38,7 @@ class UserController
                     'status' => 'success'
                 ]);
             }
-            $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_REGISTER);
+            
             return json_encode([
                 'status' => 'fail',
                 'errors' => $errors

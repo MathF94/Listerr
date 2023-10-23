@@ -41,27 +41,22 @@ function lists() {
                 const titleH3 = document.createElement("h3");
                 const list = document.createElement("ul");
 
-                const formDelete = document.createElement("form");
-                formDelete.id = `deleteForm-${object.id}`;
-                formDelete.action = `?route=delete_list`;
-                formDelete.method = "post";
-                
-                const deleteBtn = document.createElement("button");
-                deleteBtn.id = `deleteProfilList-${object.id}`;
-                deleteBtn.name = "deleteProfilList";
-                deleteBtn.type = "submit";
-                deleteBtn.value = `${object.id}`;
-                deleteBtn.textContent = "Supprimer";
-                deleteBtn.classList.add("deleteProfilList");
+                const deleteBtnLists = document.createElement("button");
+                deleteBtnLists.id = `deleteProfilList-${object.id}`;
+                deleteBtnLists.name = "deleteProfilList";
+                deleteBtnLists.type = "submit";
+                deleteBtnLists.value = `${object.id}`;
+                deleteBtnLists.textContent = "Supprimer";
+                deleteBtnLists.classList.add("deleteProfilList");
 
                 for (const key in object) {
                     const value = object[key];
                     const item = document.createElement("li");
-                    
+
                     if (key === "type") {
-                        titleH3.innerText = object.type;
+                        titleH3.innerText = `${object.type} - ${object.title}`;
                     }
-                    if (["status", "id", "userId", "type"].includes(`${key}`)) {
+                    if (["status", "id", "userId", "type", "title"].includes(`${key}`)) {
                         continue;
                     }
                     if (key === "user" && typeof(value) === "object") {
@@ -81,21 +76,20 @@ function lists() {
                     list.appendChild(item);
                     contentList.appendChild(list);
                     profilList.appendChild(contentList);
-                    profilList.appendChild(formDelete);                
-                    formDelete.appendChild(deleteBtn);
+                    profilList.appendChild(deleteBtnLists);
                     listWrapper.append(profilList);
                 }
-                
-                formDelete.addEventListener("submit", function(e){
+
+                deleteBtnLists.addEventListener("click", function(e){
                     e.preventDefault();
-                    const btnId = parseInt(e.target.deleteProfilList.value);
-                    
+                    const btnId = parseInt(e.target.value);
+
                     if (btnId !== object.id) {
                         console.warn("pas touche");
                         return;
                     } else if (confirm('Voulez-vous vraiment vous supprimer la liste ?') === true) {
                         fetchDeleteList(object.id)
-                        .then(response => {                            
+                        .then(() => {
                             dialog({title: "Suppression de la liste",
                             content: `<p>Votre liste a bien été supprimée.</p>`
                             });

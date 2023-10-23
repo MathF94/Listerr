@@ -28,7 +28,7 @@ class Router
                     break;
 
                 case 'user_logout':
-                    if ($this->isAllowedMethod('GET')) {
+                    if ($this->isAllowedMethod('POST')) {
                         $user = new UserController();
                         echo $user->logout($headers['Authorization']);
                     }
@@ -49,7 +49,7 @@ class Router
                     break;
 
                 case 'user_delete':
-                    if ($this->isAllowedMethod('GET')) {
+                    if ($this->isAllowedMethod('POST')) {
                         $user = new UserController();
                         echo $user->delete($headers['Authorization']); // delete
                     }
@@ -92,7 +92,6 @@ class Router
                     }
                     break;
 
-
                 case 'read_lists_one_user': // Toutes les listes d'un utilisateur sur lists.html
                     if ($this->isAllowedMethod('GET')) {
                         $list = new ListController($headers['Authorization']);
@@ -109,13 +108,13 @@ class Router
 
                 case 'update_list':
                     if ($this->isAllowedMethod('POST')) {
-                        // $list = new ListController();
-                        // echo $list->update(); // update
+                        $list = new ListController($headers['Authorization']);
+                        echo $list->updateList($headers['id']); // update
                     }
                     break;
 
                 case 'delete_list':
-                    if ($this->isAllowedMethod('GET')) {
+                    if ($this->isAllowedMethod('POST')) {
                         $list = new ListController($headers['Authorization']);
                         echo $list->deleteList($headers['id']); // delete
                     }

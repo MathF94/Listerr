@@ -157,7 +157,7 @@ class Users extends Database
                     WHERE `login` = :login";
             $query = $this->db->prepare($req);
             return $query->execute($parameters);
-            
+
         } catch (\Exception $e) {
             echo $e->getMessage();
             return [];

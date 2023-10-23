@@ -4,15 +4,15 @@ import { fetchDelete } from "./actions.js";
 import { redirect, dialog } from "../../services/utils.js";
 
 function deleteUser() {
-    const form = document.querySelector('form');
+    const deleteBtn = document.querySelector('#delete');
 
-    form.addEventListener('submit', function(e){
+    deleteBtn.addEventListener('click', function(e){
         e.preventDefault();
 
-        if (e.submitter.value === 'delete'){
+        if (e.target.value === 'delete'){
             if (confirm('Voulez-vous vraiment vous supprimer votre compte ?') === true) {
                 fetchDelete()
-                .then(response => {
+                .then(() => {
                     dialog({title: "Suppression de compte",
                             content: `<p>Votre compte a bien été supprimé.</p>
                                     <p>Vous allez nous manquer et être redirigé(e) dans quelques instants vers l'inscription pour vous réinscrire car vous nous aimez !</p>`});

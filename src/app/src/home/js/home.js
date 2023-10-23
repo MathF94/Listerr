@@ -45,9 +45,9 @@ function readAllLists() {
                     const item = document.createElement("li");
 
                     if (key === "type") {
-                        titleH3.innerText = object.type
+                        titleH3.innerText = `${object.type} - ${object.title}`;
                     }
-                    if (["status", "id", "userId", "type"].includes(`${key}`)) {
+                    if (["status", "id", "userId", "type", "title"].includes(`${key}`)) {
                         continue;
                     }
 

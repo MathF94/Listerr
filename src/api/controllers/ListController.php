@@ -55,7 +55,7 @@ class ListController
      * retourne une liste d'un utilisateur en fonction de l'id de la liste sélectionnée
      */
     public function readOneListById() {
-        try {            
+        try {
             if (!empty($_GET['id'])) {
                 $id = $_GET['id'];
                 $model = new Lists();
@@ -77,7 +77,7 @@ class ListController
                 'status' => 'fail',
                 'message' => 'body is empty'
             ]);
-            
+
         } catch (\Exception $e) {
             return json_encode([
                 'status' => 'error',
@@ -152,18 +152,34 @@ class ListController
         }
     }
 
-    public function deleteList(int $id): string
+    public function updateList(int $id): string
     {
-        try {            
+        try {
             if (!empty($this->user->id)) {
                 $model = new Lists();
-                $list = $model->oneList((int)$id);
-                var_dump($list);die();
-                
+                var_dump("coucou update liste");die();
+
+            }
+
+        } catch (\Exception $e) {
+            return json_encode([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function deleteList(int $id): string
+    {
+        try {
+            if (!empty($this->user->id)) {
+                $model = new Lists();
+                $list = $model->oneListById((int)$id);
+
                 if (!empty($list)) {
-                    $listId = (int)$list['id'];
+                    $listId = (int)$list->id;
                     $model->deleteList($listId);
-                    
+
                     return json_encode([
                         'status' => 'deleted',
                         'message' => 'la liste a bien été supprimée.'
