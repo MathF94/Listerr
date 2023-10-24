@@ -42,6 +42,7 @@ function readAllLists() {
 
                 for (const key in object) {
                     const value = object[key];
+
                     const item = document.createElement("li");
 
                     if (key === "type") {
@@ -68,10 +69,13 @@ function readAllLists() {
                     content.appendChild(list);
                     allListWrapper.append(content);
                 }
+
                 content.addEventListener("click", function(){
-                    if (object.type === "WishList") {
-                        redirect(`http://localhost/listerr/src/app/src/list/pages/list.html?id=${object.id}`, 0);
-                        }
+                    console.log({type: object.type, userId: object.user.id, localStorage: JSON.parse(localStorage.getItem("user")).id});
+                    if (object.type === "TodoList" && object.user.id !== JSON.parse(localStorage.getItem("user")).id) {
+                        return false;
+                    }
+                    redirect(`http://localhost/listerr/src/app/src/list/pages/list.html?id=${object.id}`, 0);
                 })
             }
         }

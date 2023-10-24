@@ -16,9 +16,12 @@ class ListController
     {
         $this->validator = new Validator();
         $session = new Session();
-        $decrypt = $session->decrypt($tokenUser);
-        $model = new Users();
-        $this->user = $model->auth($decrypt["login"], $decrypt["password"]);
+
+        if (!empty($tokenUser)) {
+            $decrypt = $session->decrypt($tokenUser);
+            $model = new Users();
+            $this->user = $model->auth($decrypt["login"], $decrypt["password"]);
+        }
     }
 
     public function create(): string
@@ -37,7 +40,6 @@ class ListController
                     ]);
                 }
 
-                $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_CREATE_LIST);
                 return json_encode([
                     'status' => 'fail',
                     'errors' => $errors
@@ -54,21 +56,31 @@ class ListController
     /**
      * retourne une liste d'un utilisateur en fonction de l'id de la liste sélectionnée
      */
-    public function readOneListById() {
+    public function readOneListById()
+    {
         try {
             if (!empty($_GET['id'])) {
                 $id = $_GET['id'];
                 $model = new Lists();
                 $list = $model->oneListById((int)$id);
+
                 if (empty($list)) {
                     return json_encode([
                         'status' => 'no list'
                     ]);
                 };
 
+                if ($list->type === "TodoList") {
+                    if (empty($this->user) || $this->user->id !== $list->user->id) {
+                        return json_encode([
+                            'status' => 'no list'
+                        ]);
+                    }
+                }
+
                 return json_encode([
                     'status' => 'readOneList',
-                    'user_id' => $this->user->id,
+                    'user_id' => $this->user->id ?? 0,
                     'data' => $list
                 ]);
             };
@@ -157,10 +169,32 @@ class ListController
         try {
             if (!empty($this->user->id)) {
                 $model = new Lists();
-                var_dump("coucou update liste");die();
+                $list = $model->oneListById((int)$id);
 
+                $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_UPDATE_LIST);
+                if (empty(count($errors))) {
+                    $listId = (int)$list->id;
+                    $date = new \DateTime();
+                    $date->setTimezone(new \DateTimeZone("Europe/Paris"));
+                    $params = [
+                        'title' => $_POST['title'],
+                        'type' => $_POST['type'],
+                        'description' => $_POST['description'],
+                        'updated_at' => $date->format("Y-d-m H:i:s")
+                    ];
+                }
+                $model->updateList($params, $listId);
+
+                return json_encode([
+                    'status' => 'updated',
+                    'message' => 'la liste a bien été mise à jour.'
+                ]);
+
+                return json_encode([
+                    'status' => 'fail',
+                    'errors' => $errors
+                ]);
             }
-
         } catch (\Exception $e) {
             return json_encode([
                 'status' => 'error',

@@ -140,15 +140,24 @@ class Lists extends Database
         }
     }
 
-    public function update(array $params, int $id): bool
+    public function updateList(array $params, int $id): bool
     {
-        $req = "UPDATE `list`
-                SET `title`= :title,
-                    `description`= :description,
-                WHERE `id` = :id";
-        $query = $this->db->prepare($req);
-        $parameters['id'] = $id;
-        return $query->execute($parameters);
+        try {
+            $req = "UPDATE `list`
+                    SET `title` = :title,
+                        `type` = :type,
+                        `description` = :description,
+                        `updated_at` = :updated_at
+                    WHERE `id` = :id";
+            
+            $query = $this->db->prepare($req);
+            $params['id'] = $id;
+            return $query->execute($params);
+
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return [];
+        }
     }
 
     public function deleteList(int $id): bool

@@ -135,14 +135,15 @@ class Users extends Database
     {
         try {
             $req = "UPDATE `user`
-                SET `login`= :login,
-                    `name`= :name,
-                    `firstname` = :firstname,
-                    `email` = :email
+                    SET `login`= :login,
+                        `name`= :name,
+                        `firstname` = :firstname,
+                        `email` = :email
                 WHERE `id` = :id";
             $query = $this->db->prepare($req);
             $parameters['id'] = $id;
             return $query->execute($parameters);
+            
         } catch (\Exception $e) {
             echo $e->getMessage();
             return [];

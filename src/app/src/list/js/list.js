@@ -1,6 +1,7 @@
 "use strict";
 
-import { fetchReadOneListById, fetchDeleteList } from "./actions.js";
+import { fetchReadOneListById, fetchDeleteList, fetchUpdateList } from "./actions.js";
+import { createUpdateForm } from "./form.js";
 import { redirect, dialog } from "../../services/utils.js";
 
 function list() {
@@ -19,61 +20,6 @@ function list() {
                 updateList.classList.add("updateList");
                 updateList.classList.add("hidden");
 
-                const updateFormList = document.createElement("form");
-                updateFormList.id = "updateFormList";
-
-                const titleForm = document.createElement("h3");
-                titleForm.innerText = "Formulaire d'édition de la liste";
-
-                const radioW = document.createElement("input");
-                radioW.type = "radio";
-                radioW.name = "type";
-                radioW.id = "wish";
-                radioW.value = "WishList";
-                radioW.checked = true;
-
-                const labelW = document.createElement("label");
-                labelW.for = "wish";
-                labelW.innerText = "WishList";
-
-                const radioT = document.createElement("input");
-                radioT.type = "radio";
-                radioT.name = "type";
-                radioT.id = "todo";
-                radioT.value = "TodoList";
-
-                const labelT = document.createElement("label");
-                labelT.for = "todo";
-                labelT.innerText = "TodoList";
-
-                const labelTitle = document.createElement("label");
-                labelTitle.for = "title";
-                labelTitle.innerText = "Titre de la liste";
-
-                const inputTitle = document.createElement("input");
-                inputTitle.type = "text";
-                inputTitle.name = "title";
-                inputTitle.id = "title";
-                inputTitle.placeholder = "Votre titre";
-                inputTitle.required = true;
-
-                const inputDescription = document.createElement("input");
-                inputDescription.type = "text";
-                inputDescription.name = "title";
-                inputDescription.id = "description";
-                inputDescription.placeholder = "Votre description";
-
-                const labelDescription = document.createElement("label");
-                labelDescription.for = "description";
-                labelDescription.innerText = "Description (facultative)";
-
-                const updateBtnListValid = document.createElement("button");
-                updateBtnListValid.type = "button";
-                updateBtnListValid.innerText = "Valider";
-                const updateBtnListCancel = document.createElement("button");
-                updateBtnListCancel.type = "button";
-                updateBtnListCancel.innerText = "Annuler";
-
                 const oneList = document.querySelector("#oneList");
                 oneList.id = "oneList";
                 oneList.class = "oneList";
@@ -89,7 +35,6 @@ function list() {
                 updateBtnList.type = "button";
                 updateBtnList.value = `${data.id}`;
                 updateBtnList.textContent = "Modifier";
-                updateBtnList.classList.add("hidden");
 
                 const deleteBtnList = document.createElement("button");
                 deleteBtnList.id = `deleteProfilList-${data.id}`;
@@ -97,7 +42,6 @@ function list() {
                 deleteBtnList.type = "button";
                 deleteBtnList.value = `${data.id}`;
                 deleteBtnList.textContent = "Supprimer";
-                deleteBtnList.classList.add("hidden");
 
                 const card = document.createElement("div");
                 card.id = "card-id";
@@ -124,32 +68,18 @@ function list() {
                         }
                     }
 
-                    updateList.appendChild(titleForm);
-                    updateList.appendChild(updateFormList);
-                    updateFormList.appendChild(radioW);
-                    updateFormList.appendChild(labelW);
-                    updateFormList.appendChild(radioT);
-                    updateFormList.appendChild(labelT);
-                    updateFormList.appendChild(labelTitle);
-                    updateFormList.appendChild(inputTitle);
-                    updateFormList.appendChild(labelDescription);
-                    updateFormList.appendChild(inputDescription);
-                    updateFormList.appendChild(updateBtnListValid);
-                    updateFormList.appendChild(updateBtnListCancel);
-
                     list.appendChild(item);
                     oneList.appendChild(titleList);
                     oneList.appendChild(list);
-                    oneList.appendChild(deleteBtnList);
-                    oneList.appendChild(updateBtnList);
                     oneList.appendChild(card);
                 }
                 if (userId !== data.userId) {
                     console.log("pas touche");
 
                 } else {
-                    deleteBtnList.classList.remove("hidden");
-                    updateBtnList.classList.remove("hidden");
+                    oneList.appendChild(deleteBtnList);
+                    oneList.appendChild(updateBtnList);
+
 
                     /**
                      * DELETE
@@ -167,7 +97,7 @@ function list() {
                                 dialog({title: "Suppression de la liste",
                                 content: `<p>Votre liste a bien été supprimée.</p>`
                                 });
-                                redirect('http://localhost/listerr/src/app/src/list/pages/lists.html', 2000);
+                                redirect('http://localhost/listerr/src/app/src/list/pages/lists.html');
                             });
                         }
                     })
@@ -175,20 +105,48 @@ function list() {
                     /**
                      * UPDATE
                     */
+                    createUpdateForm(updateList);
                     updateBtnList.addEventListener("click", function(e) {
                         e.preventDefault();
-
                         const updtBtnId = parseInt(e.target.value);
+
                         if (updtBtnId !== data.id) {
                             console.warn("pas touche");
                             return;
+
                         } else {
                             updateList.classList.remove("hidden");
                             oneList.classList.add("hidden");
+
+                            const inputTitle = document.querySelector("#title");
                             inputTitle.value = `${data.title}`;
+                            const inputDescription = document.querySelector("#description");
                             inputDescription.value = `${data.description}`;
 
+                            updateBtnListCancel.href = `list.html?id=${updtBtnId}`;
 
+                            updateFormList.addEventListener("submit", function(e) {
+                                e.preventDefault();
+
+                                if (e.target.value === "updateBtnListCancel") {
+                                    redirect(`http://localhost/listerr/src/app/src/list/pages/list.html?id=${updtBtnId}`, 0);
+                                    updateList.classList.add("hidden");
+                                    oneList.classList.remove("hidden");
+                                }
+
+                                fetchUpdateList(updateFormList, data.id)
+                                .then((response) => {
+                                    if (response.status === "updated") {
+                                        dialog({content: "Votre liste a bien été mise à jour."});
+                                        redirect(`http://localhost/listerr/src/app/src/list/pages/list.html?id=${updtBtnId}`, 3000);
+                                    }
+                                    if (response.status === "fail") {
+                                        dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
+                                        redirect(h`ttp://localhost/listerr/src/list/pages/list.html?id=${updtBtnId}`, 3000);
+                                    };
+                                })
+
+                            })
 
                         }
                     })

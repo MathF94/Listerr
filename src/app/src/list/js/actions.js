@@ -22,11 +22,10 @@ async function fetchReadOneListById(id) {
     try {
         const url = "http://localhost/listerr/src/api/?route=read_one_list_by_id";
         const token = localStorage.getItem("token");
-        const user = localStorage.getItem("user");
-        // console.log(user);
+        console.log({token});
         return await fetch(`${url}&id=${id}`, {
             method: "GET",
-            headers: {"Authorization": token, user},
+            headers: {"Authorization": token || ""},
             }).then(response => response.json());
 
     } catch (error) {
@@ -52,7 +51,7 @@ async function fetchReadAllLists() {
     }
 };
 
-async function fetchUpdateList(form) {
+async function fetchUpdateList(form, id) {
     try {
         const url = "http://localhost/listerr/src/api/?route=update_list";
         const token = localStorage.getItem("token");
@@ -61,7 +60,7 @@ async function fetchUpdateList(form) {
         return await fetch(url, {
             method: "POST",
             body: new FormData(form),
-            headers: {"Authorization": token, user},
+            headers: {"Authorization": token, id, user},
             }).then(response => response.json());
 
     } catch (error) {

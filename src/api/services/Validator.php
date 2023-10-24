@@ -8,6 +8,7 @@ class Validator
     public const CONTEXT_LOGIN = 'login';
     public const CONTEXT_UPDATE_USER = 'user_update';
     public const CONTEXT_CREATE_LIST = 'create_list';
+    public const CONTEXT_UPDATE_LIST = 'update_list';
 
     public function isValidParams(array $params, string $context): array
     {
@@ -28,7 +29,12 @@ class Validator
                 break;
 
             case self::CONTEXT_CREATE_LIST:
-                $errors = $this->isValidCreateListParams($params);
+                $errors = $this->isValidListParams($params);
+                return $errors;
+                break;
+                
+            case self::CONTEXT_UPDATE_LIST:
+                $errors = $this->isValidListParams($params);
                 return $errors;
                 break;
         }
@@ -161,7 +167,7 @@ class Validator
         return $errors;
     }
 
-    private function isValidCreateListParams(array $params): array
+    private function isValidListParams(array $params): array
     {
         $errors = [];
         $expectedKeys = ['type', 'title', 'description'];

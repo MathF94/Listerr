@@ -5,10 +5,10 @@ async function fetchAllListsByUsers() {
     try {
         const url = "http://localhost/listerr/src/api/?route=read_all_by_users";
         const token = localStorage.getItem("token");
-        const user = localStorage.getItem("user");
+        
         return await fetch(url, {
             method: "GET",
-            headers: {"Authorization": token, user},
+            headers: {"Authorization": token || ""},
             })
             .then(response => response.json())
 
