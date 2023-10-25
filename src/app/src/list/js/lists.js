@@ -4,6 +4,19 @@ import { fetchCreateList, fetchReadAllLists, fetchDeleteList } from "./actions.j
 import { redirect, dialog } from "../../services/utils.js";
 
 function lists() {
+    const createList = document.querySelector("#listCreater");
+    const listForm = document.querySelector("#listForm");
+    const cancelForm = document.querySelector("#cancelForm");
+
+    createList.addEventListener("click", function(){
+        if (createList.value === "newList") {
+            listForm.classList.remove("hidden");
+        }
+    })
+    cancelForm.addEventListener("click", function(){
+        listForm.classList.add("hidden");
+    })
+
     const form = document.querySelector("form");
     form.addEventListener("submit", function(e){
         e.preventDefault();
@@ -12,7 +25,7 @@ function lists() {
         .then(response => {
             if (response.status === "success") {
                 dialog({title: "Et une liste de créée, une !", content:"aux cartes maintenant !"});
-                redirect("http://localhost/listerr/src/app/src/list/pages/lists.html");
+                // redirect("http://localhost/listerr/src/app/src/list/pages/lists.html");
 
             }
             if (response.status === "fail") {
@@ -21,6 +34,7 @@ function lists() {
             };
         })
     })
+
 
     fetchReadAllLists()
     .then(response => {

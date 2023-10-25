@@ -44,9 +44,23 @@ function list() {
                 deleteBtnList.textContent = "Supprimer";
 
                 const card = document.createElement("div");
-                card.id = "card-id";
-                card.class = "card-id";
-                card.innerText = "cartes à partir d'ici";
+                card.id = "newCard";
+                card.class = "newCard";
+
+                const createCardBtn = document.createElement("button");
+                createCardBtn.id = `card-id`;
+                createCardBtn.name = "newCard";
+                createCardBtn.type = "button";
+                createCardBtn.value = `newCard`;
+
+                if (data.type === "TodoList") {
+                    console.log("cocou");
+                    createCardBtn.textContent = "Première tâche !";
+                } else {
+                createCardBtn.textContent = "Faites un voeu !";
+                }
+                
+                const creatCardBtn = document.createElement("button");
 
                 for (const index in data) {
                     const item = document.createElement("li");
@@ -55,7 +69,6 @@ function list() {
                     if (["id", "userId", "type", "title"].includes(`${index}`)) {
                         continue;
                     }
-
                     if ( index === "user" && typeof(data[index]) === "object") {
                         item.innerText = `Par ${data.user.login}`;
                     } else {
@@ -71,7 +84,6 @@ function list() {
                     list.appendChild(item);
                     oneList.appendChild(titleList);
                     oneList.appendChild(list);
-                    oneList.appendChild(card);
                 }
                 if (userId !== data.userId) {
                     console.log("pas touche");
@@ -79,7 +91,8 @@ function list() {
                 } else {
                     oneList.appendChild(deleteBtnList);
                     oneList.appendChild(updateBtnList);
-
+                    oneList.appendChild(card);
+                    card.appendChild(createCardBtn);
 
                     /**
                      * DELETE

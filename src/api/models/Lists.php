@@ -147,11 +147,12 @@ class Lists extends Database
                     SET `title` = :title,
                         `type` = :type,
                         `description` = :description,
-                        `updated_at` = :updated_at
+                        `updated_at` = NOW()
                     WHERE `id` = :id";
-            
+
             $query = $this->db->prepare($req);
             $params['id'] = $id;
+            
             return $query->execute($params);
 
         } catch (\Exception $e) {

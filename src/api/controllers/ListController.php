@@ -174,15 +174,14 @@ class ListController
                 $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_UPDATE_LIST);
                 if (empty(count($errors))) {
                     $listId = (int)$list->id;
-                    $date = new \DateTime();
-                    $date->setTimezone(new \DateTimeZone("Europe/Paris"));
+
                     $params = [
                         'title' => $_POST['title'],
                         'type' => $_POST['type'],
-                        'description' => $_POST['description'],
-                        'updated_at' => $date->format("Y-d-m H:i:s")
+                        'description' => $_POST['description']
                     ];
                 }
+
                 $model->updateList($params, $listId);
 
                 return json_encode([

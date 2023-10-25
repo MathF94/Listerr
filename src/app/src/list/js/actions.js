@@ -22,7 +22,7 @@ async function fetchReadOneListById(id) {
     try {
         const url = "http://localhost/listerr/src/api/?route=read_one_list_by_id";
         const token = localStorage.getItem("token");
-        console.log({token});
+        
         return await fetch(`${url}&id=${id}`, {
             method: "GET",
             headers: {"Authorization": token || ""},

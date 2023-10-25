@@ -15,7 +15,7 @@
         <div>
             <button id="listCreater" type="button" value="newList">Créer une nouvelle liste</button>
         </div>
-        <div id="listForm" class="hiddenForm">
+        <div id="listForm" class="hidden">
             <form>
                 <h3>Formulaire de création de listes</h3>
                 <input type="radio" name="type" id="wish" value="WishList" checked/>
@@ -27,7 +27,8 @@
                 <label for="description">Description (facultative)</label>
                 <input type="text" name="description" id="description" placeholder="Votre description">
 
-                <button type="submit">Valider</button>
+                <button id="validForm" type="submit">Valider</button>
+                <button id="cancelForm" type="button">Annuler</button>
             </form>
         </div>
     </section>
