@@ -1,5 +1,6 @@
 "use strict";
 
+import { CSRFToken } from "../../services/CSRFToken.js";
 import { fetchCreateList, fetchReadAllLists, fetchDeleteList } from "./actions.js";
 import { redirect, dialog } from "../../services/utils.js";
 
@@ -17,12 +18,13 @@ function lists() {
         listForm.classList.add("hidden");
     })
 
-    const form = document.querySelector("form");
-    form.addEventListener("submit", function(e){
+    createListForm.addEventListener("submit", function(e){
         e.preventDefault();
 
-        fetchCreateList(form)
+        fetchCreateList(createListForm)
         .then(response => {
+            localStorage.removeItem("csrfToken");
+            
             if (response.status === "success") {
                 dialog({title: "Et une liste de créée, une !", content:"aux cartes maintenant !"});
                 redirect("http://localhost/listerr/src/app/src/list/pages/lists.html");
@@ -38,6 +40,7 @@ function lists() {
 
     fetchReadAllLists()
     .then(response => {
+
         const data = response.data;
         if (response.status === "read"){
             const listWrapper = document.querySelector('#listsWrapper');
@@ -125,5 +128,7 @@ function lists() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    const createListForm = document.querySelector("#createListForm");
+    CSRFToken(createListForm.id);
     lists();
 });

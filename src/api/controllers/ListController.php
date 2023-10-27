@@ -4,16 +4,19 @@ namespace Controllers;
 
 use Models\Lists;
 use Models\Users;
+use Services\CSRFToken;
 use Services\Session;
 use Services\Validator;
 
 class ListController
 {
+    private $csrfToken;
     private $validator;
     private $user;
 
     public function __construct($tokenUser)
     {
+        $this->csrfToken = new CSRFToken();
         $this->validator = new Validator();
         $session = new Session();
 
@@ -24,9 +27,43 @@ class ListController
         }
     }
 
-    public function create(): string
+    public function CSRFToken()
     {
         try {
+            $formId = $_POST['formId'];
+            var_dump($formId);
+            $encryptedCSRFToken = $this->csrfToken->encrypt($formId);
+
+            return json_encode([
+                'status' => 'success',
+                'csrfToken' => $encryptedCSRFToken,
+            ]);
+
+            return json_encode([
+                'status' => 'fail',
+                'errors' => 'errors'
+            ]);
+
+        } catch (\Exception $e) {
+            return json_encode([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function create($csrfToken): string
+    {
+        try {
+            $validToken = $this->csrfToken->isValidToken($csrfToken, "createListForm");
+
+            if (!$validToken) {
+                return json_encode([
+                    'status' => 'fail',
+                    'message' => 'jeton invalide'
+                ]);
+            }
+
             if (!empty($this->user)) {
                 $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_CREATE_LIST);
 
@@ -164,9 +201,18 @@ class ListController
         }
     }
 
-    public function updateList(int $id): string
+    public function updateList(int $id, string $csrfToken): string
     {
         try {
+            $validToken = $this->csrfToken->isValidToken($csrfToken, "updateFormList");
+
+            if (!$validToken) {
+                return json_encode([
+                    'status' => 'fail',
+                    'message' => 'jeton invalide'
+                ]);
+            }
+
             if (!empty($this->user->id)) {
                 $model = new Lists();
                 $list = $model->oneListById((int)$id);

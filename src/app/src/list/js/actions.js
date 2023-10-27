@@ -1,15 +1,16 @@
 "use strict";
-// permet de créer, lire, modifier, supprimer les listes d'un utilisateurs sur list.html
+
 async function fetchCreateList(form) {
     try {
         const url = "http://localhost/listerr/src/api/?route=create_list";
-        const token = localStorage.getItem("token");
-        const user = localStorage.getItem("user");
 
         return await fetch(url, {
+            headers: {
+                "Authorization": localStorage.getItem("token"),
+                "X-CSRFToken": localStorage.getItem("csrfToken")
+            },
             method: "POST",
             body: new FormData(form),
-            headers: {"Authorization": token, user},
             }).then(response => response.json());
 
     } catch (error) {
@@ -21,11 +22,10 @@ async function fetchCreateList(form) {
 async function fetchReadOneListById(id) {
     try {
         const url = "http://localhost/listerr/src/api/?route=read_one_list_by_id";
-        const token = localStorage.getItem("token");
-        
+
         return await fetch(`${url}&id=${id}`, {
+            headers: {"Authorization": localStorage.getItem("token") || ""},
             method: "GET",
-            headers: {"Authorization": token || ""},
             }).then(response => response.json());
 
     } catch (error) {
@@ -37,12 +37,10 @@ async function fetchReadOneListById(id) {
 async function fetchReadAllLists() {
     try {
         const url = "http://localhost/listerr/src/api/?route=read_lists_one_user";
-        const token = localStorage.getItem("token");
-        const user = localStorage.getItem("user");
 
         return await fetch(url, {
+            headers: {"Authorization": localStorage.getItem("token")},
             method: "GET",
-            headers: {"Authorization": token, user},
             }).then(response => response.json());
 
     } catch (error) {
@@ -54,13 +52,14 @@ async function fetchReadAllLists() {
 async function fetchUpdateList(form, id) {
     try {
         const url = "http://localhost/listerr/src/api/?route=update_list";
-        const token = localStorage.getItem("token");
-        const user = localStorage.getItem("user");
 
         return await fetch(url, {
+            headers: {
+                "Authorization": localStorage.getItem("token"), id,
+                "X-CSRFToken": localStorage.getItem("csrfToken")
+            },
             method: "POST",
             body: new FormData(form),
-            headers: {"Authorization": token, id, user},
             }).then(response => response.json());
 
     } catch (error) {
@@ -73,11 +72,10 @@ async function fetchDeleteList(id) {
     try {
         const url = "http://localhost/listerr/src/api/?route=delete_list";
         const token = localStorage.getItem("token");
-        const user = localStorage.getItem("user");
 
         return await fetch(url, {
+            headers: {"Authorization": token, id},
             method: "POST",
-            headers: {"Authorization": token, id, user},
             }).then(response => response.json());
 
     } catch (error) {

@@ -1,5 +1,6 @@
 "use strict";
 
+import { CSRFToken } from "../../services/CSRFToken.js";
 import { fetchReadOneListById, fetchDeleteList, fetchUpdateList } from "./actions.js";
 import { createUpdateForm } from "./form.js";
 import { redirect, dialog } from "../../services/utils.js";
@@ -59,7 +60,7 @@ function list() {
                 } else {
                 createCardBtn.textContent = "Faites un voeu !";
                 }
-                
+
                 const creatCardBtn = document.createElement("button");
 
                 for (const index in data) {
@@ -119,6 +120,8 @@ function list() {
                      * UPDATE
                     */
                     createUpdateForm(updateList);
+                    CSRFToken(updateFormList.id);
+
                     updateBtnList.addEventListener("click", function(e) {
                         e.preventDefault();
                         const updtBtnId = parseInt(e.target.value);
@@ -149,6 +152,8 @@ function list() {
 
                                 fetchUpdateList(updateFormList, data.id)
                                 .then((response) => {
+                                    // localStorage.removeItem("csrfToken");
+
                                     if (response.status === "updated") {
                                         dialog({content: "Votre liste a bien été mise à jour."});
                                         redirect(`http://localhost/listerr/src/app/src/list/pages/list.html?id=${updtBtnId}`, 3000);

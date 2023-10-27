@@ -248,7 +248,7 @@ class UserController
         };
     }
 
-    public function update($tokenUser, $csrfToken): string
+    public function update(string $tokenUser, string $csrfToken): string
     {
         try {
             $validToken = $this->csrfToken->isValidToken($csrfToken, "updateForm");

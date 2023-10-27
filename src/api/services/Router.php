@@ -86,7 +86,7 @@ class Router
                 case 'create_list':
                     if ($this->isAllowedMethod('POST')) {
                         $list = new ListController($headers['Authorization']);
-                        echo $list->create(); // create
+                        echo $list->create($headers['X-CSRFToken']); // create
                     }
                     break;
 
@@ -114,7 +114,7 @@ class Router
                 case 'update_list':
                     if ($this->isAllowedMethod('POST')) {
                         $list = new ListController($headers['Authorization']);
-                        echo $list->updateList($headers['id']); // update
+                        echo $list->updateList($headers['id'], $headers['X-CSRFToken']); // update
                     }
                     break;
 
