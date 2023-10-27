@@ -25,7 +25,7 @@ function lists() {
         .then(response => {
             if (response.status === "success") {
                 dialog({title: "Et une liste de créée, une !", content:"aux cartes maintenant !"});
-                // redirect("http://localhost/listerr/src/app/src/list/pages/lists.html");
+                redirect("http://localhost/listerr/src/app/src/list/pages/lists.html");
 
             }
             if (response.status === "fail") {

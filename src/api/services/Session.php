@@ -49,7 +49,7 @@ class Session
         || $tokenData['login'] !== $user->login
         || $tokenData['password'] !== $user->password
         || strtotime($tokenData['expired_at']) < time()
-        ){
+        ) {
             return true;
         }
         return false;

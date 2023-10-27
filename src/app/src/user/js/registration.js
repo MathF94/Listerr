@@ -1,15 +1,17 @@
 "use strict";
 
+import { CSRFToken } from "../../services/CSRFToken.js";
 import { fetchRegister } from "./actions.js";
 import { redirect, dialog } from "../../services/utils.js";
 
 function registration() {
-    const form = document.querySelector("form");
-    form.addEventListener("submit", function(e){
+    registerForm.addEventListener("submit", function(e){
         e.preventDefault();
 
-        fetchRegister(form)
+        fetchRegister(registerForm)
         .then(response => {
+            localStorage.removeItem("csrfToken");
+
             if (response.status === "success") {
                 const name = e.target.children.name.value;
                 const firstname = e.target.children.firstname.value;
@@ -33,6 +35,8 @@ function registration() {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+    const registerForm = document.querySelector("#registerForm");
+    CSRFToken(registerForm.id);
     registration();
 });
 

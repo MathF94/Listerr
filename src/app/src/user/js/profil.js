@@ -15,6 +15,7 @@ function read() {
             deleteBtn.classList.add("hide");
             updateBtn.classList.add("hide");
         }
+        
         if (response.status === "connected" && localStorage.token && localStorage.user) {
             deleteBtn.classList.remove("hide");
             updateBtn.classList.remove("hide");

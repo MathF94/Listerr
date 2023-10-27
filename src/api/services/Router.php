@@ -13,17 +13,23 @@ class Router
 
             $headers = getallheaders();
             switch ($_GET['route']) {
+                case 'csrf':
+                    if ($this->isAllowedMethod('POST')) {
+                        $user = new UserController();
+                        echo $user->CSRFToken(); // token
+                    }
+                    break;
                 case 'user_register':
                     if ($this->isAllowedMethod('POST')) {
                         $user = new UserController();
-                        echo $user->register(); // create
+                        echo $user->register($headers['X-CSRFToken']); // create
                     }
                     break;
 
                 case 'user_login':
                     if ($this->isAllowedMethod('POST')) {
                         $user = new UserController();
-                        echo $user->login();
+                        echo $user->login($headers['X-CSRFToken']);
                     }
                     break;
 
@@ -44,7 +50,7 @@ class Router
                 case 'user_update':
                     if ($this->isAllowedMethod('POST')) {
                         $user = new UserController();
-                        echo $user->update($headers['Authorization']); // update
+                        echo $user->update($headers['Authorization'], $headers['X-CSRFToken']); // update
                     }
                     break;
 

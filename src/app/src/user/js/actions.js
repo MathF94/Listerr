@@ -4,6 +4,9 @@ async function fetchRegister(form) {
     try {
         const url = "http://localhost/listerr/src/api/?route=user_register";
         return await fetch(url, {
+            headers: {
+                "X-CSRFToken": localStorage.getItem("csrfToken")
+            },
             method: "POST",
             body: new FormData(form)
         }).then(response => response.json());
@@ -18,6 +21,9 @@ async function fetchLogin(form) {
     try {
         const url = "http://localhost/listerr/src/api/?route=user_login";
         return await fetch(url, {
+            headers: {
+                "X-CSRFToken": localStorage.getItem("csrfToken")
+            },
             method: "POST",
             body: new FormData(form)
         }).then(response => response.json());
@@ -31,10 +37,9 @@ async function fetchLogin(form) {
 async function fetchRead() {
     try {
         const url = "http://localhost/listerr/src/api/?route=user_profil";
-        const token = localStorage.getItem("token");
         return await fetch(url, {
             method: "GET",
-            headers: {"Authorization": token},
+            headers: {"Authorization": localStorage.getItem("token")},
             }).then(response => response.json());
 
     } catch (error) {
@@ -46,10 +51,10 @@ async function fetchRead() {
 async function fetchLogout() {
     try {
         const url = "http://localhost/listerr/src/api/?route=user_logout";
-        const token = localStorage.getItem("token");
+
         return await fetch(url, {
             method: "POST",
-            headers: {"Authorization": token},
+            headers: {"Authorization": localStorage.getItem("token")},
         }).then(response => response.json());
 
     } catch (error) {
@@ -61,12 +66,14 @@ async function fetchLogout() {
 async function fetchUpdate(form) {
     try {
         const url = "http://localhost/listerr/src/api/?route=user_update";
-        const token = localStorage.getItem("token");
-        const user = localStorage.getItem("user");
+
         return await fetch(url, {
+            headers: {
+                "Authorization": localStorage.getItem("token"),
+                "X-CSRFToken": localStorage.getItem("csrfToken")
+                },
             method: "POST",
             body: new FormData(form),
-            headers: {"Authorization": token, user},
             }).then(response => response.json());
 
     } catch (error) {
@@ -78,10 +85,10 @@ async function fetchUpdate(form) {
 async function fetchDelete() {
     try {
         const url = "http://localhost/listerr/src/api/?route=user_delete";
-        const token = localStorage.getItem("token");
+
         return await fetch(url, {
             method: "POST",
-            headers: {"Authorization": token},
+            headers: {"Authorization": localStorage.getItem("token")},
             }).then(response => response.json());
 
     } catch (error) {

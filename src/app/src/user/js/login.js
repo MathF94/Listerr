@@ -1,15 +1,17 @@
 "use strict";
 
+import { CSRFToken } from "../../services/CSRFToken.js";
 import { fetchLogin } from "./actions.js";
 import { redirect, dialog } from "../../services/utils.js";
 
 function login() {
-    const form = document.querySelector("form");
-    form.addEventListener("submit", function(e){
+    loginForm.addEventListener("submit", function(e){
         e.preventDefault();
 
-        fetchLogin(form)
+        fetchLogin(loginForm)
         .then(response => {
+            localStorage.removeItem("csrfToken");
+
             if (response.status === "success") {
                 localStorage.setItem("token", response.token);
                 localStorage.setItem("user", JSON.stringify({
@@ -17,7 +19,7 @@ function login() {
                     login: response.user_login,
                     role: response.user_role,
                     is_admin: response.user_isAdmin
-                }))
+                }));
 
                 const login = e.target.children.login.value;
                 dialog({title: `<p>Bonjour ${login} !</p>`, content: `<p>Vous êtes bien connecté(e).</p>`});
@@ -38,6 +40,8 @@ function login() {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+    const loginForm = document.querySelector("#loginForm");
+    CSRFToken(loginForm.id);
     login();
 });
 

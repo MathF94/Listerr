@@ -32,7 +32,7 @@ class Validator
                 $errors = $this->isValidListParams($params);
                 return $errors;
                 break;
-                
+
             case self::CONTEXT_UPDATE_LIST:
                 $errors = $this->isValidListParams($params);
                 return $errors;
@@ -123,7 +123,7 @@ class Validator
     private function isValidUpdateUserParams(array $params): array
     {
         $errors = [];
-        $expectedKeys = ['id', 'login', 'name', 'firstname', 'email'];
+        $expectedKeys = ['updateId', 'login', 'name', 'firstname', 'email'];
         $paramKeys = array_keys($params);
 
         if (!empty(array_diff($expectedKeys, $paramKeys))) {
@@ -132,7 +132,7 @@ class Validator
             return $errors;
         }
 
-        if (empty($params['id'])) {
+        if (empty($params['updateId'])) {
             $errors[] = 'Le champ "id" est requis.';
         }
 
