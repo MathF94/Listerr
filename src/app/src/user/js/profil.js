@@ -7,34 +7,37 @@ function read() {
 
     fetchRead()
     .then(response => {
-        localStorage.removeItem("token_user");
         const deleteBtn = document.querySelector("#delete");
         const updateBtn = document.querySelector("#update");
+        const listBtn = document.querySelector("#listsUser");
 
         if (response.status === "disconnected") {
             deleteBtn.classList.add("hide");
             updateBtn.classList.add("hide");
         }
-
+        
         if (response.status === "connected" && localStorage.token && localStorage.user) {
             deleteBtn.classList.remove("hide");
             updateBtn.classList.remove("hide");
-            const div = document.querySelector("#profilWrapper");
-            const ul = document.createElement("ul");
+            const profilWrapper = document.querySelector("#profilWrapper");
+            const list = document.createElement("ul");
 
             for (const index in response) {
-                const li = document.createElement("li");
+                const item = document.createElement("li");
                 const column = response[index];
 
                 if (["status", "id"].includes(index)) {
                     continue;
                 }
 
-                li.innerText = `${column.label} : ${column.value}`;
-                ul.appendChild(li);
+                item.innerText = `${column.label} : ${column.value}`;
+                list.appendChild(item);
             }
-            div.prepend(ul);
+            profilWrapper.prepend(list);
 
+            listBtn.addEventListener("click", function(e){
+                redirect("http://localhost/listerr/src/app/src/list/pages/lists.html", 0);
+            });
             updateBtn.addEventListener("click", function(e){
                 redirect("http://localhost/listerr/src/app/src/user/pages/update.html", 0);
             });

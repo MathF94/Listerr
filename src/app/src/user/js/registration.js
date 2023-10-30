@@ -1,15 +1,17 @@
 "use strict";
 
+import { CSRFToken } from "../../services/CSRFToken.js";
 import { fetchRegister } from "./actions.js";
 import { redirect, dialog } from "../../services/utils.js";
 
 function registration() {
-    const form = document.querySelector("form");
-    form.addEventListener("submit", function(e){
+    registerForm.addEventListener("submit", function(e){
         e.preventDefault();
 
-        fetchRegister(form)
+        fetchRegister(registerForm)
         .then(response => {
+            localStorage.removeItem("csrfToken");
+
             if (response.status === "success") {
                 const name = e.target.children.name.value;
                 const firstname = e.target.children.firstname.value;
@@ -20,19 +22,21 @@ function registration() {
                             <p>Votre compte lié à l'adresse ${email} est maintenant créé sous le login ${login}.</p>
                             <p>Vous allez être redirigé dans quelques secondes vers la page de connexion...</p>
                 `});
-                redirect("http://localhost/listerr/src/app/src/user/pages/login.html", 5000)
+                redirect("http://localhost/listerr/src/app/src/user/pages/login.html", 2000)
             }
 
             if (response.status === "fail") {
                 const errors = response.errors;
                 dialog({title: "Erreurs", content: errors, hasTimeOut: true});
-                redirect("http://localhost/listerr/src/app/src/user/pages/registration.html", 3000)
+                redirect("http://localhost/listerr/src/app/src/user/pages/registration.html", 2000)
             };
         });
     });
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+    const registerForm = document.querySelector("#registerForm");
+    CSRFToken(registerForm.id);
     registration();
 });
 

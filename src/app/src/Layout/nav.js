@@ -4,20 +4,11 @@ function navigation(template) {
     const nav = document.createElement("nav");
     nav.id = "mainNav";
     nav.className = "mainNav";
-    const ul = document.createElement("ul");
-
-    if(user){
-        const dataUser = JSON.parse(user);
-        if (dataUser.is_admin){
-            const links = [
-                {text: "Liste d'utilisateurs", href: "http://localhost/listerr/src/app/src/admin/pages/profils.html", id: "usersProfil"},
-            ];
-            addLinks(links);
-        };
-    };
+    const list = document.createElement("ul");
 
     if (token === undefined || token === null || user === null || user === undefined) {
         const links = [
+            {text: "Accueil", href: "http://localhost/listerr/src/app/src/home/pages/home.html", id: "home"},
             {text: "Inscription", href: "http://localhost/listerr/src/app/src/user/pages/registration.html", id: "register"},
             {text: "Connexion", href: "http://localhost/listerr/src/app/src/user/pages/login.html", id: "login"},
         ];
@@ -26,33 +17,44 @@ function navigation(template) {
 
     if (user !== undefined && user !== null) {
         const links = [
-            {text: "Votre profil", href: "http://localhost/listerr/src/app/src/user/pages/profil.html", id: "profil"},
-            {text: "Listes", href: "http://localhost/listerr/src/app/src/list/pages/list.html", id: "list"},
+            {text: "Accueil", href: "http://localhost/listerr/src/app/src/home/pages/home.html", id: "home"},
             {text: "Déconnexion", id: "logout"},
+            {text: "Votre profil", href: "http://localhost/listerr/src/app/src/user/pages/profil.html", id: "profil"},
+            {text: "Listes de souhaits et de tâches", href: "http://localhost/listerr/src/app/src/list/pages/lists.html", id: "lists"},
         ];
         addLinks(links);
+    };
+
+    if(user){
+        const dataUser = JSON.parse(user);
+        if (dataUser.role === "Admin"){
+            const links = [
+                {text: "Liste d'utilisateurs", href: "http://localhost/listerr/src/app/src/admin/pages/profils.html", id: "usersProfil"},
+            ];
+            addLinks(links);
+        };
     };
 
     function addLinks(links) {
 
         links.forEach(linkData => {
-            const a = document.createElement("a");
-            const li = document.createElement("li");
+            const link = document.createElement("a");
+            const item = document.createElement("li");
 
             if(linkData.href !== undefined) {
-                a.setAttribute("href", linkData.href);
-                a.id = linkData.id;
-                a.innerText = linkData.text;
+                link.setAttribute("href", linkData.href);
+                link.id = linkData.id;
+                link.innerText = linkData.text;
             } else {
                 const a = document.createElement("div");
                 a.id = linkData.id;
                 a.innerText = linkData.text;
-                li.appendChild(a);
+                item.appendChild(a);
             };
-            li.appendChild(a);
-            ul.appendChild(li);
+            item.appendChild(link);
+            list.appendChild(item);
         });
-        nav.appendChild(ul);
+        nav.appendChild(list);
         template.appendChild(nav);
     }
 };

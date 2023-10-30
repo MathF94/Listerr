@@ -1,11 +1,10 @@
 "use strict";
 
+import { CSRFToken } from "../../services/CSRFToken.js";
 import { fetchRead, fetchUpdate } from "./actions.js";
 import { redirect, dialog } from "../../services/utils.js";
 
 function updateUser() {
-    const form = document.querySelector("form");
-
     fetchRead()
     .then(response => {
         const dataUser = response;
@@ -18,13 +17,13 @@ function updateUser() {
         };
     });
 
-    form.addEventListener("submit", function(e) {
+    updateForm.addEventListener("submit", function(e) {
         e.preventDefault();
         const userLogin = e.target.login.value;
 
-        fetchUpdate(form)
+        fetchUpdate(updateForm)
         .then(response => {
-            localStorage.getItem("token");
+            localStorage.removeItem("csrfToken");
             const user = JSON.parse(localStorage.getItem("user"));
 
             if (response.status === "success") {
@@ -42,15 +41,16 @@ function updateUser() {
                     redirect("http://localhost/listerr/src/app/src/user/pages/profil.html", 3000);
                 }
             };
-
             if (response.status === "fail") {
                 dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
-                redirect("http://localhost/listerr/src/app/src/user/pages/login.html", 3000);
+                redirect("http://localhost/listerr/src/app/src/user/pages/profil.html", 3000);
             };
         });
     });
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+    const updateForm = document.querySelector("#updateForm");
+    CSRFToken(updateForm.attributes.id.value);
     updateUser();
 })

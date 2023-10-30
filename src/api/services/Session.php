@@ -22,10 +22,11 @@ class Session
                         ->setIv(self::IV);
     }
 
-    public function encrypt(string $login, string $password): string
+    public function encrypt(int $id, string $login, string $password): string
     {
         date_default_timezone_set('Europe/Paris');
         $tokenUser = [
+            'id' => $id,
             'login' => $login,
             'password' => $password,
             'expired_at' => (new DateTime())->modify('+1 hour')->format('Y-m-d H:i:s'),
@@ -48,7 +49,7 @@ class Session
         || $tokenData['login'] !== $user->login
         || $tokenData['password'] !== $user->password
         || strtotime($tokenData['expired_at']) < time()
-        ){
+        ) {
             return true;
         }
         return false;

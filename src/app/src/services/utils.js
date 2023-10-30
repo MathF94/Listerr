@@ -9,15 +9,15 @@ function redirect(url, duration = 3000) {
 function dialog({title, content, hasTimeOut}) {
 
     title = title || "Notification" ;
-    const h2 = document.createElement("h2");
-    h2.innerHTML = title ;
+    const titleH2 = document.createElement("h2");
+    titleH2.innerHTML = title ;
     const dialogSection = document.createElement("section");
     dialogSection.id = "dialog";
     dialogSection.className = "dialog";
     document.body.appendChild(dialogSection);
     const dialog = document.createElement("dialog");
     dialog.open = "open";
-    dialog.prepend(h2);
+    dialog.prepend(titleH2);
 
     if (typeof(content) === "string")  {
         const div = document.createElement("div");
@@ -27,14 +27,14 @@ function dialog({title, content, hasTimeOut}) {
     };
 
     if (["array", "object"].includes(typeof(content))) {
-        const ul = document.createElement("ul");
+        const list = document.createElement("ul");
         for(const index in content){
-        const li = document.createElement("li");
+        const item = document.createElement("li");
         const column = content[index];
-        li.innerText = column;
-        ul.appendChild(li);
+        item.innerText = column;
+        list.appendChild(item);
         };
-        dialog.appendChild(ul);
+        dialog.appendChild(list);
         dialogSection.appendChild(dialog);
     };
 

@@ -1,6 +1,6 @@
 "use strict";
 
-import { fetchReadAll } from "../js/actions_admin.js";
+import { fetchReadAll } from "./actions.js";
 
 function readAdmin() {
 
@@ -11,7 +11,7 @@ function readAdmin() {
 
         for (const index in data) {
             const column = data[index];
-            if (["id"].includes(column[index])) {
+            if (["id"].includes(column) || column.role === "Admin") {
                 continue;
             };
 

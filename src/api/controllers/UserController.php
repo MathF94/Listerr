@@ -5,6 +5,7 @@ namespace Controllers;
 use Entity\User;
 use Models\Users;
 use Services\Session;
+use Services\CSRFToken;
 use Services\Encryption;
 use Services\Validator;
 
@@ -12,20 +13,55 @@ class UserController
 {
     private const KEY = 'ec5362dc-0e29-4313-aa0d-529206a4badb';
     private const IV = '855d-4787-a9c8-e';
+    private $csrfToken;
     private $validator;
     private $encryption;
 
     public function __construct()
     {
         $this->validator = new Validator();
+        $this->csrfToken = new CSRFToken();
         $this->encryption = new Encryption();
         $this->encryption->setKey(self::KEY)
-            ->setIv(self::IV);
+                        ->setIv(self::IV);
     }
 
-    public function register(): string
+    public function CSRFToken()
     {
         try {
+            $formId = $_POST['formId'];
+            $encryptedCSRFToken = $this->csrfToken->encrypt($formId);
+
+            return json_encode([
+                'status' => 'success',
+                'csrfToken' => $encryptedCSRFToken,
+            ]);
+
+            return json_encode([
+                'status' => 'fail',
+                'errors' => 'errors'
+            ]);
+
+        } catch (\Exception $e) {
+            return json_encode([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function register($csrfToken): string
+    {
+        try {
+            $validToken = $this->csrfToken->isValidToken($csrfToken, "registerForm");
+
+            if (!$validToken) {
+                return json_encode([
+                    'status' => 'fail',
+                    'message' => 'jeton invalide'
+                ]);
+            }
+
             $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_REGISTER);
             if (empty(count($errors))) {
                 $params = $_POST;
@@ -38,7 +74,7 @@ class UserController
                     'status' => 'success'
                 ]);
             }
-            $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_REGISTER);
+
             return json_encode([
                 'status' => 'fail',
                 'errors' => $errors
@@ -52,9 +88,18 @@ class UserController
         }
     }
 
-    public function login(): string
+    public function login($csrfToken): string
     {
         try {
+            $validToken = $this->csrfToken->isValidToken($csrfToken, "loginForm");
+
+            if (!$validToken) {
+                return json_encode([
+                    'status' => 'fail',
+                    'message' => 'jeton invalide'
+                ]);
+            }
+
             $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_LOGIN);
             if (empty(count($errors))) {
                 $encrytedPassword = $this->encryption->encrypt($_POST['password']);
@@ -64,18 +109,19 @@ class UserController
                 if (empty($user)) {
                     return json_encode([
                         'status' => 'fail_data',
-                        'message' => 'Votre identifiant ou votre mot de passe est incorrect.'
+                        'message' => 'Votre identifiant n\'existe pas ou votre mot de passe est incorrect.'
                     ]);
                 }
+
                 $session = new Session();
-                $encryptToken = $session->encrypt($user->login, $encrytedPassword);
+                $encryptToken = $session->encrypt($user->id, $user->login, $encrytedPassword);
                 return json_encode([
                     'status' => 'success',
                     'connected' => true,
                     'token' => $encryptToken,
                     'user_id' => $user->id,
                     'user_login' => $user->login,
-                    'user_isAdmin' => $user->isAdmin,
+                    'user_role' => $user->role,
                 ]);
             };
             return json_encode([
@@ -115,6 +161,7 @@ class UserController
                         'firstname' => ['label' =>'Prénom', 'value' => $user->firstname],
                         'email' => ['label' =>'E-mail', 'value' => $user->email],
                         'login' => ['label' =>'Login', 'value' => $user->login],
+                        'role' => ['label' =>'Role', 'value' => $user->role],
                     ]);
 
                 } else {
@@ -201,27 +248,46 @@ class UserController
         };
     }
 
-    public function update($tokenUser) // @TODO
+    public function update(string $tokenUser, string $csrfToken): string
     {
         try {
-            $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_UPDATE_USER);
-            if (empty(count($errors))) {
-                $id = $_POST['id'];
-                $params = [
-                    'name' => $_POST['name'],
-                    'firstname' => $_POST['firstname'],
-                    'login' => $_POST['login'],
-                    'email' => $_POST['email']
-                ];
-                $modelUser = new Users();
-                $modelUser->update($params, $id);
-                return json_encode(['status' => 'success']);
-            };
+            $validToken = $this->csrfToken->isValidToken($csrfToken, "updateForm");
 
-            return json_encode([
-                'status' => 'fail',
-                'errors' => $errors
-            ]);
+            if (!$validToken) {
+                return json_encode([
+                    'status' => 'fail',
+                    'message' => 'jeton invalide'
+                ]);
+            }
+
+            $session = new Session();
+            $decryptToken = $session->decrypt($tokenUser);
+            $users = new Users();
+            $user = $users->readOne($decryptToken['login']);
+
+            if (!empty($user)) {
+                $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_UPDATE_USER);
+
+                if (empty(count($errors))) {
+                    $id = $_POST['updateId'];
+                    $params = [
+                        'name' => $_POST['name'],
+                        'firstname' => $_POST['firstname'],
+                        'login' => $_POST['login'],
+                        'email' => $_POST['email']
+                    ];
+
+                    $modelUser = new Users();
+                    $modelUser->update($params, $id);
+
+                    return json_encode(['status' => 'success']);
+                };
+
+                return json_encode([
+                    'status' => 'fail',
+                    'errors' => $errors
+                ]);
+            }
 
         } catch (\Exception $e) {
             return json_encode([
@@ -235,9 +301,10 @@ class UserController
     {
         try {
             $session = new Session();
-            $decryptToken = $session->decrypt($tokenUser); // login, password et expired_at du token
+            $decryptToken = $session->decrypt($tokenUser);
             $users = new Users();
-            $user = $users->readOne($decryptToken['login']); // donnée de l'utilisateur (login, password... de la table)
+            $user = $users->readOne($decryptToken['login']);
+
             if (!empty($user)) {
                 $users->delete($user->login);
 
@@ -246,6 +313,7 @@ class UserController
                     'message' => 'le compte a bien été supprimé.'
                 ]);
             };
+
             return json_encode(['status' => 'fail']);
 
         } catch (\Exception $e) {
