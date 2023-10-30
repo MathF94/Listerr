@@ -1,7 +1,8 @@
 "use strict";
 
+import { fetchCreateList, fetchReadAllLists, fetchDeleteList } from "../../actions/actions_lists.js";
+import { configPath } from "../../services/config.js";
 import { CSRFToken } from "../../services/CSRFToken.js";
-import { fetchCreateList, fetchReadAllLists, fetchDeleteList } from "./actions.js";
 import { redirect, dialog } from "../../services/utils.js";
 
 function lists() {
@@ -24,15 +25,15 @@ function lists() {
         fetchCreateList(createListForm)
         .then(response => {
             localStorage.removeItem("csrfToken");
-            
+
             if (response.status === "success") {
                 dialog({title: "Et une liste de créée, une !", content:"aux cartes maintenant !"});
-                redirect("http://localhost/listerr/src/app/src/list/pages/lists.html");
+                redirect(`${configPath.basePath}/list/pages/lists.html`);
 
             }
             if (response.status === "fail") {
                 dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
-                redirect("http://localhost/listerr/src/app/src/list/pages/lists.html");
+                redirect(`${configPath.basePath}/list/pages/lists.html`);
             };
         })
     })

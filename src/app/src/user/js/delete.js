@@ -1,6 +1,7 @@
 'use strict';
 
-import { fetchDelete } from "./actions.js";
+import { fetchDelete } from "../../actions/actions_user.js";
+import { configPath } from "../../services/config.js";
 import { redirect, dialog } from "../../services/utils.js";
 
 function deleteUser() {
@@ -18,7 +19,7 @@ function deleteUser() {
                                     <p>Vous allez nous manquer et être redirigé(e) dans quelques instants vers l'inscription pour vous réinscrire car vous nous aimez !</p>`});
                     localStorage.removeItem("token");
                     localStorage.removeItem("user");
-                    redirect('http://localhost/listerr/src/app/src/user/pages/registration.html', 5000);
+                    redirect(`${configPath.basePath}/user/pages/registration.html`, 2000);
                 });
             };
         };

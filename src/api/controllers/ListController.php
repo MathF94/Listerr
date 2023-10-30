@@ -2,6 +2,7 @@
 
 namespace Controllers;
 
+use Entity\Lister;
 use Models\Lists;
 use Models\Users;
 use Services\CSRFToken;
@@ -107,7 +108,7 @@ class ListController
                     ]);
                 };
 
-                if ($list->type === "TodoList") {
+                if ($list->type === Lister::TYPE_TODO) {
                     if (empty($this->user) || $this->user->id !== $list->user->id) {
                         return json_encode([
                             'status' => 'no list'

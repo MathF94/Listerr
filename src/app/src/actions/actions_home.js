@@ -1,14 +1,14 @@
 "use strict";
-// permet de voir toutes les listes de tous les utilisateurs sur home.html
+
+import { configPath } from "../services/config.js";
 
 async function fetchAllListsByUsers() {
     try {
-        const url = "http://localhost/listerr/src/api/?route=read_all_by_users";
-        const token = localStorage.getItem("token");
-        
+        const url = `${configPath.apiPath}/?route=read_all_by_users`;
+
         return await fetch(url, {
             method: "GET",
-            headers: {"Authorization": token || ""},
+            headers: {"Authorization": localStorage.getItem("token") || ""},
             })
             .then(response => response.json())
 

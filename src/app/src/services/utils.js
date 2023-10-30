@@ -40,11 +40,11 @@ function dialog({title, content, hasTimeOut}) {
 
     if (hasTimeOut) {
         const msg = document.createElement('div');
-        msg.innerHTML = "Ce message s'effacera dans 5 secondes...";
+        msg.innerHTML = "Ce message s'effacera dans 2 secondes...";
         dialog.appendChild(msg);
         setTimeout(() => {
             document.body.removeChild(dialogSection);
-        }, 5000);
+        }, 2000);
     };
 };
 

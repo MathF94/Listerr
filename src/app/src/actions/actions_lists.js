@@ -1,9 +1,10 @@
 "use strict";
 
+import { configPath } from "../services/config.js";
+
 async function fetchCreateList(form) {
     try {
-        const url = "http://localhost/listerr/src/api/?route=create_list";
-
+        const url = `${configPath.apiPath}/?route=create_list`;
         return await fetch(url, {
             headers: {
                 "Authorization": localStorage.getItem("token"),
@@ -21,8 +22,7 @@ async function fetchCreateList(form) {
 
 async function fetchReadOneListById(id) {
     try {
-        const url = "http://localhost/listerr/src/api/?route=read_one_list_by_id";
-
+        const url = `${configPath.apiPath}/?route=read_one_list_by_id`;
         return await fetch(`${url}&id=${id}`, {
             headers: {"Authorization": localStorage.getItem("token") || ""},
             method: "GET",
@@ -36,8 +36,7 @@ async function fetchReadOneListById(id) {
 
 async function fetchReadAllLists() {
     try {
-        const url = "http://localhost/listerr/src/api/?route=read_lists_one_user";
-
+        const url = `${configPath.apiPath}/?route=read_lists_one_user`;
         return await fetch(url, {
             headers: {"Authorization": localStorage.getItem("token")},
             method: "GET",
@@ -51,8 +50,7 @@ async function fetchReadAllLists() {
 
 async function fetchUpdateList(form, id) {
     try {
-        const url = "http://localhost/listerr/src/api/?route=update_list";
-
+        const url = `${configPath.apiPath}/?route=update_list`;
         return await fetch(url, {
             headers: {
                 "Authorization": localStorage.getItem("token"), id,
@@ -70,11 +68,9 @@ async function fetchUpdateList(form, id) {
 
 async function fetchDeleteList(id) {
     try {
-        const url = "http://localhost/listerr/src/api/?route=delete_list";
-        const token = localStorage.getItem("token");
-
+        const url = `${configPath.apiPath}/?route=delete_list`;
         return await fetch(url, {
-            headers: {"Authorization": token, id},
+            headers: {"Authorization": localStorage.getItem("token"), id},
             method: "POST",
             }).then(response => response.json());
 

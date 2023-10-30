@@ -1,9 +1,10 @@
 "use strict";
 
+import { fetchReadOneListById, fetchDeleteList, fetchUpdateList } from "../../actions/actions_lists";
+import { configPath } from "../../services/config.js";
 import { CSRFToken } from "../../services/CSRFToken.js";
-import { fetchReadOneListById, fetchDeleteList, fetchUpdateList } from "./actions.js";
-import { createUpdateForm } from "./form.js";
 import { redirect, dialog } from "../../services/utils.js";
+import { createUpdateForm } from "./form.js";
 
 function list() {
     const urlParams = new URLSearchParams(document.location.search);
@@ -23,7 +24,7 @@ function list() {
 
                 const oneList = document.querySelector("#oneList");
                 oneList.id = "oneList";
-                oneList.class = "oneList";
+                oneList.classList = "oneList";
 
                 const titleList = document.createElement("h3");
                 titleList.innerText = `${data.type} - ${data.title}`;
@@ -55,7 +56,6 @@ function list() {
                 createCardBtn.value = `newCard`;
 
                 if (data.type === "TodoList") {
-                    console.log("cocou");
                     createCardBtn.textContent = "Première tâche !";
                 } else {
                 createCardBtn.textContent = "Faites un voeu !";
@@ -111,7 +111,7 @@ function list() {
                                 dialog({title: "Suppression de la liste",
                                 content: `<p>Votre liste a bien été supprimée.</p>`
                                 });
-                                redirect('http://localhost/listerr/src/app/src/list/pages/lists.html');
+                                redirect(`${configPath.basePath}/list/pages/lists.html`);
                             });
                         }
                     })
@@ -136,36 +136,36 @@ function list() {
 
                             const inputTitle = document.querySelector("#title");
                             inputTitle.value = `${data.title}`;
+
                             const inputDescription = document.querySelector("#description");
                             inputDescription.value = `${data.description}`;
 
-                            updateBtnListCancel.href = `list.html?id=${updtBtnId}`;
+                            const updateBtnListCancel = document.querySelector("#updateBtnListCancel");
+                            const updateFormList  = document.querySelector("#updateFormList");
 
                             updateFormList.addEventListener("submit", function(e) {
                                 e.preventDefault();
 
-                                if (e.target.value === "updateBtnListCancel") {
-                                    redirect(`http://localhost/listerr/src/app/src/list/pages/list.html?id=${updtBtnId}`, 0);
+                                if (e.submitter.value === "updateBtnListCancel") {
+                                    redirect(`${configPath.basePath}/list/pages/list.html?id=${updtBtnId}`, 0);
                                     updateList.classList.add("hidden");
                                     oneList.classList.remove("hidden");
                                 }
 
                                 fetchUpdateList(updateFormList, data.id)
                                 .then((response) => {
-                                    // localStorage.removeItem("csrfToken");
+                                    localStorage.removeItem("csrfToken");
 
                                     if (response.status === "updated") {
                                         dialog({content: "Votre liste a bien été mise à jour."});
-                                        redirect(`http://localhost/listerr/src/app/src/list/pages/list.html?id=${updtBtnId}`, 3000);
+                                        redirect(`${configPath.basePath}/list/pages/list.html?id=${updtBtnId}`, 2000);
                                     }
                                     if (response.status === "fail") {
                                         dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
-                                        redirect(h`ttp://localhost/listerr/src/list/pages/list.html?id=${updtBtnId}`, 3000);
+                                        redirect(`${configPath.basePath}/list/pages/list.html?id=${updtBtnId}`, 2000);
                                     };
                                 })
-
                             })
-
                         }
                     })
                 }

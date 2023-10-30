@@ -1,19 +1,21 @@
+"use strict";
+
 class View {
     #wrapperTarget;
 
     constructor() {
         this.#wrapperTarget = 'main';
     }
-    
+
     setWrapperTarget (value) {
         this.#wrapperTarget = value
     }
-    
+
     load (viewPath) {
         console.log('fonction load()', {viewPath})
-        
+
         const wrapper = document.getElementById(this.#wrapperTarget);
-        
+
         fetch(`${viewPath}.html`,{
             headers: {
                 'Content-Type': 'application/text',

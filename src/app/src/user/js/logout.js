@@ -1,6 +1,7 @@
 "use strict";
 
-import { fetchLogout } from "./actions.js";
+import { fetchLogout } from "../../actions/actions_user.js";
+import { configPath } from "../../services/config.js";
 import { redirect, dialog } from "../../services/utils.js";
 
 function logout() {
@@ -18,7 +19,7 @@ function logout() {
                 });
             localStorage.removeItem("token");
             localStorage.removeItem("user");
-            redirect("http://localhost/listerr/src/app/src/user/pages/login.html", 2000);
+            redirect(`${configPath.basePath}/user/pages/login.html`, 2000);
         }
 
         anchorLogout.addEventListener("click", function(e) {
@@ -31,11 +32,12 @@ function logout() {
                     dialog({title: `A bientôt ${response.login} !`,
                             content: "Vous allez être redirigé(e) dans quelques instants vers la page de connexion..."
                         });
-                    redirect("http://localhost/listerr/src/app/src/home/pages/home.html", 2000);
+                    redirect(`${configPath.basePath}/home/pages/home.html`, 2000);
                 };
             };
         });
-    });}
+    });
+    }
 };
 
 document.addEventListener("DOMContentLoaded", () => {

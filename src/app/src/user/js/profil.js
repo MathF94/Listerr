@@ -1,6 +1,7 @@
 "use strict";
 
-import { fetchRead } from "./actions.js";
+import { fetchRead } from "../../actions/actions_user.js";
+import { configPath } from "../../services/config.js";
 import { redirect } from "../../services/utils.js";
 
 function read() {
@@ -15,7 +16,7 @@ function read() {
             deleteBtn.classList.add("hide");
             updateBtn.classList.add("hide");
         }
-        
+
         if (response.status === "connected" && localStorage.token && localStorage.user) {
             deleteBtn.classList.remove("hide");
             updateBtn.classList.remove("hide");
@@ -36,10 +37,10 @@ function read() {
             profilWrapper.prepend(list);
 
             listBtn.addEventListener("click", function(e){
-                redirect("http://localhost/listerr/src/app/src/list/pages/lists.html", 0);
+                redirect(`${configPath.basePath}/list/pages/lists.html`, 0);
             });
             updateBtn.addEventListener("click", function(e){
-                redirect("http://localhost/listerr/src/app/src/user/pages/update.html", 0);
+                redirect(`${configPath.basePath}/user/pages/update.html`, 0);
             });
         };
     });

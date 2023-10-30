@@ -1,9 +1,7 @@
 "use strict"
 
-// redirection vers la page Listes pour la création de liste
-// affichage de toutes les listes des utilisateurs == profils.js mais pour les listes
-
-import { fetchAllListsByUsers } from "./actions_home.js";
+import { fetchAllListsByUsers } from "../../actions/actions_home.js";
+import { configPath } from "../../services/config.js";
 import { dialog, redirect } from "../../services/utils.js";
 
 function readAllLists() {
@@ -14,17 +12,16 @@ function readAllLists() {
     if (token === undefined || token === null || user === null || user === undefined) {
         listBtn.addEventListener("click", function(e) {
             dialog({title:"Vous n'êtes pas encore connecté ?", content: "Vous allez être redirigé(e) vers la page de connexion", hasTimeOut: true})
-            redirect("http://localhost/listerr/src/app/src/user/pages/login.html");
+            redirect(`${configPath.basePath}/user/pages/login.html`);
         });
         return;
     }
 
     if (user !== undefined && user !== null) {
         listBtn.addEventListener("click", function(e){
-            redirect("http://localhost/listerr/src/app/src/list/pages/lists.html", 0);
+            redirect(`${configPath.basePath}/list/pages/lists.html`, 0);
         });
     }
-
 
     fetchAllListsByUsers()
     .then(response => {
@@ -71,11 +68,10 @@ function readAllLists() {
                 }
 
                 content.addEventListener("click", function(){
-                    console.log({type: object.type, userId: object.user.id, localStorage: JSON.parse(localStorage.getItem("user")).id});
                     if (object.type === "TodoList" && object.user.id !== JSON.parse(localStorage.getItem("user")).id) {
                         return false;
                     }
-                    redirect(`http://localhost/listerr/src/app/src/list/pages/list.html?id=${object.id}`, 0);
+                    redirect(`${configPath.basePath}/list/pages/list.html?id=${object.id}`, 0);
                 })
             }
         }

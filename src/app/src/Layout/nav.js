@@ -1,3 +1,7 @@
+"use strict";
+
+import { configPath } from "../../src/services/config.js";
+
 function navigation(template) {
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("user");
@@ -8,19 +12,19 @@ function navigation(template) {
 
     if (token === undefined || token === null || user === null || user === undefined) {
         const links = [
-            {text: "Accueil", href: "http://localhost/listerr/src/app/src/home/pages/home.html", id: "home"},
-            {text: "Inscription", href: "http://localhost/listerr/src/app/src/user/pages/registration.html", id: "register"},
-            {text: "Connexion", href: "http://localhost/listerr/src/app/src/user/pages/login.html", id: "login"},
+            {text: "Accueil", href: `${configPath.basePath}/home/pages/home.html`, id: "home"},
+            {text: "Inscription", href: `${configPath.basePath}/user/pages/registration.html`, id: "register"},
+            {text: "Connexion", href: `${configPath.basePath}/user/pages/login.html`, id: "login"},
         ];
         addLinks(links);
     };
 
     if (user !== undefined && user !== null) {
         const links = [
-            {text: "Accueil", href: "http://localhost/listerr/src/app/src/home/pages/home.html", id: "home"},
+            {text: "Accueil", href: `${configPath.basePath}/home/pages/home.html`, id: "home"},
             {text: "Déconnexion", id: "logout"},
-            {text: "Votre profil", href: "http://localhost/listerr/src/app/src/user/pages/profil.html", id: "profil"},
-            {text: "Listes de souhaits et de tâches", href: "http://localhost/listerr/src/app/src/list/pages/lists.html", id: "lists"},
+            {text: "Votre profil", href: `${configPath.basePath}/user/pages/profil.html`, id: "profil"},
+            {text: "Listes de souhaits et de tâches", href: `${configPath.basePath}/list/pages/lists.html`, id: "lists"},
         ];
         addLinks(links);
     };
@@ -29,7 +33,7 @@ function navigation(template) {
         const dataUser = JSON.parse(user);
         if (dataUser.role === "Admin"){
             const links = [
-                {text: "Liste d'utilisateurs", href: "http://localhost/listerr/src/app/src/admin/pages/profils.html", id: "usersProfil"},
+                {text: "Liste d'utilisateurs", href: `${configPath.basePath}/admin/pages/profils.html`, id: "usersProfil"},
             ];
             addLinks(links);
         };
@@ -46,10 +50,10 @@ function navigation(template) {
                 link.id = linkData.id;
                 link.innerText = linkData.text;
             } else {
-                const a = document.createElement("div");
-                a.id = linkData.id;
-                a.innerText = linkData.text;
-                item.appendChild(a);
+                const noLink = document.createElement("div");
+                noLink.id = linkData.id;
+                noLink.innerText = linkData.text;
+                item.appendChild(noLink);
             };
             item.appendChild(link);
             list.appendChild(item);
@@ -59,4 +63,4 @@ function navigation(template) {
     }
 };
 
-export default navigation;
+export { navigation };

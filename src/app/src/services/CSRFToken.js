@@ -1,5 +1,4 @@
-// équivalent d'actions.js
-"use strict"
+"use strict";
 
 async function fetchCSRF(formId) {
     try {

@@ -4,6 +4,9 @@ namespace Entity;
 
 class Lister
 {
+    public const TYPE_WISH = 'WishList';
+    public const TYPE_TODO = 'TodoList';
+
     public int $id;
     public string $type;
     public string $title;
@@ -14,7 +17,7 @@ class Lister
     public User $user;
 
     public function populate(array $params): void
-    {        
+    {
         $this->id = $params['list_id'];
         $this->type = $params['type'];
         $this->title = $params['title'];

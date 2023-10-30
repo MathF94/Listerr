@@ -1,7 +1,8 @@
 "use strict";
 
+import { fetchLogin } from "../../actions/actions_user.js";
+import { configPath } from "../../services/config.js";
 import { CSRFToken } from "../../services/CSRFToken.js";
-import { fetchLogin } from "./actions.js";
 import { redirect, dialog } from "../../services/utils.js";
 
 function login() {
@@ -23,17 +24,17 @@ function login() {
 
                 const login = e.target.children.login.value;
                 dialog({title: `<p>Bonjour ${login} !</p>`, content: `<p>Vous êtes bien connecté(e).</p>`});
-                redirect("http://localhost/listerr/src/app/src/home/pages/home.html", 2000);
+                redirect(`${configPath.basePath}/home/pages/home.html`, 2000);
             };
 
             if (response.status === "fail_data") {
                 dialog({title: "Erreurs de données", content: response.message, hasTimeOut: true});
-                redirect("http://localhost/listerr/src/app/src/user/pages/login.html", 2000);
+                redirect(`${configPath.basePath}/user/pages/login.html`, 2000);
             };
 
             if (response.status === "fail") {
                 dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
-                redirect("http://localhost/listerr/src/app/src/user/pages/login.html", 2000);
+                redirect(`${configPath.basePath}/user/pages/login.html`, 2000);
             };
         });
     });

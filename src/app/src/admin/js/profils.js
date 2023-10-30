@@ -1,6 +1,6 @@
 "use strict";
 
-import { fetchReadAll } from "./actions.js";
+import { fetchReadAll } from "../../actions/actions_admin.js";
 
 function readAdmin() {
 
@@ -40,12 +40,14 @@ function readAdmin() {
             const tdReadBtn = document.createElement("td");
             const readBtn = document.createElement("button");
             readBtn.textContent = "Lire";
+            readBtn.title = "Lire : amène vers le profil d'un utilisateur et ses listes"
             tdReadBtn.appendChild(readBtn);
             tr.appendChild(tdReadBtn);
 
             const tdEditBtn = document.createElement("td");
             const editBtn = document.createElement("button");
             editBtn.textContent = "Modifier";
+            editBtn.title = "Modifier : permet de modifier le profil d'un utilisateur"
             tdEditBtn.appendChild(editBtn);
             tr.appendChild(tdEditBtn);
 
@@ -54,6 +56,7 @@ function readAdmin() {
             deleteForm.action = "?route=admin_delete_user";
             deleteForm.method = "post";
             const deleteBtn = document.createElement("button");
+            deleteBtn.title = "Supprimer : permet de supprimer le profil d'un utilisateur"
             deleteBtn.type = "submit";
             deleteBtn.value = "delete";
             deleteBtn.textContent = "Supprimer";

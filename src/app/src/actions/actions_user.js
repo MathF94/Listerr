@@ -1,8 +1,10 @@
 "use strict"
 
+import { configPath } from "../services/config.js";
+
 async function fetchRegister(form) {
     try {
-        const url = "http://localhost/listerr/src/api/?route=user_register";
+        const url = `${configPath.apiPath}/?route=user_register`;
         return await fetch(url, {
             headers: {
                 "X-CSRFToken": localStorage.getItem("csrfToken")
@@ -19,7 +21,7 @@ async function fetchRegister(form) {
 
 async function fetchLogin(form) {
     try {
-        const url = "http://localhost/listerr/src/api/?route=user_login";
+        const url = `${configPath.apiPath}/?route=user_login`;
         return await fetch(url, {
             headers: {
                 "X-CSRFToken": localStorage.getItem("csrfToken")
@@ -36,7 +38,7 @@ async function fetchLogin(form) {
 
 async function fetchRead() {
     try {
-        const url = "http://localhost/listerr/src/api/?route=user_profil";
+        const url = `${configPath.apiPath}/?route=user_profil`;
         return await fetch(url, {
             method: "GET",
             headers: {"Authorization": localStorage.getItem("token")},
@@ -50,8 +52,7 @@ async function fetchRead() {
 
 async function fetchLogout() {
     try {
-        const url = "http://localhost/listerr/src/api/?route=user_logout";
-
+        const url = `${configPath.apiPath}/?route=user_logout`;
         return await fetch(url, {
             method: "POST",
             headers: {"Authorization": localStorage.getItem("token")},
@@ -65,8 +66,7 @@ async function fetchLogout() {
 
 async function fetchUpdate(form) {
     try {
-        const url = "http://localhost/listerr/src/api/?route=user_update";
-
+        const url = `${configPath.apiPath}/?route=user_update`;
         return await fetch(url, {
             headers: {
                 "Authorization": localStorage.getItem("token"),
@@ -84,8 +84,7 @@ async function fetchUpdate(form) {
 
 async function fetchDelete() {
     try {
-        const url = "http://localhost/listerr/src/api/?route=user_delete";
-
+        const url = `${configPath.apiPath}/?route=user_delete`;
         return await fetch(url, {
             method: "POST",
             headers: {"Authorization": localStorage.getItem("token")},
