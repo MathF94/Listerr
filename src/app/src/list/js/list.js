@@ -1,14 +1,17 @@
 "use strict";
 
 import { fetchReadOneListById, fetchDeleteList, fetchUpdateList } from "../../actions/actions_lists";
-import { configPath } from "../../services/config.js";
 import { CSRFToken } from "../../services/CSRFToken.js";
-import { redirect, dialog } from "../../services/utils.js";
+import { configPath, redirect, dialog } from "../../services/utils.js";
 import { createUpdateForm } from "./form.js";
 
+/**
+ * Fonction principale pour gérer la page de détails d'une liste.
+ */
 function list() {
     const urlParams = new URLSearchParams(document.location.search);
     if (urlParams.has("id")) {
+        // Obtient l'identifiant de la liste à partir des paramètres de l'URL.
         const id = urlParams.get("id");
 
         fetchReadOneListById(id)
@@ -67,6 +70,7 @@ function list() {
                     const item = document.createElement("li");
                     const object = data[index];
 
+                    // Exclut certains éléments de la liste (id, userId, type, title)
                     if (["id", "userId", "type", "title"].includes(`${index}`)) {
                         continue;
                     }
@@ -95,9 +99,7 @@ function list() {
                     oneList.appendChild(card);
                     card.appendChild(createCardBtn);
 
-                    /**
-                     * DELETE
-                     */
+                    // Gestion de la suppression de la liste
                     deleteBtnList.addEventListener("click", function(e){
                         e.preventDefault();
 
@@ -116,9 +118,7 @@ function list() {
                         }
                     })
 
-                    /**
-                     * UPDATE
-                    */
+                    // Gestion de la mise à jour de la liste
                     createUpdateForm(updateList);
                     CSRFToken(updateFormList.id);
 
@@ -158,11 +158,11 @@ function list() {
 
                                     if (response.status === "updated") {
                                         dialog({content: "Votre liste a bien été mise à jour."});
-                                        redirect(`${configPath.basePath}/list/pages/list.html?id=${updtBtnId}`, 2000);
+                                        redirect(`${configPath.basePath}/list/pages/list.html?id=${updtBtnId}`);
                                     }
                                     if (response.status === "fail") {
                                         dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
-                                        redirect(`${configPath.basePath}/list/pages/list.html?id=${updtBtnId}`, 2000);
+                                        redirect(`${configPath.basePath}/list/pages/list.html?id=${updtBtnId}`);
                                     };
                                 })
                             })

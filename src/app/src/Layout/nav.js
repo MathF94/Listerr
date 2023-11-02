@@ -1,7 +1,12 @@
 "use strict";
 
-import { configPath } from "../../src/services/config.js";
+import { configPath } from "../services/utils.js";
 
+/**
+ * Génère la barre de navigation en fonction de l'état de connexion de l'utilisateur.
+ *
+ * @param {HTMLElement} template - L'élément HTML dans lequel la barre de navigation sera générée.
+ */
 function navigation(template) {
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("user");
@@ -10,6 +15,7 @@ function navigation(template) {
     nav.className = "mainNav";
     const list = document.createElement("ul");
 
+    // Si l'utilisateur n'est pas connecté, affiche les liens d'inscription et de connexion.
     if (token === undefined || token === null || user === null || user === undefined) {
         const links = [
             {text: "Accueil", href: `${configPath.basePath}/home/pages/home.html`, id: "home"},
@@ -19,6 +25,7 @@ function navigation(template) {
         addLinks(links);
     };
 
+    // Si l'utilisateur est connecté, affiche des liens pertinents.
     if (user !== undefined && user !== null) {
         const links = [
             {text: "Accueil", href: `${configPath.basePath}/home/pages/home.html`, id: "home"},
@@ -29,6 +36,7 @@ function navigation(template) {
         addLinks(links);
     };
 
+    // Si l'utilisateur est un administrateur, affiche des liens spécifiques à l'administrateur.
     if(user){
         const dataUser = JSON.parse(user);
         if (dataUser.role === "Admin"){
@@ -39,6 +47,11 @@ function navigation(template) {
         };
     };
 
+    /**
+     * Ajoute des liens à la barre de navigation.
+     *
+     * @param {Array} links - Un tableau d'objets contenant les données des liens à ajouter.
+     */
     function addLinks(links) {
 
         links.forEach(linkData => {

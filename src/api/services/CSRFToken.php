@@ -5,6 +5,9 @@ namespace Services;
 use DateTime;
 use Services\Encryption;
 
+/**
+ * La classe CSRFToken gère la création et la validation de jetons CSRF pour prévenir les attaques CSRF.
+ */
 class CSRFToken
 {
     private const KEY = 'a2bc2fca-fef5-41b6-a1cc-6e53447b704e';
@@ -15,9 +18,15 @@ class CSRFToken
     {
         $this->encryption = new Encryption();
         $this->encryption->setKey(self::KEY)
-                        ->setIv(self::IV);
+            ->setIv(self::IV);
     }
 
+    /**
+     * Génère un jeton CSRF chiffré pour un formulaire.
+     *
+     * @param string $formId - L'identifiant du formulaire associé au jeton CSRF.
+     * @return string - Le jeton CSRF chiffré.
+     */
     public function encrypt(string $formId): string
     {
         date_default_timezone_set('Europe/Paris');
@@ -30,7 +39,14 @@ class CSRFToken
         return $this->encryption->encrypt(json_encode($csrfToken));
     }
 
-    public function isValidToken (string $csrfToken, string $formId): bool
+    /**
+     * Vérifie si un jeton CSRF est valide.
+     *
+     * @param string $csrfToken - Le jeton CSRF à valider.
+     * @param string $formId - L'identifiant du formulaire associé au jeton CSRF.
+     * @return bool - Renvoie true si le jeton est valide, sinon false.
+     */
+    public function isValidToken(string $csrfToken, string $formId): bool
     {
         $decryptedToken = $this->decrypt($csrfToken);
 
@@ -57,9 +73,8 @@ class CSRFToken
         return json_decode(json_decode($this->encryption->decrypt($csrfToken), true), true);
     }
 
-    private function generateAPIToken()
+    private function generateAPIToken(): string
     {
         return $_SESSION['token'] = bin2hex(random_bytes(24));
     }
-
 }

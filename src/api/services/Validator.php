@@ -2,6 +2,9 @@
 
 namespace Services;
 
+/**
+ * Classe pour la validation des paramètres en fonction du contexte.
+ */
 class Validator
 {
     public const CONTEXT_REGISTER = 'register';
@@ -10,6 +13,13 @@ class Validator
     public const CONTEXT_CREATE_LIST = 'create_list';
     public const CONTEXT_UPDATE_LIST = 'update_list';
 
+    /**
+     * Valide les paramètres en fonction du contexte donné.
+     *
+     * @param array  $params  Les paramètres à valider.
+     * @param string $context Le contexte de validation.
+     * @return array Un tableau d'erreurs, le cas échéant.
+     */
     public function isValidParams(array $params, string $context): array
     {
         switch ($context) {
@@ -40,6 +50,12 @@ class Validator
         }
     }
 
+    /**
+     * Valide les paramètres lors de l'enregistrement d'un utilisateur.
+     *
+     * @param array $params Les paramètres à valider.
+     * @return array Un tableau d'erreurs, le cas échéant. Chaque élément du tableau est une chaîne de caractères décrivant l'erreur.
+     */
     private function isValidRegisterParams(array $params): array
     {
         $errors = [];
@@ -91,6 +107,12 @@ class Validator
         return $errors;
     }
 
+    /**
+     * Valide les paramètres lors d'une tentative de connexion de l'utilisateur.
+     *
+     * @param array $params Les paramètres à valider.
+     * @return array Un tableau d'erreurs, le cas échéant. Chaque élément du tableau est une chaîne de caractères décrivant l'erreur.
+     */
     private function isValidLoginParams(array $params): array
     {
         $errors = [];
@@ -120,6 +142,12 @@ class Validator
         return $errors;
     }
 
+    /**
+     * Valide les paramètres lors de la mise à jour d'informations de l'utilisateur.
+     *
+     * @param array $params Les paramètres à valider.
+     * @return array Un tableau d'erreurs, le cas échéant. Chaque élément du tableau est une chaîne de caractères décrivant l'erreur.
+     */
     private function isValidUpdateUserParams(array $params): array
     {
         $errors = [];
@@ -167,6 +195,12 @@ class Validator
         return $errors;
     }
 
+    /**
+     * Valide les paramètres lors de la création ou de la mise à jour d'une liste.
+     *
+     * @param array $params Les paramètres à valider.
+     * @return array Un tableau d'erreurs, le cas échéant. Chaque élément du tableau est une chaîne de caractères décrivant l'erreur.
+     */
     private function isValidListParams(array $params): array
     {
         $errors = [];

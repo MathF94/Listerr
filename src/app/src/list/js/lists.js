@@ -1,24 +1,29 @@
 "use strict";
 
 import { fetchCreateList, fetchReadAllLists, fetchDeleteList } from "../../actions/actions_lists.js";
-import { configPath } from "../../services/config.js";
 import { CSRFToken } from "../../services/CSRFToken.js";
-import { redirect, dialog } from "../../services/utils.js";
+import { configPath, redirect, dialog } from "../../services/utils.js";
 
+/**
+ * Fonction principale pour gérer la page des listes.
+ */
 function lists() {
     const createList = document.querySelector("#listCreater");
     const listForm = document.querySelector("#listForm");
     const cancelForm = document.querySelector("#cancelForm");
 
+    // Affiche le formulaire de création de liste lorsqu'on clique sur le bouton "Nouvelle liste".
     createList.addEventListener("click", function(){
         if (createList.value === "newList") {
             listForm.classList.remove("hidden");
         }
     })
+    // Masque le formulaire de création de liste lorsqu'on clique sur le bouton "Annuler".
     cancelForm.addEventListener("click", function(){
         listForm.classList.add("hidden");
     })
 
+    // Gère la soumission du formulaire de création de liste.
     createListForm.addEventListener("submit", function(e){
         e.preventDefault();
 
@@ -38,7 +43,7 @@ function lists() {
         })
     })
 
-
+    // Récupère et affiche la liste des listes existantes.
     fetchReadAllLists()
     .then(response => {
 
@@ -98,6 +103,7 @@ function lists() {
                     listWrapper.append(profilList);
                 }
 
+                // Gestion de la suppression de liste
                 deleteBtnLists.addEventListener("click", function(e){
                     e.preventDefault();
                     const btnId = parseInt(e.target.value);
@@ -111,11 +117,12 @@ function lists() {
                             dialog({title: "Suppression de la liste",
                             content: `<p>Votre liste a bien été supprimée.</p>`
                             });
-                            redirect('http://localhost/listerr/src/app/src/list/pages/lists.html', 2000);
+                            redirect('http://localhost/listerr/src/app/src/list/pages/lists.html');
                         });
                     }
                 })
 
+                // Redirige vers la page de détails de la liste en cliquant sur la liste.
                 contentList.addEventListener("click", function(){
                     console.log({type: object.type, userId: object.user.id, localStorage: JSON.parse(localStorage.getItem("user")).id});
                     if (object.type === "TodoList" && object.user.id !== JSON.parse(localStorage.getItem("user")).id) {

@@ -5,8 +5,14 @@ namespace Services;
 use Controllers\UserController;
 use Controllers\ListController;
 
+/**
+ * Classe pour le routage des demandes HTTP vers les contrôleurs appropriés.
+ */
 class Router
 {
+    /**
+     * Effectue le routage des demandes HTTP vers les contrôleurs correspondants.
+     */
     public function routing(): void
     {
         if (array_key_exists('route', $_GET)) : // on vérifie que la route existe dans l'URL
@@ -165,9 +171,14 @@ class Router
         endif;
     }
 
+    /**
+     * Vérifie si une méthode HTTP est autorisée pour la demande en cours.
+     *
+     * @param string $method La méthode HTTP à vérifier (GET, POST, etc.).
+     * @return bool Vrai si la méthode est autorisée, sinon faux.
+     */
     private function isAllowedMethod($method): bool
     {
-        //$_SERVER['REQUEST_METHOD'] retourne get, post, pull, update, delete, selon la méthode de la requête utilisée
         if ($method !== $_SERVER['REQUEST_METHOD']) {
             echo json_encode(['statusCode' => 403, 'message' => 'Method not allowed']);
             return false;

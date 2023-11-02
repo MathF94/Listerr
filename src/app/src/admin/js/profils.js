@@ -2,6 +2,9 @@
 
 import { fetchReadAll } from "../../actions/actions_admin.js";
 
+/**
+ * Récupère et affiche la liste des utilisateurs (à l'exception des utilisateurs avec le rôle "Admin") depuis l'API.
+ */
 function readAdmin() {
 
     fetchReadAll()
@@ -11,6 +14,8 @@ function readAdmin() {
 
         for (const index in data) {
             const column = data[index];
+
+            // Exclut les colonnes inutiles ou les utilisateurs avec le rôle "Admin"
             if (["id"].includes(column) || column.role === "Admin") {
                 continue;
             };
@@ -55,6 +60,7 @@ function readAdmin() {
             const deleteForm = document.createElement("form");
             deleteForm.action = "?route=admin_delete_user";
             deleteForm.method = "post";
+
             const deleteBtn = document.createElement("button");
             deleteBtn.title = "Supprimer : permet de supprimer le profil d'un utilisateur"
             deleteBtn.type = "submit";

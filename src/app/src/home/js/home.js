@@ -1,14 +1,17 @@
 "use strict"
 
 import { fetchAllListsByUsers } from "../../actions/actions_home.js";
-import { configPath } from "../../services/config.js";
-import { dialog, redirect } from "../../services/utils.js";
+import { configPath, redirect, dialog } from "../../services/utils.js";
 
+/**
+ * Affiche les listes depuis une API sur la page d'accueil.
+ */
 function readAllLists() {
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("user");
     const listBtn = document.querySelector("#newList");
 
+    // Vérifie si l'utilisateur est connecté
     if (token === undefined || token === null || user === null || user === undefined) {
         listBtn.addEventListener("click", function(e) {
             dialog({title:"Vous n'êtes pas encore connecté ?", content: "Vous allez être redirigé(e) vers la page de connexion", hasTimeOut: true})
@@ -18,11 +21,13 @@ function readAllLists() {
     }
 
     if (user !== undefined && user !== null) {
+        // Si l'utilisateur est connecté, ajoute un gestionnaire de clic pour rediriger vers la page de création de liste
         listBtn.addEventListener("click", function(e){
             redirect(`${configPath.basePath}/list/pages/lists.html`, 0);
         });
     }
 
+    // Récupère les listes depuis l'API et les affiche
     fetchAllListsByUsers()
     .then(response => {
         const data = response.data;

@@ -9,18 +9,30 @@ use Services\CSRFToken;
 use Services\Session;
 use Services\Validator;
 
+/**
+ * Classe représentant un objet d'une liste.
+ */
 class ListController
 {
     private $csrfToken;
     private $validator;
     private $user;
 
+    /**
+     * Constructeur de la classe ListController.
+     *
+     * Ce constructeur initialise les dépendances nécessaires et authentifie un utilisateur
+     * en utilisant un jeton fourni. Il est appelé lors de la création d'une instance de ListController.
+     *
+     * @param string $tokenUser - Le jeton d'utilisateur utilisé pour l'authentification.
+     */
     public function __construct($tokenUser)
     {
         $this->csrfToken = new CSRFToken();
         $this->validator = new Validator();
         $session = new Session();
 
+        // Si un jeton d'utilisateur est fourni, nous tentons de décrypter et d'authentifier l'utilisateur.
         if (!empty($tokenUser)) {
             $decrypt = $session->decrypt($tokenUser);
             $model = new Users();
@@ -28,11 +40,20 @@ class ListController
         }
     }
 
+    /**
+     * Aide au chiffrement du jeton CSRF en réponse à une requête.
+     *
+     * Cette méthode récupère le champ 'formId' de la variable superglobale $_POST, qui correspond à l'id du formulaire renvoyé via le CSRFToken.js,
+     *               chiffre cette valeur et l'envoie en paramètre de la méthode encrypt() pour générer un CSRF Token.
+     * La méthode renvoie ensuite le résultat encodé en JSON.
+     *
+     * @return string - Le résultat est encodé au format JSON avec le statut "success" et le jeton CSRF en cas de succès.
+     *                - Le résultat est encodé au format JSON avec le statut "error" et un message d'erreur en cas d'échec.
+     */
     public function CSRFToken()
     {
         try {
             $formId = $_POST['formId'];
-            var_dump($formId);
             $encryptedCSRFToken = $this->csrfToken->encrypt($formId);
 
             return json_encode([
@@ -44,7 +65,6 @@ class ListController
                 'status' => 'fail',
                 'errors' => 'errors'
             ]);
-
         } catch (\Exception $e) {
             return json_encode([
                 'status' => 'error',
@@ -53,6 +73,12 @@ class ListController
         }
     }
 
+    /**
+     * Cette méthode permet la création d'une nouvelle liste, après validation du jeton CSRF.
+     *
+     * @param string $csrfToken - Jeton CSRF pour valider la requête.
+     * @return string - Réponse JSON : "success" en cas de succès, "fail" avec un message d'erreur en cas d'échec.
+     */
     public function create($csrfToken): string
     {
         try {
@@ -77,12 +103,12 @@ class ListController
                         'status' => 'success'
                     ]);
                 }
-
-                return json_encode([
-                    'status' => 'fail',
-                    'errors' => $errors
-                ]);
             }
+
+            return json_encode([
+                'status' => 'fail',
+                'errors' => $errors
+            ]);
         } catch (\Exception $e) {
             return json_encode([
                 'status' => 'error',
@@ -92,7 +118,9 @@ class ListController
     }
 
     /**
-     * retourne une liste d'un utilisateur en fonction de l'id de la liste sélectionnée
+     * Cette méthode récupère les détails d'une liste, en fonction de l'id de la liste, fourni via la requête HTTP.
+     *
+     * @return string - Réponse JSON contenant les informations de la liste ou un message d'erreur.
      */
     public function readOneListById()
     {
@@ -108,7 +136,10 @@ class ListController
                     ]);
                 };
 
+                // Vérifie sur la liste est une TodoList
                 if ($list->type === Lister::TYPE_TODO) {
+                    // Vérifie si la TodoList appartient à l'utilisateur connecté
+                    // S'il est différent, la réponse JSON renvoie "no list"
                     if (empty($this->user) || $this->user->id !== $list->user->id) {
                         return json_encode([
                             'status' => 'no list'
@@ -118,7 +149,9 @@ class ListController
 
                 return json_encode([
                     'status' => 'readOneList',
-                    'user_id' => $this->user->id ?? 0,
+                    // Soit 'user_id' a l'id de l'utilisateur, soit l'id a 0 comme valeur,
+                    // ainsi l'id aura toujours une valeur, même si l'id est null.
+                    'user_id' => $this->user->id !== null ? $this->user->id : 0,
                     'data' => $list
                 ]);
             };
@@ -127,7 +160,6 @@ class ListController
                 'status' => 'fail',
                 'message' => 'body is empty'
             ]);
-
         } catch (\Exception $e) {
             return json_encode([
                 'status' => 'error',
@@ -137,7 +169,9 @@ class ListController
     }
 
     /**
-     * Toutes les listes d'un utilisateur
+     * Cette méthode récupère les informations de toutes les listes pour un utilisateur.
+     *
+     * @return string - Réponse JSON contenant les informations de la liste ou un message d'erreur.
      */
     public function readListsOneUser(): string
     {
@@ -157,6 +191,7 @@ class ListController
                     'data' => $list
                 ]);
             };
+
             return json_encode([
                 'status' => 'fail',
                 'message' => 'body is empty'
@@ -170,7 +205,9 @@ class ListController
     }
 
     /**
-     * Toutes les listes de tous les utilisateurs avec login
+     * Cette méthode récupère les informations de toutes les listes de tous les utilisateurs.
+     *
+     * @return string - Réponse JSON contenant les informations de toutes les listes ou un message d'erreur.
      */
     public function readAllByUsers(): string
     {
@@ -190,6 +227,7 @@ class ListController
                     'data' => $list,
                 ]);
             };
+
             return json_encode([
                 'status' => 'fail',
                 'message' => 'body is empty'
@@ -202,6 +240,11 @@ class ListController
         }
     }
 
+    /**
+     * Cette méthode permet la mise à jour des informations d'une liste d'un utilisateur, après validation du jeton CSRF.
+     *
+     * @return string - Réponse JSON contenant un message de validaiton de mise à jour ou un message d'erreur.
+     */
     public function updateList(int $id, string $csrfToken): string
     {
         try {
@@ -249,6 +292,11 @@ class ListController
         }
     }
 
+    /**
+     * Cette méthode récupère la suppression d'une liste d'un utilisateur.
+     *
+     * @return string - Réponse JSON contenant un message de succès ou un message d'erreur.
+     */
     public function deleteList(int $id): string
     {
         try {

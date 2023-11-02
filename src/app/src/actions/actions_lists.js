@@ -1,7 +1,13 @@
 "use strict";
 
-import { configPath } from "../services/config.js";
+import { configPath } from "../services/utils.js";
 
+/**
+ * Effectue une requête pour créer une nouvelle liste en utilisant un formulaire.
+ *
+ * @param {HTMLFormElement} form - Le formulaire contenant les données de la nouvelle liste.
+ * @returns {Promise<Object|null>} Une promesse résolue avec les données de la liste créée ou null en cas d'erreur.
+ */
 async function fetchCreateList(form) {
     try {
         const url = `${configPath.apiPath}/?route=create_list`;
@@ -20,6 +26,12 @@ async function fetchCreateList(form) {
     }
 };
 
+/**
+ * Effectue une requête pour récupérer une liste spécifique par son ID.
+ *
+ * @param {number} id - L'identifiant de la liste à récupérer.
+ * @returns {Promise<Object|null>} Une promesse résolue avec les données de la liste ou null en cas d'erreur.
+ */
 async function fetchReadOneListById(id) {
     try {
         const url = `${configPath.apiPath}/?route=read_one_list_by_id`;
@@ -34,6 +46,11 @@ async function fetchReadOneListById(id) {
     }
 };
 
+/**
+ * Effectue une requête pour récupérer la liste de toutes les listes d'un utilisateur.
+ *
+ * @returns {Promise<Object|null>} Une promesse résolue avec les données de toutes les listes de l'utilisateur ou null en cas d'erreur.
+ */
 async function fetchReadAllLists() {
     try {
         const url = `${configPath.apiPath}/?route=read_lists_one_user`;
@@ -48,6 +65,13 @@ async function fetchReadAllLists() {
     }
 };
 
+/**
+ * Effectue une requête pour mettre à jour une liste en utilisant un formulaire.
+ *
+ * @param {HTMLFormElement} form - Le formulaire contenant les données mises à jour de la liste.
+ * @param {number} id - L'identifiant de la liste à mettre à jour.
+ * @returns {Promise<Object|null>} Une promesse résolue avec les données de la liste mise à jour ou null en cas d'erreur.
+ */
 async function fetchUpdateList(form, id) {
     try {
         const url = `${configPath.apiPath}/?route=update_list`;
@@ -66,6 +90,12 @@ async function fetchUpdateList(form, id) {
     }
 };
 
+/**
+ * Effectue une requête pour supprimer une liste par son ID.
+ *
+ * @param {number} id - L'identifiant de la liste à supprimer.
+ * @returns {Promise<Object|null>} Une promesse résolue avec les données de la suppression ou null en cas d'erreur.
+ */
 async function fetchDeleteList(id) {
     try {
         const url = `${configPath.apiPath}/?route=delete_list`;

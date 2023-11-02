@@ -1,7 +1,12 @@
 "use strict";
 
-import { configPath } from "../services/config.js";
+import { configPath } from "../services/utils.js";
 
+/**
+ * Effectue une requête pour récupérer la liste de tous les utilisateurs depuis l'API.
+ *
+ * @returns {Promise<Object|null>} Une promesse résolue avec les données des utilisateurs ou null en cas d'erreur.
+ */
 async function fetchReadAll() {
     try {
         const url = `${configPath.apiPath}/?route=admin_read_users`;
@@ -16,4 +21,4 @@ async function fetchReadAll() {
     }
 };
 
-export {fetchReadAll};
+export { fetchReadAll };

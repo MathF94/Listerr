@@ -1,5 +1,10 @@
 "use strict";
 
+/**
+ * Génère un formulaire de mise à jour pour une liste.
+ *
+ * @param {HTMLElement} updateList - L'élément HTML dans lequel le formulaire de mise à jour sera généré.
+ */
 function createUpdateForm(updateList) {
     const updateFormList = document.createElement("form");
     updateFormList.id = "updateFormList";
