@@ -1,10 +1,13 @@
 "use strict";
 
-import { fetchRead } from "./actions.js";
-import { redirect } from "../../services/utils.js";
+import { fetchRead } from "../../actions/actions_user.js";
+import { configPath, redirect } from "../../services/utils.js";
 
+/**
+ * Gère l'affichage des informations de profil de l'utilisateur et les fonctionnalités associées.
+ */
 function read() {
-
+    // Appelle la fonction fetchRead pour obtenir les informations du profil de l'utilisateur.
     fetchRead()
     .then(response => {
         const deleteBtn = document.querySelector("#delete");
@@ -12,11 +15,13 @@ function read() {
         const listBtn = document.querySelector("#listsUser");
 
         if (response.status === "disconnected") {
+            // Masque les boutons de suppression et de mise à jour lorsque l'utilisateur est déconnecté.
             deleteBtn.classList.add("hide");
             updateBtn.classList.add("hide");
         }
-        
+
         if (response.status === "connected" && localStorage.token && localStorage.user) {
+            // Affiche les boutons de suppression et de mise à jour lorsque l'utilisateur est connecté.
             deleteBtn.classList.remove("hide");
             updateBtn.classList.remove("hide");
             const profilWrapper = document.querySelector("#profilWrapper");
@@ -35,11 +40,13 @@ function read() {
             }
             profilWrapper.prepend(list);
 
+            // Redirige l'utilisateur vers la page de listes lorsqu'il clique sur le bouton "Listes d'utilisateurs".
             listBtn.addEventListener("click", function(e){
-                redirect("http://localhost/listerr/src/app/src/list/pages/lists.html", 0);
+                redirect(`${configPath.basePath}/list/pages/lists.html`, 0);
             });
+            // Redirige l'utilisateur vers la page de mise à jour de profil lorsqu'il clique sur le bouton "Mettre à jour".
             updateBtn.addEventListener("click", function(e){
-                redirect("http://localhost/listerr/src/app/src/user/pages/update.html", 0);
+                redirect(`${configPath.basePath}/user/pages/update.html`, 0);
             });
         };
     });

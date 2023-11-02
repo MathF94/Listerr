@@ -1,6 +1,11 @@
-// équivalent d'actions.js
-"use strict"
+"use strict";
 
+/**
+ * Effectue une requête pour obtenir un jeton CSRF depuis le serveur.
+ *
+ * @param {string} formId - L'ID du formulaire pour lequel un jeton CSRF doit être obtenu
+ * @returns {Promise} Une promesse qui résout avec le résultat de la requête.
+ */
 async function fetchCSRF(formId) {
     try {
         const formData = new FormData();
@@ -19,6 +24,11 @@ async function fetchCSRF(formId) {
     }
 }
 
+/**
+ * Obtient un jeton CSRF en appelant la fonction fetchCSRF et le stocke localement.
+ *
+ * @param {string} formId - L'ID du formulaire pour lequel un jeton CSRF doit être obtenu.
+ */
 function CSRFToken(formId) {
     fetchCSRF(formId)
     .then(response => {

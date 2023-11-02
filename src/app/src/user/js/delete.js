@@ -1,8 +1,11 @@
 'use strict';
 
-import { fetchDelete } from "./actions.js";
-import { redirect, dialog } from "../../services/utils.js";
+import { fetchDelete } from "../../actions/actions_user.js";
+import { configPath, redirect, dialog } from "../../services/utils.js";
 
+/**
+ * Supprime le compte de l'utilisateur.
+ */
 function deleteUser() {
     const deleteBtn = document.querySelector('#delete');
 
@@ -18,7 +21,7 @@ function deleteUser() {
                                     <p>Vous allez nous manquer et être redirigé(e) dans quelques instants vers l'inscription pour vous réinscrire car vous nous aimez !</p>`});
                     localStorage.removeItem("token");
                     localStorage.removeItem("user");
-                    redirect('http://localhost/listerr/src/app/src/user/pages/registration.html', 5000);
+                    redirect(`${configPath.basePath}/user/pages/registration.html`);
                 });
             };
         };

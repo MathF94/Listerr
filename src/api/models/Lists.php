@@ -5,8 +5,18 @@ namespace Models;
 use Entity\Lister;
 use Services\Database;
 
+/**
+ * La classe Lists gère les opérations liées aux listes dans la base de données.
+ */
 class Lists extends Database
 {
+    /**
+     * Crée une nouvelle liste dans la base de données.
+     *
+     * @param array $params - Les paramètres de la liste à créer.
+     * @param int $userId - L'ID de l'utilisateur associé à la liste.
+     * @return bool - Renvoie true en cas de succès, sinon false.
+     */
     public function create(array $params, int $userId): bool
     {
         try {
@@ -29,7 +39,10 @@ class Lists extends Database
     }
 
     /**
-     * retourne une liste d'un utilisateur en fonction de l'id de la liste sélectionnée
+     * Récupère les détails d'une liste en fonction de son ID.
+     *
+     * @param int $id - L'ID de la liste à récupérer.
+     * @return Lister|null - L'objet Lister correspondant à la liste ou null si non trouvé.
      */
     public function oneListById(int $id): ?Lister
     {
@@ -55,7 +68,6 @@ class Lists extends Database
             $lister = new Lister();
             $lister->populate($result);
             return $lister;
-
         } catch (\Exception $e) {
             echo $e->getMessage();
             return null;
@@ -63,7 +75,10 @@ class Lists extends Database
     }
 
     /**
-     * Toutes les listes d'un utilisateur
+     * Récupère toutes les listes d'un utilisateur en fonction de l'ID utilisateur.
+     *
+     * @param int $userId - L'ID de l'utilisateur pour lequel les listes sont récupérées.
+     * @return Lister[] - Un tableau d'objets Lister représentant les listes de l'utilisateur.
      */
     public function listsOneUser(int $userId): array
     {
@@ -104,7 +119,9 @@ class Lists extends Database
     }
 
     /**
-     * Toutes les listes de tous les utilisateurs avec login
+     * Récupère toutes les listes de tous les utilisateurs avec login.
+     *
+     * @return Lister[] - Un tableau d'objets Lister représentant toutes les listes de tous les utilisateurs.
      */
     public function listsByUsers(): array
     {
@@ -140,6 +157,13 @@ class Lists extends Database
         }
     }
 
+    /**
+     * Met à jour les informations d'une liste dans la base de données.
+     *
+     * @param array $params - Les paramètres mis à jour de la liste.
+     * @param int $id - L'ID de la liste à mettre à jour.
+     * @return bool - Renvoie true en cas de succès, sinon false.
+     */
     public function updateList(array $params, int $id): bool
     {
         try {
@@ -152,15 +176,20 @@ class Lists extends Database
 
             $query = $this->db->prepare($req);
             $params['id'] = $id;
-            
-            return $query->execute($params);
 
+            return $query->execute($params);
         } catch (\Exception $e) {
             echo $e->getMessage();
             return [];
         }
     }
 
+    /**
+     * Supprime une liste de la base de données.
+     *
+     * @param int $id - L'ID de la liste à supprimer.
+     * @return bool - Renvoie true en cas de succès, sinon false.
+     */
     public function deleteList(int $id): bool
     {
         try {
@@ -169,7 +198,6 @@ class Lists extends Database
 
             $query = $this->db->prepare($req);
             return $query->execute(['id' => $id]);
-
         } catch (\Exception $e) {
             echo $e->getMessage();
             return [];

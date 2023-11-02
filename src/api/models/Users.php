@@ -6,6 +6,9 @@ use Entity\User;
 use Services\Database;
 use Services\Encryption;
 
+/**
+ * La classe Users gère les opérations liées aux utilisateurs dans la base de données.
+ */
 class Users extends Database
 {
     /**
@@ -24,6 +27,12 @@ class Users extends Database
             ->setIv(self::IV);
     }
 
+    /**
+     * Crée un nouvel utilisateur dans la base de données.
+     *
+     * @param array $params - Les paramètres de l'utilisateur à créer.
+     * @return bool - Renvoie true en cas de succès, sinon false.
+     */
     public function create(array $params): bool
     {
         try {
@@ -47,6 +56,13 @@ class Users extends Database
         }
     }
 
+    /**
+     * Authentifie un utilisateur en fonction de son login et mot de passe.
+     *
+     * @param string $login - Le login de l'utilisateur.
+     * @param string $password - Le mot de passe de l'utilisateur.
+     * @return User|null - L'objet User correspondant à l'utilisateur authentifié ou null si non trouvé.
+     */
     public function auth(string $login, string $password): ?User
     {
         try {
@@ -78,6 +94,12 @@ class Users extends Database
         }
     }
 
+    /**
+     * Récupère les informations d'un utilisateur en fonction de son login.
+     *
+     * @param string $login - Le login de l'utilisateur à récupérer.
+     * @return User|null - L'objet User correspondant à l'utilisateur ou null si non trouvé.
+     */
     public function readOne(string $login): ?User
     {
         try {
@@ -103,6 +125,11 @@ class Users extends Database
         }
     }
 
+    /**
+     * Récupère les informations de tous les utilisateurs.
+     *
+     * @return User[] - Un tableau d'objets User représentant tous les utilisateurs.
+     */
     public function readAll(): array
     {
         try {
@@ -131,6 +158,13 @@ class Users extends Database
         }
     }
 
+    /**
+     * Met à jour les informations d'un utilisateur dans la base de données.
+     *
+     * @param array $parameters - Les paramètres mis à jour de l'utilisateur.
+     * @param int $id - L'ID de l'utilisateur à mettre à jour.
+     * @return bool - Renvoie true en cas de succès, sinon false.
+     */
     public function update(array $parameters, int $id): bool
     {
         try {
@@ -143,13 +177,18 @@ class Users extends Database
             $query = $this->db->prepare($req);
             $parameters['id'] = $id;
             return $query->execute($parameters);
-            
         } catch (\Exception $e) {
             echo $e->getMessage();
             return [];
         }
     }
 
+    /**
+     * Met à jour le mot de passe d'un utilisateur dans la base de données.
+     *
+     * @param array $parameters - Les paramètres mis à jour, y compris le nouveau mot de passe.
+     * @return bool - Renvoie true en cas de succès, sinon false.
+     */
     public function updatePassword(array $parameters): bool
     {
         try {
@@ -158,13 +197,18 @@ class Users extends Database
                     WHERE `login` = :login";
             $query = $this->db->prepare($req);
             return $query->execute($parameters);
-
         } catch (\Exception $e) {
             echo $e->getMessage();
             return [];
         }
     }
 
+    /**
+     * Supprime un utilisateur de la base de données en fonction de son login.
+     *
+     * @param string $login - Le login de l'utilisateur à supprimer.
+     * @return bool - Renvoie true en cas de succès, sinon false.
+     */
     public function delete(string $login): bool
     {
         try {
@@ -173,7 +217,6 @@ class Users extends Database
 
             $query = $this->db->prepare($req);
             return $query->execute(['login' => $login]);
-
         } catch (\Exception $e) {
             echo $e->getMessage();
             return [];

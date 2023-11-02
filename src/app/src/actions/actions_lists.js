@@ -1,9 +1,16 @@
 "use strict";
 
+import { configPath } from "../services/utils.js";
+
+/**
+ * Effectue une requête pour créer une nouvelle liste en utilisant un formulaire.
+ *
+ * @param {HTMLFormElement} form - Le formulaire contenant les données de la nouvelle liste.
+ * @returns {Promise<Object|null>} Une promesse résolue avec les données de la liste créée ou null en cas d'erreur.
+ */
 async function fetchCreateList(form) {
     try {
-        const url = "http://localhost/listerr/src/api/?route=create_list";
-
+        const url = `${configPath.apiPath}/?route=create_list`;
         return await fetch(url, {
             headers: {
                 "Authorization": localStorage.getItem("token"),
@@ -19,10 +26,15 @@ async function fetchCreateList(form) {
     }
 };
 
+/**
+ * Effectue une requête pour récupérer une liste spécifique par son ID.
+ *
+ * @param {number} id - L'identifiant de la liste à récupérer.
+ * @returns {Promise<Object|null>} Une promesse résolue avec les données de la liste ou null en cas d'erreur.
+ */
 async function fetchReadOneListById(id) {
     try {
-        const url = "http://localhost/listerr/src/api/?route=read_one_list_by_id";
-
+        const url = `${configPath.apiPath}/?route=read_one_list_by_id`;
         return await fetch(`${url}&id=${id}`, {
             headers: {"Authorization": localStorage.getItem("token") || ""},
             method: "GET",
@@ -34,10 +46,14 @@ async function fetchReadOneListById(id) {
     }
 };
 
+/**
+ * Effectue une requête pour récupérer la liste de toutes les listes d'un utilisateur.
+ *
+ * @returns {Promise<Object|null>} Une promesse résolue avec les données de toutes les listes de l'utilisateur ou null en cas d'erreur.
+ */
 async function fetchReadAllLists() {
     try {
-        const url = "http://localhost/listerr/src/api/?route=read_lists_one_user";
-
+        const url = `${configPath.apiPath}/?route=read_lists_one_user`;
         return await fetch(url, {
             headers: {"Authorization": localStorage.getItem("token")},
             method: "GET",
@@ -49,10 +65,16 @@ async function fetchReadAllLists() {
     }
 };
 
+/**
+ * Effectue une requête pour mettre à jour une liste en utilisant un formulaire.
+ *
+ * @param {HTMLFormElement} form - Le formulaire contenant les données mises à jour de la liste.
+ * @param {number} id - L'identifiant de la liste à mettre à jour.
+ * @returns {Promise<Object|null>} Une promesse résolue avec les données de la liste mise à jour ou null en cas d'erreur.
+ */
 async function fetchUpdateList(form, id) {
     try {
-        const url = "http://localhost/listerr/src/api/?route=update_list";
-
+        const url = `${configPath.apiPath}/?route=update_list`;
         return await fetch(url, {
             headers: {
                 "Authorization": localStorage.getItem("token"), id,
@@ -68,13 +90,17 @@ async function fetchUpdateList(form, id) {
     }
 };
 
+/**
+ * Effectue une requête pour supprimer une liste par son ID.
+ *
+ * @param {number} id - L'identifiant de la liste à supprimer.
+ * @returns {Promise<Object|null>} Une promesse résolue avec les données de la suppression ou null en cas d'erreur.
+ */
 async function fetchDeleteList(id) {
     try {
-        const url = "http://localhost/listerr/src/api/?route=delete_list";
-        const token = localStorage.getItem("token");
-
+        const url = `${configPath.apiPath}/?route=delete_list`;
         return await fetch(url, {
-            headers: {"Authorization": token, id},
+            headers: {"Authorization": localStorage.getItem("token"), id},
             method: "POST",
             }).then(response => response.json());
 
