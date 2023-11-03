@@ -180,26 +180,41 @@ class UserController
      *                - En cas d'échec :
      *                   Réponse JSON : "disconnected" avec un message d'erreur invitant à se reconnecter.
      */
-    public function read($tokenUser): string
+    public function read(string $tokenUser, ?string $userId = null): string
     {
         try {
             if (!empty($tokenUser)) {
-
                 $session = new Session();
                 $decrypt = $session->decrypt($tokenUser);
                 $login = $decrypt["login"];
                 $modelUser = new Users();
-                $user = $modelUser->readOne($login);
+                // faire une condition en fonction du $_GET pour récupérer l'id à visualiser
 
-                if (empty($user)) {
-                    return json_encode([
-                        "status" => "unknown user"
-                    ]);
-                };
+                if ($userId === "undefined") {
+                    $user = $modelUser->readOne($login);
 
-                if (!$session->isExpired($decrypt, $user)) {
+                    if (!$session->isExpired($decrypt, $user)) {
+                        return json_encode([
+                            "status" => "connected",
+                            "id" => ["label" => "id", "value" => $user->id],
+                            "name" => ["label" => "Nom", "value" => $user->name],
+                            "firstname" => ["label" => "Prénom", "value" => $user->firstname],
+                            "email" => ["label" => "E-mail", "value" => $user->email],
+                            "login" => ["label" => "Login", "value" => $user->login],
+                            "role" => ["label" => "Role", "value" => $user->role],
+                        ]);
+                    } else {
+                        return json_encode([
+                            "status" => "disconnected",
+                            "message" => "La connexion a été perdue, merci de vous reconnecter"
+                        ]);
+                    };
+
+                } else {
+                    // fonction readById
+                    $user = $modelUser->readById((int)$userId);
                     return json_encode([
-                        "status" => "connected",
+                        "status" => "[Admin]user",
                         "id" => ["label" => "id", "value" => $user->id],
                         "name" => ["label" => "Nom", "value" => $user->name],
                         "firstname" => ["label" => "Prénom", "value" => $user->firstname],
@@ -207,10 +222,11 @@ class UserController
                         "login" => ["label" => "Login", "value" => $user->login],
                         "role" => ["label" => "Role", "value" => $user->role],
                     ]);
-                } else {
+                }
+
+                if (empty($user)) {
                     return json_encode([
-                        "status" => "disconnected",
-                        "message" => "La connexion a été perdue, merci de vous reconnecter"
+                        "status" => "unknown user"
                     ]);
                 };
             };

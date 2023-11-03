@@ -68,6 +68,7 @@ class Database
      */
     protected function findOne(string $req, array $params = []): array
     {
+        
         try {
             $query = $this->db->prepare($req);
             $query->execute($params);

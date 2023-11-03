@@ -49,7 +49,7 @@ class Router
                 case 'user_profil':
                     if ($this->isAllowedMethod('GET')) {
                         $user = new UserController();
-                        echo $user->read($headers['Authorization']); // readOne
+                        echo $user->read($headers['Authorization'], $headers['id']); // readOne
                     }
                     break;
 
@@ -73,6 +73,7 @@ class Router
                         echo $user->readUsers(); // readAll
                     }
                     break;
+
 
                     // @TODO
                     // case 'admin_update_user':
