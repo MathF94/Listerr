@@ -49,10 +49,10 @@ class Database
             return $query->fetchAll(); // Récupérer un jeu d'enregistrements
 
         } catch (\Exception $e) {
-            return json_encode([
+            return [
                 'status' => 'error',
                 'message' => $e->getMessage()
-            ]);
+            ];
         }
     }
 
@@ -68,7 +68,6 @@ class Database
      */
     protected function findOne(string $req, array $params = []): array
     {
-        
         try {
             $query = $this->db->prepare($req);
             $query->execute($params);
@@ -79,10 +78,10 @@ class Database
             }
             return $result;
         } catch (\Exception $e) {
-            return json_encode([
+            return [
                 'status' => 'error',
                 'message' => $e->getMessage()
-            ]);
+            ];
         }
     }
 
@@ -103,10 +102,10 @@ class Database
             $query->execute($params);
             return $query->fetch(\PDO::FETCH_ASSOC);
         } catch (\Exception $e) {
-            return json_encode([
+            return [
                 'status' => 'error',
                 'message' => $e->getMessage()
-            ]);
+            ];
         }
     }
 }

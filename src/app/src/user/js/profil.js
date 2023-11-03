@@ -1,7 +1,9 @@
 "use strict";
 
 import { fetchRead } from "../../actions/actions_user.js";
-import { configPath, redirect } from "../../services/utils.js";
+import { configPath, redirect, notAllowedRedirection } from "../../services/utils.js";
+
+notAllowedRedirection();
 
 /**
  * Gère l'affichage des informations de profil de l'utilisateur et les fonctionnalités associées.
@@ -49,6 +51,7 @@ function read() {
     if (urlParams.size === 0) {
         fetchRead()
         .then(response => {
+
             if (response.status === "disconnected") {
                 // Masque les boutons de suppression et de mise à jour lorsque l'utilisateur est déconnecté.
                 deleteBtn.classList.add("hide");
@@ -57,6 +60,10 @@ function read() {
 
             if (response.status === "connected" && localStorage.token && localStorage.user) {
                 // Affiche les boutons de suppression et de mise à jour lorsque l'utilisateur est connecté.
+                if (JSON.parse(localStorage.user).role === "Admin") {
+                    deleteBtn.remove();
+                }
+
                 deleteBtn.classList.remove("hide");
                 updateBtn.classList.remove("hide");
 

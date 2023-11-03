@@ -47,9 +47,13 @@ class Users extends Database
                 'email' => $params['email'],
                 'role_id' => $params['role_id']
             ];
+            $exect = $this->executeReq($req, $params);
 
-            $this->executeReq($req, $params);
+            if (isset($exect['status']) && $exect['status'] === "error") {
+                return false;
+            }
             return true;
+
         } catch (\Exception $e) {
             echo $e->getMessage();
             return false;

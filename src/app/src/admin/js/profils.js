@@ -1,8 +1,9 @@
 "use strict";
 
 import { fetchReadAll } from "../../actions/actions_admin.js";
-import { configPath, redirect } from "../../services/utils.js";
+import { configPath, redirect, notAllowedRedirection } from "../../services/utils.js";
 
+notAllowedRedirection();
 /**
  * Récupère et affiche la liste des utilisateurs (à l'exception des utilisateurs avec le rôle "Admin") depuis l'API.
  */
@@ -71,6 +72,7 @@ function readAdmin() {
             const deleteForm = document.createElement("form");
             deleteForm.action = "?route=admin_delete_user";
             deleteForm.method = "post";
+
 
             const deleteBtn = document.createElement("button");
             deleteBtn.title = "Supprimer : permet de supprimer le profil d'un utilisateur";

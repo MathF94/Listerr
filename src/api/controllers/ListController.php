@@ -259,11 +259,11 @@ class ListController
 
             if (!empty($this->user->id)) {
                 $model = new Lists();
-                $list = $model->oneListById((int)$id);
+                $list = $model->oneListById($id);
 
                 $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_UPDATE_LIST);
                 if (empty(count($errors))) {
-                    $listId = (int)$list->id;
+                    $listId = $list->id;
 
                     $params = [
                         'title' => $_POST['title'],
@@ -302,10 +302,10 @@ class ListController
         try {
             if (!empty($this->user->id)) {
                 $model = new Lists();
-                $list = $model->oneListById((int)$id);
+                $list = $model->oneListById($id);
 
                 if (!empty($list)) {
-                    $listId = (int)$list->id;
+                    $listId = $list->id;
                     $model->deleteList($listId);
 
                     return json_encode([

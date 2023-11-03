@@ -92,13 +92,18 @@ class UserController
                 $params["password"] = $this->encryption->encrypt($params["password"]);
                 $params["role_id"] = User::ROLE_USER;
                 $model = new Users();
-                $model->create($params);
+                $create = $model->create($params);
 
+                if ($create) {
+                    return json_encode([
+                        "status" => "success"
+                    ]);
+                }
                 return json_encode([
-                    "status" => "success"
+                    "status" => "fail",
+                    "errors" => "Ce login existe déjà"
                 ]);
             }
-
             return json_encode([
                 "status" => "fail",
                 "errors" => $errors
@@ -180,7 +185,7 @@ class UserController
      *                - En cas d'échec :
      *                   Réponse JSON : "disconnected" avec un message d'erreur invitant à se reconnecter.
      */
-    public function read(string $tokenUser, ?string $userId = null): string
+    public function read(string $tokenUser, ?int $userId = null): string
     {
         try {
             if (!empty($tokenUser)) {
@@ -190,7 +195,7 @@ class UserController
                 $modelUser = new Users();
                 // faire une condition en fonction du $_GET pour récupérer l'id à visualiser
 
-                if ($userId === "undefined") {
+                if (empty($userId)) {
                     $user = $modelUser->readOne($login);
 
                     if (!$session->isExpired($decrypt, $user)) {
@@ -209,7 +214,6 @@ class UserController
                             "message" => "La connexion a été perdue, merci de vous reconnecter"
                         ]);
                     };
-
                 } else {
                     // fonction readById
                     $user = $modelUser->readById((int)$userId);

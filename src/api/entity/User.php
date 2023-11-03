@@ -38,7 +38,7 @@ class User
     /**
      * Définit le rôle de l'utilisateur en utilisant le tableau de correspondance ROLES.
      *
-     * @param int $value - Valeur du rôle de l'utilisateur (ROLE_ADMIN ou ROLE_USER).
+     * @param int $value - ID du rôle de l'utilisateur (ROLE_ADMIN ou ROLE_USER).
      * @return User - L'objet utilisateur actuel pour permettre les appels en chaîne.
      */
     public function setRole(int $value): User

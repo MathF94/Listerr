@@ -2,7 +2,9 @@
 
 import { fetchRead, fetchUpdate } from "../../actions/actions_user.js";
 import { CSRFToken } from "../../services/CSRFToken.js";
-import { configPath, redirect, dialog } from "../../services/utils.js";
+import { configPath, redirect, dialog, notAllowedRedirection } from "../../services/utils.js";
+
+notAllowedRedirection();
 
 /**
  * Gère le processus de mise à jour du profil de l'utilisateur, y compris la récupération des données actuelles de l'utilisateur,

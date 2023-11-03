@@ -49,7 +49,8 @@ class Router
                 case 'user_profil':
                     if ($this->isAllowedMethod('GET')) {
                         $user = new UserController();
-                        echo $user->read($headers['Authorization'], $headers['id']); // readOne
+                        $id = $_GET['id'] ?? null;
+                        echo $user->read($headers['Authorization'], $id); // readOne
                     }
                     break;
 
@@ -121,14 +122,14 @@ class Router
                 case 'update_list':
                     if ($this->isAllowedMethod('POST')) {
                         $list = new ListController($headers['Authorization']);
-                        echo $list->updateList($headers['id'], $headers['X-CSRFToken']); // update
+                        echo $list->updateList($_POST['id'], $headers['X-CSRFToken']); // update
                     }
                     break;
 
                 case 'delete_list':
                     if ($this->isAllowedMethod('POST')) {
                         $list = new ListController($headers['Authorization']);
-                        echo $list->deleteList($headers['id']); // delete
+                        echo $list->deleteList($_POST['id']); // delete
                     }
                     break;
 

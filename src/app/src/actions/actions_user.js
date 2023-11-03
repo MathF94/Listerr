@@ -55,10 +55,13 @@ async function fetchLogin(form) {
  */
 async function fetchRead(id) {
     try {
-        const url = `${configPath.apiPath}/?route=user_profil`;
+        let url = `${configPath.apiPath}/?route=user_profil`;
+        if(id) {
+            url += `&id=${id}`;
+        }
         return await fetch(url, {
             method: "GET",
-            headers: {"Authorization": localStorage.getItem("token"), id},
+            headers: {"Authorization": localStorage.getItem("token")},
             }).then(response => response.json());
 
     } catch (error) {

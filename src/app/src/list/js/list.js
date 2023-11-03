@@ -134,6 +134,11 @@ function list() {
                             updateList.classList.remove("hidden");
                             oneList.classList.add("hidden");
 
+                            if (data.type === "TodoList") {
+                                const radio = document.querySelector("#todo");
+                                radio.checked = true;
+                            }
+
                             const inputTitle = document.querySelector("#title");
                             inputTitle.value = `${data.title}`;
 
@@ -172,6 +177,10 @@ function list() {
             }
         })
     }
+}
+
+function updateList(){
+
 }
 
 document.addEventListener("DOMContentLoaded", () => {
