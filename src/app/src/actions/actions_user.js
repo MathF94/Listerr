@@ -53,9 +53,12 @@ async function fetchLogin(form) {
  *
  * @returns {Promise<Object|null>} Une promesse résolue avec les données du profil de l'utilisateur ou null en cas d'erreur.
  */
-async function fetchRead() {
+async function fetchRead(id) {
     try {
-        const url = `${configPath.apiPath}/?route=user_profil`;
+        let url = `${configPath.apiPath}/?route=user_profil`;
+        if(id) {
+            url += `&id=${id}`;
+        }
         return await fetch(url, {
             method: "GET",
             headers: {"Authorization": localStorage.getItem("token")},

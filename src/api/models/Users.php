@@ -47,9 +47,13 @@ class Users extends Database
                 'email' => $params['email'],
                 'role_id' => $params['role_id']
             ];
+            $exect = $this->executeReq($req, $params);
 
-            $this->executeReq($req, $params);
+            if (isset($exect['status']) && $exect['status'] === "error") {
+                return false;
+            }
             return true;
+
         } catch (\Exception $e) {
             echo $e->getMessage();
             return false;
@@ -103,6 +107,7 @@ class Users extends Database
     public function readOne(string $login): ?User
     {
         try {
+
             $req = "SELECT `id`,
                             `login`,
                             `password`,
@@ -115,10 +120,34 @@ class Users extends Database
                     ORDER BY created_at DESC";
 
             $result = $this->findOne($req, ['login' => $login]);
-
             $user = new User();
             $user->populate($result);
             return $user;
+
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return null;
+        }
+    }
+    public function readById(int $id): ?User
+    {
+        try {
+            $req = "SELECT `id`,
+                            `login`,
+                            `password`,
+                            `name`,
+                            `firstname`,
+                            `email`,
+                            `role_id`
+                    FROM `user`
+                    WHERE `id` = :id
+                    ORDER BY created_at DESC";
+
+            $result = $this->findOne($req, ['id' => $id]);
+            $user = new User();
+            $user->populate($result);
+            return $user;
+
         } catch (\Exception $e) {
             echo $e->getMessage();
             return null;

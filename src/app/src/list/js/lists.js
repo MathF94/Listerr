@@ -42,7 +42,7 @@ function lists() {
             };
         })
     })
-
+ 
     // Récupère et affiche la liste des listes existantes.
     fetchReadAllLists()
     .then(response => {

@@ -71,4 +71,10 @@ function dialog({title, content, hasTimeOut}) {
     };
 };
 
-export { configPath, redirect, dialog };
+function notAllowedRedirection() {
+    if (!localStorage.token || localStorage.token === undefined ) {
+        redirect(`${configPath.basePath}`, 0);
+    }
+}
+
+export { configPath, redirect, dialog, notAllowedRedirection };

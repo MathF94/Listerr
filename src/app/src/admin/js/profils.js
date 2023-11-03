@@ -1,7 +1,9 @@
 "use strict";
 
 import { fetchReadAll } from "../../actions/actions_admin.js";
+import { configPath, redirect, notAllowedRedirection } from "../../services/utils.js";
 
+notAllowedRedirection();
 /**
  * Récupère et affiche la liste des utilisateurs (à l'exception des utilisateurs avec le rôle "Admin") depuis l'API.
  */
@@ -45,14 +47,24 @@ function readAdmin() {
             const tdReadBtn = document.createElement("td");
             const readBtn = document.createElement("button");
             readBtn.textContent = "Lire";
-            readBtn.title = "Lire : amène vers le profil d'un utilisateur et ses listes"
+            readBtn.title = "Lire : amène vers le profil d'un utilisateur et ses listes";
+            readBtn.id = "readUserProfil";
+            readBtn.value = column.id;
+
+            readBtn.addEventListener("click", function(e){
+                e.preventDefault();
+                redirect(`${configPath.basePath}/user/pages/profil.html?id=${column.id}`, 0);
+            })
+
             tdReadBtn.appendChild(readBtn);
             tr.appendChild(tdReadBtn);
 
             const tdEditBtn = document.createElement("td");
             const editBtn = document.createElement("button");
             editBtn.textContent = "Modifier";
-            editBtn.title = "Modifier : permet de modifier le profil d'un utilisateur"
+            editBtn.title = "Modifier : permet de modifier le profil d'un utilisateur";
+            editBtn.id = "editUserProfil";
+            editBtn.value = column.id;
             tdEditBtn.appendChild(editBtn);
             tr.appendChild(tdEditBtn);
 
@@ -61,10 +73,12 @@ function readAdmin() {
             deleteForm.action = "?route=admin_delete_user";
             deleteForm.method = "post";
 
+
             const deleteBtn = document.createElement("button");
-            deleteBtn.title = "Supprimer : permet de supprimer le profil d'un utilisateur"
+            deleteBtn.title = "Supprimer : permet de supprimer le profil d'un utilisateur";
+            deleteBtn.value = column.id;
+            deleteBtn.id = "deleteUserProfil";
             deleteBtn.type = "submit";
-            deleteBtn.value = "delete";
             deleteBtn.textContent = "Supprimer";
             deleteForm.appendChild(deleteBtn);
             tdDeleteBtn.appendChild(deleteForm);

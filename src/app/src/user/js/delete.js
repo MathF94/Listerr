@@ -8,7 +8,6 @@ import { configPath, redirect, dialog } from "../../services/utils.js";
  */
 function deleteUser() {
     const deleteBtn = document.querySelector('#delete');
-
     deleteBtn.addEventListener('click', function(e){
         e.preventDefault();
 

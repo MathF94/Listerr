@@ -74,14 +74,17 @@ async function fetchReadAllLists() {
  */
 async function fetchUpdateList(form, id) {
     try {
+        const formData = new FormData(form);
+        formData.append('id', id);
+
         const url = `${configPath.apiPath}/?route=update_list`;
         return await fetch(url, {
             headers: {
-                "Authorization": localStorage.getItem("token"), id,
+                "Authorization": localStorage.getItem("token"),
                 "X-CSRFToken": localStorage.getItem("csrfToken")
             },
             method: "POST",
-            body: new FormData(form),
+            body: formData,
             }).then(response => response.json());
 
     } catch (error) {
@@ -98,10 +101,14 @@ async function fetchUpdateList(form, id) {
  */
 async function fetchDeleteList(id) {
     try {
+        const formData = new FormData();
+        formData.append('id', id);
+
         const url = `${configPath.apiPath}/?route=delete_list`;
         return await fetch(url, {
-            headers: {"Authorization": localStorage.getItem("token"), id},
+            headers: {"Authorization": localStorage.getItem("token")},
             method: "POST",
+            body: formData
             }).then(response => response.json());
 
     } catch (error) {

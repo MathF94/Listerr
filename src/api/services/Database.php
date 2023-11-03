@@ -49,10 +49,10 @@ class Database
             return $query->fetchAll(); // Récupérer un jeu d'enregistrements
 
         } catch (\Exception $e) {
-            return json_encode([
+            return [
                 'status' => 'error',
                 'message' => $e->getMessage()
-            ]);
+            ];
         }
     }
 
@@ -78,10 +78,10 @@ class Database
             }
             return $result;
         } catch (\Exception $e) {
-            return json_encode([
+            return [
                 'status' => 'error',
                 'message' => $e->getMessage()
-            ]);
+            ];
         }
     }
 
@@ -102,10 +102,10 @@ class Database
             $query->execute($params);
             return $query->fetch(\PDO::FETCH_ASSOC);
         } catch (\Exception $e) {
-            return json_encode([
+            return [
                 'status' => 'error',
                 'message' => $e->getMessage()
-            ]);
+            ];
         }
     }
 }
