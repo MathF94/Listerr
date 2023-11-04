@@ -8,13 +8,13 @@ import { configPath, redirect, dialog } from "../../services/utils.js";
  * Fonction principale pour gérer la page des listes.
  */
 function lists() {
-    const createList = document.querySelector("#listCreater");
+    const createListBtn = document.querySelector("#listCreater");
     const listForm = document.querySelector("#listForm");
     const cancelForm = document.querySelector("#cancelForm");
 
     // Affiche le formulaire de création de liste lorsqu'on clique sur le bouton "Nouvelle liste".
-    createList.addEventListener("click", function(){
-        if (createList.value === "newList") {
+    createListBtn.addEventListener("click", function(){
+        if (createListBtn.value === "newList") {
             listForm.classList.remove("hidden");
         }
     })
@@ -42,7 +42,7 @@ function lists() {
             };
         })
     })
- 
+
     // Récupère et affiche la liste des listes existantes.
     fetchReadAllLists()
     .then(response => {

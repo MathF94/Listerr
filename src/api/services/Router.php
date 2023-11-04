@@ -133,12 +133,13 @@ class Router
                     }
                     break;
 
-                    // case 'create_card':
-                    //     if ($this->isAllowedMethod('POST')) {
-                    //         // $card = new CardController();
-                    //         // echo $card->create(); // create
-                    //     }
-                    //     break;
+                    case 'create_card':
+                        if ($this->isAllowedMethod('POST')) {
+                            var_dump($headers);
+                            // $card = new CardController();
+                            // echo $card->create(); // create
+                        }
+                        break;
 
                     // case 'read_card':
                     //     if ($this->isAllowedMethod('GET')) {

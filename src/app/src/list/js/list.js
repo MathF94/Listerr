@@ -3,7 +3,7 @@
 import { fetchReadOneListById, fetchDeleteList, fetchUpdateList } from "../../actions/actions_lists";
 import { CSRFToken } from "../../services/CSRFToken.js";
 import { configPath, redirect, dialog } from "../../services/utils.js";
-import { createUpdateForm } from "./form.js";
+import { createUpdateForm } from "./update_form_list.js";
 
 /**
  * Fonction principale pour gérer la page de détails d'une liste.
@@ -48,30 +48,12 @@ function list() {
                 deleteBtnList.value = `${data.id}`;
                 deleteBtnList.textContent = "Supprimer";
 
-                const card = document.createElement("div");
-                card.id = "newCard";
-                card.class = "newCard";
-
-                const createCardBtn = document.createElement("button");
-                createCardBtn.id = `card-id`;
-                createCardBtn.name = "newCard";
-                createCardBtn.type = "button";
-                createCardBtn.value = `newCard`;
-
-                if (data.type === "TodoList") {
-                    createCardBtn.textContent = "Première tâche !";
-                } else {
-                createCardBtn.textContent = "Faites un voeu !";
-                }
-
-                const creatCardBtn = document.createElement("button");
-
                 for (const index in data) {
                     const item = document.createElement("li");
                     const object = data[index];
 
                     // Exclut certains éléments de la liste (id, userId, type, title)
-                    if (["id", "userId", "type", "title"].includes(`${index}`)) {
+                    if (["id", "userId", "type", "title", "cards"].includes(`${index}`)) {
                         continue;
                     }
                     if ( index === "user" && typeof(data[index]) === "object") {
@@ -91,13 +73,11 @@ function list() {
                     oneList.appendChild(list);
                 }
                 if (userId !== data.userId) {
-                    console.log("pas touche");
+                    console.warn("pas touche");
 
                 } else {
                     oneList.appendChild(deleteBtnList);
                     oneList.appendChild(updateBtnList);
-                    oneList.appendChild(card);
-                    card.appendChild(createCardBtn);
 
                     // Gestion de la suppression de la liste
                     deleteBtnList.addEventListener("click", function(e){
@@ -177,10 +157,6 @@ function list() {
             }
         })
     }
-}
-
-function updateList(){
-
 }
 
 document.addEventListener("DOMContentLoaded", () => {

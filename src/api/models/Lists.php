@@ -157,6 +157,8 @@ class Lists extends Database
         }
     }
 
+    
+
     /**
      * Met à jour les informations d'une liste dans la base de données.
      *

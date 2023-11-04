@@ -13,6 +13,10 @@ function readAdmin() {
     .then(response => {
         const data = response.data;
         const tbody = document.querySelector("tbody");
+        const listUser = document.querySelector("#newUser");
+        listUser.addEventListener("click", function(e){
+            redirect(`${configPath.basePath}/user/pages/registration.html`, 0);
+        });
 
         for (const index in data) {
             const column = data[index];
@@ -48,7 +52,7 @@ function readAdmin() {
             const readBtn = document.createElement("button");
             readBtn.textContent = "Lire";
             readBtn.title = "Lire : amène vers le profil d'un utilisateur et ses listes";
-            readBtn.id = "readUserProfil";
+            readBtn.id = `readUserProfil-${column.id}`;
             readBtn.value = column.id;
 
             readBtn.addEventListener("click", function(e){
@@ -63,7 +67,7 @@ function readAdmin() {
             const editBtn = document.createElement("button");
             editBtn.textContent = "Modifier";
             editBtn.title = "Modifier : permet de modifier le profil d'un utilisateur";
-            editBtn.id = "editUserProfil";
+            editBtn.id = `editUserProfil-${column.id}`;
             editBtn.value = column.id;
             tdEditBtn.appendChild(editBtn);
             tr.appendChild(tdEditBtn);
@@ -77,7 +81,7 @@ function readAdmin() {
             const deleteBtn = document.createElement("button");
             deleteBtn.title = "Supprimer : permet de supprimer le profil d'un utilisateur";
             deleteBtn.value = column.id;
-            deleteBtn.id = "deleteUserProfil";
+            deleteBtn.id = `deleteUserProfil-${column.id}`;
             deleteBtn.type = "submit";
             deleteBtn.textContent = "Supprimer";
             deleteForm.appendChild(deleteBtn);
