@@ -64,7 +64,7 @@ function createUpdateForm(updateList) {
 
     const updateBtnListCancel = document.createElement("button");
     updateBtnListCancel.id = "updateBtnListCancel";
-    updateBtnListCancel.type = "submit";
+    updateBtnListCancel.type = "button";
     updateBtnListCancel.value = "updateBtnListCancel";
     updateBtnListCancel.innerText = "Annuler";
 

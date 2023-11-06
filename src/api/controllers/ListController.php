@@ -146,12 +146,9 @@ class ListController
                         ]);
                     }
                 }
-                
+
                 return json_encode([
                     'status' => 'readOneList',
-                    // Soit 'user_id' a l'id de l'utilisateur, soit l'id a 0 comme valeur,
-                    // ainsi l'id aura toujours une valeur, même si l'id est null.
-                    'user_id' => $this->user->id !== null ? $this->user->id : 0,
                     'data' => $list
                 ]);
             };

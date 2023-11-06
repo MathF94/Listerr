@@ -39,7 +39,6 @@ function createCardForm(newCard) {
     labelPriority.for = "priority";
     labelPriority.innerText = "Priorité";
 
-
     const inputPriority = document.createElement("input");
     inputPriority.type = "number";
     inputPriority.name = "priority";
@@ -58,7 +57,7 @@ function createCardForm(newCard) {
 
     const createBtnCardCancel = document.createElement("button");
     createBtnCardCancel.id = "CardCancelBtn";
-    createBtnCardCancel.type = "submit";
+    createBtnCardCancel.type = "button";
     createBtnCardCancel.value = "CardCancelBtn";
     createBtnCardCancel.innerText = "Annuler";
 

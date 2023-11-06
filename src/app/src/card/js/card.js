@@ -5,7 +5,7 @@ import { CSRFToken } from "../../services/CSRFToken.js";
 import { configPath, redirect, dialog } from "../../services/utils.js";
 import { createCardForm } from "./form_card.js";
 
-function card() {
+function card(canCreateCard) {
     const urlParams = new URLSearchParams(document.location.search);
     const id = urlParams.get("id");
 
@@ -20,7 +20,12 @@ function card() {
     createCardBtn.name = "newCard";
     createCardBtn.type = "button";
     createCardBtn.value = `newCard`;
-    createCardBtn.textContent = "Nouveau souhait / nouvelle tâche"
+
+    let btnLabel = "Nouveau souhait";
+    if (localStorage.getItem("typeList") === "TodoList") {
+        btnLabel = "Nouvelle tâche";
+    }
+    createCardBtn.textContent = btnLabel;
 
     createCardBtn.addEventListener("click", function(e){
         if (createCardBtn.value !== "newCard") {
@@ -28,43 +33,49 @@ function card() {
         }
         createCardBtn.disabled = true;
         const newCard = document.querySelector("#newCard");
+
         createCardForm(newCard);
 
         const cardForm = document.querySelector("#createFormCard");
         CSRFToken(cardForm.id);
 
+        const cardCancelBtn = document.querySelector("#CardCancelBtn");
+        cardCancelBtn.addEventListener("click", function(){
+            createCardBtn.disabled = false;
+            cardForm.remove();
+        })
+
         cardForm.addEventListener("submit", function(e) {
             e.preventDefault();
             createCardBtn.disabled = false;
 
-            if (e.submitter.value === "CardCancelBtn") {
-                cardForm.remove();
-            } else {
-                fetchCreateCard(cardForm, id)
-                .then(response => {
-                    localStorage.removeItem("csrfToken");
+            fetchCreateCard(cardForm, id)
+            .then(response => {
+                localStorage.removeItem("csrfToken");
 
-                    if (response.status === "success") {
-                        dialog({title: "Et voilà la carte !", content:"à la suivante !"});
-                        redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                if (response.status === "success") {
+                    dialog({title: "Et voilà la carte !", content:"à la suivante !"});
+                    redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
 
-                    }
-                    if (response.status === "fail") {
-                        dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
-                        redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
-                    };
-                });
-            };
+                }
+                if (response.status === "fail") {
+                    dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
+                    redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                };
+            });
         });
     });
-    oneList.after(cardSection);
-    cardSection.appendChild(createCardBtn);
+
+    if (canCreateCard) {
+        oneList.after(cardSection);
+        cardSection.appendChild(createCardBtn);
+    }
 
     fetchReadAllCardsByList(id)
     .then(response => {
         if (response.status === "readOneList") {
-
             const dataCards = response.data.cards;
+
             for (const indexCard in dataCards) {
                 const objectCard = dataCards[indexCard];
 
@@ -99,21 +110,21 @@ function card() {
                     priority.classList.add("star");
                     priority.setAttribute("data-star", i+1);
                     priority.textContent = i < priorityValue ? "\u2605" : "\u2606" ;
-
                     contentCard.appendChild(priority);
                 }
 
                 for (const key in objectCard) {
                     const text = document.createElement("p");
+                    const small = document.createElement("small");
 
                     if (["id", "listId", "checked", "priority"].includes(`${key}`)) {
                         continue;
                     };
 
                     if (key === "createdAt") {
-                        text.innerText = `Créée le ${objectCard.createdAt}`;
+                        small.innerText = `Créée le ${objectCard.createdAt}`;
                     } else if (key === "updatedAt") {
-                        text.innerText = `Modifiée le ${objectCard.updatedAt}`;
+                        small.innerText = `Modifiée le ${objectCard.updatedAt}`;
                     } else  {
                         text.innerText = `${objectCard[key]}`;
                     };
@@ -121,19 +132,16 @@ function card() {
                         check.checked = Boolean(objectCard.checked);
                     }
 
-
                     contentCard.appendChild(text);
+                    contentCard.appendChild(small);
                     contentCard.appendChild(check);
                     contentCard.appendChild(deleteBtnCard);
                     contentCard.appendChild(updateBtnCard);
-                    cardSection.appendChild(contentCard);
+                    cardSection.after(contentCard);
                 }
-
             }
         }
     })
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    card();
-});
+export { card };

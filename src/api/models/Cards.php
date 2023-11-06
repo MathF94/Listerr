@@ -37,9 +37,68 @@ class Cards extends Database
         }
     }
     // readOne
-    
+    public function oneCardById(int $id): ?Card
+    {
+        try {
+            $req = "SELECT `id`,
+                            `title`,
+                            `description`,
+                            `priority`,
+                            `checked`,
+                            `list_id`
+                    FROM `card`
+                    WHERE `id` = :id
+                    ORDER BY created_at DESC";
+
+            $result = $this->findOne($req, ['id' => $id]);
+            $card = new Card();
+            $card->populate($result);
+            return $card;
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return null;
+        }
+    }
+
+
+    // readAll
+    public function getAllByList(int $listId): array
+    {
+        try {
+            $req = "SELECT `c`.`id`,
+                            `c`.`title`,
+                            `c`.`description`,
+                            `c`.`priority`,
+                            `c`.`checked`,
+                            `c`.`list_id`,
+                            `c`.`created_at`,
+                            `c`.`updated_at`
+                    FROM `card` `c`
+                    INNER JOIN `list` `l`  ON `c`.`list_id` = `l`.`id`
+                    WHERE `l`.`id` = :id
+                    ORDER BY `c`.`created_at` DESC"  ;
+
+            $results = $this->findAll(
+                $req,
+                ['id' => $listId]
+            );
+            $cardsArray = [];
+
+            foreach ($results as $result) {
+                $card = new Card();
+                $card->populate($result);
+                $cardsArray[] = $card;
+            }
+            return $cardsArray;
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return null;
+        }
+    }
 
     // update
+
+
 
     /**
      * Supprime une carte de la base de données.
@@ -62,38 +121,4 @@ class Cards extends Database
     }
 
 
-
-    // readAll
-    public function getAllByList(int $listId): array
-    {
-        try {
-            $req = "SELECT `c`.`id`,
-                            `c`.`title`,
-                            `c`.`description`,
-                            `c`.`priority`,
-                            `c`.`checked`,
-                            `c`.`list_id`,
-                            `c`.`created_at`,
-                            `c`.`updated_at`
-                    FROM `card` `c`
-                    INNER JOIN `list` `l`  ON `c`.`list_id` = `l`.`id`
-                    WHERE `l`.`id` = :id";
-
-            $results = $this->findAll(
-                $req,
-                ['id' => $listId]
-            );
-            $cardsArray = [];
-
-            foreach ($results as $result) {
-                $card = new Card();
-                $card->populate($result);
-                $cardsArray[] = $card;
-            }
-            return $cardsArray;
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-            return null;
-        }
-    }
 }

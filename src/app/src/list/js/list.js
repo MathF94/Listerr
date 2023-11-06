@@ -4,6 +4,7 @@ import { fetchReadOneListById, fetchDeleteList, fetchUpdateList } from "../../ac
 import { CSRFToken } from "../../services/CSRFToken.js";
 import { configPath, redirect, dialog } from "../../services/utils.js";
 import { createUpdateForm } from "./update_form_list.js";
+import { card } from "../../card/js/card.js";
 
 /**
  * Fonction principale pour gérer la page de détails d'une liste.
@@ -16,8 +17,10 @@ function list() {
 
         fetchReadOneListById(id)
         .then(response => {
-            const data = response.data;
-            const userId = response.user_id;
+            const data = response.data; // user de la liste
+
+            localStorage.setItem("typeList", data.type);
+            const userId = JSON.parse(localStorage.user).id; // user courant
 
             if (response.status === "readOneList") {
                 const updateList = document.querySelector("#updateList");
@@ -71,19 +74,20 @@ function list() {
                     oneList.appendChild(titleList);
                     oneList.appendChild(list);
                 };
-                if (userId !== data.userId) {
-                    console.warn("pas touche");
 
-                } else {
+                localStorage.setItem("canCreateCard", userId === data.user.id)
+                if (userId === data.user.id) {
+
                     oneList.appendChild(deleteBtnList);
                     oneList.appendChild(updateBtnList);
 
                     // Gestion de la suppression de la liste
                     deleteBtnList.addEventListener("click", function(e){
                         e.preventDefault();
-
                         const dltBtnId = parseInt(e.target.value);
+
                         if (dltBtnId !== data.id) {
+
                             console.warn("pas touche");
                             return;
                         } else if (confirm('Voulez-vous vraiment vous supprimer la liste ?') === true) {
@@ -124,35 +128,38 @@ function list() {
                             const inputDescription = document.querySelector("#description");
                             inputDescription.value = `${data.description}`;
 
-                            const updateBtnListCancel = document.querySelector("#updateBtnListCancel");
                             const updateFormList  = document.querySelector("#updateFormList");
+
+                            const listCancelBtn = document.querySelector("#updateBtnListCancel");
+                            listCancelBtn.addEventListener("click", function(){
+                                inputTitle.value = "";
+                                inputDescription.value = "";
+                            })
 
                             updateFormList.addEventListener("submit", function(e) {
                                 e.preventDefault();
 
-                                if (e.submitter.value === "updateBtnListCancel") {
-                                    redirect(`${configPath.basePath}/list/pages/list.html?id=${updtBtnId}`, 0);
-                                } else {
-                                    fetchUpdateList(updateFormList, data.id)
-                                    .then((response) => {
-                                        localStorage.removeItem("csrfToken");
+                                fetchUpdateList(updateFormList, data.id)
+                                .then((response) => {
+                                    localStorage.removeItem("csrfToken");
 
-                                        if (response.status === "updated") {
-                                            dialog({title: "Modification de la liste", content: "Votre liste a bien été mise à jour."});
-                                            redirect(`${configPath.basePath}/list/pages/list.html?id=${updtBtnId}`);
-                                        };
-                                        if (response.status === "fail") {
-                                            dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
-                                            redirect(`${configPath.basePath}/list/pages/list.html?id=${updtBtnId}`);
-                                        };
-                                    });
-                                };
+                                    if (response.status === "updated") {
+                                        dialog({title: "Modification de la liste", content: "Votre liste a bien été mise à jour."});
+                                        redirect(`${configPath.basePath}/list/pages/list.html?id=${updtBtnId}`);
+                                    };
+                                    if (response.status === "fail") {
+                                        dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
+                                        redirect(`${configPath.basePath}/list/pages/list.html?id=${updtBtnId}`);
+                                    };
+                                });
                             });
                         };
                     });
                 };
             };
+            card(userId === data.user.id);
         });
+
     };
 };
 

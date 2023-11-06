@@ -156,9 +156,9 @@ class Router
                     break;
 
                 case 'delete_card':
-                    if ($this->isAllowedMethod('GET')) {
-                        // $card = new CardController();
-                        // echo $card->delete(); // delete
+                    if ($this->isAllowedMethod('POST')) {
+                        $card = new CardController($headers['Authorization']);
+                        echo $card->deleteCard($_POST['id']); // delete
                     }
                     break;
 

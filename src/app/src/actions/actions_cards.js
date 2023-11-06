@@ -43,7 +43,26 @@ async function fetchReadAllCardsByList(id) {
     }
 }
 
+
+async function fetchDeleteCard(id){
+    try {
+        const formData = new FormData();
+        formData.append('id', id);
+
+        const url = `${configPath.apiPath}/?route=delete_card`;
+        return await fetch(url, {
+            headers: {"Authorization": localStorage.getItem("token")},
+            method: "POST",
+            body: formData
+            }).then(response => response.json());
+
+    } catch (error) {
+        console.error("Erreur lors de la requête fetch :", error);
+        return null;
+    }
+}
 export {
     fetchCreateCard,
-    fetchReadAllCardsByList
+    fetchReadAllCardsByList,
+    fetchDeleteCard
 };

@@ -106,4 +106,35 @@ class CardController
             ]);
         }
     }
+
+    /**
+     * Cette méthode récupère la suppression d'une carte d'une liste.
+     * @param int $id - L'ID de la carte à supprimer.
+     * @return string - Réponse JSON contenant un message de succès ou un message d'erreur.
+     */
+    public function deleteCard(int $id): string
+    {
+        try {
+            if (!empty($this->user->id)) {
+                $model = new Cards();
+                $card = $model->oneCardById($id);
+
+                if (!empty($card)) {
+                    $cardId = $card->id;
+                    $model->delete($cardId);
+
+                    return json_encode([
+                        'status' => 'deleted',
+                        'message' => 'la liste a bien été supprimée.'
+                    ]);
+                };
+                return json_encode(['status' => 'fail']);
+            }
+        } catch (\Exception $e) {
+            return json_encode([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        };
+    }
 }
