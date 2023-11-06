@@ -79,7 +79,7 @@ function lists() {
                     if (key === "type") {
                         titleH3.innerText = `${object.type} - ${object.title}`;
                     }
-                    if (["status", "id", "userId", "type", "title"].includes(`${key}`)) {
+                    if (["status", "id", "userId", "type", "title", "cards"].includes(`${key}`)) {
                         continue;
                     }
                     if (key === "user" && typeof(value) === "object") {
@@ -117,7 +117,7 @@ function lists() {
                             dialog({title: "Suppression de la liste",
                             content: `<p>Votre liste a bien été supprimée.</p>`
                             });
-                            redirect('http://localhost/listerr/src/app/src/list/pages/lists.html');
+                            redirect(`${configPath.basePath}/list/pages/list.html`);
                         });
                     }
                 })
@@ -128,7 +128,7 @@ function lists() {
                     if (object.type === "TodoList" && object.user.id !== JSON.parse(localStorage.getItem("user")).id) {
                         return false;
                     }
-                    redirect(`http://localhost/listerr/src/app/src/list/pages/list.html?id=${object.id}`, 0);
+                    redirect(`${configPath.basePath}/list/pages/list.html?id=${object.id}`, 0);
                 })
             }
         }

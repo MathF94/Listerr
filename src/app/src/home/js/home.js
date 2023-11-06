@@ -50,7 +50,7 @@ function readAllLists() {
                     if (key === "type") {
                         titleH3.innerText = `${object.type} - ${object.title}`;
                     }
-                    if (["status", "id", "userId", "type", "title"].includes(`${key}`)) {
+                    if (["status", "id", "userId", "type", "title", "cards"].includes(`${key}`)) {
                         continue;
                     }
 

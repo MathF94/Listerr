@@ -194,7 +194,6 @@ class UserController
                 $login = $decrypt["login"];
                 $modelUser = new Users();
                 // faire une condition en fonction du $_GET pour récupérer l'id à visualiser
-
                 if (empty($userId)) {
                     $user = $modelUser->readOne($login);
 
@@ -336,7 +335,7 @@ class UserController
      *               - $tokenUser - Jeton Utilisateur pour valider la requête.
      * @return string - Réponse JSON : "success" en cas de succès, "fail" avec un message d'erreur en cas d'échec.
      */
-    public function update(string $csrfToken, string $tokenUser): string
+    public function update(string $tokenUser, string $csrfToken,): string
     {
         try {
             $validToken = $this->csrfToken->isValidToken($csrfToken, "updateForm");

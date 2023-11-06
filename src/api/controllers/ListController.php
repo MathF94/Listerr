@@ -146,7 +146,7 @@ class ListController
                         ]);
                     }
                 }
-
+                
                 return json_encode([
                     'status' => 'readOneList',
                     // Soit 'user_id' a l'id de l'utilisateur, soit l'id a 0 comme valeur,
@@ -272,7 +272,7 @@ class ListController
                     ];
                 }
 
-                $model->updateList($params, $listId);
+                $model->update($params, $listId);
 
                 return json_encode([
                     'status' => 'updated',
@@ -306,7 +306,7 @@ class ListController
 
                 if (!empty($list)) {
                     $listId = $list->id;
-                    $model->deleteList($listId);
+                    $model->delete($listId);
 
                     return json_encode([
                         'status' => 'deleted',

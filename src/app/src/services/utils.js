@@ -8,7 +8,9 @@
  */
 const configPath = {
     basePath: "http://localhost/listerr/src/app/src",
-    apiPath: "http://localhost/listerr/src/api"
+    apiPath: "http://localhost/listerr/src/api",
+    // basePath: "https://mathieufagot.sites.3wa.io/listerr/src/app/src",
+    // apiPath: "https://mathieufagot.sites.3wa.io/listerr/src/api"
 };
 
 /**
@@ -41,7 +43,7 @@ function dialog({title, content, hasTimeOut}) {
     const dialog = document.createElement("dialog");
     dialog.open = "open";
     dialog.prepend(titleH2);
- 
+
     if (typeof(content) === "string")  {
         const div = document.createElement("div");
         div.innerHTML = content;

@@ -22,7 +22,7 @@ function createCardForm(newCard) {
     inputTitle.id = "title";
     inputTitle.placeholder = "Votre titre";
     inputTitle.value = "";
-    // inputTitle.required = true;
+    inputTitle.required = true;
 
     const labelDescription = document.createElement("label");
     labelDescription.for = "description";
@@ -39,13 +39,16 @@ function createCardForm(newCard) {
     labelPriority.for = "priority";
     labelPriority.innerText = "Priorité";
 
+
     const inputPriority = document.createElement("input");
     inputPriority.type = "number";
     inputPriority.name = "priority";
     inputPriority.id = "priority";
+    inputPriority.value = "1";
     inputPriority.placeholder = "Niveau de priorité de 1 à 5";
     inputPriority.min = 1;
     inputPriority.max = 5;
+    inputPriority.required = true;
 
     const createBtnCardValid = document.createElement("button");
     createBtnCardValid.id = "CardValidBtn";
@@ -54,9 +57,9 @@ function createCardForm(newCard) {
     createBtnCardValid.innerText = "Valider";
 
     const createBtnCardCancel = document.createElement("button");
-    createBtnCardCancel.id = "CardCanceBtnl";
+    createBtnCardCancel.id = "CardCancelBtn";
     createBtnCardCancel.type = "submit";
-    createBtnCardCancel.value = "CardCanceBtnl";
+    createBtnCardCancel.value = "CardCancelBtn";
     createBtnCardCancel.innerText = "Annuler";
 
     createFormCard.appendChild(titleForm);

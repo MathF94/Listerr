@@ -157,8 +157,6 @@ class Lists extends Database
         }
     }
 
-    
-
     /**
      * Met à jour les informations d'une liste dans la base de données.
      *
@@ -166,7 +164,7 @@ class Lists extends Database
      * @param int $id - L'ID de la liste à mettre à jour.
      * @return bool - Renvoie true en cas de succès, sinon false.
      */
-    public function updateList(array $params, int $id): bool
+    public function update(array $params, int $id): bool
     {
         try {
             $req = "UPDATE `list`
@@ -192,7 +190,7 @@ class Lists extends Database
      * @param int $id - L'ID de la liste à supprimer.
      * @return bool - Renvoie true en cas de succès, sinon false.
      */
-    public function deleteList(int $id): bool
+    public function delete(int $id): bool
     {
         try {
             $req = "DELETE FROM `list`

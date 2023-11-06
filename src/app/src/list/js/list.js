@@ -1,6 +1,6 @@
 "use strict";
 
-import { fetchReadOneListById, fetchDeleteList, fetchUpdateList } from "../../actions/actions_lists";
+import { fetchReadOneListById, fetchDeleteList, fetchUpdateList } from "../../actions/actions_lists.js";
 import { CSRFToken } from "../../services/CSRFToken.js";
 import { configPath, redirect, dialog } from "../../services/utils.js";
 import { createUpdateForm } from "./update_form_list.js";
@@ -51,11 +51,10 @@ function list() {
                 for (const index in data) {
                     const item = document.createElement("li");
                     const object = data[index];
-
                     // Exclut certains éléments de la liste (id, userId, type, title)
                     if (["id", "userId", "type", "title", "cards"].includes(`${index}`)) {
                         continue;
-                    }
+                    };
                     if ( index === "user" && typeof(data[index]) === "object") {
                         item.innerText = `Par ${data.user.login}`;
                     } else {
@@ -65,13 +64,13 @@ function list() {
                             item.innerText = `Modifiée le ${data.updatedAt}`;
                         } else {
                             item.innerText = `${object}`;
-                        }
-                    }
+                        };
+                    };
 
                     list.appendChild(item);
                     oneList.appendChild(titleList);
                     oneList.appendChild(list);
-                }
+                };
                 if (userId !== data.userId) {
                     console.warn("pas touche");
 
@@ -95,8 +94,8 @@ function list() {
                                 });
                                 redirect(`${configPath.basePath}/list/pages/lists.html`);
                             });
-                        }
-                    })
+                        };
+                    });
 
                     // Gestion de la mise à jour de la liste
                     createUpdateForm(updateList);
@@ -117,7 +116,7 @@ function list() {
                             if (data.type === "TodoList") {
                                 const radio = document.querySelector("#todo");
                                 radio.checked = true;
-                            }
+                            };
 
                             const inputTitle = document.querySelector("#title");
                             inputTitle.value = `${data.title}`;
@@ -133,31 +132,29 @@ function list() {
 
                                 if (e.submitter.value === "updateBtnListCancel") {
                                     redirect(`${configPath.basePath}/list/pages/list.html?id=${updtBtnId}`, 0);
-                                    updateList.classList.add("hidden");
-                                    oneList.classList.remove("hidden");
-                                }
+                                } else {
+                                    fetchUpdateList(updateFormList, data.id)
+                                    .then((response) => {
+                                        localStorage.removeItem("csrfToken");
 
-                                fetchUpdateList(updateFormList, data.id)
-                                .then((response) => {
-                                    localStorage.removeItem("csrfToken");
-
-                                    if (response.status === "updated") {
-                                        dialog({content: "Votre liste a bien été mise à jour."});
-                                        redirect(`${configPath.basePath}/list/pages/list.html?id=${updtBtnId}`);
-                                    }
-                                    if (response.status === "fail") {
-                                        dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
-                                        redirect(`${configPath.basePath}/list/pages/list.html?id=${updtBtnId}`);
-                                    };
-                                })
-                            })
-                        }
-                    })
-                }
-            }
-        })
-    }
-}
+                                        if (response.status === "updated") {
+                                            dialog({title: "Modification de la liste", content: "Votre liste a bien été mise à jour."});
+                                            redirect(`${configPath.basePath}/list/pages/list.html?id=${updtBtnId}`);
+                                        };
+                                        if (response.status === "fail") {
+                                            dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
+                                            redirect(`${configPath.basePath}/list/pages/list.html?id=${updtBtnId}`);
+                                        };
+                                    });
+                                };
+                            });
+                        };
+                    });
+                };
+            };
+        });
+    };
+};
 
 document.addEventListener("DOMContentLoaded", () => {
     list();

@@ -107,7 +107,6 @@ class Users extends Database
     public function readOne(string $login): ?User
     {
         try {
-
             $req = "SELECT `id`,
                             `login`,
                             `password`,

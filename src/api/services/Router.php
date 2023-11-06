@@ -4,6 +4,7 @@ namespace Services;
 
 use Controllers\UserController;
 use Controllers\ListController;
+use Controllers\CardController;
 
 /**
  * Classe pour le routage des demandes HTTP vers les contrôleurs appropriés.
@@ -133,34 +134,33 @@ class Router
                     }
                     break;
 
-                    case 'create_card':
-                        if ($this->isAllowedMethod('POST')) {
-                            var_dump($headers);
-                            // $card = new CardController();
-                            // echo $card->create(); // create
-                        }
-                        break;
+                case 'create_card':
+                    if ($this->isAllowedMethod('POST')) {
+                        $card = new CardController($headers['Authorization']);
+                        echo $card->create($headers['X-CSRFToken']); // create
+                    }
+                    break;
 
-                    // case 'read_card':
-                    //     if ($this->isAllowedMethod('GET')) {
-                    //         // $user = new CardController();
-                    //         // echo $card->read(); // readOne
-                    //     }
-                    //     break;
+                case 'read_card':
+                    if ($this->isAllowedMethod('GET')) {
+                        // $user = new CardController();
+                        // echo $card->read(); // readOne
+                    }
+                    break;
 
-                    // case 'update_card':
-                    //     if ($this->isAllowedMethod('POST')) {
-                    //         // $card = new CardController();
-                    //         // echo $card->update(); // update
-                    //     }
-                    //     break;
+                case 'update_card':
+                    if ($this->isAllowedMethod('POST')) {
+                        // $card = new CardController();
+                        // echo $card->update(); // update
+                    }
+                    break;
 
-                    // case 'delete_card':
-                    //     if ($this->isAllowedMethod('GET')) {
-                    //         // $card = new CardController();
-                    //         // echo $card->delete(); // delete
-                    //     }
-                    //     break;
+                case 'delete_card':
+                    if ($this->isAllowedMethod('GET')) {
+                        // $card = new CardController();
+                        // echo $card->delete(); // delete
+                    }
+                    break;
 
                 default:
                     header('Location: index.php'); // on renvoie vers l'index

@@ -67,5 +67,43 @@ class CardController
         }
     }
 
-    
+    public function create($csrfToken): string
+    {
+        try {
+            $validToken = $this->csrfToken->isValidToken($csrfToken, "createFormCard");
+
+            if (!$validToken) {
+                return json_encode([
+                    'status' => 'fail',
+                    'message' => 'jeton invalide'
+                ]);
+            }
+
+            if (!empty($this->user)) {
+                $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_CREATE_CARD);
+
+                if (empty(count($errors))) {
+                    $params = $_POST;
+                    $model = new Cards();
+                    $model->create($params);
+
+                    return json_encode([
+                        'status' => 'success'
+                    ]);
+                }
+            }
+
+            return json_encode([
+                'status' => 'fail',
+                'errors' => $errors
+            ]);
+
+
+        } catch (\Exception $e) {
+            return json_encode([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
 }
