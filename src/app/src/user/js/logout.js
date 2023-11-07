@@ -1,12 +1,15 @@
 "use strict";
 
-import { fetchLogout } from "./actions.js";
-import { redirect, dialog } from "../../services/utils.js";
+import { fetchLogout } from "../../actions/actions_user.js";
+import { configPath, redirect, dialog } from "../../services/utils.js";
 
+/**
+ * Gère le processus de déconnexion de l'utilisateur.
+ */
 function logout() {
     const anchorLogout = document.querySelector("#logout");
     localStorage.getItem("token");
-    
+
     fetchLogout()
     .then(response => {
         if (response.status === "disconnect") {
@@ -16,7 +19,7 @@ function logout() {
                 });
             localStorage.removeItem("token");
             localStorage.removeItem("user");
-            redirect("http://localhost/listerr/src/app/src/user/pages/login.html", 5000);
+            redirect(`${configPath.basePath}/user/pages/login.html`);
         }
 
         anchorLogout.addEventListener("click", function(e) {
@@ -29,7 +32,7 @@ function logout() {
                     dialog({title: `A bientôt ${response.login} !`,
                             content: "Vous allez être redirigé(e) dans quelques instants vers la page de connexion..."
                         });
-                    redirect("http://localhost/listerr/src/app/src/user/pages/login.html", 5000);
+                    redirect(`${configPath.basePath}/home/pages/home.html`);
                 };
             };
         });
@@ -40,4 +43,4 @@ document.addEventListener("DOMContentLoaded", () => {
     logout();
 })
 
-export default logout;
+export { logout };

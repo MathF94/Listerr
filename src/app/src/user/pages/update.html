@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listerr</title>
+    <script type="module" src="../../actions/actions_user.js"></script>
     <script type="module" src="../../layout/header.js"></script>
     <script type="module" src="../../services/utils.js"></script>
-    <script type="module" src="../js/actions.js"></script>
     <script type="module" src="../js/update.js"></script>
     <script type="module" src="../js/logout.js"></script>
 </head>
 <body>
     <section>
         <h2>Modification de l'utilisateur</h2>
-        <form action="?route=user_update" method="post">
-            <input type="hidden" name="id" id="id"/>
+        <form id="updateForm">
+            <input type="hidden" name="updateId" id="id"/>
 
             <label for="name">Votre nom</label>
             <input type="text" name="name" id="name" placeholder="Votre nom" required/>
@@ -29,7 +29,7 @@
             <input type="email" name="email" id="email" placeholder="Votre email" required/>
 
             <button id="update" type="submit" value="update">Valider</button>
-            <a id="cancelBtn" href="profil.html" class="cancel-button">Retour</a>
+            <button id="updateCancelBtn" type="submit" value="updateCancelBtn">Retour</button>
         </form>
     </section>
 </body>

@@ -5,6 +5,10 @@ namespace Models;
 use Entity\User;
 use Services\Database;
 use Services\Encryption;
+
+/**
+ * La classe Users gère les opérations liées aux utilisateurs dans la base de données.
+ */
 class Users extends Database
 {
     /**
@@ -23,6 +27,12 @@ class Users extends Database
                         ->setIv(self::IV);
     }
 
+    /**
+     * Crée un nouvel utilisateur dans la base de données.
+     *
+     * @param array $params - Les paramètres de l'utilisateur à créer.
+     * @return bool - Renvoie true en cas de succès, sinon false.
+     */
     public function create(array $params): bool
     {
         try {
@@ -37,44 +47,17 @@ class Users extends Database
                 'email' => $params['email'],
                 'role_id' => $params['role_id']
             ];
+            $exect = $this->executeReq($req, $params);
 
-            $this->executeReq($req, $params);
+            if (isset($exect['status']) && $exect['status'] === "error") {
+                return false;
+            }
             return true;
 
         } catch (\Exception $e) {
             echo $e->getMessage();
             return false;
         }
-    }
-
-    public function update(array $parameters, int $id): bool
-    {
-        $req = "UPDATE `user`
-                SET `login`= :login,
-                    `name`= :name,
-                    `firstname` = :firstname,
-                    `email` = :email
-                WHERE `id` = :id";
-        $query = $this->db->prepare($req);
-        $parameters['id'] = $id;
-        return $query->execute($parameters);
-    }
-
-    public function updatePassword(array $parameters):bool
-    {
-        $req = "UPDATE `user`
-                SET `password`= :password
-                WHERE `login` = :login" ;
-        $query = $this->db->prepare($req);
-        return $query->execute($parameters);
-    }
-
-    public function delete(string $login): bool
-    {
-        $req = "DELETE FROM `user`
-                WHERE `login` = :login";
-        $query = $this->db->prepare($req);
-        return $query->execute(['login' => $login]);
     }
 
     public function auth(string $login, string $password): ?User
@@ -108,6 +91,12 @@ class Users extends Database
         }
     }
 
+    /**
+     * Récupère les informations d'un utilisateur en fonction de son login.
+     *
+     * @param string $login - Le login de l'utilisateur à récupérer.
+     * @return User|null - L'objet User correspondant à l'utilisateur ou null si non trouvé.
+     */
     public function readOne(string $login): ?User
     {
         try {
@@ -123,7 +112,30 @@ class Users extends Database
                     ORDER BY created_at DESC";
 
             $result = $this->findOne($req, ['login' => $login]);
+            $user = new User();
+            $user->populate($result);
+            return $user;
 
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return null;
+        }
+    }
+    public function readById(int $id): ?User
+    {
+        try {
+            $req = "SELECT `id`,
+                            `login`,
+                            `password`,
+                            `name`,
+                            `firstname`,
+                            `email`,
+                            `role_id`
+                    FROM `user`
+                    WHERE `id` = :id
+                    ORDER BY created_at DESC";
+
+            $result = $this->findOne($req, ['id' => $id]);
             $user = new User();
             $user->populate($result);
             return $user;
@@ -134,6 +146,11 @@ class Users extends Database
         }
     }
 
+    /**
+     * Récupère les informations de tous les utilisateurs.
+     *
+     * @return User[] - Un tableau d'objets User représentant tous les utilisateurs.
+     */
     public function readAll(): array
     {
         try {
@@ -156,6 +173,47 @@ class Users extends Database
                 $usersArray[] = $user;
             }
             return $usersArray;
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return [];
+        }
+    }
+
+    public function update(array $parameters, int $id): bool
+    {
+        try {
+            $req = "UPDATE `user`
+                SET `login`= :login,
+                    `name`= :name,
+                    `firstname` = :firstname,
+                    `email` = :email
+                WHERE `id` = :id";
+            $query = $this->db->prepare($req);
+            $parameters['id'] = $id;
+            return $query->execute($parameters);
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return [];
+        }
+    }
+
+    public function updatePassword(array $parameters): bool
+    {
+        $req = "UPDATE `user`
+                SET `password`= :password
+                WHERE `login` = :login";
+        $query = $this->db->prepare($req);
+        return $query->execute($parameters);
+    }
+
+    public function delete(string $login): bool
+    {
+        try {
+            $req = "DELETE FROM `user`
+                    WHERE `login` = :login";
+
+            $query = $this->db->prepare($req);
+            return $query->execute(['login' => $login]);
 
         } catch (\Exception $e) {
             echo $e->getMessage();

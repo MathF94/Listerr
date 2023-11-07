@@ -1,17 +1,28 @@
 "use strict";
 
-import { fetchReadAll } from "../js/actions_admin.js";
+import { fetchReadAll } from "../../actions/actions_admin.js";
+import { configPath, redirect, notAllowedRedirection } from "../../services/utils.js";
 
+notAllowedRedirection();
+/**
+ * Récupère et affiche la liste des utilisateurs (à l'exception des utilisateurs avec le rôle "Admin") depuis l'API.
+ */
 function readAdmin() {
 
     fetchReadAll()
     .then(response => {
         const data = response.data;
         const tbody = document.querySelector("tbody");
+        const listUser = document.querySelector("#newUser");
+        listUser.addEventListener("click", function(e){
+            redirect(`${configPath.basePath}/user/pages/registration.html`, 0);
+        });
 
         for (const index in data) {
             const column = data[index];
-            if (["id"].includes(column[index])) {
+
+            // Exclut les colonnes inutiles ou les utilisateurs avec le rôle "Admin"
+            if (["id"].includes(column) || column.role === "Admin") {
                 continue;
             };
 
@@ -40,12 +51,24 @@ function readAdmin() {
             const tdReadBtn = document.createElement("td");
             const readBtn = document.createElement("button");
             readBtn.textContent = "Lire";
+            readBtn.title = "Lire : amène vers le profil d'un utilisateur et ses listes";
+            readBtn.id = `readUserProfil-${column.id}`;
+            readBtn.value = column.id;
+
+            readBtn.addEventListener("click", function(e){
+                e.preventDefault();
+                redirect(`${configPath.basePath}/user/pages/profil.html?id=${column.id}`, 0);
+            })
+
             tdReadBtn.appendChild(readBtn);
             tr.appendChild(tdReadBtn);
 
             const tdEditBtn = document.createElement("td");
             const editBtn = document.createElement("button");
             editBtn.textContent = "Modifier";
+            editBtn.title = "Modifier : permet de modifier le profil d'un utilisateur";
+            editBtn.id = `editUserProfil-${column.id}`;
+            editBtn.value = column.id;
             tdEditBtn.appendChild(editBtn);
             tr.appendChild(tdEditBtn);
 
@@ -53,9 +76,13 @@ function readAdmin() {
             const deleteForm = document.createElement("form");
             deleteForm.action = "?route=admin_delete_user";
             deleteForm.method = "post";
+
+
             const deleteBtn = document.createElement("button");
+            deleteBtn.title = "Supprimer : permet de supprimer le profil d'un utilisateur";
+            deleteBtn.value = column.id;
+            deleteBtn.id = `deleteUserProfil-${column.id}`;
             deleteBtn.type = "submit";
-            deleteBtn.value = "delete";
             deleteBtn.textContent = "Supprimer";
             deleteForm.appendChild(deleteBtn);
             tdDeleteBtn.appendChild(deleteForm);

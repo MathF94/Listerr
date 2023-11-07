@@ -1,3 +1,5 @@
+"use strict";
+
 import View  from "./view.js";
 import {route, template, router} from './routeur.js'
 

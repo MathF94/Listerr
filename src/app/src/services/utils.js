@@ -1,23 +1,48 @@
 "use strict";
 
-function redirect(url, duration = 3000) {
+/**
+ * Configuration des chemins de base pour l'application et l'API.
+ * @namespace
+ * @property {string} basePath - Le chemin de base de l'application.
+ * @property {string} apiPath - Le chemin de base de l'API.
+ */
+const configPath = {
+    basePath: "http://localhost/listerr/src/app/src",
+    apiPath: "http://localhost/listerr/src/api",
+    // basePath: "https://mathieufagot.sites.3wa.io/listerr/src/app/src",
+    // apiPath: "https://mathieufagot.sites.3wa.io/listerr/src/api"
+};
+
+/**
+ * Redirige l'utilisateur vers une autre URL.
+ * @param {string} url - L'URL vers laquelle rediriger l'utilisateur.
+ * @param {number} [duration=2000] - La durée en millisecondes avant la redirection.
+ */
+function redirect(url, duration = 2000) {
     window.setTimeout(function() {
         window.location.href = url
         }, duration)
 };
 
+/**
+ * Affiche une boîte de dialogue modale.
+ * @param {Object} options - Les options de la boîte de dialogue.
+ * @param {string} [options.title="Notification"] - Le titre de la boîte de dialogue.
+ * @param {string|Array|Object} options.content - Le contenu de la boîte de dialogue.
+ * @param {boolean} [options.hasTimeOut] - Indique si la boîte de dialogue doit disparaître automatiquement après 2 secondes.
+ */
 function dialog({title, content, hasTimeOut}) {
 
     title = title || "Notification" ;
-    const h2 = document.createElement("h2");
-    h2.innerHTML = title ;
+    const titleH2 = document.createElement("h2");
+    titleH2.innerHTML = title ;
     const dialogSection = document.createElement("section");
     dialogSection.id = "dialog";
     dialogSection.className = "dialog";
     document.body.appendChild(dialogSection);
     const dialog = document.createElement("dialog");
     dialog.open = "open";
-    dialog.prepend(h2);
+    dialog.prepend(titleH2);
 
     if (typeof(content) === "string")  {
         const div = document.createElement("div");
@@ -27,25 +52,31 @@ function dialog({title, content, hasTimeOut}) {
     };
 
     if (["array", "object"].includes(typeof(content))) {
-        const ul = document.createElement("ul");
+        const list = document.createElement("ul");
         for(const index in content){
-        const li = document.createElement("li");
+        const item = document.createElement("li");
         const column = content[index];
-        li.innerText = column;
-        ul.appendChild(li);
+        item.innerText = column;
+        list.appendChild(item);
         };
-        dialog.appendChild(ul);
+        dialog.appendChild(list);
         dialogSection.appendChild(dialog);
     };
 
     if (hasTimeOut) {
         const msg = document.createElement('div');
-        msg.innerHTML = "Ce message s'effacera dans 5 secondes...";
+        msg.innerHTML = "Ce message s'effacera dans 2 secondes...";
         dialog.appendChild(msg);
         setTimeout(() => {
             document.body.removeChild(dialogSection);
-        }, 5000);
+        }, 2000);
     };
 };
 
-export { redirect, dialog };
+function notAllowedRedirection() {
+    if (!localStorage.token || localStorage.token === undefined ) {
+        redirect(`${configPath.basePath}`, 0);
+    }
+}
+
+export { configPath, redirect, dialog, notAllowedRedirection };

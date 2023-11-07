@@ -4,13 +4,14 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Listerr</title>
+        <script type="module" src="../../actions/actions_user.js"></script>
         <script type="module" src="../../layout/header.js"></script>
-        <script type="module" src="../js/actions.js"></script>
         <script type="module" src="../js/profil.js"></script>
         <script type="module" src="../js/logout.js"></script>
         <script type="module" src="../js/delete.js"></script>
     </head>
     <body>
+<<<<<<< Updated upstream
         <section id="mainSection" class="mainSection">
             <h2 id="mainTitle" class="mainTitle">Profil utilisateur</h2>
             <section id="contentSection">
@@ -21,6 +22,15 @@
                     </form>
                 </div>
             </section>
+=======
+        <section id="contentSection" class="contentSection">
+            <h2 id="secondTitle" class="secondTitle">Profil utilisateur</h2>
+            <div id="profilWrapper">
+                <button id="listsUser" type="button" value=`${object.id}`>Accéder aux listes</button>
+                <button id="update" type="button" value="update">Modifier</button>
+                <button id="delete" type="button" value="delete">Supprimer</button>
+            </div>
+>>>>>>> Stashed changes
         </section>
     </body>
 </html>

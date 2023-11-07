@@ -2,12 +2,26 @@
 
 namespace Services;
 
+/**
+ * Classe pour la validation des paramètres en fonction du contexte.
+ */
 class Validator
 {
     public const CONTEXT_REGISTER = 'register';
     public const CONTEXT_LOGIN = 'login';
     public const CONTEXT_UPDATE_USER = 'user_update';
+    public const CONTEXT_CREATE_LIST = 'create_list';
+    public const CONTEXT_UPDATE_LIST = 'update_list';
+    public const CONTEXT_CREATE_CARD = 'create_card';
+    public const CONTEXT_UPDATE_CARD = 'update_card';
 
+    /**
+     * Valide les paramètres en fonction du contexte donné.
+     *
+     * @param array  $params  Les paramètres à valider.
+     * @param string $context Le contexte de validation.
+     * @return array Un tableau d'erreurs, le cas échéant.
+     */
     public function isValidParams(array $params, string $context): array
     {
         switch ($context) {
@@ -25,9 +39,35 @@ class Validator
                 $errors = $this->isValidUpdateUserParams($params);
                 return $errors;
                 break;
+
+            case self::CONTEXT_CREATE_LIST:
+                $errors = $this->isValidListParams($params);
+                return $errors;
+                break;
+
+            case self::CONTEXT_UPDATE_LIST:
+                $errors = $this->isValidListParams($params);
+                return $errors;
+                break;
+
+            case self::CONTEXT_CREATE_CARD:
+                $errors = $this->isValidCardParams($params);
+                return $errors;
+                break;
+
+            case self::CONTEXT_UPDATE_CARD:
+                $errors = $this->isValidCardParams($params);
+                return $errors;
+                break;
         }
     }
 
+    /**
+     * Valide les paramètres lors de l'enregistrement d'un utilisateur.
+     *
+     * @param array $params Les paramètres à valider.
+     * @return array Un tableau d'erreurs, le cas échéant. Chaque élément du tableau est une chaîne de caractères décrivant l'erreur.
+     */
     private function isValidRegisterParams(array $params): array
     {
         $errors = [];
@@ -79,6 +119,12 @@ class Validator
         return $errors;
     }
 
+    /**
+     * Valide les paramètres lors d'une tentative de connexion de l'utilisateur.
+     *
+     * @param array $params Les paramètres à valider.
+     * @return array Un tableau d'erreurs, le cas échéant. Chaque élément du tableau est une chaîne de caractères décrivant l'erreur.
+     */
     private function isValidLoginParams(array $params): array
     {
         $errors = [];
@@ -108,10 +154,16 @@ class Validator
         return $errors;
     }
 
+    /**
+     * Valide les paramètres lors de la mise à jour d'informations de l'utilisateur.
+     *
+     * @param array $params Les paramètres à valider.
+     * @return array Un tableau d'erreurs, le cas échéant. Chaque élément du tableau est une chaîne de caractères décrivant l'erreur.
+     */
     private function isValidUpdateUserParams(array $params): array
     {
         $errors = [];
-        $expectedKeys = ['id', 'login', 'name', 'firstname', 'email'];
+        $expectedKeys = ['updateId', 'login', 'name', 'firstname', 'email'];
         $paramKeys = array_keys($params);
 
         if (!empty(array_diff($expectedKeys, $paramKeys))) {
@@ -120,7 +172,7 @@ class Validator
             return $errors;
         }
 
-        if (empty($params['id'])) {
+        if (empty($params['updateId'])) {
             $errors[] = 'Le champ "id" est requis.';
         }
 
@@ -152,6 +204,63 @@ class Validator
             $errors[] = 'Le champ "Prénom" ne peut contenir que des lettres, des espaces, des tirets et des apostrophes.';
         }
 
+        return $errors;
+    }
+
+    /**
+     * Valide les paramètres lors de la création ou de la mise à jour d'une liste.
+     *
+     * @param array $params Les paramètres à valider.
+     * @return array Un tableau d'erreurs, le cas échéant. Chaque élément du tableau est une chaîne de caractères décrivant l'erreur.
+     */
+    private function isValidListParams(array $params): array
+    {
+        $errors = [];
+        $expectedKeys = ['type', 'titleList', 'descriptionList'];
+        $paramKeys = array_keys($params);
+
+        if (!empty(array_diff($expectedKeys, $paramKeys))) {
+            $changedKey = array_diff($expectedKeys, $paramKeys);
+            $errors[] = "Le/les champs suivante(s) a/ont été modifiée(s) : " . implode(', ', $changedKey) . ". Merci de ne pas y toucher, merci !";
+            return $errors;
+        }
+
+        if (empty(trim($params['titleList']))) {
+            $errors[] = 'Le champ "titre" est requis.';
+        } elseif (strlen($params['titleList']) > 50) {
+            $errors[] = 'Le champ "titre" ne doit pas dépasser 20 caractères.';
+        }
+
+        return $errors;
+    }
+
+    private function isValidCardParams(array $params): array
+    {
+        $errors = [];
+        $expectedKeys = ['titleCard', 'descriptionCard', 'priority'];
+        $paramKeys = array_keys($params);
+
+        if (!empty(array_diff($expectedKeys, $paramKeys))) {
+            $changedKey = array_diff($expectedKeys, $paramKeys);
+            $errors[] = "Le/les champs suivante(s) a/ont été modifiée(s) : " . implode(', ', $changedKey) . ". Merci de ne pas y toucher, merci !";
+            return $errors;
+        }
+
+        if (empty(trim($params['titleCard']))) {
+            $errors[] = 'Le champ "titre" est requis.';
+        } elseif (strlen($params['titleCard']) > 50) {
+            $errors[] = 'Le champ "titre" ne doit pas dépasser 20 caractères.';
+        }
+
+        if (empty(trim($params['priority']))) {
+            $errors[] = 'Le champ "priorité" est requis.';
+        } elseif (!preg_match('/^[1-5]+$/', $params['priority'])) {
+            $errors[] = 'La chaîne ne doit contenir que les chiffres allant de 1 à 5.';
+        } elseif (strlen($params['priority']) > 5) {
+            $errors[] = 'La priorité ne doit pas être supérieure à 5.';
+        } elseif (strlen($params['priority']) < 1) {
+            $errors[] = 'La priorité ne doit pas être inférieure à 1.';
+        }
         return $errors;
     }
 }
