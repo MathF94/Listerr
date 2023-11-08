@@ -263,18 +263,16 @@ class ListController
                     $listId = $list->id;
 
                     $params = [
-                        'title' => $_POST['title'],
+                        'title' => $_POST['titleList'],
                         'type' => $_POST['type'],
-                        'description' => $_POST['description']
+                        'description' => $_POST['descriptionList']
                     ];
+                    $model->update($params, $listId);
+                    return json_encode([
+                        'status' => 'updated',
+                        'message' => 'la liste a bien été mise à jour.'
+                    ]);
                 }
-
-                $model->update($params, $listId);
-
-                return json_encode([
-                    'status' => 'updated',
-                    'message' => 'la liste a bien été mise à jour.'
-                ]);
 
                 return json_encode([
                     'status' => 'fail',

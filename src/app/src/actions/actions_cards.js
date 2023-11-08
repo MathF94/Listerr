@@ -43,7 +43,40 @@ async function fetchReadAllCardsByList(id) {
     }
 }
 
+/**
+ * Effectue une requête pour mettre à jour une carte en utilisant un formulaire.
+ *
+ * @param {HTMLFormElement} form - Le formulaire contenant les données mises à jour de la liste.
+ * @param {number} id - L'identifiant de la carte à mettre à jour.
+ * @returns {Promise<Object|null>} Une promesse résolue avec les données de la carte mise à jour ou null en cas d'erreur.
+ */
+async function fetchUpdateCard(form, id) {
+    try {
+        const formData = new FormData(form);
+        formData.append('id', id);
 
+        const url = `${configPath.apiPath}/?route=update_card`;
+        return await fetch(url, {
+            headers: {
+                "Authorization": localStorage.getItem("token"),
+                "X-CSRFToken": localStorage.getItem("csrfToken")
+            },
+            method: "POST",
+            body: formData,
+            }).then(response => response.json());
+
+    } catch (error) {
+        console.error("Erreur lors de la requête fetch :", error);
+        return null;
+    }
+};
+
+/**
+ * Effectue une requête pour supprimer une carte par son ID.
+ *
+ * @param {number} id - L'identifiant de la carte à supprimer.
+ * @returns {Promise<Object|null>} Une promesse résolue avec les données de la suppression ou null en cas d'erreur.
+ */
 async function fetchDeleteCard(id){
     try {
         const formData = new FormData();
@@ -64,5 +97,6 @@ async function fetchDeleteCard(id){
 export {
     fetchCreateCard,
     fetchReadAllCardsByList,
+    fetchUpdateCard,
     fetchDeleteCard
 };

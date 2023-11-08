@@ -25,8 +25,8 @@ class Lists extends Database
 
             $params = [
                 'type' => $params['type'],
-                'title' => $params['title'],
-                'description' => $params['description'],
+                'title' => $params['titleList'],
+                'description' => $params['descriptionList'],
                 'user_id' => $userId
             ];
 

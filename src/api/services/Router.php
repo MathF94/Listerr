@@ -17,7 +17,6 @@ class Router
     public function routing(): void
     {
         if (array_key_exists('route', $_GET)) : // on vérifie que la route existe dans l'URL
-
             $headers = getallheaders();
             switch ($_GET['route']) {
                 case 'csrf':
@@ -43,6 +42,7 @@ class Router
                 case 'user_logout':
                     if ($this->isAllowedMethod('POST')) {
                         $user = new UserController();
+                        $headers = getallheaders();
                         echo $user->logout($headers['Authorization']);
                     }
                     break;
@@ -65,6 +65,7 @@ class Router
                 case 'user_delete':
                     if ($this->isAllowedMethod('POST')) {
                         $user = new UserController();
+                        $headers = getallheaders();
                         echo $user->delete($headers['Authorization']); // delete
                     }
                     break;
@@ -170,7 +171,6 @@ class Router
         else :
             header('Location: index.php'); // on renvoie vers l'index
             exit;
-
         endif;
     }
 

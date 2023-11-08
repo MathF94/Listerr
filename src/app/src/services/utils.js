@@ -16,9 +16,9 @@ const configPath = {
 /**
  * Redirige l'utilisateur vers une autre URL.
  * @param {string} url - L'URL vers laquelle rediriger l'utilisateur.
- * @param {number} [duration=2000] - La durée en millisecondes avant la redirection.
+ * @param {number} [duration=3000] - La durée en millisecondes avant la redirection.
  */
-function redirect(url, duration = 2000) {
+function redirect(url, duration = 3000) {
     window.setTimeout(function() {
         window.location.href = url
         }, duration)
@@ -32,14 +32,15 @@ function redirect(url, duration = 2000) {
  * @param {boolean} [options.hasTimeOut] - Indique si la boîte de dialogue doit disparaître automatiquement après 2 secondes.
  */
 function dialog({title, content, hasTimeOut}) {
-
+    const header = document.querySelector("#mainWrapper");
     title = title || "Notification" ;
     const titleH2 = document.createElement("h2");
     titleH2.innerHTML = title ;
     const dialogSection = document.createElement("section");
     dialogSection.id = "dialog";
     dialogSection.className = "dialog";
-    document.body.appendChild(dialogSection);
+    // document.body.appendChild(dialogSection);
+    header.after(dialogSection);
     const dialog = document.createElement("dialog");
     dialog.open = "open";
     dialog.prepend(titleH2);
@@ -75,8 +76,13 @@ function dialog({title, content, hasTimeOut}) {
 
 function notAllowedRedirection() {
     if (!localStorage.token || localStorage.token === undefined ) {
-        redirect(`${configPath.basePath}`, 0);
+        redirect(`${configPath.basePath}/home/pages/home.html`, 0);
     }
 }
+
+// SI Todolist
+//      ALORS redirect(`${configPath.basePath}/home/pages/home.html`, 0);
+// SI WishList && utilisateurs non connectés (=visiteurs)
+//      ALORS redirect(`${configPath.basePath}/list/pages/list.html?id=${objectList.id}`, 0);
 
 export { configPath, redirect, dialog, notAllowedRedirection };

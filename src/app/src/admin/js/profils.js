@@ -1,7 +1,7 @@
 "use strict";
 
 import { fetchReadAll } from "../../actions/actions_admin.js";
-import { configPath, redirect, notAllowedRedirection } from "../../services/utils.js";
+import { configPath, redirect, notAllowedRedirection, dialog } from "../../services/utils.js";
 
 notAllowedRedirection();
 /**
@@ -14,6 +14,7 @@ function readAdmin() {
         const data = response.data;
         const tbody = document.querySelector("tbody");
         const listUser = document.querySelector("#newUser");
+
         listUser.addEventListener("click", function(e){
             redirect(`${configPath.basePath}/user/pages/registration.html`, 0);
         });
@@ -55,11 +56,6 @@ function readAdmin() {
             readBtn.id = `readUserProfil-${column.id}`;
             readBtn.value = column.id;
 
-            readBtn.addEventListener("click", function(e){
-                e.preventDefault();
-                redirect(`${configPath.basePath}/user/pages/profil.html?id=${column.id}`, 0);
-            })
-
             tdReadBtn.appendChild(readBtn);
             tr.appendChild(tdReadBtn);
 
@@ -77,7 +73,6 @@ function readAdmin() {
             deleteForm.action = "?route=admin_delete_user";
             deleteForm.method = "post";
 
-
             const deleteBtn = document.createElement("button");
             deleteBtn.title = "Supprimer : permet de supprimer le profil d'un utilisateur";
             deleteBtn.value = column.id;
@@ -87,6 +82,23 @@ function readAdmin() {
             deleteForm.appendChild(deleteBtn);
             tdDeleteBtn.appendChild(deleteForm);
             tr.appendChild(tdDeleteBtn);
+
+            readBtn.addEventListener("click", function(e){
+                e.preventDefault();
+                redirect(`${configPath.basePath}/user/pages/profil.html?id=${column.id}`, 0);
+            })
+
+            editBtn.addEventListener("click", function(e){
+                e.preventDefault();
+                dialog({title: "Prévue pour la version 2.0", content: "Merci de votre compréhension."});
+                redirect(`${configPath.basePath}/admin/pages/profils.html`)
+            })
+
+            deleteBtn.addEventListener("click", function(e){
+                e.preventDefault();
+                dialog({title: "Prévue pour la version 2.0", content: "Merci de votre compréhension."});
+                redirect(`${configPath.basePath}/admin/pages/profils.html`)
+            })
 
             tbody.appendChild(tr);
         };

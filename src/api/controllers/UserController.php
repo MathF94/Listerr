@@ -151,7 +151,6 @@ class UserController
                         "message" => "Votre identifiant n\'existe pas ou votre mot de passe est incorrect."
                     ]);
                 }
-
                 $session = new Session();
                 $encryptToken = $session->encrypt($user->id, $user->login, $encrytedPassword);
                 return json_encode([

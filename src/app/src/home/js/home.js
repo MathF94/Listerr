@@ -32,7 +32,20 @@ function readAllLists() {
     .then(response => {
         const data = response.data;
         if (response.status === "read"){
-            const allListWrapper = document.querySelector('#allListsWrapper');
+            const homeDisplayLists = document.querySelector("#homeDisplayLists");
+
+            const allListsSection = document.createElement("section");
+            allListsSection.id = "allListsSection";
+
+            const titleLists = document.createElement("h2");
+            titleLists.innerText = "Voici toutes les listes de tous les utilisateurs";
+
+            const allListWrapper = document.createElement("div");
+            allListWrapper.id = "allListsWrapper";
+
+            homeDisplayLists.after(allListsSection);
+            allListsSection.appendChild(titleLists);
+            allListsSection.appendChild(allListWrapper);
 
             for (const index in data) {
                 const object = data[index]
@@ -65,11 +78,11 @@ function readAllLists() {
                             item.innerText = `${object[key]}`;
                         }
                     }
-
-                    list.appendChild(item);
+                    titleLists.after(allListWrapper);
+                    allListWrapper.appendChild(content);
                     content.appendChild(titleH3);
                     content.appendChild(list);
-                    allListWrapper.append(content);
+                    list.appendChild(item);
                 }
 
                 content.addEventListener("click", function(){

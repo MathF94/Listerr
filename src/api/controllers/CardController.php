@@ -92,13 +92,89 @@ class CardController
                     ]);
                 }
             }
-
             return json_encode([
                 'status' => 'fail',
                 'errors' => $errors
             ]);
+        } catch (\Exception $e) {
+            return json_encode([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
 
+    public function readOneCard(int $id): string
+    {
+        try {
+            if (!empty($this->user->id)) {
+                $model = new Cards();
+                $card = $model->getOneCardById($id);
 
+                if (!empty($card)) {
+                    return json_encode([
+                        'status' => 'readOne',
+                        'message' => $card
+                    ]);
+                };
+                return json_encode([
+                    'status' => 'fail',
+                    'message' => 'no card'
+                ]);
+            }
+        } catch (\Exception $e) {
+            return json_encode([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * Cette méthode permet la mise à jour des informations d'une carte d'une liste, après validation du jeton CSRF.
+     *
+     * @return string - Réponse JSON contenant un message de validaiton de mise à jour ou un message d'erreur.
+     */
+    public function updateCard(int $id, string $csrfToken): string
+    {
+        try {
+            $validToken = $this->csrfToken->isValidToken($csrfToken, "updateFormCard");
+
+            if (!$validToken) {
+                return json_encode([
+                    'status' => 'fail',
+                    'message' => 'jeton invalide'
+                ]);
+            }
+
+            if (!empty($this->user->id)) {
+                $model = new Cards();
+                $card = $model->getOneCardById($id);
+
+                $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_UPDATE_CARD);
+                if (empty(count($errors))) {
+                    $cardId = $card->id;
+
+                    $params = [
+                        'title' => $_POST['title'],
+                        'description' => $_POST['description'],
+                        'priority' => $_POST['priority'],
+                        'checked'=> $_POST['checked']
+                    ];
+                }
+
+                $model->update($params, $cardId);
+
+                return json_encode([
+                    'status' => 'updated',
+                    'message' => 'la carte a bien été mise à jour.'
+                ]);
+
+                return json_encode([
+                    'status' => 'fail',
+                    'errors' => $errors
+                ]);
+            }
         } catch (\Exception $e) {
             return json_encode([
                 'status' => 'error',
@@ -117,15 +193,14 @@ class CardController
         try {
             if (!empty($this->user->id)) {
                 $model = new Cards();
-                $card = $model->oneCardById($id);
+                $card = $model->getOneCardById($id);
 
                 if (!empty($card)) {
-                    $cardId = $card->id;
-                    $model->delete($cardId);
+                    $model->delete($card->id);
 
                     return json_encode([
                         'status' => 'deleted',
-                        'message' => 'la liste a bien été supprimée.'
+                        'message' => 'la carte a bien été supprimée.'
                     ]);
                 };
                 return json_encode(['status' => 'fail']);

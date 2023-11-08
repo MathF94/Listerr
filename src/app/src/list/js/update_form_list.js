@@ -34,27 +34,27 @@ function createUpdateForm(updateList) {
     labelT.innerText = "TodoList";
 
     const labelTitle = document.createElement("label");
-    labelTitle.for = "title";
+    labelTitle.for = "titleList";
     labelTitle.innerText = "Titre de la liste";
 
     const inputTitle = document.createElement("input");
     inputTitle.type = "text";
-    inputTitle.name = "title";
-    inputTitle.id = "title";
+    inputTitle.name = "titleList";
+    inputTitle.id = "titleList";
     inputTitle.placeholder = "Votre titre";
     inputTitle.value = "";
     inputTitle.required = true;
 
+    const labelDescription = document.createElement("label");
+    labelDescription.for = "descriptionList";
+    labelDescription.innerText = "Description (facultative)";
+
     const inputDescription = document.createElement("input");
     inputDescription.type = "text";
-    inputDescription.name = "description";
-    inputDescription.id = "description";
+    inputDescription.name = "descriptionList";
+    inputDescription.id = "descriptionList";
     inputDescription.placeholder = "Votre description";
     inputDescription.value = ``;
-
-    const labelDescription = document.createElement("label");
-    labelDescription.for = "description";
-    labelDescription.innerText = "Description (facultative)";
 
     const updateBtnListValid = document.createElement("button");
     updateBtnListValid.id = "updateBtnListValid";

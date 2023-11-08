@@ -28,7 +28,6 @@ function updateUser() {
     updateForm.addEventListener("submit", function(e) {
         e.preventDefault();
         const userLogin = e.target.login.value;
-        console.log(e.submitter.value);
 
         if (e.submitter.value === "updateCancelBtn") {
             redirect(`${configPath.basePath}/user/pages/profil.html`, 0);
@@ -52,7 +51,7 @@ function updateUser() {
                         redirect(`${configPath.basePath}/user/pages/login.html`);
                     } else {
                         // Affiche un message de succès et redirige l'utilisateur vers la page de profil.
-                        dialog({content: "Votre profil a bien été mis à jour."});
+                        dialog({title: "Modification du profil", content: "Votre profil a bien été mis à jour."});
                         redirect(`${configPath.basePath}/user/pages/profil.html`);
                     }
                 };

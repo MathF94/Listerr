@@ -23,8 +23,8 @@ class Cards extends Database
             VALUES (:title, :description, :priority, :list_id)";
 
             $params = [
-                'title' => $params['title'],
-                'description' => $params['description'],
+                'title' => $params['titleCard'],
+                'description' => $params['descriptionCard'],
                 'priority' => $params['priority'],
                 'list_id' => $params['list_id']
             ];
@@ -37,7 +37,7 @@ class Cards extends Database
         }
     }
     // readOne
-    public function oneCardById(int $id): ?Card
+    public function getOneCardById(int $id): ?Card
     {
         try {
             $req = "SELECT `id`,
@@ -45,7 +45,9 @@ class Cards extends Database
                             `description`,
                             `priority`,
                             `checked`,
-                            `list_id`
+                            `list_id`,
+                            `created_at`,
+                            `updated_at`
                     FROM `card`
                     WHERE `id` = :id
                     ORDER BY created_at DESC";
@@ -59,7 +61,6 @@ class Cards extends Database
             return null;
         }
     }
-
 
     // readAll
     public function getAllByList(int $listId): array
@@ -98,8 +99,26 @@ class Cards extends Database
 
     // update
 
+    public function update(array $params, int $id): bool
+    {
+        try {
+            $req = "UPDATE `card`
+                    SET `title` = :title,
+                        `description` = :description,
+                        `priority` = :priority,
+                        `checked` = :checked,
+                        `updated_at` = NOW()
+                    WHERE `id` = :id";
 
+            $query = $this->db->prepare($req);
+            $params['id'] = $id;
 
+            return $query->execute($params);
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return [];
+        }
+    }
     /**
      * Supprime une carte de la base de données.
      *

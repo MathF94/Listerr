@@ -216,7 +216,7 @@ class Validator
     private function isValidListParams(array $params): array
     {
         $errors = [];
-        $expectedKeys = ['type', 'title', 'description'];
+        $expectedKeys = ['type', 'titleList', 'descriptionList'];
         $paramKeys = array_keys($params);
 
         if (!empty(array_diff($expectedKeys, $paramKeys))) {
@@ -225,9 +225,9 @@ class Validator
             return $errors;
         }
 
-        if (empty(trim($params['title']))) {
+        if (empty(trim($params['titleList']))) {
             $errors[] = 'Le champ "titre" est requis.';
-        } elseif (strlen($params['title']) > 50) {
+        } elseif (strlen($params['titleList']) > 50) {
             $errors[] = 'Le champ "titre" ne doit pas dépasser 20 caractères.';
         }
 
@@ -237,7 +237,7 @@ class Validator
     private function isValidCardParams(array $params): array
     {
         $errors = [];
-        $expectedKeys = ['title', 'description', 'priority'];
+        $expectedKeys = ['titleCard', 'descriptionCard', 'priority'];
         $paramKeys = array_keys($params);
 
         if (!empty(array_diff($expectedKeys, $paramKeys))) {
@@ -246,9 +246,9 @@ class Validator
             return $errors;
         }
 
-        if (empty(trim($params['title']))) {
+        if (empty(trim($params['titleCard']))) {
             $errors[] = 'Le champ "titre" est requis.';
-        } elseif (strlen($params['title']) > 50) {
+        } elseif (strlen($params['titleCard']) > 50) {
             $errors[] = 'Le champ "titre" ne doit pas dépasser 20 caractères.';
         }
 

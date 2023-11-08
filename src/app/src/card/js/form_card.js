@@ -13,25 +13,25 @@ function createCardForm(newCard) {
     titleForm.innerText = "Formulaire de création de cartes";
 
     const labelTitle = document.createElement("label");
-    labelTitle.for = "title";
+    labelTitle.for = "titleCard";
     labelTitle.innerText = "Titre de la carte";
 
     const inputTitle = document.createElement("input");
     inputTitle.type = "text";
-    inputTitle.name = "title";
-    inputTitle.id = "title";
+    inputTitle.name = "titleCard";
+    inputTitle.id = "titleCard";
     inputTitle.placeholder = "Votre titre";
     inputTitle.value = "";
     inputTitle.required = true;
 
     const labelDescription = document.createElement("label");
-    labelDescription.for = "description";
+    labelDescription.for = "descriptionCard";
     labelDescription.innerText = "Description";
 
     const inputDescription = document.createElement("input");
     inputDescription.type = "text";
-    inputDescription.name = "description";
-    inputDescription.id = "description";
+    inputDescription.name = "descriptionCard";
+    inputDescription.id = "descriptionCard";
     inputDescription.placeholder = "Votre description";
     inputDescription.value = ``;
 
@@ -49,17 +49,17 @@ function createCardForm(newCard) {
     inputPriority.max = 5;
     inputPriority.required = true;
 
-    const createBtnCardValid = document.createElement("button");
-    createBtnCardValid.id = "CardValidBtn";
-    createBtnCardValid.type = "submit";
-    createBtnCardValid.value = "CardValidBtn";
-    createBtnCardValid.innerText = "Valider";
+    const CardValidFormBtn = document.createElement("button");
+    CardValidFormBtn.id = "cardValidBtn";
+    CardValidFormBtn.type = "submit";
+    CardValidFormBtn.value = "cardValidBtn";
+    CardValidFormBtn.innerText = "Valider";
 
-    const createBtnCardCancel = document.createElement("button");
-    createBtnCardCancel.id = "CardCancelBtn";
-    createBtnCardCancel.type = "button";
-    createBtnCardCancel.value = "CardCancelBtn";
-    createBtnCardCancel.innerText = "Annuler";
+    const CardCancelFormBtn = document.createElement("button");
+    CardCancelFormBtn.id = "cardCancelBtn";
+    CardCancelFormBtn.type = "button";
+    CardCancelFormBtn.value = "cardCancelBtn";
+    CardCancelFormBtn.innerText = "Annuler";
 
     createFormCard.appendChild(titleForm);
     createFormCard.appendChild(labelTitle);
@@ -68,8 +68,8 @@ function createCardForm(newCard) {
     createFormCard.appendChild(inputDescription);
     createFormCard.appendChild(labelPriority);
     createFormCard.appendChild(inputPriority);
-    createFormCard.appendChild(createBtnCardValid);
-    createFormCard.appendChild(createBtnCardCancel);
+    createFormCard.appendChild(CardValidFormBtn);
+    createFormCard.appendChild(CardCancelFormBtn);
 
     newCard.appendChild(createFormCard);
 }
