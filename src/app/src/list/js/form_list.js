@@ -1,5 +1,7 @@
 "use strict";
 
+import { mandatoryStar } from "../../services/utils.js";
+
 /**
  * Génère un formulaire de mise à jour pour une liste.
  *
@@ -78,6 +80,7 @@ function displayFormList(elementDOM) {
     formList.appendChild(radioT);
     formList.appendChild(labelT);
     formList.appendChild(labelTitle);
+    labelTitle.appendChild(mandatoryStar);
     formList.appendChild(inputTitle);
     formList.appendChild(labelDescription);
     formList.appendChild(inputDescription);

@@ -2,7 +2,6 @@
 
 /**
  * Configuration des chemins de base pour l'application et l'API.
- * @namespace
  * @property {string} basePath - Le chemin de base de l'application.
  * @property {string} apiPath - Le chemin de base de l'API.
  */
@@ -12,6 +11,13 @@ const configPath = {
     // basePath: "https://mathieufagot.sites.3wa.io/listerr/src/app/src",
     // apiPath: "https://mathieufagot.sites.3wa.io/listerr/src/api"
 };
+
+/**
+ * Ajout d'astérisque pour les champs obligatoires des formulaires
+ */
+const mandatoryStar = document.createElement("span");
+mandatoryStar.innerText = "*";
+mandatoryStar.classList.add("star");
 
 /**
  * Redirige l'utilisateur vers une autre URL.
@@ -82,4 +88,4 @@ function notAllowedRedirection(type) {
     }
 }
 
-export { configPath, redirect, dialog, notAllowedRedirection };
+export { configPath, redirect, dialog, notAllowedRedirection, mandatoryStar };

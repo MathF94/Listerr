@@ -1,5 +1,7 @@
 "use strict";
 
+import { mandatoryStar } from "../../services/utils.js";
+
 /**
  * Génère un formulaire de mise à jour pour une liste.
  *
@@ -59,10 +61,12 @@ function displayFormCard(elementDOM) {
     CardCancelFormBtn.innerText = "Annuler";
 
     createFormCard.appendChild(labelTitle);
+    labelTitle.appendChild(mandatoryStar.cloneNode(true));
     createFormCard.appendChild(inputTitle);
     createFormCard.appendChild(labelDescription);
     createFormCard.appendChild(inputDescription);
     createFormCard.appendChild(labelPriority);
+    labelPriority.appendChild(mandatoryStar.cloneNode(true));
     createFormCard.appendChild(inputPriority);
     createFormCard.appendChild(CardValidFormBtn);
     createFormCard.appendChild(CardCancelFormBtn);
