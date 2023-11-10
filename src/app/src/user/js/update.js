@@ -38,7 +38,7 @@ function updateUser() {
                 localStorage.removeItem("csrfToken");
                 const user = JSON.parse(localStorage.getItem("user"));
 
-                if (response.status === "success") {
+                if (response.status === "updateUser") {
                     if (userLogin !== user.login) {
                         // En cas de modification du login, déconnecte l'utilisateur et le redirige vers la page de connexion.
                         localStorage.removeItem("token");
@@ -55,7 +55,7 @@ function updateUser() {
                         redirect(`${configPath.basePath}/user/pages/profil.html`);
                     }
                 };
-                if (response.status === "fail") {
+                if (response.status === "errors") {
                     // En cas d'échec, affiche les erreurs rencontrées et redirige l'utilisateur vers la page de profil.
                     dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
                     redirect(`${configPath.basePath}/user/pages/profil.html`);

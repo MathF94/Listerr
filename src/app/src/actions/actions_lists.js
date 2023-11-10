@@ -27,7 +27,7 @@ async function fetchCreateList(form) {
 };
 
 /**
- * Effectue une requête pour récupérer une liste spécifique par son ID.
+ * Effectue une requête pour récupérer une liste spécifique par son ID pour list.html
  *
  * @param {number} id - L'identifiant de la liste à récupérer.
  * @returns {Promise<Object|null>} Une promesse résolue avec les données de la liste ou null en cas d'erreur.
@@ -47,13 +47,17 @@ async function fetchReadOneListById(id) {
 };
 
 /**
- * Effectue une requête pour récupérer la liste de toutes les listes d'un utilisateur.
+ * Effectue une requête pour récupérer toutes les listes d'un utilisateur pour lists.html
  *
  * @returns {Promise<Object|null>} Une promesse résolue avec les données de toutes les listes de l'utilisateur ou null en cas d'erreur.
  */
-async function fetchReadAllLists() {
+async function fetchReadAllLists(id) {
     try {
-        const url = `${configPath.apiPath}/?route=read_lists_one_user`;
+        console.log(id);
+        let url = `${configPath.apiPath}/?route=read_all_lists_by_user`;
+        if(id) {
+            url += `&id=${id}`;
+        }
         return await fetch(url, {
             headers: {"Authorization": localStorage.getItem("token")},
             method: "GET",

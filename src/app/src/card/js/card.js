@@ -4,15 +4,19 @@ import {
     fetchCreateCard,
     fetchReadAllCardsByList,
     fetchUpdateCard,
+    fetchUpdateReservation,
     fetchDeleteCard,
 } from "../../actions/actions_cards.js";
+
 import { CSRFToken } from "../../services/CSRFToken.js";
+
 import {
     configPath,
     redirect,
     dialog
 } from "../../services/utils.js";
-import { createCardForm } from "./form_card.js";
+
+import { displayFormCard } from "./form_card.js";
 
 /**
  * Fonction principale pour gérer les cartes d'une liste.
@@ -27,6 +31,9 @@ function card(canCreateCard) {
     cardSectionForm.id = "cardSectionForm";
     cardSectionForm.class = "cardSectionForm";
 
+    const titleForm = document.createElement("h3");
+    titleForm.id = "titleFormCard";
+
     const createCardFormBtn = document.createElement("button");
     createCardFormBtn.id = `cardFormBtn`;
     createCardFormBtn.name = "cardFormBtn";
@@ -35,48 +42,40 @@ function card(canCreateCard) {
 
     // Affichage du contenu du bouton en fonction du type de liste
     let btnLabel = "Nouveau souhait";
+    let checklabel = "Réservé";
     if (localStorage.getItem("typeList") === "TodoList") {
         btnLabel = "Nouvelle tâche";
+        checklabel = "Réalisé";
     }
     createCardFormBtn.textContent = btnLabel;
 
     const updateProfilList = document.querySelector(`#updateProfilList-${id}`);
-    // Désactive le bouton de création de cartes si update de liste en cours
-    updateProfilList.addEventListener("click", function(e){
-        e.preventDefault();
-        if (updateProfilList.disabled === true) {
-            createCardFormBtn.disabled = true;
-
-            const cancelBtn = document.querySelector("#updateBtnListCancel");
-            // Réactive le bouton de création de cartes si annulation
-            cancelBtn.addEventListener("click", function(e){
-                e.preventDefault();
-                if (createCardFormBtn.disabled === true) {
-                    createCardFormBtn.disabled = false
-                };
-            })
-        }
-    })
-
+    const deleteProfilList = document.querySelector(`#deleteProfilList-${id}`);
 
     // Affichage du formulaire au click du bouton
-    createCardFormBtn.addEventListener("click", function(e){
+    createCardFormBtn.addEventListener("click", function(e) {
         if (createCardFormBtn.value !== "cardFormBtn") {
             return false;
         }
+
         // Bouton rendu inutilisable
         createCardFormBtn.disabled = true;
         updateProfilList.disabled = true;
+        deleteProfilList.disabled = true;
+        ;
+        cardSectionForm.appendChild(titleForm);
         // Appel du formulaire de création d'une carte
-        createCardForm(cardSectionForm);
-
+        displayFormCard(cardSectionForm);
+        titleForm.innerText = "Formulaire de création d'une carte";
         const cardCancelBtn = document.querySelector("#cardCancelBtn");
-        const cardForm = document.querySelector("#createFormCard");
+        const cardForm = document.querySelector("#formCard");
 
-        // Suppression du formulaire au click du bouton
-        cardCancelBtn.addEventListener("click", function(){
+        // Suppression du formulaire d'édition au click du bouton
+        cardCancelBtn.addEventListener("click", function() {
             updateProfilList.disabled = false;
+            deleteProfilList.disabled = false;
             createCardFormBtn.disabled = false;
+            titleFormCard.remove();
             cardForm.remove();
         })
 
@@ -85,25 +84,25 @@ function card(canCreateCard) {
             e.preventDefault();
             createCardFormBtn.disabled = false;
 
+            // Création d'une carte
             fetchCreateCard(cardForm, id)
             .then(response => {
                 localStorage.removeItem("csrfToken");
 
-                if (response.status === "success") {
+                if (response.status === "createCard") {
                     dialog({title: "Et voilà la carte !", content:"à la suivante !"});
                     redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
 
                 }
-                if (response.status === "fail") {
+                if (response.status === "errors") {
                     dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
                     redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
-                };
-            });
-        });
-    });
+                }
+            })
+        })
+    })
 
     if (canCreateCard) {
-        // oneList.appendChild(createCardFormBtn);
         oneList.appendChild(cardSectionForm);
         cardSectionForm.appendChild(createCardFormBtn);
     }
@@ -120,18 +119,23 @@ function card(canCreateCard) {
                 const objectCard = dataCards[indexCard];
 
                 const contentCard = document.createElement("div");
-                contentCard.id = `ContentCard-${objectCard.id}`;
+                contentCard.id = `contentCard-${objectCard.id}`;
                 contentCard.classList.add("contentCard");
 
+                const labelCheck = document.createElement("label");
+                labelCheck.for = "checkbox";
+                labelCheck.innerText = checklabel;
+
                 const check = document.createElement("input");
+                check.id = `checked-${objectCard.id}`;
                 check.type = "checkbox";
-                check.checked = false;
+                check.value = objectCard.checked;
 
                 const deleteBtnCard = document.createElement("button");
                 deleteBtnCard.id = `deleteCard-${objectCard.id}`;
                 deleteBtnCard.name = "deleteCard";
                 deleteBtnCard.type = "button";
-                deleteBtnCard.value = `${objectCard.id}`;
+                deleteBtnCard.value = objectCard.id;
                 deleteBtnCard.textContent = "Supprimer";
                 deleteBtnCard.classList.add("deleteCard");
 
@@ -139,7 +143,7 @@ function card(canCreateCard) {
                 updateBtnCard.id = `updateCard-${objectCard.id}`;
                 updateBtnCard.name = "updateCard";
                 updateBtnCard.type = "submit";
-                updateBtnCard.value = `${objectCard.id}`;
+                updateBtnCard.value = objectCard.id;
                 updateBtnCard.textContent = "Modifier";
                 updateBtnCard.classList.add("updateCard");
 
@@ -157,50 +161,156 @@ function card(canCreateCard) {
                 // Affichage des éléments de la carte
                 for (const key in objectCard) {
                     const text = document.createElement("p");
-
-                    if (["id", "listId", "checked", "priority"].includes(`${key}`)) {
+                    if (["id", "listId", "priority"].includes(`${key}`)) {
                         continue;
-                    };
+                    }
 
                     if (key === "createdAt") {
                         text.innerText = `Créée le ${objectCard.createdAt}`;
                     } else if (key === "updatedAt") {
                         text.innerText = `Modifiée le ${objectCard.updatedAt}`;
-                    } else  {
-                        text.innerText = `${objectCard[key]}`;
-                    };
-                    if (key === "checked") {
-                        check.checked = Boolean(objectCard.checked);
+                    } else if (key === "checked") {
+                        check.checked = objectCard.checked === 1;
+                        if(check.checked) {
+                            check.disabled = true;
+                        }
+                    } else {
+                        text.innerText = objectCard[key];
                     }
 
                     contentCard.appendChild(text);
-
-                    // Rend visible l'input "check" et les boutons pour l'utilisateur courant uniquement
+                    oneList.after(cardSectionContent);
+                    cardSectionContent.appendChild(contentCard);
+                    contentCard.appendChild(labelCheck);
+                    contentCard.appendChild(check);
+                    // Rend visible les boutons pour l'utilisateur courant uniquement
                     if (canCreateCard) {
                         contentCard.appendChild(updateBtnCard);
                         contentCard.appendChild(deleteBtnCard);
+
+                        // Désactive le bouton de création de cartes si update de liste en cours
+                        updateProfilList.addEventListener("click", function(e) {
+                            e.preventDefault();
+                            if (updateProfilList.disabled === true) {
+                                createCardFormBtn.disabled = true;
+
+                                // Réactive le bouton de création de cartes si annulation update de liste
+                                cancelForm.addEventListener("click", function(e) {
+                                    e.preventDefault();
+                                    if (createCardFormBtn.disabled === true) {
+                                        createCardFormBtn.disabled = false
+                                    }
+                                })
+                            }
+                        })
                     }
-                    oneList.after(cardSectionContent);
-                    cardSectionContent.appendChild(contentCard);
-                    contentCard.appendChild(check);
                 }
+
+                // Gestion de la modification d'une carte
+                updateBtnCard.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    const updtBtnCardId = parseInt(e.target.value);
+                    if (updtBtnCardId !== objectCard.id) {
+                        console.warn("pas touche");
+                        return;
+                    }
+                    else {
+                        const updateCardSection = document.createElement("section");
+                        updateCardSection.id = `updateCardSection-${objectCard.id}`;
+                        updateCardSection.classList.add("updateCard");
+                        deleteBtnCard.after(updateCardSection);
+                        titleForm.innerText = "Formulaire d'édition d'une carte";
+                        updateCardSection.appendChild(titleForm)
+
+                        // Affichage du formulaire d'édition + dissimulation de la carte
+                        displayFormCard(updateCardSection);
+
+                        contentCard.classList.add("hidden");
+                        updateBtnCard.disabled = true;
+                        deleteBtnCard.disabled = true;
+
+                        // Affichage de la carte + suppression du formulaire d'édition
+                        const updateFormCard  = document.querySelector("#formCard");
+                        const cardCancelBtn = document.querySelector("#cardCancelBtn");
+                        cardCancelBtn.addEventListener("click", function() {
+                            updateBtnCard.disabled = false;
+                            deleteBtnCard.disabled = false;
+                            updateFormCard.remove();
+                            titleForm.remove();
+                            contentCard.classList.remove("hidden");
+                        })
+
+                        // Insertion des éléments de la liste dans les inputs
+                        const inputTitle = document.querySelector("#titleCard");
+                        inputTitle.value = objectCard.title;
+
+                        const inputDescription = document.querySelector("#descriptionCard");
+                        inputDescription.value = objectCard.description;
+
+                        const inputPriority = document.querySelector("#priority");
+                        inputPriority.value = objectCard.priority;
+
+                        CSRFToken(updateFormCard.id);
+                        updateFormCard.addEventListener("submit", function(e) {
+                            e.preventDefault();
+
+                            fetchUpdateCard(updateFormCard, objectCard.id)
+                            .then(response => {
+                                localStorage.removeItem("csrfToken");
+
+                                if (response.status === "updateCard") {
+                                    dialog({title: "Modification de la carte", content: "Votre carte a bien été mise à jour."});
+                                    redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                                }
+                                if (response.status === "errors") {
+                                    dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
+                                    redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                                }
+                            })
+                        })
+                    }
+                })
+
+                // Gestion de la réservation d'une carte
+                CSRFToken("checkForm");
+                check.addEventListener("change", function(e) {
+                check.checked === false ? objectCard.checked = 0 : objectCard.checked = 1;
+                    check.value = objectCard.checked
+
+                    fetchUpdateReservation(objectCard.checked, objectCard.id)
+                    .then(response => {
+                        localStorage.removeItem("csrfToken");
+
+                        if (response.status === "updateChecked") {
+
+                            dialog({title: "Modification de la réservation", content: "Votre réservation a bien été prise en compte."});
+                            redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                        }
+                        if (response.status === "errors") {
+                            dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
+                            redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                        }
+                    })
+                })
 
                 // Gestion de la suppression de carte
                 deleteBtnCard.addEventListener("click", function(e) {
                     e.preventDefault();
-                    const btnCardId = parseInt(e.target.value);
+                    const dltBtnCardId = parseInt(e.target.value);
 
-                    if (btnCardId !== objectCard.id) {
+                    if (dltBtnCardId !== objectCard.id) {
                         console.warn("pas touche");
                         return;
-                    } else if (confirm('Voulez-vous vraiment vous supprimer la liste ?') === true) {
+                    } else if (confirm('Voulez-vous vraiment vous supprimer la carte ?') === true) {
                         fetchDeleteCard(objectCard.id)
-                        .then(() => {
-                            dialog({title: "Suppression de la carte",
-                            content: `<p>Votre carte a bien été supprimée.</p>`
-                            });
-                            redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
-                        });
+                        .then((response) => {
+                            if (response.status === "deleteCard") {
+                                dialog({title: "Suppression de la carte",
+                                content: `<p>Votre carte a bien été supprimée.</p>`
+                                });
+                                redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                            }
+                        })
                     }
                 })
             }

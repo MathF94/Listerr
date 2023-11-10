@@ -15,7 +15,9 @@ function login() {
         .then(response => {
             localStorage.removeItem("csrfToken");
 
-            if (response.status === "success") {
+            if (response.status === "loginUser") {
+                // Ces deux informations permettront de vérifier si la session utilisateur est active
+                //                                   de vérifier si la déconnexion est réalisable (Cf. logout.js).
                 localStorage.setItem("token", response.token);
                 localStorage.setItem("user", JSON.stringify({
                     id: response.user_id,
@@ -29,12 +31,12 @@ function login() {
                 redirect(`${configPath.basePath}/home/pages/home.html`);
             };
 
-            if (response.status === "fail_data") {
+            if (response.status === "loginUser failed") {
                 dialog({title: "Erreurs de données", content: response.message, hasTimeOut: true});
                 redirect(`${configPath.basePath}/user/pages/login.html`);
             };
 
-            if (response.status === "fail") {
+            if (response.status === "errors") {
                 dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
                 redirect(`${configPath.basePath}/user/pages/login.html`);
             };

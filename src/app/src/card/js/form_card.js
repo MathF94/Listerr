@@ -3,14 +3,11 @@
 /**
  * Génère un formulaire de mise à jour pour une liste.
  *
- * @param {HTMLElement} createCard - L'élément HTML dans lequel le formulaire de mise à jour sera généré.
+ * @param {HTMLElement} elementDOM - L'élément HTML dans lequel le formulaire de mise à jour sera généré.
  */
-function createCardForm(newCard) {
+function displayFormCard(elementDOM) {
     const createFormCard = document.createElement("form");
-    createFormCard.id = "createFormCard";
-
-    const titleForm = document.createElement("h3");
-    titleForm.innerText = "Formulaire de création de cartes";
+    createFormCard.id = "formCard";
 
     const labelTitle = document.createElement("label");
     labelTitle.for = "titleCard";
@@ -33,7 +30,7 @@ function createCardForm(newCard) {
     inputDescription.name = "descriptionCard";
     inputDescription.id = "descriptionCard";
     inputDescription.placeholder = "Votre description";
-    inputDescription.value = ``;
+    inputDescription.value = "";
 
     const labelPriority = document.createElement("label");
     labelPriority.for = "priority";
@@ -61,7 +58,6 @@ function createCardForm(newCard) {
     CardCancelFormBtn.value = "cardCancelBtn";
     CardCancelFormBtn.innerText = "Annuler";
 
-    createFormCard.appendChild(titleForm);
     createFormCard.appendChild(labelTitle);
     createFormCard.appendChild(inputTitle);
     createFormCard.appendChild(labelDescription);
@@ -71,7 +67,7 @@ function createCardForm(newCard) {
     createFormCard.appendChild(CardValidFormBtn);
     createFormCard.appendChild(CardCancelFormBtn);
 
-    newCard.appendChild(createFormCard);
+    elementDOM.appendChild(createFormCard);
 }
 
-export {createCardForm};
+export { displayFormCard };

@@ -9,9 +9,10 @@ import { CSRFToken } from "../../services/CSRFToken.js";
 import {
     configPath,
     redirect,
-    dialog
+    dialog,
+    notAllowedRedirection
 } from "../../services/utils.js";
-import { createUpdateForm } from "./update_form_list.js";
+import { displayFormList } from "./form_list.js";
 import { card } from "../../card/js/card.js";
 
 /**
@@ -25,12 +26,20 @@ function list() {
 
         fetchReadOneListById(id)
         .then(response => {
+            if(response.errors === "no list found") {
+                // Si aucune liste n'est retrouvée (type === null), redirection vers home.html
+                notAllowedRedirection();
+            }
             const data = response.data; // user de la liste
+            let userId = null;
 
-            localStorage.setItem("typeList", data.type);
-            const userId = JSON.parse(localStorage.user).id; // user courant
+            localStorage.setItem("typeList", data?.type);
+            if (localStorage.user) {
+                userId = JSON.parse(localStorage.user).id; // user courant
+            }
 
             if (response.status === "readOneList") {
+                notAllowedRedirection(data?.type);
                 const oneList = document.querySelector("#oneList");
                 oneList.classList = "oneList";
 
@@ -85,8 +94,8 @@ function list() {
                     // Gestion de la mise à jour de la liste
                     updateBtnList.addEventListener("click", function(e) {
                         e.preventDefault();
-                        const updtBtnId = parseInt(e.target.value);
-                        if (updtBtnId !== data.id) {
+                        const updtBtnListId = parseInt(e.target.value);
+                        if (updtBtnListId !== data.id) {
                             console.warn("pas touche");
                             return;
 
@@ -96,19 +105,17 @@ function list() {
                             updateList.classList.add("updateList");
                             deleteBtnList.after(updateList);
 
-
                             // Affichage du formulaire d'édition + dissimulation de la liste
-                            createUpdateForm(updateList);
+                            displayFormList(updateList);
+                            titleFormList.innerText = "Formulaire d'édition de la liste";
                             oneList.classList.add("hidden");
                             updateBtnList.disabled = true;
                             deleteBtnList.disabled = true;
 
                             // Affichage de la liste + suppression du formulaire d'édition
-                            const updateFormList  = document.querySelector("#updateFormList");
-                            const listCancelBtn = document.querySelector("#updateBtnListCancel");
-                            listCancelBtn.addEventListener("click", function(){
+                            const updateFormList  = document.querySelector("#formList");
+                            cancelForm.addEventListener("click", function(){
                                 updateList.remove();
-                                updateFormList.remove();
                                 updateBtnList.disabled = false;
                                 deleteBtnList.disabled = false;
                                 oneList.classList.remove("hidden");
@@ -120,26 +127,26 @@ function list() {
                                 radio.checked = true;
                             };
                             const inputTitle = document.querySelector("#titleList");
-                            inputTitle.value = `${data.title}`;
+                            inputTitle.value = data.title;
 
                             const inputDescription = document.querySelector("#descriptionList");
-                            inputDescription.value = `${data.description}`;
+                            inputDescription.value = data.description;
 
                             CSRFToken(updateFormList.id);
                             updateFormList.addEventListener("submit", function(e) {
                                 e.preventDefault();
 
                                 fetchUpdateList(updateFormList, data.id)
-                                .then((response) => {
+                                .then(response => {
                                     localStorage.removeItem("csrfToken");
 
-                                    if (response.status === "updated") {
+                                    if (response.status === "updateList") {
                                         dialog({title: "Modification de la liste", content: "Votre liste a bien été mise à jour."});
-                                        redirect(`${configPath.basePath}/list/pages/list.html?id=${updtBtnId}`);
+                                        redirect(`${configPath.basePath}/list/pages/list.html?id=${updtBtnListId}`);
                                     };
-                                    if (response.status === "fail") {
+                                    if (response.status === "errors") {
                                         dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
-                                        redirect(`${configPath.basePath}/list/pages/list.html?id=${updtBtnId}`);
+                                        redirect(`${configPath.basePath}/list/pages/list.html?id=${updtBtnListId}`);
                                     };
                                 });
                             });
@@ -166,9 +173,10 @@ function list() {
                         };
                     });
                 };
+                card(userId === data?.user.id);
             };
-            card(userId === data.user.id);
-        });
+        })
+        .catch(e=>console.error(e))
     };
 };
 

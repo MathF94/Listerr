@@ -74,15 +74,12 @@ function dialog({title, content, hasTimeOut}) {
     };
 };
 
-function notAllowedRedirection() {
-    if (!localStorage.token || localStorage.token === undefined ) {
-        redirect(`${configPath.basePath}/home/pages/home.html`, 0);
+function notAllowedRedirection(type) {
+    if (type !== "WishList" || type === null) {
+        if (!localStorage.token || localStorage.token === undefined ) {
+            redirect(`${configPath.basePath}/home/pages/home.html`, 0);
+        }
     }
 }
-
-// SI Todolist
-//      ALORS redirect(`${configPath.basePath}/home/pages/home.html`, 0);
-// SI WishList && utilisateurs non connectés (=visiteurs)
-//      ALORS redirect(`${configPath.basePath}/list/pages/list.html?id=${objectList.id}`, 0);
 
 export { configPath, redirect, dialog, notAllowedRedirection };

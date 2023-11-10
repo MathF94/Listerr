@@ -3,14 +3,17 @@
 /**
  * Génère un formulaire de mise à jour pour une liste.
  *
- * @param {HTMLElement} updateList - L'élément HTML dans lequel le formulaire de mise à jour sera généré.
+ * @param {HTMLElement} elementDOM - L'élément HTML dans lequel le formulaire de mise à jour sera généré.
  */
-function createUpdateForm(updateList) {
-    const updateFormList = document.createElement("form");
-    updateFormList.id = "updateFormList";
+function displayFormList(elementDOM) {
+    const sectionForm = document.createElement("section");
+    sectionForm.id = "listFormSection";
+
+    const formList = document.createElement("form");
+    formList.id = "formList";
 
     const titleForm = document.createElement("h3");
-    titleForm.innerText = "Formulaire d'édition de la liste";
+    titleForm.id = "titleFormList";
 
     const radioW = document.createElement("input");
     radioW.type = "radio";
@@ -56,31 +59,32 @@ function createUpdateForm(updateList) {
     inputDescription.placeholder = "Votre description";
     inputDescription.value = ``;
 
-    const updateBtnListValid = document.createElement("button");
-    updateBtnListValid.id = "updateBtnListValid";
-    updateBtnListValid.type = "submit";
-    updateBtnListValid.value = "updateBtnListValid";
-    updateBtnListValid.innerText = "Valider";
+    const validListBtn = document.createElement("button");
+    validListBtn.id = "validForm";
+    validListBtn.type = "submit";
+    validListBtn.value = "validForm";
+    validListBtn.innerText = "Valider";
 
-    const updateBtnListCancel = document.createElement("button");
-    updateBtnListCancel.id = "updateBtnListCancel";
-    updateBtnListCancel.type = "button";
-    updateBtnListCancel.value = "updateBtnListCancel";
-    updateBtnListCancel.innerText = "Annuler";
+    const cancelListBtn = document.createElement("button");
+    cancelListBtn.id = "cancelForm";
+    cancelListBtn.type = "button";
+    cancelListBtn.value = "cancelForm";
+    cancelListBtn.innerText = "Annuler";
 
-    updateFormList.appendChild(titleForm);
-    updateFormList.appendChild(radioW);
-    updateFormList.appendChild(labelW);
-    updateFormList.appendChild(radioT);
-    updateFormList.appendChild(labelT);
-    updateFormList.appendChild(labelTitle);
-    updateFormList.appendChild(inputTitle);
-    updateFormList.appendChild(labelDescription);
-    updateFormList.appendChild(inputDescription);
-    updateFormList.appendChild(updateBtnListValid);
-    updateFormList.appendChild(updateBtnListCancel);
+    sectionForm.appendChild(titleForm);
+    sectionForm.appendChild(formList);
+    formList.appendChild(radioW);
+    formList.appendChild(labelW);
+    formList.appendChild(radioT);
+    formList.appendChild(labelT);
+    formList.appendChild(labelTitle);
+    formList.appendChild(inputTitle);
+    formList.appendChild(labelDescription);
+    formList.appendChild(inputDescription);
+    formList.appendChild(validListBtn);
+    formList.appendChild(cancelListBtn);
 
-    updateList.appendChild(updateFormList);
+    elementDOM.appendChild(sectionForm);
 }
 
-export {createUpdateForm};
+export { displayFormList };

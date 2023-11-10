@@ -46,6 +46,7 @@ class Lister
         $this->user->populate($params);
 
         $model = new Cards();
-        $this->cards = $model->getAllByList($this->id);
+        // Récupère toutes les cartes d'une liste en fonction de son ID $this->id
+        $this->cards = $model->getAllCardsByList($this->id);
     }
 }

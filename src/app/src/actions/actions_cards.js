@@ -71,6 +71,27 @@ async function fetchUpdateCard(form, id) {
     }
 };
 
+async function fetchUpdateReservation(checked, id) {
+    try {
+        const formData = new FormData();
+        formData.append('id', id);
+        formData.append('checked', checked);
+
+        const url = `${configPath.apiPath}/?route=update_checked`;
+        return await fetch(url, {
+            headers: {
+                "Authorization": localStorage.getItem("token"),
+                "X-CSRFToken": localStorage.getItem("csrfToken")
+            },
+            method: "POST",
+            body: formData,
+            }).then(response => response.json());
+
+    } catch (error) {
+        console.error("Erreur lors de la requête fetch :", error);
+        return null;
+    }
+}
 /**
  * Effectue une requête pour supprimer une carte par son ID.
  *
@@ -98,5 +119,6 @@ export {
     fetchCreateCard,
     fetchReadAllCardsByList,
     fetchUpdateCard,
+    fetchUpdateReservation,
     fetchDeleteCard
 };

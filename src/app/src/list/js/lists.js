@@ -12,6 +12,7 @@ import {
     dialog,
     notAllowedRedirection
 } from "../../services/utils.js";
+import { displayFormList } from "./form_list.js";
 
 notAllowedRedirection();
 
@@ -20,54 +21,52 @@ notAllowedRedirection();
  */
 function lists() {
     const createListBtn = document.querySelector("#listCreater");
-    const validListBtn = document.querySelector("#validForm");
-    const cancelListBtn = document.querySelector("#cancelForm");
-    validListBtn.disabled = true;
-    cancelListBtn.disabled = true;
-    const listForm = document.querySelector("#listForm");
-    const cancelForm = document.querySelector("#cancelForm");
-
-    // Affiche le formulaire de création de liste lorsqu'on clique sur le bouton "Nouvelle liste".
+    // Affiche le formulaire de création de liste lorsqu'on clique sur le bouton "Créer une nouvelle liste".
     createListBtn.addEventListener("click", function(){
         if (createListBtn.value === "newList") {
-            listForm.classList.remove("hidden");
-            validListBtn.disabled = false;
-            cancelListBtn.disabled = false;
+            const divList = document.querySelector("#divList");
+
+            // Appelle le formulaire pour la création de la liste
+            displayFormList(divList)
+            titleFormList.innerText = "Formulaire de création de la liste";
+            createListBtn.disabled = true;
+            const listForm = document.querySelector("#listFormSection");
+            const formList = document.querySelector("#formList");
+
+            // Masque le formulaire de création de liste lorsqu'on clique sur le bouton "Annuler".
+            cancelForm.addEventListener("click", function(e){
+                e.preventDefault();
+                listForm.remove();
+                createListBtn.disabled = false;
+            })
+
+            // Gère la soumission du formulaire de création de liste.
+            CSRFToken(formList.id);
+            formList.addEventListener("submit", function(e){
+                e.preventDefault();
+                fetchCreateList(formList)
+                .then(response => {
+                    localStorage.removeItem("csrfToken");
+
+                    if (response.status === "createList") {
+                        dialog({title: "Et une liste de créée, une !", content:"aux cartes maintenant !"});
+                        redirect(`${configPath.basePath}/list/pages/lists.html`);
+
+                    }
+                    if (response.status === "errors") {
+                        dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
+                        redirect(`${configPath.basePath}/list/pages/lists.html`);
+                    };
+                })
+            })
         }
-    })
-    // Masque le formulaire de création de liste lorsqu'on clique sur le bouton "Annuler".
-    cancelForm.addEventListener("click", function(){
-        listForm.classList.add("hidden");
-        validListBtn.disabled = true;
-        cancelListBtn.disabled = true;
-    })
-
-    // Gère la soumission du formulaire de création de liste.
-    createListForm.addEventListener("submit", function(e){
-        e.preventDefault();
-
-        fetchCreateList(createListForm)
-        .then(response => {
-            localStorage.removeItem("csrfToken");
-
-            if (response.status === "success") {
-                dialog({title: "Et une liste de créée, une !", content:"aux cartes maintenant !"});
-                redirect(`${configPath.basePath}/list/pages/lists.html`);
-
-            }
-            if (response.status === "fail") {
-                dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
-                redirect(`${configPath.basePath}/list/pages/lists.html`);
-            };
-        })
     })
 
     // Récupère et affiche la liste des listes existantes.
     fetchReadAllLists()
     .then(response => {
-
         const data = response.data;
-        if (response.status === "read"){
+        if (response.status === "readAllListsByUser"){
             const listWrapper = document.querySelector('#listsWrapper');
 
             for (const index in data) {
@@ -155,7 +154,7 @@ function lists() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    const createListForm = document.querySelector("#createListForm");
-    CSRFToken(createListForm.id);
+    // const createListForm = document.querySelector("#createListForm");
+    // CSRFToken(createListForm.id);
     lists();
 });

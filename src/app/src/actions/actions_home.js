@@ -9,7 +9,7 @@ import { configPath } from "../services/utils.js";
  */
 async function fetchAllListsByUsers() {
     try {
-        const url = `${configPath.apiPath}/?route=read_all_by_users`;
+        const url = `${configPath.apiPath}/?route=read_all_lists_all_users`;
 
         return await fetch(url, {
             method: "GET",

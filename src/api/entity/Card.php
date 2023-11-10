@@ -2,8 +2,6 @@
 
 namespace Entity;
 
-use Models\Cards;
-
 /**
  * Classe représentant une carte.
  */
@@ -17,7 +15,6 @@ class Card
     public string $createdAt;
     public string $updatedAt;
     public int $listId;
-    public Lister $list;
 
     /**
      * Initialise les propriétés de l'objet d'une carte à partir d'un tableau associatif de paramètres.

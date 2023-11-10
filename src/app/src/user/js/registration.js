@@ -18,7 +18,7 @@ function registration() {
         .then(response => {
             localStorage.removeItem("csrfToken");
 
-            if (response.status === "success") {
+            if (response.status === "createUser") {
                 // En cas de succès, affiche un message de bienvenue et redirige l'utilisateur vers la page de connexion.
                 const name = e.target.children.name.value;
                 const firstname = e.target.children.firstname.value;
@@ -27,16 +27,16 @@ function registration() {
                 dialog({title: `<p>Bienvenue !</p>`,
                         content: `<p>Bonjour ${firstname} ${name}.</p>
                             <p>Votre compte lié à l'adresse ${email} est maintenant créé sous le login ${login}.</p>
-                            <p>Vous allez être redirigé dans quelques secondes vers la page de connexion...</p>
+                            <p>Vous allez être redirigé(e) dans quelques secondes vers la page de connexion...</p>
                 `});
                 redirect(`${configPath.basePath}/user/pages/login.html`)
             }
 
-            if (response.status === "fail") {
+            if (response.status === "errors") {
                 // En cas d'échec, affiche les erreurs rencontrées et redirige l'utilisateur vers la page d'inscription.
                 const errors = response.errors;
                 dialog({title: "Erreurs", content: errors, hasTimeOut: true});
-                redirect(`${configPath.basePath}/user/pages/registration.html`)
+                // redirect(`${configPath.basePath}/user/pages/registration.html`)
             };
         });
     });

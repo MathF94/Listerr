@@ -31,7 +31,7 @@ function readAllLists() {
     fetchAllListsByUsers()
     .then(response => {
         const data = response.data;
-        if (response.status === "read"){
+        if (response.status === "readAllListsAllUsers"){
             const homeDisplayLists = document.querySelector("#homeDisplayLists");
 
             const allListsSection = document.createElement("section");
