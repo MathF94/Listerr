@@ -142,7 +142,6 @@ function lists() {
 
                 // Redirige vers la page de détails de la liste en cliquant sur la liste.
                 contentList.addEventListener("click", function(){
-                    console.log({type: objectList.type, userId: objectList.user.id, localStorage: JSON.parse(localStorage.getItem("user")).id});
                     if (objectList.type === "TodoList" && objectList.user.id !== JSON.parse(localStorage.getItem("user")).id) {
                         return false;
                     }

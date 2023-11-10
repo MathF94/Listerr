@@ -40,13 +40,15 @@ function redirect(url, duration = 3000) {
 function dialog({title, content, hasTimeOut}) {
     const header = document.querySelector("#mainWrapper");
     title = title || "Notification" ;
+
     const titleH2 = document.createElement("h2");
     titleH2.innerHTML = title ;
+
     const dialogSection = document.createElement("section");
     dialogSection.id = "dialog";
     dialogSection.className = "dialog";
-    // document.body.appendChild(dialogSection);
     header.after(dialogSection);
+
     const dialog = document.createElement("dialog");
     dialog.open = "open";
     dialog.prepend(titleH2);
@@ -61,10 +63,11 @@ function dialog({title, content, hasTimeOut}) {
     if (["array", "object"].includes(typeof(content))) {
         const list = document.createElement("ul");
         for(const index in content){
-        const item = document.createElement("li");
-        const column = content[index];
-        item.innerText = column;
-        list.appendChild(item);
+            const item = document.createElement("li");
+            const column = content[index];
+            item.innerText = column;
+
+            list.appendChild(item);
         };
         dialog.appendChild(list);
         dialogSection.appendChild(dialog);
@@ -82,7 +85,7 @@ function dialog({title, content, hasTimeOut}) {
 
 function notAllowedRedirection(type) {
     if (type !== "WishList" || type === null) {
-        if (!localStorage.token || localStorage.token === undefined ) {
+        if (!localStorage.token || localStorage.token === undefined) {
             redirect(`${configPath.basePath}/home/pages/home.html`, 0);
         }
     }

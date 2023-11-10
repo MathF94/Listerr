@@ -213,8 +213,7 @@ function card(canCreateCard) {
                     if (updtBtnCardId !== objectCard.id) {
                         console.warn("pas touche");
                         return;
-                    }
-                    else {
+                    } else {
                         const updateCardSection = document.createElement("section");
                         updateCardSection.id = `updateCardSection-${objectCard.id}`;
                         updateCardSection.classList.add("updateCard");

@@ -46,10 +46,12 @@ function read() {
                 displayUser(response);
                 listBtn.addEventListener("click", function(e){
                     e.preventDefault();
+
                     fetchReadAllLists(id)
                     .then(response => {
                         const data = response.data;
-                        if (response.status === "readAllListsByUser"){
+                            if (response.status === "readAllListsByUser"){
+
                             const listWrapper = document.querySelector('#listsWrapper');
 
                             for (const index in data) {
@@ -66,13 +68,6 @@ function read() {
                                 const titleH3 = document.createElement("h3");
                                 const list = document.createElement("ul");
 
-                                // const deleteBtnLists = document.createElement("button");
-                                // deleteBtnLists.id = `deleteProfilList-${objectList.id}`;
-                                // deleteBtnLists.name = "deleteProfilList";
-                                // deleteBtnLists.type = "submit";
-                                // deleteBtnLists.value = `${objectList.id}`;
-                                // deleteBtnLists.textContent = "Supprimer";
-                                // deleteBtnLists.classList.add("deleteProfilList");
 
                                 for (const key in objectList) {
                                     const value = objectList[key];

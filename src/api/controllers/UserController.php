@@ -38,14 +38,13 @@ class UserController
     /**
      * Aide au chiffrement du jeton CSRF en réponse à une requête.
      *
-     * Cette méthode récupère le champ "formId" de la variable superglobale $_POST, qui correspond à l'id du formulaire renvoyé via le CSRFToken.js,
+     * Cette méthode récupère le champ "formId" du $_POST, qui correspond à l'ID du formulaire renvoyé via le CSRFToken.js,
      *               chiffre cette valeur et l'envoie en paramètre de la méthode encrypt() pour générer un CSRF Token.
-     * La méthode renvoie ensuite le résultat encodé en JSON.
      *
-     * @return string - Le résultat est encodé au format JSON avec le statut "success" et le jeton CSRF en cas de succès.
-     *                - Le résultat est encodé au format JSON avec le statut "error" et un message d'erreur en cas d'échec.
+     * @return string - Réponse JSON : "success" avec le jeton CSRF chiffré, en cas de succès.
+     *                                 "fail" avec un message d'erreur, en cas d'échec.
      */
-    public function CSRFToken()
+    public function CSRFToken(): string
     {
         try {
             $formId = $_POST["formId"];

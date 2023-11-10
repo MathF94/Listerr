@@ -53,7 +53,6 @@ async function fetchReadOneListById(id) {
  */
 async function fetchReadAllLists(id) {
     try {
-        console.log(id);
         let url = `${configPath.apiPath}/?route=read_all_lists_by_user`;
         if(id) {
             url += `&id=${id}`;

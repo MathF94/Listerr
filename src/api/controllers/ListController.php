@@ -136,7 +136,7 @@ class ListController
     public function readOneListById(): string
     {
         try {
-            if (!empty($_GET['id'])) {
+            if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
                 $id = $_GET['id'];
                 $model = new Lists();
                 $list = $model->getOneListById((int)$id);
@@ -165,7 +165,7 @@ class ListController
             }
             return json_encode([
                 "status" => "readOneList failed",
-                "message" => "no ID in URL"
+                "message" => "ID not numeric"
             ]);
         } catch (\Exception $e) {
             return json_encode([
@@ -215,7 +215,7 @@ class ListController
                                 "status" => "standBy",
                                 "errors" => "no lists created yet"
                             ]);
-                            
+
                         } else {
                             return json_encode([
                                 "status" => "readAllListsByUser",

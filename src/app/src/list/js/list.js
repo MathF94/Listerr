@@ -26,6 +26,9 @@ function list() {
 
         fetchReadOneListById(id)
         .then(response => {
+            if(response.message === "ID not numeric" || id === "") {
+                redirect(`${configPath.basePath}/home/pages/home.html`, 0)
+            }
             if(response.errors === "no list found") {
                 // Si aucune liste n'est retrouvée (type === null), redirection vers home.html
                 notAllowedRedirection();
@@ -176,8 +179,8 @@ function list() {
                 card(userId === data?.user.id);
             };
         })
-        .catch(e=>console.error(e))
-    };
+        // .catch(e=>console.error(e))
+    }
 };
 
 document.addEventListener("DOMContentLoaded", () => {
