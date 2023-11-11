@@ -55,7 +55,7 @@ class Users extends Database
             }
             return true;
         } catch (\Exception $e) {
-            echo $e->getMessage();
+            throw new \Exception ($e->getMessage());
             return false;
         }
     }
@@ -209,10 +209,17 @@ class Users extends Database
                 WHERE `id` = :id";
             $query = $this->db->prepare($req);
             $params['id'] = $id;
-            return $query->execute($params);
+            $exect = $query->execute($params);
+
+            // S'il y a un status et qu'il s'agit d'une erreur de duplicata, dans ce cas, retourne false
+            if (isset($exect['status']) && $exect['status'] === "error") {
+                return false;
+            }
+            return true;
+
         } catch (\Exception $e) {
-            echo $e->getMessage();
-            return [];
+            throw new \Exception ($e->getMessage());
+            return false;
         }
     }
 

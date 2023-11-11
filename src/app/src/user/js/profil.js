@@ -47,7 +47,6 @@ function read() {
 
                 // Affiche le bouton "Retour..." uniquement pour l'Admin
                 if (JSON.parse(localStorage.user).role === "Admin") {
-                    const profilWrapper = document.querySelector("#profilWrapper");
                     const returnBtn = document.createElement("button");
                     returnBtn.id = "returnBtn";
                     returnBtn.innerText = "Retour à la liste d'utilisateurs";
@@ -76,7 +75,6 @@ function read() {
                             const listWrapper = document.querySelector('#listsWrapper');
 
                             for (const index in data) {
-                                console.log(data);
                                 const objectList = data[index]
                                 const profilList = document.createElement("div");
                                 profilList.id = `profilList-${objectList.id}`;
@@ -88,7 +86,6 @@ function read() {
 
                                 const titleH3 = document.createElement("h3");
                                 const list = document.createElement("ul");
-
 
                                 for (const key in objectList) {
                                     const value = objectList[key];
@@ -117,32 +114,11 @@ function read() {
                                     list.appendChild(item);
                                     contentList.appendChild(list);
                                     profilList.appendChild(contentList);
-                                    // profilList.appendChild(deleteBtnLists);
                                     listWrapper.append(profilList);
                                 }
 
-                                // Gestion de la suppression de liste
-                                // deleteBtnLists.addEventListener("click", function(e){
-                                //     e.preventDefault();
-                                //     const btnListId = parseInt(e.target.value);
-
-                                //     if (btnListId !== objectList.id) {
-                                //         console.warn("pas touche");
-                                //         return;
-                                //     } else if (confirm('Voulez-vous vraiment vous supprimer la liste ?') === true) {
-                                //         fetchDeleteList(objectList.id)
-                                //         .then(() => {
-                                //             dialog({title: "Suppression de la liste",
-                                //             content: `<p>Votre liste a bien été supprimée.</p>`
-                                //             });
-                                //             redirect(`${configPath.basePath}/list/pages/lists.html`);
-                                //         });
-                                //     }
-                                // })
-
                                 // Redirige vers la page de détails de la liste en cliquant sur la liste.
                                 contentList.addEventListener("click", function(){
-                                    console.log({type: objectList.type, userId: objectList.user.id, localStorage: JSON.parse(localStorage.getItem("user")).id});
                                     if (objectList.type === "TodoList" && objectList.user.id !== JSON.parse(localStorage.getItem("user")).id) {
                                         return false;
                                     }
@@ -151,13 +127,12 @@ function read() {
                             }
                         }
                     })
-
                 })
-            };
-        });
+            }
+        })
     }
 
-    // Affichage du profil utilisateur
+    // Affichage du profil utilisateur courant
     if (urlParams.size === 0) {
         fetchRead()
         .then(response => {

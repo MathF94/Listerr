@@ -113,9 +113,14 @@ class UserController
                 "errors" => $errors
             ]);
         } catch (\Exception $e) {
+            $message = "Une erreur est survenue";
+            if (strpos($e->getMessage(), "SQLSTATE[23000]") !== false) {
+                $message = "Ce login existe déjà, veuillez en trouver un autre svp, merci :)";
+            }
             return json_encode([
-                "status" => "error",
-                "message" => $e->getMessage()
+                "status" => "errors",
+                "message" => $e->getMessage(),
+                "errors" => $message
             ]);
         }
     }
@@ -379,23 +384,35 @@ class UserController
                     "email" => $_POST["email"]
                 ];
                 $modelUser = new Users();
-                $modelUser->update($params, $id);
+                $update = $modelUser->update($params, $id);
 
+                if ($update) {
+                    return json_encode([
+                        "status" => "updateUser",
+                        "message" => "Le profil a bien été mis à jour."
+                    ]);
+                }
+                // si $create est false, il s'agit d'un duplicata de login
                 return json_encode([
-                    "status" => "updateUser",
-                    "message" => "Le profil a bien été mis à jour."
+                    "status" => "errors",
+                    "errors" => "Ce login existe déjà, veuillez en trouver un autre svp, merci :)"
                 ]);
-            };
+            }
             return json_encode([
                 "status" => "errors",
                 "errors" => $errors
             ]);
         } catch (\Exception $e) {
+            $message = "Une erreur est survenue";
+            if (strpos($e->getMessage(), "SQLSTATE[23000]") !== false) {
+                $message = "Ce login existe déjà, veuillez en trouver un autre svp, merci :)";
+            }
             return json_encode([
                 "status" => "errors",
-                "message" => $e->getMessage()
+                "message" => $e->getMessage(),
+                "errors" => $message
             ]);
-        };
+        }
     }
 
     /**
