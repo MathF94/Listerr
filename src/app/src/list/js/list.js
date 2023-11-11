@@ -28,7 +28,6 @@ function list() {
 
         fetchReadOneListById(id)
         .then(response => {
-            console.log(localStorage.user);
             const returnLists = document.querySelector("#cancelBtn");
             if (JSON.parse(localStorage.user).role === "Admin") {
                 returnLists.href = `${configPath.basePath}/user/pages/profil.html?id=${response.data.userId}`;
@@ -189,7 +188,7 @@ function list() {
                 card(userId === data?.user.id);
             };
         })
-        // .catch(e=>console.error(e))
+        .catch(e=>console.error(e))
     }
 };
 

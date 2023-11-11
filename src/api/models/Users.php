@@ -216,7 +216,7 @@ class Users extends Database
         }
     }
 
-    /*******************************************************
+    /********************************************************
      * PREVUE POUR LA VERSION 2
      ********************************************************/
     /**
@@ -238,6 +238,7 @@ class Users extends Database
             return [];
         }
     }
+    /********************************************************/
 
     /**
      * Cette méthode permet de suppri;er un utilisateur de la base de données en fonction de son login.

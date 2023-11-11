@@ -153,7 +153,5 @@ function lists() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    // const createListForm = document.querySelector("#createListForm");
-    // CSRFToken(createListForm.id);
     lists();
 });

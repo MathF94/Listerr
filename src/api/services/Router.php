@@ -77,7 +77,9 @@ class Router
                     }
                     break;
 
-
+                    /********************************************************
+                     * PREVUE POUR LA VERSION 2
+                     ********************************************************/
                     // @TODO
                     // case 'admin_update_user':
                     //     if ($this->isAllowedMethod('GET')) {
@@ -92,6 +94,7 @@ class Router
                     //         echo $user->delete($headers['Authorization']); // delete
                     //     }
                     //     break;
+                    /********************************************************/
 
                 case 'create_list':
                     if ($this->isAllowedMethod('POST')) {
