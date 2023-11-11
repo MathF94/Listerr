@@ -29,10 +29,10 @@ function list() {
         fetchReadOneListById(id)
         .then(response => {
             const returnLists = document.querySelector("#cancelBtn");
+            returnLists.href = `${configPath.basePath}/user/pages/profil.html`;
+            
             if (JSON.parse(localStorage.user).role === "Admin") {
                 returnLists.href = `${configPath.basePath}/user/pages/profil.html?id=${response.data.userId}`;
-            } else {
-                returnLists.href = `${configPath.basePath}/user/pages/profil.html`;
             }
 
             if(response.message === "ID not numeric" || id === "") {
