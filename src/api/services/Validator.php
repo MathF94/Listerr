@@ -110,7 +110,7 @@ class Validator
 
         if (empty(trim($params['firstname']))) {
             $errors[] = 'Le champ "Prénom" est requis.';
-        } elseif (strlen($params['firstname']) < 3 || strlen($params['firstname']) > 20) {
+        } elseif (strlen($params['firstname']) < 1 || strlen($params['firstname']) > 20) {
             $errors[] = 'Le champ "Prénom" doit comporter entre 3 et 20 caractères.';
         } elseif (!preg_match("/^[A-Za-zÀ-ÿ '-]+$/", $params['firstname'])) {
             $errors[] = 'Le champ "Prénom" ne peut contenir que des lettres, des espaces, des tirets et des apostrophes.';
