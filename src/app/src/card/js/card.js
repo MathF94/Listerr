@@ -273,7 +273,7 @@ function card(canCreateCard) {
                 // Gestion de la réservation d'une carte
                 CSRFToken("checkForm");
                 check.addEventListener("change", function(e) {
-                check.checked === false ? objectCard.checked = 0 : objectCard.checked = 1;
+                    objectCard.checked = check.checked === true ? 1 : 0
                     check.value = objectCard.checked
 
                     fetchUpdateReservation(objectCard.checked, objectCard.id)

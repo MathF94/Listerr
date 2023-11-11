@@ -44,7 +44,28 @@ function read() {
         .then(response => {
             if (response.status === "[Admin]user" && localStorage.token && localStorage.user) {
                 displayUser(response);
-                listBtn.addEventListener("click", function(e){
+
+                // Affiche le bouton "Retour..." uniquement pour l'Admin
+                if (JSON.parse(localStorage.user).role === "Admin") {
+                    const profilWrapper = document.querySelector("#profilWrapper");
+                    const returnBtn = document.createElement("button");
+                    returnBtn.id = "returnBtn";
+                    returnBtn.innerText = "Retour à la liste d'utilisateurs";
+                    returnBtn.type = "button";
+                    const listsUser = document.querySelector("#listsUser");
+                    listsUser.innerText = "Accéder aux listes de l'utilisateur"
+                    listsUser.after(returnBtn)
+
+                    // Permet de revenir aux listes d'utilisateurs
+                    returnBtn.addEventListener("click", function(e) {
+                        e.preventDefault();
+                        redirect(`${configPath.basePath}/admin/pages/profils.html`, 0);
+                        })
+                }
+
+
+                // Affiche les listes de l'utilisateur vu par l'Admin
+                listBtn.addEventListener("click", function(e) {
                     e.preventDefault();
 
                     fetchReadAllLists(id)
