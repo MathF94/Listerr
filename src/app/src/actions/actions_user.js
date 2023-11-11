@@ -10,7 +10,6 @@ import { configPath } from "../services/utils.js";
  */
 async function fetchRegister(form) {
     try {
-        console.log(localStorage.getItem("csrfToken"));
         const url = `${configPath.apiPath}/?route=user_register`;
         return await fetch(url, {
             headers: {

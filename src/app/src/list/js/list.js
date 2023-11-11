@@ -15,6 +15,8 @@ import {
 import { displayFormList } from "./form_list.js";
 import { card } from "../../card/js/card.js";
 
+notAllowedRedirection();
+
 /**
  * Fonction principale pour gérer la page de détails d'une liste.
  */
@@ -26,6 +28,13 @@ function list() {
 
         fetchReadOneListById(id)
         .then(response => {
+            const returnLists = document.querySelector("#cancelBtn");
+            returnLists.href = `${configPath.basePath}/user/pages/profil.html`;
+            
+            if (JSON.parse(localStorage.user).role === "Admin") {
+                returnLists.href = `${configPath.basePath}/user/pages/profil.html?id=${response.data.userId}`;
+            }
+
             if(response.message === "ID not numeric" || id === "") {
                 redirect(`${configPath.basePath}/home/pages/home.html`, 0)
             }
@@ -179,7 +188,7 @@ function list() {
                 card(userId === data?.user.id);
             };
         })
-        // .catch(e=>console.error(e))
+        .catch(e=>console.error(e))
     }
 };
 

@@ -35,6 +35,7 @@ function updateUser() {
             // Appelle la fonction fetchUpdate pour envoyer les données du formulaire de mise à jour au serveur.
             fetchUpdate(updateForm)
             .then(response => {
+                console.log(response);
                 localStorage.removeItem("csrfToken");
                 const user = JSON.parse(localStorage.getItem("user"));
 
@@ -54,7 +55,8 @@ function updateUser() {
                         dialog({title: "Modification du profil", content: "Votre profil a bien été mis à jour."});
                         redirect(`${configPath.basePath}/user/pages/profil.html`);
                     }
-                };
+                }
+
                 if (response.status === "errors") {
                     // En cas d'échec, affiche les erreurs rencontrées et redirige l'utilisateur vers la page de profil.
                     dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
@@ -63,7 +65,7 @@ function updateUser() {
             });
         }
     });
-};
+}
 
 document.addEventListener("DOMContentLoaded", () => {
     const updateForm = document.querySelector("#updateForm");
