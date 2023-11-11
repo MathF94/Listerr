@@ -38,14 +38,13 @@ class UserController
     /**
      * Aide au chiffrement du jeton CSRF en réponse à une requête.
      *
-     * Cette méthode récupère le champ "formId" de la variable superglobale $_POST, qui correspond à l'id du formulaire renvoyé via le CSRFToken.js,
+     * Cette méthode récupère le champ "formId" du $_POST, qui correspond à l'ID du formulaire renvoyé via le CSRFToken.js,
      *               chiffre cette valeur et l'envoie en paramètre de la méthode encrypt() pour générer un CSRF Token.
-     * La méthode renvoie ensuite le résultat encodé en JSON.
      *
-     * @return string - Le résultat est encodé au format JSON avec le statut "success" et le jeton CSRF en cas de succès.
-     *                - Le résultat est encodé au format JSON avec le statut "error" et un message d'erreur en cas d'échec.
+     * @return string - Réponse JSON : "success" avec le jeton CSRF chiffré, en cas de succès.
+     *                                 "fail" avec un message d'erreur, en cas d'échec.
      */
-    public function CSRFToken()
+    public function CSRFToken(): string
     {
         try {
             $formId = $_POST["formId"];
@@ -72,9 +71,12 @@ class UserController
      * Cette méthode permet la création d'un nouvel utilisateur, après validation du jeton CSRF.
      *
      * @param string - $csrfToken - Jeton CSRF pour valider l'utilisation du formulaire.
-     * @return string - Réponse JSON : "success" en cas de succès, "fail" avec un message d'erreur en cas d'échec.
+     * @return string - Réponse JSON : "createList" avec un message, en cas de succès.
+     *                                 "fail" avec un message d'erreur, si le jeton est invalide.
+     *                                 "errors" avec un message d'erreur, en cas d'échec.
+     *                                 "errors" avec un message d'erreur, si le login existe déjà.
      */
-    public function register($csrfToken): string
+    public function register(string $csrfToken): string
     {
         try {
             $validToken = $this->csrfToken->isValidToken($csrfToken, "registerForm");
@@ -82,7 +84,7 @@ class UserController
             if (!$validToken) {
                 return json_encode([
                     "status" => "fail",
-                    "message" => "jeton invalide"
+                    "message" => "no valid csrfToken"
                 ]);
             }
 
@@ -92,20 +94,22 @@ class UserController
                 $params["password"] = $this->encryption->encrypt($params["password"]);
                 $params["role_id"] = User::ROLE_USER;
                 $model = new Users();
-                $create = $model->create($params);
+                $create = $model->createUser($params);
 
                 if ($create) {
                     return json_encode([
-                        "status" => "success"
+                        "status" => "createUser",
+                        "message" => "l'utilisateur a bien été créé."
                     ]);
                 }
+                // si $create est false, il s'agit d'un duplicata de login
                 return json_encode([
-                    "status" => "fail",
-                    "errors" => "Ce login existe déjà"
+                    "status" => "errors",
+                    "errors" => "Ce login existe déjà, veuillez en trouver un autre svp, merci :)"
                 ]);
             }
             return json_encode([
-                "status" => "fail",
+                "status" => "errors",
                 "errors" => $errors
             ]);
         } catch (\Exception $e) {
@@ -121,13 +125,12 @@ class UserController
      *                      la création d'un jeton Utilisateur chiffré.
      *
      * @param string - $csrfToken - Jeton CSRF pour valider l'utilisation du formulaire.
-     * @return string - En cas de succès :
-     *                   1- Réponse JSON : "success"
-     *                   2- Récupération du jeton Utilisateur chiffré, de l'id, du login et du rôle de l'utilisateur
-     *                - En cas d'échec :
-     *                   Réponse JSON : "fail" avec un message d'erreur.
+     * @return string - Réponse JSON : "loginUser" avec un message, en cas de succès.
+     *                                 "loginUser failed" avec un message d'erreur, si le login n'existe pas.
+     *                                 "fail" avec un message d'erreur, si le jeton est invalide.
+     *                                 "errors" avec un message d'erreur, en cas d'échec.
      */
-    public function login($csrfToken): string
+    public function login(string $csrfToken): string
     {
         try {
             $validToken = $this->csrfToken->isValidToken($csrfToken, "loginForm");
@@ -135,7 +138,7 @@ class UserController
             if (!$validToken) {
                 return json_encode([
                     "status" => "fail",
-                    "message" => "jeton invalide"
+                    "message" => "no valid csrfToken"
                 ]);
             }
 
@@ -147,15 +150,14 @@ class UserController
 
                 if (empty($user)) {
                     return json_encode([
-                        "status" => "fail_data",
-                        "message" => "Votre identifiant n\'existe pas ou votre mot de passe est incorrect."
+                        "status" => "loginUser failed",
+                        "message" => "Votre identifiant n'existe pas ou votre mot de passe est incorrect."
                     ]);
                 }
-
                 $session = new Session();
                 $encryptToken = $session->encrypt($user->id, $user->login, $encrytedPassword);
                 return json_encode([
-                    "status" => "success",
+                    "status" => "loginUser",
                     "connected" => true,
                     "token" => $encryptToken,
                     "user_id" => $user->id,
@@ -164,7 +166,7 @@ class UserController
                 ]);
             };
             return json_encode([
-                "status" => "fail",
+                "status" => "errors",
                 "errors" => $errors
             ]);
         } catch (\Exception $e) {
@@ -179,13 +181,14 @@ class UserController
      * Cette méthode permet l'affichage des informations d'un utilisateur, après vérification de l'existence du jeton Utilisateur.
      *
      * @param string - $tokenUser - Jeton Utilisateur pour valider la requête.
-     * @return string - En cas de succès :
-     *                   1- Réponse JSON : "success" ;
-     *                   2- Récupération des informations de l'utilisateur.
-     *                - En cas d'échec :
-     *                   Réponse JSON : "disconnected" avec un message d'erreur invitant à se reconnecter.
+     * @param ?int - $userId - ID utilisateur pour lecture de son profil par l'Admin.
+     *
+     * @return string - Réponse JSON : "connected" avec data pour lecture profil utilisateur courant, en cas de succès.
+     *                                 "disconnected" avec un message si la connexion a été perdue.
+     *                                 "[Admin]user" avec data autre profil utilisateur lues par l'admin, en cas de succès.
+     *                                 "errors" avec un message d'erreur, en cas d'échec.
      */
-    public function read(string $tokenUser, ?int $userId = null): string
+    public function readOneUser(string $tokenUser, ?int $userId = null): string
     {
         try {
             if (!empty($tokenUser)) {
@@ -193,11 +196,12 @@ class UserController
                 $decrypt = $session->decrypt($tokenUser);
                 $login = $decrypt["login"];
                 $modelUser = new Users();
-                // faire une condition en fonction du $_GET pour récupérer l'id à visualiser
 
+                // $userId correspond à l'ID d'un autre utilisateur que l'admin, récupéré via l'URL
                 if (empty($userId)) {
+                    // fonction readOne pour la lecture du profil de l'utilisateur courant
                     $user = $modelUser->readOne($login);
-
+                    // Si la session de l'utilisateur n'est pas expirée, le profil est affiché
                     if (!$session->isExpired($decrypt, $user)) {
                         return json_encode([
                             "status" => "connected",
@@ -215,8 +219,15 @@ class UserController
                         ]);
                     };
                 } else {
-                    // fonction readById
+                    // fonction readById pour la lecture d'un profil utilisateur par l'admin
                     $user = $modelUser->readById((int)$userId);
+
+                    if (empty($user)) {
+                        return json_encode([
+                            "status" => "[Admin]user failed",
+                            "message" => "unknown user"
+                        ]);
+                    };
                     return json_encode([
                         "status" => "[Admin]user",
                         "id" => ["label" => "id", "value" => $user->id],
@@ -227,16 +238,10 @@ class UserController
                         "role" => ["label" => "Role", "value" => $user->role],
                     ]);
                 }
-
-                if (empty($user)) {
-                    return json_encode([
-                        "status" => "unknown user"
-                    ]);
-                };
             };
             return json_encode([
-                "status" => "fail",
-                "message" => "body is empty"
+                "status" => "ReadProfil failed",
+                "message" => "no user found"
             ]);
         } catch (\Exception $e) {
             return json_encode([
@@ -247,22 +252,25 @@ class UserController
     }
 
     /**
-     * Cette méthode permet l'affichage de tous les utilisateurs.
+     * Cette méthode permet l'affichage de tous les utilisateurs vus par l'Admin sur profils.html
      *
-     * @return string - En cas de succès :
-     *                   1- Réponse JSON : "success" ;
-     *                   2- Récupération des informations des utilisateurs.
-     *                - En cas d'échec :
-     *                   Réponse JSON : "error" avec un message d'erreur.
+     * @return string - Réponse JSON : "success" avec data pour afficher la liste des utilisateurs, en cas de succès.
+     *                                 "fail" avec un message d'erreur, en cas d'échec.
+     *                                 "errors" avec un message d'erreur, en cas d'échec.
      */
-    public function readUsers(): string
+    public function readAllUsers(): string
     {
         try {
             $model = new Users();
             $usersList = $model->readAll();
-
+            if (empty($usersList)) {
+                return json_encode([
+                    "status" => "ReadAllUsers failed",
+                    "message" => "no users list found"
+                ]);
+            }
             return json_encode([
-                "status" => "success",
+                "status" => "ReadAllUsers",
                 "data" => $usersList
             ]);
         } catch (\Exception $e) {
@@ -274,14 +282,15 @@ class UserController
     }
 
     /**
-     * Cette méthode permet la déconnexion d'un utilisateur, après :
-     *               vérifie l'expiration du jeton Utilisateur.
+     * Cette méthode permet la déconnexion d'un utilisateur, après vérification l'expiration du jeton Utilisateur.
      *
-     * @return string - 1 - si le jeton est expiré, la déconnexion est automatique, réponse JSON : "disconnect".
-     *                     - 2 - si le jeton n"est pas expiré, possibilité de se déconnecter, répnse JSON : "connected".
-     *                - 3 - si l'utilisateur est vide, réponse JSON : "error".
+     * @return string - Réponse JSON : "connected" avec le login de l'utilisateur, si le jeton n'est pas expiré.
+     *                                  => possibilité de se déconnecter via logout.js
+     *                                 "disconnect" avec le login de l'utilisateur, si le jeton est expiré.
+     *                                  ==> suppression jeton utilisateur et redirection automatique vers home.html via logout.js
+     *                                 "errors" avec un message d'erreur, en cas d'échec.
      */
-    public function logout($tokenUser): string
+    public function logout(string $tokenUser): string
     {
         try {
             $session = new Session();
@@ -293,18 +302,17 @@ class UserController
 
             if (empty($user)) {
                 return json_encode([
-                    "status" => "error",
+                    "status" => "errors",
                     "message" => "unknown user"
                 ]);
             };
-
             $isExpired = $session->isExpired($decryptToken, $user);
+
             if (!$isExpired) {
                 return json_encode([
                     "status" => "connected",
                     "connected" => true,
-                    "message" => "still connected.",
-                    "token" => $tokenUser,
+                    "message" => "la session est encore active.",
                     "login" => $decryptToken["login"],
                 ]);
             };
@@ -314,14 +322,13 @@ class UserController
                 return json_encode([
                     "status" => "disconnect",
                     "connected" => false,
-                    "message" => "Vous êtes déjà déconnecté(e).",
-                    "token" => $tokenUser,
+                    "message" => "La session a expirée.",
                     "login" => $decryptToken["login"],
                 ]);
             };
         } catch (\Exception $e) {
             return json_encode([
-                "status" => "error",
+                "status" => "errors",
                 "message" => $e->getMessage()
             ]);
         };
@@ -332,11 +339,14 @@ class UserController
      *                  1 - validation du jeton CSRF ;
      *                  2 - vérification de l'existence du jeton Utilisateur.
      *
+     * @param string - $tokenUser - Jeton Utilisateur pour valider la requête.
      * @param string - $csrfToken - Jeton CSRF pour valider l'utilisation du formulaire.
-     *               - $tokenUser - Jeton Utilisateur pour valider la requête.
-     * @return string - Réponse JSON : "success" en cas de succès, "fail" avec un message d'erreur en cas d'échec.
-     */
-    public function update(string $csrfToken, string $tokenUser): string
+     * @return string - Réponse JSON : "updateUser" avec un message, en cas de succès.
+     *                                 "updateUser failed" avec un message d'erreur, si l'utilisateur est introuvable.
+     *                                 "fail" avec un message d'erreur, si le jeton est invalide.
+     *                                 "fail" avec un message d'erreur, si l'utilisateur est introuvable.
+     *                                 "errors" avec un message d'erreur, en cas d'échec.     */
+    public function update(string $tokenUser, string $csrfToken,): string
     {
         try {
             $validToken = $this->csrfToken->isValidToken($csrfToken, "updateForm");
@@ -344,41 +354,45 @@ class UserController
             if (!$validToken) {
                 return json_encode([
                     "status" => "fail",
-                    "message" => "jeton invalide"
+                    "message" => "no valid csrfToken"
                 ]);
             }
-
             $session = new Session();
             $decryptToken = $session->decrypt($tokenUser);
             $users = new Users();
             $user = $users->readOne($decryptToken["login"]);
 
-            if (!empty($user)) {
-                $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_UPDATE_USER);
-
-                if (empty(count($errors))) {
-                    $id = $_POST["updateId"];
-                    $params = [
-                        "name" => $_POST["name"],
-                        "firstname" => $_POST["firstname"],
-                        "login" => $_POST["login"],
-                        "email" => $_POST["email"]
-                    ];
-
-                    $modelUser = new Users();
-                    $modelUser->update($params, $id);
-
-                    return json_encode(["status" => "success"]);
-                };
-
+            if (empty($user)) {
                 return json_encode([
                     "status" => "fail",
-                    "errors" => $errors
+                    "message" => "no user found"
                 ]);
             }
+
+            $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_UPDATE_USER);
+            if (empty(count($errors))) {
+                $id = $_POST["updateId"];
+                $params = [
+                    "name" => $_POST["name"],
+                    "firstname" => $_POST["firstname"],
+                    "login" => $_POST["login"],
+                    "email" => $_POST["email"]
+                ];
+                $modelUser = new Users();
+                $modelUser->update($params, $id);
+
+                return json_encode([
+                    "status" => "updateUser",
+                    "message" => "Le profil a bien été mis à jour."
+                ]);
+            };
+            return json_encode([
+                "status" => "errors",
+                "errors" => $errors
+            ]);
         } catch (\Exception $e) {
             return json_encode([
-                "status" => "error",
+                "status" => "errors",
                 "message" => $e->getMessage()
             ]);
         };
@@ -387,10 +401,12 @@ class UserController
     /**
      * Cette méthode permet la suppression d'un utilisateur, après vérification de l'existence du jeton Utilisateur.
      *
-     * @param string - $tokenUser - Jeton Utilisateur.
-     * @return string - Réponse JSON : "unsubscribed" en cas de succès, "fail" en cas d'échec.
+     * @param string - $tokenUser - Jeton Utilisateur pour valider la requête.
+     * @return string - Réponse JSON : "unsubscribed" avec un message, en cas de succès.
+     *                                 "fail" avec un message d'erreur, si l'utilisateur est introuvable.
+     *                                 "errors" avec un message d'erreur, en cas d'échec.
      */
-    public function delete($tokenUser): string
+    public function delete(string $tokenUser): string
     {
         try {
             $session = new Session();
@@ -406,11 +422,13 @@ class UserController
                     "message" => "le compte a bien été supprimé."
                 ]);
             };
-
-            return json_encode(["status" => "fail"]);
+            return json_encode([
+                "status" => "fail",
+                "message" => "no user found"
+            ]);
         } catch (\Exception $e) {
             return json_encode([
-                "status" => "error",
+                "status" => "errors",
                 "message" => $e->getMessage()
             ]);
         };

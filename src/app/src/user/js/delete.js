@@ -17,7 +17,7 @@ function deleteUser() {
                 .then(() => {
                     dialog({title: "Suppression de compte",
                             content: `<p>Votre compte a bien été supprimé.</p>
-                                    <p>Vous allez nous manquer et être redirigé(e) dans quelques instants vers l'inscription pour vous réinscrire car vous nous aimez !</p>`});
+                                    <p>Vous allez nous manquer et être redirigé(e) dans quelques instants vers la page d'inscription.</p>`});
                     localStorage.removeItem("token");
                     localStorage.removeItem("user");
                     redirect(`${configPath.basePath}/user/pages/registration.html`);

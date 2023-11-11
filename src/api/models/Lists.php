@@ -11,7 +11,7 @@ use Services\Database;
 class Lists extends Database
 {
     /**
-     * Crée une nouvelle liste dans la base de données.
+     * Cette méthode permet de créer une nouvelle liste dans la base de données.
      *
      * @param array $params - Les paramètres de la liste à créer.
      * @param int $userId - L'ID de l'utilisateur associé à la liste.
@@ -25,8 +25,8 @@ class Lists extends Database
 
             $params = [
                 'type' => $params['type'],
-                'title' => $params['title'],
-                'description' => $params['description'],
+                'title' => $params['titleList'],
+                'description' => $params['descriptionList'],
                 'user_id' => $userId
             ];
 
@@ -39,12 +39,12 @@ class Lists extends Database
     }
 
     /**
-     * Récupère les détails d'une liste en fonction de son ID.
+     * Cette méthode permet de récupérer les détails d'une liste en fonction de son ID.
      *
-     * @param int $id - L'ID de la liste à récupérer.
+     * @param int $id - ID de la liste à récupérer.
      * @return Lister|null - L'objet Lister correspondant à la liste ou null si non trouvé.
      */
-    public function oneListById(int $id): ?Lister
+    public function getOneListById(int $id): ?Lister
     {
         try {
             $req = "SELECT `l`.`id` AS `list_id`,
@@ -75,12 +75,12 @@ class Lists extends Database
     }
 
     /**
-     * Récupère toutes les listes d'un utilisateur en fonction de l'ID utilisateur.
+     * Cette méthode permet de récupérer toutes les listes d'un utilisateur en fonction de l'ID utilisateur.
      *
-     * @param int $userId - L'ID de l'utilisateur pour lequel les listes sont récupérées.
+     * @param int $userId - ID de l'utilisateur pour lequel les listes sont récupérées.
      * @return Lister[] - Un tableau d'objets Lister représentant les listes de l'utilisateur.
      */
-    public function listsOneUser(int $userId): array
+    public function AllListsByUser(int $userId): array
     {
         try {
             $req = "SELECT `l`.`id` AS `list_id`,
@@ -119,11 +119,11 @@ class Lists extends Database
     }
 
     /**
-     * Récupère toutes les listes de tous les utilisateurs avec login.
+     * Cette méthode permet de récupérer toutes les listes de tous les utilisateurs.
      *
      * @return Lister[] - Un tableau d'objets Lister représentant toutes les listes de tous les utilisateurs.
      */
-    public function listsByUsers(): array
+    public function AllListsAllUsers(): array
     {
         try {
             $req = "SELECT `l`.`id` AS `list_id`,
@@ -158,10 +158,10 @@ class Lists extends Database
     }
 
     /**
-     * Met à jour les informations d'une liste dans la base de données.
+     * Cette méthode permet de mettre à jour les informations d'une liste dans la base de données.
      *
      * @param array $params - Les paramètres mis à jour de la liste.
-     * @param int $id - L'ID de la liste à mettre à jour.
+     * @param int $id - ID de la liste à mettre à jour.
      * @return bool - Renvoie true en cas de succès, sinon false.
      */
     public function updateList(array $params, int $id): bool
@@ -185,9 +185,9 @@ class Lists extends Database
     }
 
     /**
-     * Supprime une liste de la base de données.
+     * Cette méthode permet de supprimer une liste de la base de données.
      *
-     * @param int $id - L'ID de la liste à supprimer.
+     * @param int $id - ID de la liste à supprimer.
      * @return bool - Renvoie true en cas de succès, sinon false.
      */
     public function deleteList(int $id): bool

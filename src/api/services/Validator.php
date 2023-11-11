@@ -12,6 +12,8 @@ class Validator
     public const CONTEXT_UPDATE_USER = 'user_update';
     public const CONTEXT_CREATE_LIST = 'create_list';
     public const CONTEXT_UPDATE_LIST = 'update_list';
+    public const CONTEXT_CREATE_CARD = 'create_card';
+    public const CONTEXT_UPDATE_CARD = 'update_card';
 
     /**
      * Valide les paramètres en fonction du contexte donné.
@@ -45,6 +47,16 @@ class Validator
 
             case self::CONTEXT_UPDATE_LIST:
                 $errors = $this->isValidListParams($params);
+                return $errors;
+                break;
+
+            case self::CONTEXT_CREATE_CARD:
+                $errors = $this->isValidCardParams($params);
+                return $errors;
+                break;
+
+            case self::CONTEXT_UPDATE_CARD:
+                $errors = $this->isValidCardParams($params);
                 return $errors;
                 break;
         }
@@ -204,7 +216,7 @@ class Validator
     private function isValidListParams(array $params): array
     {
         $errors = [];
-        $expectedKeys = ['type', 'title', 'description'];
+        $expectedKeys = ['type', 'titleList', 'descriptionList'];
         $paramKeys = array_keys($params);
 
         if (!empty(array_diff($expectedKeys, $paramKeys))) {
@@ -213,16 +225,42 @@ class Validator
             return $errors;
         }
 
-        if (empty(trim($params['title']))) {
-            $errors[] = 'Le champ "title" est requis.';
-        } elseif (strlen($params['title']) > 50) {
+        if (empty(trim($params['titleList']))) {
+            $errors[] = 'Le champ "titre" est requis.';
+        } elseif (strlen($params['titleList']) > 50) {
             $errors[] = 'Le champ "titre" ne doit pas dépasser 20 caractères.';
         }
 
-        if (strlen($params['description']) > 100) {
-            $errors[] = 'La description ne doit pas dépasser 100 caractères.';
+        return $errors;
+    }
+
+    private function isValidCardParams(array $params): array
+    {
+        $errors = [];
+        $expectedKeys = ['titleCard', 'descriptionCard', 'priority'];
+        $paramKeys = array_keys($params);
+
+        if (!empty(array_diff($expectedKeys, $paramKeys))) {
+            $changedKey = array_diff($expectedKeys, $paramKeys);
+            $errors[] = "Le/les champs suivante(s) a/ont été modifiée(s) : " . implode(', ', $changedKey) . ". Merci de ne pas y toucher, merci !";
+            return $errors;
         }
 
+        if (empty(trim($params['titleCard']))) {
+            $errors[] = 'Le champ "titre" est requis.';
+        } elseif (strlen($params['titleCard']) > 50) {
+            $errors[] = 'Le champ "titre" ne doit pas dépasser 20 caractères.';
+        }
+
+        if (empty(trim($params['priority']))) {
+            $errors[] = 'Le champ "priorité" est requis.';
+        } elseif (!preg_match('/^[1-5]+$/', $params['priority'])) {
+            $errors[] = 'La chaîne ne doit contenir que les chiffres allant de 1 à 5.';
+        } elseif (strlen($params['priority']) > 5) {
+            $errors[] = 'La priorité ne doit pas être supérieure à 5.';
+        } elseif (strlen($params['priority']) < 1) {
+            $errors[] = 'La priorité ne doit pas être inférieure à 1.';
+        }
         return $errors;
     }
 }

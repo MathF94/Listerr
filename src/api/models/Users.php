@@ -28,12 +28,12 @@ class Users extends Database
     }
 
     /**
-     * Crée un nouvel utilisateur dans la base de données.
+     * Cette méthode permet de créer un nouvel utilisateur dans la base de données.
      *
      * @param array $params - Les paramètres de l'utilisateur à créer.
      * @return bool - Renvoie true en cas de succès, sinon false.
      */
-    public function create(array $params): bool
+    public function createUser(array $params): bool
     {
         try {
             $req = "INSERT INTO `user` (`login`, `password`, `name`, `firstname`, `email`, `role_id`)
@@ -49,11 +49,11 @@ class Users extends Database
             ];
             $exect = $this->executeReq($req, $params);
 
+            // S'il y a un status et qu'il s'agit d'une erreur de duplicata, dans ce cas, retourne false
             if (isset($exect['status']) && $exect['status'] === "error") {
                 return false;
             }
             return true;
-
         } catch (\Exception $e) {
             echo $e->getMessage();
             return false;
@@ -61,7 +61,7 @@ class Users extends Database
     }
 
     /**
-     * Authentifie un utilisateur en fonction de son login et mot de passe.
+     * Cette méthode permet d'authentifier un utilisateur en fonction de son login et mot de passe.
      *
      * @param string $login - Le login de l'utilisateur.
      * @param string $password - Le mot de passe de l'utilisateur.
@@ -99,7 +99,7 @@ class Users extends Database
     }
 
     /**
-     * Récupère les informations d'un utilisateur en fonction de son login.
+     * Cette méthode permet de récupérer les informations d'un utilisateur en fonction de son login.
      *
      * @param string $login - Le login de l'utilisateur à récupérer.
      * @return User|null - L'objet User correspondant à l'utilisateur ou null si non trouvé.
@@ -107,7 +107,6 @@ class Users extends Database
     public function readOne(string $login): ?User
     {
         try {
-
             $req = "SELECT `id`,
                             `login`,
                             `password`,
@@ -123,12 +122,18 @@ class Users extends Database
             $user = new User();
             $user->populate($result);
             return $user;
-
         } catch (\Exception $e) {
             echo $e->getMessage();
             return null;
         }
     }
+
+    /**
+     * Cette méthode permet de récupérer les informations d'un utilisateur en fonction de son ID.
+     *
+     * @param int $id - L'ID de l'utilisateur à récupérer.
+     * @return User|null - L'objet User correspondant à l'utilisateur ou null si non trouvé.
+     */
     public function readById(int $id): ?User
     {
         try {
@@ -147,7 +152,6 @@ class Users extends Database
             $user = new User();
             $user->populate($result);
             return $user;
-
         } catch (\Exception $e) {
             echo $e->getMessage();
             return null;
@@ -155,7 +159,7 @@ class Users extends Database
     }
 
     /**
-     * Récupère les informations de tous les utilisateurs.
+     * Cette méthode permet de récupérer les informations de tous les utilisateurs.
      *
      * @return User[] - Un tableau d'objets User représentant tous les utilisateurs.
      */
@@ -188,13 +192,13 @@ class Users extends Database
     }
 
     /**
-     * Met à jour les informations d'un utilisateur dans la base de données.
+     * Cette méthode permet de mettre à jour les informations d'un utilisateur dans la base de données.
      *
-     * @param array $parameters - Les paramètres mis à jour de l'utilisateur.
+     * @param array $params - Les paramètres mis à jour de l'utilisateur.
      * @param int $id - L'ID de l'utilisateur à mettre à jour.
      * @return bool - Renvoie true en cas de succès, sinon false.
      */
-    public function update(array $parameters, int $id): bool
+    public function update(array $params, int $id): bool
     {
         try {
             $req = "UPDATE `user`
@@ -204,28 +208,31 @@ class Users extends Database
                         `email` = :email
                 WHERE `id` = :id";
             $query = $this->db->prepare($req);
-            $parameters['id'] = $id;
-            return $query->execute($parameters);
+            $params['id'] = $id;
+            return $query->execute($params);
         } catch (\Exception $e) {
             echo $e->getMessage();
             return [];
         }
     }
 
+    /*******************************************************
+     * PREVUE POUR LA VERSION 2
+     ********************************************************/
     /**
-     * Met à jour le mot de passe d'un utilisateur dans la base de données.
+     * Cette méthode permet de mettre à jour le mot de passe d'un utilisateur dans la base de données.
      *
-     * @param array $parameters - Les paramètres mis à jour, y compris le nouveau mot de passe.
+     * @param array $params - Les paramètres mis à jour, y compris le nouveau mot de passe.
      * @return bool - Renvoie true en cas de succès, sinon false.
      */
-    public function updatePassword(array $parameters): bool
+    public function updatePassword(array $params): bool
     {
         try {
             $req = "UPDATE `user`
                     SET `password`= :password
                     WHERE `login` = :login";
             $query = $this->db->prepare($req);
-            return $query->execute($parameters);
+            return $query->execute($params);
         } catch (\Exception $e) {
             echo $e->getMessage();
             return [];
@@ -233,7 +240,7 @@ class Users extends Database
     }
 
     /**
-     * Supprime un utilisateur de la base de données en fonction de son login.
+     * Cette méthode permet de suppri;er un utilisateur de la base de données en fonction de son login.
      *
      * @param string $login - Le login de l'utilisateur à supprimer.
      * @return bool - Renvoie true en cas de succès, sinon false.

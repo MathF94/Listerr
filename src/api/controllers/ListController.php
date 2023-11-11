@@ -21,8 +21,8 @@ class ListController
     /**
      * Constructeur de la classe ListController.
      *
-     * Ce constructeur initialise les dépendances nécessaires et authentifie un utilisateur
-     * en utilisant un jeton fourni. Il est appelé lors de la création d'une instance de ListController.
+     * Ce constructeur initialise les dépendances nécessaires et authentifie un utilisateur, en utilisant un jeton fourni.
+     * Il est appelé lors de la création d'une instance de ListController.
      *
      * @param string $tokenUser - Le jeton d'utilisateur utilisé pour l'authentification.
      */
@@ -32,7 +32,7 @@ class ListController
         $this->validator = new Validator();
         $session = new Session();
 
-        // Si un jeton d'utilisateur est fourni, nous tentons de décrypter et d'authentifier l'utilisateur.
+        // Si un jeton d'utilisateur est fourni, l'utilisateur est décrypté et d'authentifié.
         if (!empty($tokenUser)) {
             $decrypt = $session->decrypt($tokenUser);
             $model = new Users();
@@ -43,51 +43,52 @@ class ListController
     /**
      * Aide au chiffrement du jeton CSRF en réponse à une requête.
      *
-     * Cette méthode récupère le champ 'formId' de la variable superglobale $_POST, qui correspond à l'id du formulaire renvoyé via le CSRFToken.js,
+     * Cette méthode récupère le champ "formId" du $_POST, qui correspond à l'ID du formulaire renvoyé via le CSRFToken.js,
      *               chiffre cette valeur et l'envoie en paramètre de la méthode encrypt() pour générer un CSRF Token.
-     * La méthode renvoie ensuite le résultat encodé en JSON.
      *
-     * @return string - Le résultat est encodé au format JSON avec le statut "success" et le jeton CSRF en cas de succès.
-     *                - Le résultat est encodé au format JSON avec le statut "error" et un message d'erreur en cas d'échec.
+     * @return string - Réponse JSON : "success" avec le jeton CSRF chiffré, en cas de succès.
+     *                                 "fail" avec un message d'erreur, en cas d'échec.
      */
-    public function CSRFToken()
+    public function CSRFToken(): string
     {
         try {
-            $formId = $_POST['formId'];
+            $formId = $_POST["formId"];
             $encryptedCSRFToken = $this->csrfToken->encrypt($formId);
 
             return json_encode([
-                'status' => 'success',
-                'csrfToken' => $encryptedCSRFToken,
+                "status" => "success",
+                "csrfToken" => $encryptedCSRFToken,
             ]);
-
             return json_encode([
-                'status' => 'fail',
-                'errors' => 'errors'
+                "status" => "fail",
+                "errors" => "error encrypted csrfToken"
             ]);
         } catch (\Exception $e) {
             return json_encode([
-                'status' => 'error',
-                'message' => $e->getMessage()
+                "status" => "errors",
+                "message" => $e->getMessage()
             ]);
         }
     }
 
     /**
      * Cette méthode permet la création d'une nouvelle liste, après validation du jeton CSRF.
-     *
      * @param string $csrfToken - Jeton CSRF pour valider la requête.
-     * @return string - Réponse JSON : "success" en cas de succès, "fail" avec un message d'erreur en cas d'échec.
+     *
+     * @return string - Réponse JSON : "createList" avec un message, en cas de succès.
+     *                                 "createList failed" avec un message d'erreur, si l'utilisateur est introuvable.
+     *                                 "fail" avec un message d'erreur, si le jeton est invalide.
+     *                                 "errors" avec un message d'erreur, en cas d'échec.
      */
-    public function create($csrfToken): string
+    public function createList($csrfToken): string
     {
         try {
-            $validToken = $this->csrfToken->isValidToken($csrfToken, "createListForm");
+            $validToken = $this->csrfToken->isValidToken($csrfToken, "formList");
 
             if (!$validToken) {
                 return json_encode([
-                    'status' => 'fail',
-                    'message' => 'jeton invalide'
+                    "status" => "fail",
+                    "message" => "no valid csrfToken"
                 ]);
             }
 
@@ -100,225 +101,285 @@ class ListController
                     $model->create($params, $this->user->id);
 
                     return json_encode([
-                        'status' => 'success'
+                        "status" => "createList",
+                        "message" => "la liste a bien été créée."
                     ]);
                 }
+                return json_encode([
+                    "status" => "errors",
+                    "errors" => $errors
+                ]);
             }
-
             return json_encode([
-                'status' => 'fail',
-                'errors' => $errors
+                "status" => "createList failed",
+                "message" => "no user found"
             ]);
         } catch (\Exception $e) {
             return json_encode([
-                'status' => 'error',
-                'message' => $e->getMessage()
+                "status" => "errors",
+                "message" => $e->getMessage()
             ]);
         }
     }
 
     /**
-     * Cette méthode récupère les détails d'une liste, en fonction de l'id de la liste, fourni via la requête HTTP.
+     * Cette méthode récupère en fonction de l'ID de la liste, sur la page list.html :
+     *       ==> les détails d'une seul liste,
+     *                       de l'utilisateur,
+     *                       des cartes associés à la liste.
      *
-     * @return string - Réponse JSON contenant les informations de la liste ou un message d'erreur.
+     * @return string - Réponse JSON : "readOneList" avec les data d'une liste, en cas de succès.
+     *                                 "readOneList failed" avec un message d'erreur, si l'ID est vide.
+     *                                 "fail" avec un message d'erreur, si la liste est introuvable.
+     *                                 "errors" avec un message d'erreur, en cas d'échec.
      */
-    public function readOneListById()
+    public function readOneListById(): string
     {
         try {
-            if (!empty($_GET['id'])) {
+            if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
                 $id = $_GET['id'];
                 $model = new Lists();
-                $list = $model->oneListById((int)$id);
+                $list = $model->getOneListById((int)$id);
 
                 if (empty($list)) {
                     return json_encode([
-                        'status' => 'no list'
+                        "status" => "fail",
+                        "errors" => "no list found"
                     ]);
-                };
-
-                // Vérifie sur la liste est une TodoList
+                }
+                // Vérifie sur la liste est de type TodoList
                 if ($list->type === Lister::TYPE_TODO) {
                     // Vérifie si la TodoList appartient à l'utilisateur connecté
-                    // S'il est différent, la réponse JSON renvoie "no list"
+                    // S'il est différent, la réponse JSON renvoie "no list found"
                     if (empty($this->user) || $this->user->id !== $list->user->id) {
                         return json_encode([
-                            'status' => 'no list'
+                            "status" => "fail",
+                            "errors" => "no list found"
                         ]);
                     }
                 }
-
                 return json_encode([
-                    'status' => 'readOneList',
-                    // Soit 'user_id' a l'id de l'utilisateur, soit l'id a 0 comme valeur,
-                    // ainsi l'id aura toujours une valeur, même si l'id est null.
-                    'user_id' => $this->user->id !== null ? $this->user->id : 0,
-                    'data' => $list
+                    "status" => "readOneList",
+                    "data" => $list
                 ]);
-            };
-
+            }
             return json_encode([
-                'status' => 'fail',
-                'message' => 'body is empty'
+                "status" => "readOneList failed",
+                "message" => "ID not numeric"
             ]);
         } catch (\Exception $e) {
             return json_encode([
-                'status' => 'error',
-                'message' => $e->getMessage()
+                "status" => "errors",
+                "message" => $e->getMessage()
             ]);
         }
     }
 
     /**
-     * Cette méthode récupère les informations de toutes les listes pour un utilisateur.
+     * Cette méthode récupère en fonction de l'ID de l'utilisateur, sur la page lists.html :
+     *       ==> les détails de toutes les listes,
+     *                       de l'utilisateur,
+     *                       des cartes associés à la liste.
      *
-     * @return string - Réponse JSON contenant les informations de la liste ou un message d'erreur.
+     * @return string - Réponse JSON : "readAllListsByUser" avec les data des listes, en cas de succès.
+     *                                 "readAllListsByUser failed" avec un message d'erreur, si l'utilisateur est introuvable.
+     *                                 "standBy" avec un message d'erreur, si aucune liste n'est encore créée.
+     *                                 "errors" avec un message d'erreur, en cas d'éch
      */
-    public function readListsOneUser(): string
+    public function readAllListsByUser(?int $userId = null): string
     {
         try {
             if (!empty($this->user)) {
                 $model = new Lists();
-                $list = $model->listsOneUser($this->user->id);
+                $lists = $model->AllListsByUser($this->user->id);
 
-                if (empty($list)) {
-                    return json_encode([
-                        'status' => 'unknown user'
-                    ]);
-                };
+                if (empty($userId)) {
+                    if (empty($lists)) {
+                        return json_encode([
+                            "status" => "standBy",
+                            "errors" => "no lists created yet"
+                        ]);
+                    } else {
+                        return json_encode([
+                            "status" => "readAllListsByUser",
+                            "data" => $lists
+                        ]);
+                    }
 
-                return json_encode([
-                    'status' => 'read',
-                    'data' => $list
-                ]);
+                } else {
+                    $lists = $model->AllListsByUser($userId);
+
+                    if (!empty($userId)) {
+                        if (empty($lists)) {
+                            return json_encode([
+                                "status" => "standBy",
+                                "errors" => "no lists created yet"
+                            ]);
+
+                        } else {
+                            return json_encode([
+                                "status" => "readAllListsByUser",
+                                "data" => $lists
+                            ]);
+                        }
+                    }
+                }
             };
-
             return json_encode([
-                'status' => 'fail',
-                'message' => 'body is empty'
+                "status" => "readAllListsByUser failed",
+                "message" => "no user found"
             ]);
         } catch (\Exception $e) {
             return json_encode([
-                'status' => 'error',
-                'message' => $e->getMessage()
+                "status" => "errors",
+                "message" => $e->getMessage()
             ]);
         };
     }
 
     /**
-     * Cette méthode récupère les informations de toutes les listes de tous les utilisateurs.
+     * Cette méthode récupère sur la page home.html :
+     *       ==> les détails de toutes les listes,
+     *                       de tous les utilisateurs,
+     *                       des cartes associés aux listes.
      *
-     * @return string - Réponse JSON contenant les informations de toutes les listes ou un message d'erreur.
+     * @return string - Réponse JSON : "readAllListsAllUsers" avec les data des listes, en cas de succès.
+     *                                 "readAllListsAllUsers failed" avec un message d'erreur, si l'utilisateur est introuvable.
+     *                                 "standBy" avec un message d'erreur, si aucune liste n'est encore créée.
+     *                                 "errors" avec un message d'erreur, en cas d'éch
      */
-    public function readAllByUsers(): string
+    public function readAllListsAllUsers(): string
     {
         try {
             if (!empty($this->user)) {
                 $model = new Lists();
-                $list = $model->listsByUsers();
+                $lists = $model->AllListsAllUsers();
 
-                if (empty($list)) {
+                if (empty($lists)) {
                     return json_encode([
-                        'status' => 'unknown user'
+                        "status" => "standBy",
+                        "errors" => "no lists created yet"
                     ]);
                 };
-
                 return json_encode([
-                    'status' => 'read',
-                    'data' => $list,
+                    "status" => "readAllListsAllUsers",
+                    "data" => $lists,
                 ]);
             };
-
             return json_encode([
-                'status' => 'fail',
-                'message' => 'body is empty'
+                "status" => "readAllListsAllUsers failed",
+                "message" => "no user found"
             ]);
         } catch (\Exception $e) {
             return json_encode([
-                'status' => 'error',
-                'message' => $e->getMessage()
+                "status" => "errors",
+                "message" => $e->getMessage()
             ]);
         }
     }
 
     /**
      * Cette méthode permet la mise à jour des informations d'une liste d'un utilisateur, après validation du jeton CSRF.
+     * @param int $id - L'ID de la liste à mettre à jour.
+     * @param string $csrfToken - Jeton CSRF pour valider la requête.
      *
-     * @return string - Réponse JSON contenant un message de validaiton de mise à jour ou un message d'erreur.
+     * @return string - Réponse JSON : "updateList" avec un message, en cas de succès.
+     *                                 "updateList failed" avec un message d'erreur, si l'utilisateur est introuvable.
+     *                                 "fail" avec un message d'erreur, si le jeton est invalide.
+     *                                 "fail" avec un message d'erreur, si la liste est introuvable.
+     *                                 "errors" avec un message d'erreur, en cas d'éch
      */
     public function updateList(int $id, string $csrfToken): string
     {
         try {
-            $validToken = $this->csrfToken->isValidToken($csrfToken, "updateFormList");
+            $validToken = $this->csrfToken->isValidToken($csrfToken, "formList");
 
             if (!$validToken) {
                 return json_encode([
-                    'status' => 'fail',
-                    'message' => 'jeton invalide'
+                    "status" => "fail",
+                    "message" => "no valid csrfToken"
                 ]);
             }
 
             if (!empty($this->user->id)) {
                 $model = new Lists();
-                $list = $model->oneListById($id);
+                $list = $model->getOneListById($id);
+
+                if (empty($list)) {
+                    return json_encode([
+                        "status" => "fail",
+                        "errors" => "no list found"
+                    ]);
+                }
 
                 $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_UPDATE_LIST);
                 if (empty(count($errors))) {
                     $listId = $list->id;
-
                     $params = [
-                        'title' => $_POST['title'],
+                        'title' => $_POST['titleList'],
                         'type' => $_POST['type'],
-                        'description' => $_POST['description']
+                        'description' => $_POST['descriptionList']
                     ];
+                    $model->updateList($params, $listId);
+                    return json_encode([
+                        "status" => "updateList",
+                        "message" => "la liste a bien été mise à jour."
+                    ]);
                 }
-
-                $model->updateList($params, $listId);
-
                 return json_encode([
-                    'status' => 'updated',
-                    'message' => 'la liste a bien été mise à jour.'
-                ]);
-
-                return json_encode([
-                    'status' => 'fail',
-                    'errors' => $errors
+                    "status" => "errors",
+                    "errors" => $errors
                 ]);
             }
+            return json_encode([
+                "status" => "updateList failed",
+                "message" => "no user found"
+            ]);
         } catch (\Exception $e) {
             return json_encode([
-                'status' => 'error',
-                'message' => $e->getMessage()
+                "status" => "errors",
+                "message" => $e->getMessage()
             ]);
         }
     }
 
     /**
-     * Cette méthode récupère la suppression d'une liste d'un utilisateur.
+     * Cette méthode permet la suppression d'une liste d'un utilisateur.
+     * @param int $id - L'ID de la liste à supprimer.
      *
-     * @return string - Réponse JSON contenant un message de succès ou un message d'erreur.
+     * @return string - Réponse JSON : "deleteList" avec un message, en cas de succès.
+     *                                 "deleteList failed" avec un message d'erreur, si l'utilisateur est introuvable.
+     *                                 "fail" avec un message d'erreur, si la liste est introuvable.
+     *                                 "errors" avec un message d'erreur, en cas d'échec.
      */
     public function deleteList(int $id): string
     {
         try {
             if (!empty($this->user->id)) {
                 $model = new Lists();
-                $list = $model->oneListById($id);
+                $list = $model->getOneListById($id);
 
                 if (!empty($list)) {
-                    $listId = $list->id;
-                    $model->deleteList($listId);
+                    $model->deleteList($list->id);
 
                     return json_encode([
-                        'status' => 'deleted',
-                        'message' => 'la liste a bien été supprimée.'
+                        "status" => "deleteList",
+                        "message" => "la liste a bien été supprimée."
                     ]);
                 };
-                return json_encode(['status' => 'fail']);
+                return json_encode([
+                    "status" => "fail",
+                    "message" => "no list found"
+                ]);
             }
+            return json_encode([
+                "status" => "deleteList failed",
+                "message" => "no user found"
+            ]);
         } catch (\Exception $e) {
             return json_encode([
-                'status' => 'error',
-                'message' => $e->getMessage()
+                "status" => "errors",
+                "message" => $e->getMessage()
             ]);
         };
     }

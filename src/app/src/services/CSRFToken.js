@@ -1,5 +1,7 @@
 "use strict";
 
+import { configPath } from "../services/utils.js";
+
 /**
  * Effectue une requête pour obtenir un jeton CSRF depuis le serveur.
  *
@@ -11,7 +13,7 @@ async function fetchCSRF(formId) {
         const formData = new FormData();
         formData.append("formId", formId);
 
-        const url = "http://localhost/listerr/src/api/?route=csrf";
+        const url = `${configPath.apiPath}/?route=csrf`;
         return await fetch(url, {
             method: "POST",
             body: formData

@@ -2,6 +2,7 @@
 
 namespace Entity;
 
+use Models\Cards;
 /**
  * Classe représentant une liste, qui peut être de type "WishList" ou "TodoList".
  */
@@ -18,6 +19,7 @@ class Lister
     public string $updatedAt;
     public int $userId;
     public User $user;
+    public array $cards;
 
     /**
      * Initialise les propriétés de l'objet d'une liste à partir d'un tableau associatif de paramètres.
@@ -28,6 +30,10 @@ class Lister
      */
     public function populate(array $params): void
     {
+        if (empty($params)) {
+            return;
+        }
+
         $this->id = $params['list_id'];
         $this->type = $params['type'];
         $this->title = $params['title'];
@@ -38,5 +44,9 @@ class Lister
 
         $this->user = new User();
         $this->user->populate($params);
+
+        $model = new Cards();
+        // Récupère toutes les cartes d'une liste en fonction de son ID $this->id
+        $this->cards = $model->getAllCardsByList($this->id);
     }
 }
