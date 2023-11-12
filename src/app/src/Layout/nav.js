@@ -1,6 +1,7 @@
 "use strict";
 
 import { configPath } from "../services/utils.js";
+import { createSVG } from "./svg.js";
 
 /**
  * Génère la barre de navigation en fonction de l'état de connexion de l'utilisateur.
@@ -10,42 +11,95 @@ import { configPath } from "../services/utils.js";
 function navigation(template) {
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("user");
+
+    const wrapDiv = document.createElement("div");
+    wrapDiv.id = "wrap";
+
+    const wrapAnchor = document.createElement("a");
+    wrapAnchor.id = "open";
+    wrapAnchor.href = "#wrap";
+
+    const closeAnchor = document.createElement("a");
+    closeAnchor.id = "close";
+    closeAnchor.href = "#";
+    closeAnchor.innerText = "x";
+
+    const svgElement = createSVG();
+
     const nav = document.createElement("nav");
     nav.id = "mainNav";
     nav.className = "mainNav";
+
+    nav.appendChild(wrapAnchor);
+    wrapAnchor.appendChild(svgElement);
+    wrapAnchor.after(closeAnchor);
+
     const list = document.createElement("ul");
 
     // Si l'utilisateur n'est pas connecté, affiche les liens d'inscription et de connexion.
-    if (token === undefined || token === null || user === null || user === undefined) {
+    if (
+        token === undefined ||
+        token === null ||
+        user === null ||
+        user === undefined
+    ) {
         const links = [
-            {text: "Accueil", href: `${configPath.basePath}/home/pages/home.html`, id: "home"},
-            {text: "Inscription", href: `${configPath.basePath}/user/pages/registration.html`, id: "register"},
-            {text: "Connexion", href: `${configPath.basePath}/user/pages/login.html`, id: "login"},
+            {
+                text: "Accueil",
+                href: `${configPath.basePath}/home/pages/home.html`,
+                id: "home",
+            },
+            {
+                text: "Inscription",
+                href: `${configPath.basePath}/user/pages/registration.html`,
+                id: "register",
+            },
+            {
+                text: "Connexion",
+                href: `${configPath.basePath}/user/pages/login.html`,
+                id: "login",
+            },
         ];
         addLinks(links);
-    };
+    }
 
     // Si l'utilisateur est connecté, affiche des liens pertinents.
     if (user !== undefined && user !== null) {
         const links = [
-            {text: "Accueil", href: `${configPath.basePath}/home/pages/home.html`, id: "home"},
-            {text: "Déconnexion", id: "logout"},
-            {text: "Votre profil", href: `${configPath.basePath}/user/pages/profil.html`, id: "profil"},
-            {text: "Listes de souhaits et de tâches", href: `${configPath.basePath}/list/pages/lists.html`, id: "lists"},
+            {
+                text: "Accueil",
+                href: `${configPath.basePath}/home/pages/home.html`,
+                id: "home",
+            },
+            { text: "Déconnexion", id: "logout" },
+            {
+                text: "Votre profil",
+                href: `${configPath.basePath}/user/pages/profil.html`,
+                id: "profil",
+            },
+            {
+                text: "Listes de souhaits et de tâches",
+                href: `${configPath.basePath}/list/pages/lists.html`,
+                id: "lists",
+            },
         ];
         addLinks(links);
-    };
+    }
 
     // Si l'utilisateur est un administrateur, affiche des liens spécifiques à l'administrateur.
-    if(user){
+    if (user) {
         const dataUser = JSON.parse(user);
-        if (dataUser.role === "Admin"){
+        if (dataUser.role === "Admin") {
             const links = [
-                {text: "Liste d'utilisateurs", href: `${configPath.basePath}/admin/pages/profils.html`, id: "usersProfil"},
+                {
+                    text: "Liste d'utilisateurs",
+                    href: `${configPath.basePath}/admin/pages/profils.html`,
+                    id: "usersProfil",
+                },
             ];
             addLinks(links);
-        };
-    };
+        }
+    }
 
     /**
      * Ajoute des liens à la barre de navigation.
@@ -53,12 +107,11 @@ function navigation(template) {
      * @param {Array} links - Un tableau d'objets contenant les données des liens à ajouter.
      */
     function addLinks(links) {
-
-        links.forEach(linkData => {
+        links.forEach((linkData) => {
             const link = document.createElement("a");
             const item = document.createElement("li");
 
-            if(linkData.href !== undefined) {
+            if (linkData.href !== undefined) {
                 link.setAttribute("href", linkData.href);
                 link.id = linkData.id;
                 link.innerText = linkData.text;
@@ -66,14 +119,17 @@ function navigation(template) {
                 const noLink = document.createElement("div");
                 noLink.id = linkData.id;
                 noLink.innerText = linkData.text;
-                item.appendChild(noLink);
-            };
-            item.appendChild(link);
+                item.appendChild(link);
+                link.appendChild(noLink);
+            }
             list.appendChild(item);
+            item.appendChild(link);
+            list.appendChild(link);
+            nav.appendChild(link);
         });
-        nav.appendChild(list);
-        template.appendChild(nav);
+        wrapDiv.appendChild(nav);
+        template.appendChild(wrapDiv);
     }
-};
+}
 
 export { navigation };

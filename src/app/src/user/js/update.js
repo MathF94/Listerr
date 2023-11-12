@@ -35,7 +35,6 @@ function updateUser() {
             // Appelle la fonction fetchUpdate pour envoyer les données du formulaire de mise à jour au serveur.
             fetchUpdate(updateForm)
             .then(response => {
-                console.log(response);
                 localStorage.removeItem("csrfToken");
                 const user = JSON.parse(localStorage.getItem("user"));
 

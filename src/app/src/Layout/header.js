@@ -4,18 +4,17 @@ import { navigation } from "./nav.js";
 
 function header() {
     const header = document.createElement("header")
-    header.id = "mainWrapper";
-    header.className = "mainWrapper";
+    header.id = "navWrapper";
+    header.className = "navWrapper";
 
     const title = document.createElement("h1")
     title.id = "mainTitle";
     title.className = "mainTitle";
     title.innerText = "Listerr";
     title.style.textAlign = "Center";
-    header.appendChild(title)
 
     navigation(header);
-
+    header.appendChild(title)
     document.body.prepend(header);
 }
 

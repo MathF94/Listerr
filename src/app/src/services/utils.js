@@ -38,7 +38,7 @@ function redirect(url, duration = 3000) {
  * @param {boolean} [options.hasTimeOut] - Indique si la boîte de dialogue doit disparaître automatiquement après 2 secondes.
  */
 function dialog({title, content, hasTimeOut}) {
-    const header = document.querySelector("#mainWrapper");
+    const header = document.querySelector("#navWrapper");
     title = title || "Notification" ;
 
     const titleH2 = document.createElement("h2");

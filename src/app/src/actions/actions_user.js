@@ -118,9 +118,12 @@ async function fetchUpdate(form) {
  *
  * @returns {Promise<Object|null>} Une promesse résolue avec les données de la suppression du compte ou null en cas d'erreur.
  */
-async function fetchDelete() {
+async function fetchDelete(id) {
     try {
-        const url = `${configPath.apiPath}/?route=user_delete`;
+        let url = `${configPath.apiPath}/?route=user_delete`;
+        if(id) {
+            url += `&id=${id}`;
+        }
         return await fetch(url, {
             method: "POST",
             headers: {"Authorization": localStorage.getItem("token")},
