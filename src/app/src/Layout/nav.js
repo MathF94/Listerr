@@ -1,7 +1,6 @@
 "use strict";
 
 import { configPath } from "../services/utils.js";
-import { createSVG } from "./svg.js";
 
 /**
  * Génère la barre de navigation en fonction de l'état de connexion de l'utilisateur.
@@ -13,28 +12,29 @@ function navigation(template) {
     const user = localStorage.getItem("user");
 
     const wrapDiv = document.createElement("div");
-    wrapDiv.id = "wrap";
+    wrapDiv.id = "hamburger-menu";
 
-    const wrapAnchor = document.createElement("a");
-    wrapAnchor.id = "open";
-    wrapAnchor.href = "#wrap";
+    const input = document.createElement("input");
+    input.id= "menu__toggle";
+    input.type = "checkbox";
 
-    const closeAnchor = document.createElement("a");
-    closeAnchor.id = "close";
-    closeAnchor.href = "#";
-    closeAnchor.innerText = "x";
+    const label = document.createElement("label");
+    label.classList.add("menu__btn");
+    label.htmlFor = "menu__toggle";
 
-    const svgElement = createSVG();
+    const span = document.createElement("span");
+
+    const list = document.createElement("ul");
 
     const nav = document.createElement("nav");
     nav.id = "mainNav";
-    nav.className = "mainNav";
+    nav.className = "menu__box";
 
-    nav.appendChild(wrapAnchor);
-    wrapAnchor.appendChild(svgElement);
-    wrapAnchor.after(closeAnchor);
-
-    const list = document.createElement("ul");
+    wrapDiv.appendChild(input);
+    wrapDiv.appendChild(label);
+    label.appendChild(span);
+    wrapDiv.appendChild(nav);
+    nav.appendChild(list);
 
     // Si l'utilisateur n'est pas connecté, affiche les liens d'inscription et de connexion.
     if (
@@ -78,7 +78,7 @@ function navigation(template) {
                 id: "profil",
             },
             {
-                text: "Listes de souhaits et de tâches",
+                text: "Vos listes",
                 href: `${configPath.basePath}/list/pages/lists.html`,
                 id: "lists",
             },
@@ -92,7 +92,7 @@ function navigation(template) {
         if (dataUser.role === "Admin") {
             const links = [
                 {
-                    text: "Liste d'utilisateurs",
+                    text: "Les utilisateurs",
                     href: `${configPath.basePath}/admin/pages/profils.html`,
                     id: "usersProfil",
                 },
@@ -108,8 +108,9 @@ function navigation(template) {
      */
     function addLinks(links) {
         links.forEach((linkData) => {
-            const link = document.createElement("a");
             const item = document.createElement("li");
+            const link = document.createElement("a");
+            link.classList.add("menu__item");
 
             if (linkData.href !== undefined) {
                 link.setAttribute("href", linkData.href);
@@ -124,10 +125,7 @@ function navigation(template) {
             }
             list.appendChild(item);
             item.appendChild(link);
-            list.appendChild(link);
-            nav.appendChild(link);
         });
-        wrapDiv.appendChild(nav);
         template.appendChild(wrapDiv);
     }
 }

@@ -1,65 +1,79 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listerr</title>
-    <script type="module" src="../../actions/actions_user.js"></script>
-    <script type="module" src="../../layout/header.js"></script>
-    <script type="module" src="../js/registration.js"></script>
-    <link rel="stylesheet" href="../../style.css">
-</head>
-<body>
-    <section class="register">
-        <h2>Nouvelle inscription</h2>
-        <form id="registerForm">
-            <label for="name">Votre nom</label>
-            <input
-                type="text"
-                name="name"
-                id="name"
-                placeholder="Votre nom"
-                pattern="[A-Za-zÀ-ÿ' \-]+"
-                required/>
-
-            <label for="firstname">Votre prénom</label>
-            <input
-                type="text"
-                name="firstname"
-                id="firstname"
-                placeholder="Votre prénom"
-                pattern="[A-Za-zÀ-ÿ' \-]+"
-                required/>
-
-            <label for="login">Votre login</label>
-            <input
-                type="text"
-                name="login"
-                id="login"
-                placeholder="Votre login"
-                required/>
-
-            <label for="email">Votre email</label>
-            <input
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Votre email"
-                pattern = "[^@\s]+@[^@\s]+\.[a-zA-Z]{2,}"
-                required/>
-
-            <label for="password">Votre mot de passe</label>
-            <input
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Votre mot de passe"
-                pattern = "^(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).{12,}$"
-                required/>
-
-            <button type="submit">Valider</button>
-        </form>
-        <a href="http://localhost/listerr/src/app/src/user/pages/login.html">J'ai déjà un compte.</a>
-    </section>
-</body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Listerr</title>
+        <script type="module" src="../../actions/actions_user.js"></script>
+        <script type="module" src="../../layout/header.js"></script>
+        <script type="module" src="../js/registration.js"></script>
+        <link rel="stylesheet" href="../../style.css" />
+    </head>
+    <body>
+        <section class="register">
+            <h2>Nouvelle inscription</h2>
+            <form id="registerForm">
+                <div>
+                    <label for="name">Votre nom</label>
+                    <input
+                        type="text"
+                        name="name"
+                        id="name"
+                        placeholder="Votre nom"
+                        pattern="[A-Za-zÀ-ÿ' \-]+"
+                        required
+                    />
+                </div>
+                <div>
+                    <label for="firstname">Votre prénom</label>
+                    <input
+                        type="text"
+                        name="firstname"
+                        id="firstname"
+                        placeholder="Votre prénom"
+                        pattern="[A-Za-zÀ-ÿ' \-]+"
+                        required
+                    />
+                </div>
+                <div>
+                    <label for="login">Votre login</label>
+                    <input
+                        type="text"
+                        name="login"
+                        id="login"
+                        placeholder="Votre login"
+                        required
+                    />
+                </div>
+                <div>
+                    <label for="email">Votre email</label>
+                    <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        placeholder="Votre email"
+                        pattern="[^@\s]+@[^@\s]+\.[a-zA-Z]{2,}"
+                        required
+                    />
+                </div>
+                <div>
+                    <label for="password">Votre mot de passe</label>
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        placeholder="Votre mot de passe"
+                        pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).{12,}$"
+                        required
+                    />
+                </div>
+                <div>
+                    <button type="submit">Valider</button>
+                </div>
+            </form>
+            <a href="http://localhost/listerr/src/app/src/user/pages/login.html"
+                >J'ai déjà un compte.</a
+            >
+        </section>
+    </body>
 </html>

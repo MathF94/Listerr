@@ -12,7 +12,7 @@ function displayFormCard(elementDOM) {
     createFormCard.id = "formCard";
 
     const labelTitle = document.createElement("label");
-    labelTitle.for = "titleCard";
+    labelTitle.htmlFor  = "titleCard";
     labelTitle.innerText = "Titre de la carte";
 
     const inputTitle = document.createElement("input");
@@ -24,7 +24,7 @@ function displayFormCard(elementDOM) {
     inputTitle.required = true;
 
     const labelDescription = document.createElement("label");
-    labelDescription.for = "descriptionCard";
+    labelDescription.htmlFor  = "descriptionCard";
     labelDescription.innerText = "Description";
 
     const inputDescription = document.createElement("input");
@@ -35,7 +35,7 @@ function displayFormCard(elementDOM) {
     inputDescription.value = "";
 
     const labelPriority = document.createElement("label");
-    labelPriority.for = "priority";
+    labelPriority.htmlFor  = "priority";
     labelPriority.innerText = "Priorité";
 
     const inputPriority = document.createElement("input");

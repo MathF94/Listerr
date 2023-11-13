@@ -10,8 +10,7 @@ function header() {
     const title = document.createElement("h1")
     title.id = "mainTitle";
     title.className = "mainTitle";
-    title.innerText = "Listerr";
-    title.style.textAlign = "Center";
+    title.innerText = "listerr";
 
     navigation(header);
     header.appendChild(title)

@@ -26,7 +26,7 @@ function login() {
                     is_admin: response.user_isAdmin
                 }));
 
-                const login = e.target.children.login.value;
+                // const login = e.target.children.login.value;
                 dialog({title: `<p>Bonjour ${login} !</p>`, content: `<p>Vous êtes bien connecté(e).</p>`});
                 redirect(`${configPath.basePath}/home/pages/home.html`);
             };

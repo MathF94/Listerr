@@ -25,7 +25,7 @@ function displayFormList(elementDOM) {
     radioW.checked = true;
 
     const labelW = document.createElement("label");
-    labelW.for = "wish";
+    labelW.htmlFor  = "wish";
     labelW.innerText = "WishList";
 
     const radioT = document.createElement("input");
@@ -35,11 +35,11 @@ function displayFormList(elementDOM) {
     radioT.value = "TodoList";
 
     const labelT = document.createElement("label");
-    labelT.for = "todo";
+    labelT.htmlFor  = "todo";
     labelT.innerText = "TodoList";
 
     const labelTitle = document.createElement("label");
-    labelTitle.for = "titleList";
+    labelTitle.htmlFor  = "titleList";
     labelTitle.innerText = "Titre de la liste";
 
     const inputTitle = document.createElement("input");
@@ -51,7 +51,7 @@ function displayFormList(elementDOM) {
     inputTitle.required = true;
 
     const labelDescription = document.createElement("label");
-    labelDescription.for = "descriptionList";
+    labelDescription.htmlFor  = "descriptionList";
     labelDescription.innerText = "Description (facultative)";
 
     const inputDescription = document.createElement("input");
