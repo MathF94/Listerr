@@ -97,17 +97,15 @@ function lists() {
                     if (key === "type") {
                         titleH3.innerText = `${objectList.type} - ${objectList.title}`;
                     }
-                    if (["status", "id", "userId", "type", "title", "cards"].includes(`${key}`)) {
+                    if (["status", "id", "userId", "type", "title", "cards", "createdAt"].includes(`${key}`)) {
                         continue;
                     }
                     if (key === "user" && typeof(value) === "object") {
                         item.innerText = `Par ${objectList[key].login}.`;
                     }
                     else {
-                        if (key === "createdAt") {
-                            item.innerText = `Créée le ${objectList[key]}`;
-                        } else if (key === "updatedAt")  {
-                            item.innerText = `Modifiée le ${objectList[key]}`;
+                        if (key === "updatedAt") {
+                            item.innerText = `Dernière modification le ${objectList[key]}`;
                         } else {
                             item.innerText = `${objectList[key]}`;
                         }

@@ -30,7 +30,7 @@ function list() {
         .then(response => {
             const returnLists = document.querySelector("#cancelBtn");
             returnLists.href = `${configPath.basePath}/user/pages/profil.html`;
-            
+
             if (JSON.parse(localStorage.user).role === "Admin") {
                 returnLists.href = `${configPath.basePath}/user/pages/profil.html?id=${response.data.userId}`;
             }
@@ -78,16 +78,14 @@ function list() {
                     const item = document.createElement("li");
                     const object = data[index];
                     // Exclut certains éléments de la liste (id, userId, type, title)
-                    if (["id", "userId", "type", "title", "cards"].includes(`${index}`)) {
+                    if (["id", "userId", "type", "title", "cards", "createdAt"].includes(`${index}`)) {
                         continue;
                     };
                     if ( index === "user" && typeof(data[index]) === "object") {
                         item.innerText = `Par ${data.user.login}`;
                     } else {
-                        if (index === "createdAt") {
-                            item.innerText = `Créée le ${data.createdAt}`;
-                        } else if (index === "updatedAt") {
-                            item.innerText = `Modifiée le ${data.updatedAt}`;
+                        if (index === "updatedAt") {
+                            item.innerText = `Dernière modification le ${data.createdAt}`;
                         } else {
                             item.innerText = `${object}`;
                         };
