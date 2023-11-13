@@ -1,0 +1,194 @@
+@charset "UTF-8";
+/* *****************************************************************
+    POLICE
+***************************************************************** */
+@font-face {
+  font-family: "dyslexic";
+  src: url(./resources/fonts/open-dyslexic.woff) format("woff");
+}
+/* *****************************************************************
+    COULEURS PRINCIPALES
+***************************************************************** */
+:root {
+  --primary-bg: #eceff1;
+  --secondary-bg: #d4edda;
+  --accent-color: #218838;
+  --yellow: rgba(210, 194, 42, 0.6);
+  --text-dark: #333;
+  --text-light: #888;
+  --border-color: #ddd;
+}
+
+/* *****************************************************************
+    HEADER & NAVIGATION (MENU BURGER)
+***************************************************************** */
+#menu__toggle {
+  opacity: 0;
+}
+#menu__toggle:checked + .menu__btn > span {
+  transform: rotate(45deg);
+}
+#menu__toggle:checked + .menu__btn > span::before {
+  top: 0;
+  transform: rotate(0deg);
+}
+#menu__toggle:checked + .menu__btn > span::after {
+  top: 0;
+  transform: rotate(90deg);
+}
+#menu__toggle:checked ~ .menu__box {
+  left: 0 !important;
+}
+
+.menu__btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  z-index: 1;
+}
+.menu__btn > span, .menu__btn > span::before, .menu__btn > span::after {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: #616161;
+  transition-duration: 0.25s;
+}
+.menu__btn > span::before {
+  content: "";
+  top: -8px;
+}
+.menu__btn > span::after {
+  content: "";
+  top: 8px;
+}
+.menu__box {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 200px;
+  height: 100%;
+  margin: 0;
+  padding: 80px 0;
+  list-style: none;
+  background-color: #eceff1;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+  transition-duration: 0.25s;
+}
+.menu__item {
+  display: block;
+  padding: 12px 24px;
+  color: #333;
+  font-family: "dyslexic";
+  font-size: 20px;
+  font-weight: 600;
+  text-decoration: none;
+  transition-duration: 0.25s;
+}
+.menu__item:hover {
+  background-color: var(--yellow);
+}
+
+.mainTitle {
+  text-align: center;
+  text-transform: uppercase;
+  font-style: italic;
+}
+
+ul {
+  padding: 0;
+}
+
+li {
+  list-style-type: none;
+  padding: 0 auto;
+}
+
+.homeList {
+  background: rgba(210, 194, 42, 0.6);
+  max-width: 700px;
+  width: 75%;
+  text-align: center;
+  box-shadow: 0px 0px 10px 2px rgba(210, 194, 42, 0.6);
+  border-radius: 20px;
+  margin: 20px auto;
+  padding: 5px 0;
+  cursor: pointer;
+}
+
+.btn {
+  border: none;
+  border-radius: 10px;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  font-family: "dyslexic";
+  cursor: pointer;
+}
+.btn.way {
+  background-color: rgb(117, 117, 117);
+}
+.btn.way:hover {
+  background-color: rgba(117, 117, 117, 0.8);
+  color: var(--text-dark);
+}
+.btn.valid {
+  background-color: rgb(32, 170, 6);
+}
+.btn.valid:hover {
+  background-color: rgba(32, 170, 6, 0.8);
+  color: var(--text-dark);
+}
+
+body {
+  margin: 0;
+  max-width: 780px;
+  background-color: var(--primary-bg);
+  color: var(--text-dark);
+  font-family: "dyslexic";
+  font-size: 100%;
+}
+
+/* *****************************************************************
+    VERSION MOBILE
+***************************************************************** */
+@media screen and (min-width: 360px) and (max-width: 779px) {
+  a {
+    color: var(--accent-color);
+  }
+  .login {
+    padding: 25px;
+    flex: 1;
+    display: inline-block;
+  }
+  /* Styles pour les états ou les interactions */
+}
+/* *****************************************************************
+    VERSION TABLETTE
+***************************************************************** */
+@media screen and (min-width: 780px) and (max-width: 980px) {
+  /* *****************************************************************
+  BODY
+  ***************************************************************** */
+  body {
+    max-width: 980px;
+  }
+}
+/* *****************************************************************
+    VERSION DESKTOP
+***************************************************************** */
+@media screen and (min-width: 980px) {
+  /* *****************************************************************
+  BODY
+  ***************************************************************** */
+}
+
+/*# sourceMappingURL=style.css.map */
