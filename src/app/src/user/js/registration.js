@@ -34,8 +34,7 @@ function registration() {
 
             if (response.status === "errors") {
                 // En cas d'échec, affiche les erreurs rencontrées et redirige l'utilisateur vers la page d'inscription.
-                const errors = response.errors;
-                dialog({title: "Erreurs", content: errors, hasTimeOut: true});
+                dialog({title: "Erreurs", content: response.errors});
                 // redirect(`${configPath.basePath}/user/pages/registration.html`)
             };
         });

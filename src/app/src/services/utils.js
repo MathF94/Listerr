@@ -46,11 +46,11 @@ function dialog({title, content, hasTimeOut}) {
 
     const dialogSection = document.createElement("section");
     dialogSection.id = "dialog";
-    dialogSection.className = "dialog";
     header.after(dialogSection);
 
     const dialog = document.createElement("dialog");
     dialog.open = "open";
+    dialog.classList.add("dialog");
     dialog.prepend(titleH2);
 
     if (typeof(content) === "string")  {

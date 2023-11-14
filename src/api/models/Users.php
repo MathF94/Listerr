@@ -48,12 +48,12 @@ class Users extends Database
                 'role_id' => $params['role_id']
             ];
             $exect = $this->executeReq($req, $params);
-
             // S'il y a un status et qu'il s'agit d'une erreur de duplicata, dans ce cas, retourne false
             if (isset($exect['status']) && $exect['status'] === "error") {
                 return false;
             }
             return true;
+
         } catch (\Exception $e) {
             throw new \Exception ($e->getMessage());
             return false;

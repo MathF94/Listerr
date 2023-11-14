@@ -10,7 +10,7 @@
     COULEURS PRINCIPALES
 ***************************************************************** */
 :root {
-  --primary-bg: rgb(236, 239, 241);
+  --primary-bg: rgb(217, 199, 32)
   --text-dark: rgb(51, 51, 51);
   --text-light: rgb(221, 221, 221);
   --burger-bg: rgb(255, 241, 198);
@@ -31,14 +31,17 @@
   --cancel-btn: rgb(213, 190, 3);
   --cancel-btn-hover: rgba(213, 190, 3, 0.8);
   --form-bg: rgb(255, 241, 198);
-  --secondary-bg: rgb(212, 237, 218);
-  --accent-color: rgb(33, 136, 56);
+  --dialog-bg: rgba(200, 236, 39, 0.5);
   --border-color: rgb(221, 221, 221);
 }
 
 /* *****************************************************************
     HEADER & NAVIGATION (MENU BURGER)
 ***************************************************************** */
+header {
+  margin-bottom: 100px;
+}
+
 #menu__toggle {
   opacity: 0;
 }
@@ -113,9 +116,10 @@
 }
 
 h1 {
-  text-align: center;
+  text-align: right;
   text-transform: uppercase;
   font-style: italic;
+  margin-right: 50px;
 }
 
 ul {
@@ -128,7 +132,7 @@ li {
 }
 
 /* *****************************************************************
-    BODY
+    GENERALE
 ***************************************************************** */
 body {
   margin: 0 auto;
@@ -137,26 +141,25 @@ body {
   color: var(--text-dark);
   font-family: "dyslexic";
   font-size: 80%;
+  text-align: center;
 }
 
 .login, .register, .sectionList {
   display: flex;
   flex-direction: column;
-  justify-items: center;
-}
-.login > h2, .register > h2, .sectionList > h2 {
-  text-align: center;
 }
 
-.login > a, .register > a {
-  text-align: center;
+h3, h4 {
+  margin: 10px auto;
 }
 
-.sectionList > h3 {
-  text-align: center;
-}
-.sectionList > div {
-  text-align: center;
+.dialog {
+  position: absolute;
+  top: 10px;
+  height: 100px;
+  border-radius: 10px;
+  background: var(--dialog-bg);
+  width: 36%;
 }
 
 /* *****************************************************************
@@ -171,13 +174,21 @@ body {
   border-radius: 20px;
   margin: 20px auto;
   padding: 5px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   cursor: pointer;
+}
+
+small {
+  display: block;
+  margin: 0 auto;
 }
 
 .card {
   background: var(--card-bg);
   max-width: 700px;
-  width: 75%;
+  width: 90%;
   text-align: center;
   box-shadow: 0px 0px 10px 2px rgba(210, 194, 42, 0.6);
   border-radius: 20px;
@@ -196,6 +207,11 @@ body {
   color: red;
 }
 
+.sectionList {
+  width: 60%;
+  margin: 0 auto;
+}
+
 /* *****************************************************************
     BOUTONS
 ***************************************************************** */
@@ -204,11 +220,9 @@ body {
   border-radius: 10px;
   color: white;
   padding: 5px 10px;
-  text-align: center;
   text-decoration: none;
-  display: inline-block;
   font-size: 16px;
-  margin: 0 auto;
+  margin: 10px auto;
   font-family: "dyslexic";
   cursor: pointer;
 }
@@ -289,38 +303,40 @@ form > div {
 }
 
 label {
-  margin-right: 10px;
   font-weight: bold;
+  margin: 10px auto;
 }
 
 input[type=text],
 input[type=password],
 input[type=email],
-input[type=radio],
 input[type=submit] {
   width: 100%;
+  margin: 10px 0;
   padding: 10px;
   box-sizing: border-box;
-  border: 1px solid #000;
-  border-radius: 4px;
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 5px;
+}
+
+input[type=submit] {
+  background-color: var(--valid-btn);
+  color: var(--text-light);
+  cursor: pointer;
+}
+input[type=submit]:hover {
+  background-color: var(--valid-btn-hover);
 }
 
 input[type=radio] {
-  margin-right: 5px;
+  width: 10%;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 5px;
 }
-
-input[type=submit] {
-  background-color: #4caf50;
-  color: #fff;
-  cursor: pointer;
-}
-
-input[type=submit]:hover {
-  background-color: #45a049;
-}
-
 input[type=radio]:checked {
-  background-color: #4caf50;
+  background-color: var(--valid-btn-hover);
   color: #fff;
 }
 
@@ -328,12 +344,14 @@ input[type=radio]:checked {
     TABLEAU
 ***************************************************************** */
 .userList {
-  text-align: left;
+  text-align: center;
   border-collapse: collapse;
   width: 90%;
   max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 20px auto;
+}
+.userList > thead > tr {
+  height: 36px;
 }
 .userList > tbody > tr:nth-child(odd) {
   background-color: #aaa;

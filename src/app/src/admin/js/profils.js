@@ -55,9 +55,10 @@ function readAdmin() {
 
                 const tdReadBtn = document.createElement("td");
                 const readBtn = document.createElement("button");
-                readBtn.textContent = "";
-                readBtn.title = "Amène vers le profil d'un utilisateur et ses listes";
                 readBtn.id = `readUserProfil-${column.id}`;
+                readBtn.type = "button";
+                readBtn.title = "Amène vers le profil d'un utilisateur et ses listes";
+                readBtn.textContent = "";
                 readBtn.value = column.id;
                 readBtn.classList.add("btn");
                 readBtn.classList.add("view");
@@ -71,6 +72,7 @@ function readAdmin() {
                 editBtn.title = "Modifier le profil d'un utilisateur";
                 editBtn.id = `editUserProfil-${column.id}`;
                 editBtn.value = column.id;
+                editBtn.type = "button";
                 editBtn.classList.add("btn");
                 editBtn.classList.add("valid");
                 editBtn.classList.add("edit");
@@ -78,9 +80,6 @@ function readAdmin() {
                 tr.appendChild(tdEditBtn);
 
                 const tdDeleteBtn = document.createElement("td");
-                const deleteForm = document.createElement("form");
-                deleteForm.action = "?route=admin_delete_user";
-                deleteForm.method = "post";
 
                 const deleteBtn = document.createElement("button");
                 deleteBtn.title = "Supprimer le profil d'un utilisateur";
@@ -88,10 +87,9 @@ function readAdmin() {
                 deleteBtn.classList.add("btn");
                 deleteBtn.classList.add("delete");
                 deleteBtn.id = `deleteUserProfil-${column.id}`;
-                deleteBtn.type = "submit";
+                deleteBtn.type = "click";
                 deleteBtn.textContent = "";
-                deleteForm.appendChild(deleteBtn);
-                tdDeleteBtn.appendChild(deleteForm);
+                tdDeleteBtn.appendChild(deleteBtn)
                 tr.appendChild(tdDeleteBtn);
 
                 readBtn.addEventListener("click", function(e){
