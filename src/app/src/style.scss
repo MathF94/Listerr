@@ -13,13 +13,38 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     COULEURS PRINCIPALES
 ***************************************************************** */
 :root {
-    --primary-bg: #eceff1;
-    --secondary-bg: #d4edda;
-    --accent-color: #218838;
-    --yellow: rgba(210, 194, 42, 0.6);
-    --text-dark: #333;
-    --text-light: #888;
-    --border-color: #ddd;
+    --primary-bg: rgb(236, 239, 241);
+    --text-dark: rgb(51, 51, 51);
+    --text-light: rgb(221, 221, 221);
+
+    // Burger
+    --burger-bg: rgb(255, 241, 198);
+    --burger-item: rgb(121, 2, 2);
+    --burger-btn: rgb(97, 97, 97);
+
+    // Listes et cartes
+    --list-bg: rgba(210, 194, 42, 0.6);
+    --card-bg: rgba(112, 191, 132, 0.6);
+
+    // Boutons
+    --valid-btn: rgb(32, 170, 6);
+    --valid-btn-hover: rgb(32, 170, 6);
+    --delete-btn: rgb(170, 6, 6);
+    --delete-btn-hover: rgba(170, 6, 6, 0.8);
+    --edit-btn: rgb(8, 62, 166);
+    --edit-btn-hover: rgba(8, 62, 166, 0.8);
+    --view-btn: rgb(213, 190, 3);
+    --view-btn-hover: rgba(213, 190, 3, 0.8);
+    --way-btn: rgb(117, 117, 117);
+    --way-btn-hover: rgba(117, 117, 117, 0.8);
+    --cancel-btn: rgb(213, 190, 3);
+    --cancel-btn-hover: rgba(213, 190, 3, 0.8);
+
+    // Formulaire
+    --form-bg: rgb(255, 241, 198);
+    --secondary-bg: rgb(212, 237, 218); // utilisé ?
+    --accent-color: rgb(33, 136, 56); // utilisé ?
+    --border-color: rgb(221, 221, 221); // utilisé ?
 }
 
 /* *****************************************************************
@@ -67,9 +92,10 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
         & > span::after {
             display: block;
             position: absolute;
+            top: 12px;
             width: 100%;
             height: 2px;
-            background-color: #616161;
+            background-color: var(--burger-btn);
             transition-duration: 0.25s;
         }
         & > span::before {
@@ -86,31 +112,32 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
         position: fixed;
         top: 0;
         left: -100%;
-        width: 200px;
+        width: 210px;
         height: 100%;
         margin: 0;
         padding: 80px 0;
         list-style: none;
-        background-color: #eceff1;
+        background-color: var(--burger-bg);
         box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
         transition-duration: 0.25s;
     }
     &__item {
         display: block;
         padding: 12px 24px;
-        color: #333;
+        color: var(--text-dark);
         font-family: $font-family-name;
         font-size: 20px;
         font-weight: 600;
         text-decoration: none;
         transition-duration: 0.25s;
         &:hover {
-            background-color: var(--yellow);
+            background-color: var(--burger-item);
+            color: var(--text-light);
         }
     }
 }
 
-.mainTitle {
+h1 {
     text-align: center;
     text-transform: uppercase;
     font-style: italic;
@@ -125,8 +152,47 @@ li {
     padding: 0 auto;
 }
 
-.homeList {
-    background: rgba(210, 194, 42, 0.6);
+/* *****************************************************************
+    BODY
+***************************************************************** */
+body {
+    margin: 0 auto;
+    max-width: 780px;
+    background-color: var(--primary-bg);
+    color: var(--text-dark);
+    font-family: $font-family-name;
+    font-size: 80%;
+}
+
+.login, .register, .sectionList {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    &>h2 {
+        text-align: center;
+    }
+}
+.login, .register{
+    &>a {
+    text-align: center;
+    }
+}
+.sectionList {
+    &>h3 {
+        text-align: center;
+    }
+    &>div {
+        text-align: center;
+        // display: flex;
+        // flex-direction: column;
+    }
+}
+
+/* *****************************************************************
+    LISTE & CARTE
+***************************************************************** */
+.list {
+    background: var(--list-bg);
     max-width: 700px;
     width: 75%;
     text-align: center;
@@ -136,77 +202,203 @@ li {
     padding: 5px 0;
     cursor: pointer;
 }
+
+.card {
+    background: var(--card-bg);
+    max-width: 700px;
+    width: 75%;
+    text-align: center;
+    box-shadow: 0px 0px 10px 2px rgba(210, 194, 42, 0.6);
+    border-radius: 20px;
+    margin: 20px auto;
+    padding: 5px 0;
+    cursor: pointer;
+}
+
+.flex {
+    display: flex;
+    flex-direction: column;
+}
+
+.star {
+    font-size: 25px;
+    color: red;
+}
+
+/* *****************************************************************
+    BOUTONS
+***************************************************************** */
 .btn {
     border: none;
     border-radius: 10px;
     color: white;
-    padding: 15px 32px;
+    padding: 5px 10px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin: 4px 2px;
+    margin: 0 auto;
     font-family: $font-family-name;
     cursor: pointer;
-    &.way {
-        background-color: rgb(117, 117, 117);
+    &.view {
+        background-color: var(--view-btn);
+        color: var(--text-dark);
+        &::before {
+            content: "👁";
+        }
         &:hover {
-            background-color: rgba(117, 117, 117, 0.8);
+            background-color: var(--view-btn-hover);
+            color: var(--text-light);
+        }
+    }
+    &.way {
+        background-color: var(--way-btn);
+        &:hover {
+            background-color: var(--way-btn-hover);
             color: var(--text-dark);
         }
     }
     &.valid {
-        background-color: rgb(32, 170, 6);
+        background-color: var(--valid-btn);
         &:hover {
-            background-color: rgba(32, 170, 6, 0.8);
+            background-color: var(--valid-btn-hover);
+            color: var(--text-dark);
+        }
+    }
+    &.delete {
+        background-color: var(--delete-btn);
+        &::before {
+            content: "🗑";
+        }
+        &:hover {
+            background-color: var(--delete-btn-hover);
+            color: var(--text-dark);
+        }
+    }
+    &.edit {
+        background-color: var(--edit-btn);
+        &::before {
+            content: "🖉";
+        }
+        &:hover {
+            background-color: var(--edit-btn-hover);
+            color: var(--text-dark);
+        }
+    }
+    &.cancel {
+        background-color: var(--cancel-btn);
+        &:hover {
+            background-color: var(--cancel-btn-hover);
             color: var(--text-dark);
         }
     }
 }
 
-body {
-    margin: 0;
-    max-width: 780px;
-    background-color: var(--primary-bg);
-    color: var(--text-dark);
-    font-family: $font-family-name;
-    font-size: 100%;
-}
 /* *****************************************************************
-    VERSION MOBILE
+    FORMULAIRES
 ***************************************************************** */
-// Adaptabilité en fonction du Nokia 8110 4G au
-@media screen and (min-width: 360px) and (max-width: 779px) {
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: var(--form-bg);
+    padding: 20px;
+    margin: 10px auto;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+    &> div {
+        margin: 10px 0;
+    }
+}
 
+.label-radio-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+label {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="radio"],
+input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #000;
+    border-radius: 4px;
+}
+
+input[type="radio"] {
+    margin-right: 5px;
+}
+
+input[type="submit"] {
+    background-color: #4caf50;
+    color: #fff;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+input[type="radio"]:checked {
+    background-color: #4caf50;
+    color: #fff;
+}
+
+/* *****************************************************************
+    TABLEAU
+***************************************************************** */
+.userList {
+    text-align: left;
+    border-collapse: collapse;
+    width: 90%;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    & > tbody {
+        & > tr {
+            &:nth-child(odd) {
+                background-color: #aaa;
+            }
+        }
+    }
+}
+
+/* *****************************************************************
+    SAMSUNG
+***************************************************************** */
+@media screen and (min-width: 361px) {
     a {
         color: var(--accent-color);
     }
 
-    .login {
-        padding: 25px;
-        flex: 1;
-        display: inline-block;
-    }
-
-    /* Styles pour les états ou les interactions */
 }
 /* *****************************************************************
-    VERSION TABLETTE
+    IPHONE
 ***************************************************************** */
-@media screen and (min-width: 780px) and (max-width: 980px) {
-    /* *****************************************************************
-    BODY
-    ***************************************************************** */
-    body {
-        max-width: 980px;
-    }
+@media screen and (min-width: 415px) {
+}
+
+/* *****************************************************************
+    NEXUS ANDROID
+***************************************************************** */
+@media screen and (min-width: 801px) {
 }
 /* *****************************************************************
-    VERSION DESKTOP
+    IPAD
 ***************************************************************** */
-@media screen and (min-width: 980px) {
-    /* *****************************************************************
-    BODY
-    ***************************************************************** */
-
+@media screen and (min-width: 811px) {
+}
+/* *****************************************************************
+    DESKTOP
+***************************************************************** */
+@media screen and (min-width: 1025px) {
 }

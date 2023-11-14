@@ -14,6 +14,8 @@ function readAdmin() {
         if(response.status === "ReadAllUsers"){
             const data = response.data;
             const tbody = document.querySelector("tbody");
+            const table = document.querySelector("table");
+            table.classList.add("userList");
             const listUser = document.querySelector("#newUser");
 
             // Bouton de redirection pour création d'utilisateur
@@ -23,6 +25,7 @@ function readAdmin() {
 
             for (const index in data) {
                 const column = data[index];
+
                 // Exclut les colonnes inutiles ou les utilisateurs avec le rôle "Admin"
                 if (["id"].includes(column) || column.role === "Admin") {
                     continue;
@@ -52,20 +55,25 @@ function readAdmin() {
 
                 const tdReadBtn = document.createElement("td");
                 const readBtn = document.createElement("button");
-                readBtn.textContent = "Lire";
-                readBtn.title = "Lire : amène vers le profil d'un utilisateur et ses listes";
+                readBtn.textContent = "";
+                readBtn.title = "Amène vers le profil d'un utilisateur et ses listes";
                 readBtn.id = `readUserProfil-${column.id}`;
                 readBtn.value = column.id;
+                readBtn.classList.add("btn");
+                readBtn.classList.add("view");
 
                 tdReadBtn.appendChild(readBtn);
                 tr.appendChild(tdReadBtn);
 
                 const tdEditBtn = document.createElement("td");
                 const editBtn = document.createElement("button");
-                editBtn.textContent = "Modifier";
-                editBtn.title = "Modifier : permet de modifier le profil d'un utilisateur";
+                editBtn.textContent = "";
+                editBtn.title = "Modifier le profil d'un utilisateur";
                 editBtn.id = `editUserProfil-${column.id}`;
                 editBtn.value = column.id;
+                editBtn.classList.add("btn");
+                editBtn.classList.add("valid");
+                editBtn.classList.add("edit");
                 tdEditBtn.appendChild(editBtn);
                 tr.appendChild(tdEditBtn);
 
@@ -75,11 +83,13 @@ function readAdmin() {
                 deleteForm.method = "post";
 
                 const deleteBtn = document.createElement("button");
-                deleteBtn.title = "Supprimer : permet de supprimer le profil d'un utilisateur";
+                deleteBtn.title = "Supprimer le profil d'un utilisateur";
                 deleteBtn.value = column.id;
+                deleteBtn.classList.add("btn");
+                deleteBtn.classList.add("delete");
                 deleteBtn.id = `deleteUserProfil-${column.id}`;
                 deleteBtn.type = "submit";
-                deleteBtn.textContent = "Supprimer";
+                deleteBtn.textContent = "";
                 deleteForm.appendChild(deleteBtn);
                 tdDeleteBtn.appendChild(deleteForm);
                 tr.appendChild(tdDeleteBtn);
@@ -103,7 +113,7 @@ function readAdmin() {
 
                 tbody.appendChild(tr);
             };
-            
+
         }
     });
 }

@@ -10,7 +10,6 @@ import { configPath, redirect, dialog } from "../../services/utils.js";
 function login() {
     loginForm.addEventListener("submit", function(e){
         e.preventDefault();
-
         fetchLogin(loginForm)
         .then(response => {
             localStorage.removeItem("csrfToken");
@@ -26,7 +25,7 @@ function login() {
                     is_admin: response.user_isAdmin
                 }));
 
-                // const login = e.target.children.login.value;
+                const login = JSON.parse(localStorage.user).login;
                 dialog({title: `<p>Bonjour ${login} !</p>`, content: `<p>Vous êtes bien connecté(e).</p>`});
                 redirect(`${configPath.basePath}/home/pages/home.html`);
             };

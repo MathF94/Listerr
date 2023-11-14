@@ -53,12 +53,16 @@ function displayFormCard(elementDOM) {
     CardValidFormBtn.type = "submit";
     CardValidFormBtn.value = "cardValidBtn";
     CardValidFormBtn.innerText = "Valider";
+    CardValidFormBtn.classList.add("btn");
+    CardValidFormBtn.classList.add("valid");
 
     const CardCancelFormBtn = document.createElement("button");
     CardCancelFormBtn.id = "cardCancelBtn";
     CardCancelFormBtn.type = "button";
     CardCancelFormBtn.value = "cardCancelBtn";
     CardCancelFormBtn.innerText = "Annuler";
+    CardCancelFormBtn.classList.add("btn");
+    CardCancelFormBtn.classList.add("cancel");
 
     createFormCard.appendChild(labelTitle);
     labelTitle.appendChild(mandatoryStar.cloneNode(true));

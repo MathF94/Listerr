@@ -48,8 +48,7 @@ function readAllLists() {
             allListsSection.id = "allListsSection";
 
             const titleLists = document.createElement("h2");
-            titleLists.innerText =
-                "Voici toutes les listes de tous les utilisateurs";
+            titleLists.innerText = "Voici toutes les listes de tous les utilisateurs";
 
             const allListWrapper = document.createElement("div");
             allListWrapper.id = "allListsWrapper";
@@ -60,56 +59,49 @@ function readAllLists() {
 
             for (const index in data) {
                 const object = data[index];
-                const content = document.createElement("div");
-                content.id = `homeList-${object.id}`;
-                content.classList.add("homeList");
-                const list = document.createElement("ul");
-                const titleH3 = document.createElement("h3");
+                const articleList = document.createElement("article");
+                articleList.id = `homeList-${object.id}`;
+                articleList.classList.add("list");
+
+                const sectionList = document.createElement("section");
+                const typeH3 = document.createElement("h3");
+                const titleH4 = document.createElement("h4");
 
                 for (const key in object) {
                     const value = object[key];
+                    const text = document.createElement("p");
 
-                    const item = document.createElement("li");
-
-                    if (key === "type") {
-                        titleH3.innerText = `${object.type} - ${object.title}`;
-                    }
-                    if (
-                        [
-                            "status",
-                            "id",
-                            "userId",
-                            "type",
-                            "title",
-                            "cards",
-                            "createdAt",
-                        ].includes(`${key}`)
-                    ) {
-                        continue;
+                    if (key === "title") {
+                        titleH4.innerText = `${object.title}`;
+                        sectionList.appendChild(titleH4);
+                    } else if (key === "type") {
+                        typeH3.innerText = `${object.type}`;
                     }
 
-                    
                     if (key === "user" && typeof value === "object") {
                         const small = document.createElement("small");
                         small.innerText = `Par ${object[key].login}`;
-                        item.appendChild(small);
+                        sectionList.appendChild(small);
                     } else {
                         if (key === "updatedAt") {
                             const small = document.createElement("small");
                             small.innerText = `Dernière modification le ${object[key]}`;
-                            item.appendChild(small);
-                        } else {
-                            item.innerText = `${object[key]}`;
+                            sectionList.appendChild(small);
                         }
                     }
+
+                    if (["status", "id", "userId", "user", "type", "title", "cards", "createdAt", "updatedAt"].includes(`${key}`)) {
+                        continue;
+                    }
+                    text.innerText = `${object[key]}`;
                     titleLists.after(allListWrapper);
-                    allListWrapper.appendChild(content);
-                    content.appendChild(titleH3);
-                    content.appendChild(list);
-                    list.appendChild(item);
+                    allListWrapper.appendChild(articleList);
+                    articleList.appendChild(typeH3);
+                    articleList.appendChild(sectionList);
+                    sectionList.appendChild(text);
                 }
 
-                content.addEventListener("click", function () {
+                articleList.addEventListener("click", function () {
                     if (
                         object.type === "TodoList" &&
                         object.user.id !==

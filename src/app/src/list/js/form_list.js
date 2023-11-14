@@ -63,12 +63,16 @@ function displayFormList(elementDOM) {
 
     const validListBtn = document.createElement("button");
     validListBtn.id = "validForm";
+    validListBtn.classList.add("btn");
+    validListBtn.classList.add("valid");
     validListBtn.type = "submit";
     validListBtn.value = "validForm";
     validListBtn.innerText = "Valider";
 
     const cancelListBtn = document.createElement("button");
     cancelListBtn.id = "cancelForm";
+    cancelListBtn.classList.add("btn");
+    cancelListBtn.classList.add("cancel");
     cancelListBtn.type = "button";
     cancelListBtn.value = "cancelForm";
     cancelListBtn.innerText = "Annuler";

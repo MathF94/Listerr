@@ -71,52 +71,59 @@ function lists() {
 
             for (const index in data) {
                 const objectList = data[index]
-                const profilList = document.createElement("div");
-                profilList.id = `profilList-${objectList.id}`;
-                profilList.classList.add("profilList");
+                const articleList = document.createElement("article");
+                articleList.id = `profilList-${objectList.id}`;
+                articleList.classList.add("list");
 
-                const contentList = document.createElement("div");
-                contentList.id = `contentList-${objectList.id}`;
-                contentList.classList.add("contentList");
+                const sectionList = document.createElement("section");
 
-                const titleH3 = document.createElement("h3");
-                const list = document.createElement("ul");
+                const typeH3 = document.createElement("h3");
+                const titleH4 = document.createElement("h4");
 
                 const deleteBtnLists = document.createElement("button");
                 deleteBtnLists.id = `deleteProfilList-${objectList.id}`;
                 deleteBtnLists.name = "deleteProfilList";
                 deleteBtnLists.type = "submit";
                 deleteBtnLists.value = `${objectList.id}`;
-                deleteBtnLists.textContent = "Supprimer";
-                deleteBtnLists.classList.add("deleteProfilList");
+                deleteBtnLists.textContent = "";
+                deleteBtnLists.classList.add("btn");
+                deleteBtnLists.classList.add("delete");
 
                 for (const key in objectList) {
                     const value = objectList[key];
-                    const item = document.createElement("li");
+                    const text = document.createElement("p");
 
-                    if (key === "type") {
-                        titleH3.innerText = `${objectList.type} - ${objectList.title}`;
+                    if (key === "title") {
+                        titleH4.innerText = `${objectList.title}`;
+                    } else if (key === "type") {
+                        typeH3.innerText = `${objectList.type}`;
                     }
-                    if (["status", "id", "userId", "type", "title", "cards", "createdAt"].includes(`${key}`)) {
-                        continue;
-                    }
+
                     if (key === "user" && typeof(value) === "object") {
-                        item.innerText = `Par ${objectList[key].login}.`;
+                        const small = document.createElement("small");
+                        small.innerText = `Par ${objectList[key].login}.`;
+                        sectionList.appendChild(small);
                     }
                     else {
                         if (key === "updatedAt") {
-                            item.innerText = `Dernière modification le ${objectList[key]}`;
+                            const small = document.createElement("small");
+                            small.innerText = `Dernière modification le ${objectList[key]}`;
+                            sectionList.appendChild(small);
                         } else {
-                            item.innerText = `${objectList[key]}`;
                         }
                     }
 
-                    contentList.appendChild(titleH3);
-                    list.appendChild(item);
-                    contentList.appendChild(list);
-                    profilList.appendChild(contentList);
-                    profilList.appendChild(deleteBtnLists);
-                    listWrapper.append(profilList);
+                    // Exclut certains éléments de la liste (id, userId, type, title, cards, createdAd)
+                    if (["status", "id", "userId", "user", "type", "title", "cards", "createdAt", "updatedAt"].includes(`${key}`)) {
+                        continue;
+                    }
+                    text.innerText = `${objectList[key]}`;
+                    listWrapper.append(articleList);
+                    articleList.appendChild(typeH3);
+                    sectionList.appendChild(titleH4);
+                    articleList.appendChild(sectionList);
+                    sectionList.appendChild(text);
+                    articleList.appendChild(deleteBtnLists);
                 }
 
                 // Gestion de la suppression de liste
@@ -139,7 +146,7 @@ function lists() {
                 })
 
                 // Redirige vers la page de détails de la liste en cliquant sur la liste.
-                contentList.addEventListener("click", function(){
+                sectionList.addEventListener("click", function(){
                     if (objectList.type === "TodoList" && objectList.user.id !== JSON.parse(localStorage.getItem("user")).id) {
                         return false;
                     }

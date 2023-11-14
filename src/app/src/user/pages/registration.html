@@ -19,7 +19,6 @@
                         type="text"
                         name="name"
                         id="name"
-                        placeholder="Votre nom"
                         pattern="[A-Za-zÀ-ÿ' \-]+"
                         required
                     />
@@ -30,7 +29,6 @@
                         type="text"
                         name="firstname"
                         id="firstname"
-                        placeholder="Votre prénom"
                         pattern="[A-Za-zÀ-ÿ' \-]+"
                         required
                     />
@@ -41,7 +39,6 @@
                         type="text"
                         name="login"
                         id="login"
-                        placeholder="Votre login"
                         required
                     />
                 </div>
@@ -51,7 +48,6 @@
                         type="email"
                         name="email"
                         id="email"
-                        placeholder="Votre email"
                         pattern="[^@\s]+@[^@\s]+\.[a-zA-Z]{2,}"
                         required
                     />
@@ -62,13 +58,12 @@
                         type="password"
                         name="password"
                         id="password"
-                        placeholder="Votre mot de passe"
                         pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).{12,}$"
                         required
                     />
                 </div>
                 <div>
-                    <button type="submit">Valider</button>
+                    <button class="btn valid" type="submit">Valider</button>
                 </div>
             </form>
             <a href="http://localhost/listerr/src/app/src/user/pages/login.html"

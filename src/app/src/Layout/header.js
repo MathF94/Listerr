@@ -9,7 +9,6 @@ function header() {
 
     const title = document.createElement("h1")
     title.id = "mainTitle";
-    title.className = "mainTitle";
     title.innerText = "listerr";
 
     navigation(header);

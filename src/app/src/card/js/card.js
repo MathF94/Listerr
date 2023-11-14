@@ -27,9 +27,9 @@ function card(canCreateCard) {
     const id = urlParams.get("id");
     const oneList = document.querySelector("#oneList");
 
-    const cardSectionForm = document.createElement("div");
+    const cardSectionForm = document.createElement("section");
     cardSectionForm.id = "cardSectionForm";
-    cardSectionForm.class = "cardSectionForm";
+    cardSectionForm.classList.add("form");
 
     const titleForm = document.createElement("h3");
     titleForm.id = "titleFormCard";
@@ -39,6 +39,8 @@ function card(canCreateCard) {
     createCardFormBtn.name = "cardFormBtn";
     createCardFormBtn.type = "button";
     createCardFormBtn.value = `cardFormBtn`;
+    createCardFormBtn.classList.add("btn");
+    createCardFormBtn.classList.add("way");
 
     // Affichage du contenu du bouton en fonction du type de liste
     let btnLabel = "Nouveau souhait";
@@ -47,7 +49,8 @@ function card(canCreateCard) {
         btnLabel = "Nouvelle tâche";
         checklabel = "Réalisé";
     }
-    createCardFormBtn.textContent = btnLabel;
+    createCardFormBtn.textContent = "+";
+    createCardFormBtn.title = btnLabel;
 
     const updateProfilList = document.querySelector(`#updateProfilList-${id}`);
     const deleteProfilList = document.querySelector(`#deleteProfilList-${id}`);
@@ -111,16 +114,23 @@ function card(canCreateCard) {
     .then(response => {
         if (response.status === "readOneList") {
             const dataCards = response.data.cards;
-            const cardSectionContent = document.createElement("div");
-            cardSectionContent.id = "cardSectionContent";
-            cardSectionContent.classList.add("sectionCard");
+            const cardArticleContent = document.createElement("article");
+            cardArticleContent.id = "cardArticleContent";
+            cardArticleContent.classList.add("list");
 
             for (const indexCard in dataCards) {
                 const objectCard = dataCards[indexCard];
 
-                const contentCard = document.createElement("div");
-                contentCard.id = `contentCard-${objectCard.id}`;
-                contentCard.classList.add("contentCard");
+                const cardSectionContent = document.createElement("section");
+                cardSectionContent.id = `cardSectionContent-${objectCard.id}`;
+                cardSectionContent.classList.add("card");
+                cardSectionContent.classList.add("flex");
+
+                const divStar = document.createElement("div");
+                divStar.classList.add("stars");
+                const titleH3 = document.createElement("h3");
+
+                const text = document.createElement("p");
 
                 const labelCheck = document.createElement("label");
                 labelCheck.for = "checkbox";
@@ -131,21 +141,23 @@ function card(canCreateCard) {
                 check.type = "checkbox";
                 check.value = objectCard.checked;
 
-                const deleteBtnCard = document.createElement("button");
-                deleteBtnCard.id = `deleteCard-${objectCard.id}`;
-                deleteBtnCard.name = "deleteCard";
-                deleteBtnCard.type = "button";
-                deleteBtnCard.value = objectCard.id;
-                deleteBtnCard.textContent = "Supprimer";
-                deleteBtnCard.classList.add("deleteCard");
-
                 const updateBtnCard = document.createElement("button");
                 updateBtnCard.id = `updateCard-${objectCard.id}`;
                 updateBtnCard.name = "updateCard";
                 updateBtnCard.type = "submit";
                 updateBtnCard.value = objectCard.id;
-                updateBtnCard.textContent = "Modifier";
-                updateBtnCard.classList.add("updateCard");
+                updateBtnCard.textContent = "";
+                updateBtnCard.classList.add("btn");
+                updateBtnCard.classList.add("edit");
+
+                const deleteBtnCard = document.createElement("button");
+                deleteBtnCard.id = `deleteCard-${objectCard.id}`;
+                deleteBtnCard.name = "deleteCard";
+                deleteBtnCard.type = "button";
+                deleteBtnCard.value = objectCard.id;
+                deleteBtnCard.textContent = "";
+                deleteBtnCard.classList.add("btn");
+                deleteBtnCard.classList.add("delete");
 
                 const priorityValue = objectCard.priority;
 
@@ -155,55 +167,58 @@ function card(canCreateCard) {
                     priority.classList.add("star");
                     priority.setAttribute("data-star", i+1);
                     priority.textContent = i < priorityValue ? "\u2605" : "\u2606" ;
-                    contentCard.appendChild(priority);
+                    divStar.appendChild(priority);
                 }
 
                 // Affichage des éléments de la carte
                 for (const key in objectCard) {
-                    const text = document.createElement("p");
-                    if (["id", "listId", "priority"].includes(`${key}`)) {
-                        continue;
-                    }
-
-                    if (key === "createdAt") {
-                        text.innerText = `Créée le ${objectCard.createdAt}`;
+                    if (key === "title") {
+                        titleH3.innerText = `${objectCard.title}`;
+                        cardSectionContent.appendChild(titleH3);
                     } else if (key === "updatedAt") {
-                        text.innerText = `Modifiée le ${objectCard.updatedAt}`;
+                        const small = document.createElement("small");
+                        small.innerText = `Dernière modification le ${objectCard.updatedAt}`;
+                        cardSectionContent.appendChild(small);
                     } else if (key === "checked") {
                         check.checked = objectCard.checked === 1;
                         if(check.checked) {
                             check.disabled = true;
                         }
-                    } else {
-                        text.innerText = objectCard[key];
+                        cardSectionContent.appendChild(labelCheck);
+                        cardSectionContent.appendChild(check);
                     }
 
-                    contentCard.appendChild(text);
-                    oneList.after(cardSectionContent);
-                    cardSectionContent.appendChild(contentCard);
-                    contentCard.appendChild(labelCheck);
-                    contentCard.appendChild(check);
-                    // Rend visible les boutons pour l'utilisateur courant uniquement
-                    if (canCreateCard) {
-                        contentCard.appendChild(updateBtnCard);
-                        contentCard.appendChild(deleteBtnCard);
-
-                        // Désactive le bouton de création de cartes si update de liste en cours
-                        updateProfilList.addEventListener("click", function(e) {
-                            e.preventDefault();
-                            if (updateProfilList.disabled === true) {
-                                createCardFormBtn.disabled = true;
-
-                                // Réactive le bouton de création de cartes si annulation update de liste
-                                cancelForm.addEventListener("click", function(e) {
-                                    e.preventDefault();
-                                    if (createCardFormBtn.disabled === true) {
-                                        createCardFormBtn.disabled = false
-                                    }
-                                })
-                            }
-                        })
+                    if (["id", "listId", "title", "priority", "checked", "createdAt", "updatedAt"].includes(`${key}`)) {
+                        continue;
                     }
+
+                    text.innerText = objectCard[key];
+                    oneList.after(cardArticleContent);
+                    cardArticleContent.appendChild(cardSectionContent);
+                    cardSectionContent.appendChild(divStar);
+                    cardSectionContent.appendChild(text);
+                }
+
+                // Rend visible les boutons pour l'utilisateur courant uniquement
+                if (canCreateCard) {
+                    cardSectionContent.appendChild(updateBtnCard);
+                    cardSectionContent.appendChild(deleteBtnCard);
+
+                    // Désactive le bouton de création de cartes si update de liste en cours
+                    updateProfilList.addEventListener("click", function(e) {
+                        e.preventDefault();
+                        if (updateProfilList.disabled === true) {
+                            createCardFormBtn.disabled = true;
+
+                            // Réactive le bouton de création de cartes si annulation update de liste
+                            cancelForm.addEventListener("click", function(e) {
+                                e.preventDefault();
+                                if (createCardFormBtn.disabled === true) {
+                                    createCardFormBtn.disabled = false
+                                }
+                            })
+                        }
+                    })
                 }
 
                 // Gestion de la modification d'une carte
@@ -224,7 +239,7 @@ function card(canCreateCard) {
                         // Affichage du formulaire d'édition + dissimulation de la carte
                         displayFormCard(updateCardSection);
 
-                        contentCard.classList.add("hidden");
+                        cardSectionContent.classList.add("hidden");
                         updateBtnCard.disabled = true;
                         deleteBtnCard.disabled = true;
 
@@ -236,7 +251,7 @@ function card(canCreateCard) {
                             deleteBtnCard.disabled = false;
                             updateFormCard.remove();
                             titleForm.remove();
-                            contentCard.classList.remove("hidden");
+                            cardSectionContent.classList.remove("hidden");
                         })
 
                         // Insertion des éléments de la liste dans les inputs

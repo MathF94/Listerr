@@ -29,9 +29,9 @@ function list() {
         fetchReadOneListById(id)
         .then(response => {
             const returnLists = document.querySelector("#cancelBtn");
-            returnLists.href = `${configPath.basePath}/user/pages/profil.html`;
+            returnLists.href = `${configPath.basePath}/list/pages/lists.html`;
 
-            if (JSON.parse(localStorage.user).role === "Admin") {
+            if (JSON.parse(localStorage.user).role === "Admin" && response.data.user.role !== "Admin") {
                 returnLists.href = `${configPath.basePath}/user/pages/profil.html?id=${response.data.userId}`;
             }
 
@@ -53,47 +53,60 @@ function list() {
             if (response.status === "readOneList") {
                 notAllowedRedirection(data?.type);
                 const oneList = document.querySelector("#oneList");
-                oneList.classList = "oneList";
+                oneList.classList = "list";
 
-                const titleList = document.createElement("h3");
-                titleList.innerText = `${data.type} - ${data.title}`;
+                const typeList = document.createElement("h3");
+                typeList.innerText = `${data.type}`;
 
-                const list = document.createElement("ul");
+                const sectionList = document.createElement("section");
+                sectionList.classList.add("flex");
+
+                const titleList = document.createElement("h4");
+                titleList.innerText = `${data.title}`;
+                sectionList.appendChild(titleList);
+
+                const text = document.createElement("p");
 
                 const updateBtnList = document.createElement("button");
                 updateBtnList.id = `updateProfilList-${data.id}`;
                 updateBtnList.name = "updateProfilList";
                 updateBtnList.type = "button";
                 updateBtnList.value = `${data.id}`;
-                updateBtnList.textContent = "Modifier";
+                updateBtnList.textContent = "";
+                updateBtnList.classList.add("btn");
+                updateBtnList.classList.add("edit");
 
                 const deleteBtnList = document.createElement("button");
                 deleteBtnList.id = `deleteProfilList-${data.id}`;
                 deleteBtnList.name = "deleteProfilList";
                 deleteBtnList.type = "button";
                 deleteBtnList.value = `${data.id}`;
-                deleteBtnList.textContent = "Supprimer";
+                deleteBtnList.textContent = "";
+                deleteBtnList.classList.add("btn");
+                deleteBtnList.classList.add("delete");
 
                 for (const index in data) {
-                    const item = document.createElement("li");
                     const object = data[index];
-                    // Exclut certains éléments de la liste (id, userId, type, title)
-                    if (["id", "userId", "type", "title", "cards", "createdAt"].includes(`${index}`)) {
-                        continue;
-                    };
                     if ( index === "user" && typeof(data[index]) === "object") {
-                        item.innerText = `Par ${data.user.login}`;
+                        const small = document.createElement("small");
+                        small.innerText = `Par ${data.user.login}`;
+                        sectionList.appendChild(small);
                     } else {
                         if (index === "updatedAt") {
-                            item.innerText = `Dernière modification le ${data.createdAt}`;
-                        } else {
-                            item.innerText = `${object}`;
+                            const small = document.createElement("small");
+                            small.innerText = `Dernière modification le ${data.updatedAt}`;
+                            sectionList.appendChild(small);
                         };
                     };
 
-                    list.appendChild(item);
-                    oneList.appendChild(titleList);
-                    oneList.appendChild(list);
+                    // Exclut certains éléments de la liste (id, userId, type, title, cards, createdAd)
+                    if (["id", "userId", "user", "type", "title", "cards", "createdAt", "updatedAt"].includes(`${index}`)) {
+                        continue;
+                    };
+                    text.innerText = `${object}`;
+                    sectionList.appendChild(text);
+                    oneList.appendChild(typeList);
+                    oneList.appendChild(sectionList);
                 };
                 // Rend visible les boutons "Supprimer" et "Modifier" pour l'utilisateur en cours uniquement
                 localStorage.setItem("canCreateCard", userId === data.user.id)

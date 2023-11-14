@@ -57,12 +57,14 @@ function read() {
                 if (JSON.parse(localStorage.user).role === "Admin") {
                     const returnBtn = document.createElement("button");
                     returnBtn.id = "returnBtn";
-                    returnBtn.innerText = "Retour à la liste d'utilisateurs";
+                    returnBtn.classList.add("btn");
+                    returnBtn.classList.add("cancel");
+                    returnBtn.innerText = "Retour";
                     returnBtn.type = "button";
 
                     // En tant qu'Admin, modifie le texte du bouton
                     const listsUser = document.querySelector("#listsUser");
-                    listsUser.innerText = "Accéder aux listes de l'utilisateur";
+                    listsUser.innerText = "Listes de l'utilisateur";
                     listsUser.after(returnBtn);
 
                     updateBtn.addEventListener("click", function (e) {
@@ -104,90 +106,69 @@ function read() {
                     fetchReadAllLists(id).then((response) => {
                         const data = response.data;
                         if (response.status === "readAllListsByUser") {
-                            const listWrapper =
-                                document.querySelector("#listsWrapper");
+                            const listWrapper = document.querySelector("#listsWrapper");
 
                             for (const index in data) {
                                 const objectList = data[index];
-                                const profilList =
-                                    document.createElement("div");
-                                profilList.id = `profilList-${objectList.id}`;
-                                profilList.classList.add("profilList");
+                                const articleList = document.createElement("article");
+                                articleList.id = `profilList-${objectList.id}`;
+                                articleList.classList.add("list");
 
-                                const contentList =
-                                    document.createElement("div");
-                                contentList.id = `contentList-${objectList.id}`;
-                                contentList.classList.add("contentList");
-
-                                const titleH3 = document.createElement("h3");
-                                const list = document.createElement("ul");
+                                const sectionList = document.createElement("section");
+                                const typeH3 = document.createElement("h3");
+                                const titleH4 = document.createElement("h4");
 
                                 for (const key in objectList) {
                                     const value = objectList[key];
-                                    const item = document.createElement("li");
+                                    const item = document.createElement("p");
 
-                                    if (key === "type") {
-                                        titleH3.innerText = `${objectList.type} - ${objectList.title}`;
+                                    if (key === "title") {
+                                        titleH4.innerText = `${objectList.title}`;
+
+                                    } else if (key === "type") {
+                                        typeH3.innerText = `${objectList.type}`;
                                     }
-                                    if (
-                                        [
-                                            "status",
-                                            "id",
-                                            "userId",
-                                            "type",
-                                            "title",
-                                            "cards",
-                                        ].includes(`${key}`)
-                                    ) {
-                                        continue;
-                                    }
-                                    if (
-                                        key === "user" &&
-                                        typeof value === "object"
-                                    ) {
-                                        item.innerText = `Par ${objectList[key].login}.`;
+
+                                    if (key === "user" && typeof value === "object") {
+                                        const small = document.createElement("small");
+                                        small.innerText = `Par ${objectList[key].login}.`;
+                                        sectionList.appendChild(small);
                                     } else {
-                                        if (key === "createdAt") {
-                                            item.innerText = `Créée le ${objectList[key]}`;
-                                        } else if (key === "updatedAt") {
-                                            item.innerText = `Modifiée le ${objectList[key]}`;
-                                        } else {
-                                            item.innerText = `${objectList[key]}`;
+                                        if (key === "updatedAt") {
+                                            const small = document.createElement("small");
+                                            small.innerText = `Dernière modification le ${objectList[key]}`;
+                                            sectionList.appendChild(small);
                                         }
                                     }
 
-                                    contentList.appendChild(titleH3);
-                                    list.appendChild(item);
-                                    contentList.appendChild(list);
-                                    profilList.appendChild(contentList);
-                                    listWrapper.append(profilList);
+                                    // Exclut certains éléments de la liste
+                                    if (["status", "id", "userId", "user", "type", "title", "cards", "createdAt", "updatedAt"].includes(`${key}`)) {
+                                        continue;
+                                    }
+                                    item.innerText = `${objectList[key]}`;
+                                    listWrapper.appendChild(articleList);
+                                    articleList.appendChild(typeH3);
+                                    articleList.appendChild(sectionList);
+                                    sectionList.appendChild(titleH4);
+                                    sectionList.appendChild(item);
                                 }
 
                                 // Redirige vers la page de détails de la liste en cliquant sur la liste.
-                                contentList.addEventListener(
-                                    "click",
-                                    function () {
-                                        if (
-                                            objectList.type === "TodoList" &&
-                                            objectList.user.id !==
-                                                JSON.parse(
-                                                    localStorage.getItem("user")
-                                                ).id
-                                        ) {
+                                sectionList.addEventListener("click",  function () {
+                                        if (objectList.type === "TodoList" && objectList.user.id !== JSON.parse(localStorage.getItem("user")).id) {
                                             return false;
                                         }
-                                        redirect(
-                                            `${configPath.basePath}/list/pages/list.html?id=${objectList.id}`,
+                                        redirect(`${configPath.basePath}/list/pages/list.html?id=${objectList.id}`,
                                             0
-                                        );
+                                        )
                                     }
-                                );
+                                )
                             }
                         }
-                    });
-                });
+                    })
+                })
             }
-        });
+        })
     }
 
     // Affichage du profil utilisateur courant
@@ -199,11 +180,7 @@ function read() {
                 updateBtn.classList.add("hide");
             }
 
-            if (
-                response.status === "connected" &&
-                localStorage.token &&
-                localStorage.user
-            ) {
+            if (response.status === "connected" && localStorage.token && localStorage.user) {
                 // Affiche les boutons de suppression et de mise à jour lorsque l'utilisateur est connecté.
                 if (JSON.parse(localStorage.user).role === "Admin") {
                     deleteBtn.remove();

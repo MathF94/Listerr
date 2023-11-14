@@ -10,13 +10,30 @@
     COULEURS PRINCIPALES
 ***************************************************************** */
 :root {
-  --primary-bg: #eceff1;
-  --secondary-bg: #d4edda;
-  --accent-color: #218838;
-  --yellow: rgba(210, 194, 42, 0.6);
-  --text-dark: #333;
-  --text-light: #888;
-  --border-color: #ddd;
+  --primary-bg: rgb(236, 239, 241);
+  --text-dark: rgb(51, 51, 51);
+  --text-light: rgb(221, 221, 221);
+  --burger-bg: rgb(255, 241, 198);
+  --burger-item: rgb(121, 2, 2);
+  --burger-btn: rgb(97, 97, 97);
+  --list-bg: rgba(210, 194, 42, 0.6);
+  --card-bg: rgba(112, 191, 132, 0.6);
+  --valid-btn: rgb(32, 170, 6);
+  --valid-btn-hover: rgb(32, 170, 6);
+  --delete-btn: rgb(170, 6, 6);
+  --delete-btn-hover: rgba(170, 6, 6, 0.8);
+  --edit-btn: rgb(8, 62, 166);
+  --edit-btn-hover: rgba(8, 62, 166, 0.8);
+  --view-btn: rgb(213, 190, 3);
+  --view-btn-hover: rgba(213, 190, 3, 0.8);
+  --way-btn: rgb(117, 117, 117);
+  --way-btn-hover: rgba(117, 117, 117, 0.8);
+  --cancel-btn: rgb(213, 190, 3);
+  --cancel-btn-hover: rgba(213, 190, 3, 0.8);
+  --form-bg: rgb(255, 241, 198);
+  --secondary-bg: rgb(212, 237, 218);
+  --accent-color: rgb(33, 136, 56);
+  --border-color: rgb(221, 221, 221);
 }
 
 /* *****************************************************************
@@ -52,9 +69,10 @@
 .menu__btn > span, .menu__btn > span::before, .menu__btn > span::after {
   display: block;
   position: absolute;
+  top: 12px;
   width: 100%;
   height: 2px;
-  background-color: #616161;
+  background-color: var(--burger-btn);
   transition-duration: 0.25s;
 }
 .menu__btn > span::before {
@@ -70,19 +88,19 @@
   position: fixed;
   top: 0;
   left: -100%;
-  width: 200px;
+  width: 210px;
   height: 100%;
   margin: 0;
   padding: 80px 0;
   list-style: none;
-  background-color: #eceff1;
+  background-color: var(--burger-bg);
   box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
   transition-duration: 0.25s;
 }
 .menu__item {
   display: block;
   padding: 12px 24px;
-  color: #333;
+  color: var(--text-dark);
   font-family: "dyslexic";
   font-size: 20px;
   font-weight: 600;
@@ -90,10 +108,11 @@
   transition-duration: 0.25s;
 }
 .menu__item:hover {
-  background-color: var(--yellow);
+  background-color: var(--burger-item);
+  color: var(--text-light);
 }
 
-.mainTitle {
+h1 {
   text-align: center;
   text-transform: uppercase;
   font-style: italic;
@@ -108,8 +127,43 @@ li {
   padding: 0 auto;
 }
 
-.homeList {
-  background: rgba(210, 194, 42, 0.6);
+/* *****************************************************************
+    BODY
+***************************************************************** */
+body {
+  margin: 0 auto;
+  max-width: 780px;
+  background-color: var(--primary-bg);
+  color: var(--text-dark);
+  font-family: "dyslexic";
+  font-size: 80%;
+}
+
+.login, .register, .sectionList {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+}
+.login > h2, .register > h2, .sectionList > h2 {
+  text-align: center;
+}
+
+.login > a, .register > a {
+  text-align: center;
+}
+
+.sectionList > h3 {
+  text-align: center;
+}
+.sectionList > div {
+  text-align: center;
+}
+
+/* *****************************************************************
+    LISTE & CARTE
+***************************************************************** */
+.list {
+  background: var(--list-bg);
   max-width: 700px;
   width: 75%;
   text-align: center;
@@ -120,75 +174,190 @@ li {
   cursor: pointer;
 }
 
+.card {
+  background: var(--card-bg);
+  max-width: 700px;
+  width: 75%;
+  text-align: center;
+  box-shadow: 0px 0px 10px 2px rgba(210, 194, 42, 0.6);
+  border-radius: 20px;
+  margin: 20px auto;
+  padding: 5px 0;
+  cursor: pointer;
+}
+
+.flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.star {
+  font-size: 25px;
+  color: red;
+}
+
+/* *****************************************************************
+    BOUTONS
+***************************************************************** */
 .btn {
   border: none;
   border-radius: 10px;
   color: white;
-  padding: 15px 32px;
+  padding: 5px 10px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-  margin: 4px 2px;
+  margin: 0 auto;
   font-family: "dyslexic";
   cursor: pointer;
 }
+.btn.view {
+  background-color: var(--view-btn);
+  color: var(--text-dark);
+}
+.btn.view::before {
+  content: "👁";
+}
+.btn.view:hover {
+  background-color: var(--view-btn-hover);
+  color: var(--text-light);
+}
 .btn.way {
-  background-color: rgb(117, 117, 117);
+  background-color: var(--way-btn);
 }
 .btn.way:hover {
-  background-color: rgba(117, 117, 117, 0.8);
+  background-color: var(--way-btn-hover);
   color: var(--text-dark);
 }
 .btn.valid {
-  background-color: rgb(32, 170, 6);
+  background-color: var(--valid-btn);
 }
 .btn.valid:hover {
-  background-color: rgba(32, 170, 6, 0.8);
+  background-color: var(--valid-btn-hover);
   color: var(--text-dark);
 }
-
-body {
-  margin: 0;
-  max-width: 780px;
-  background-color: var(--primary-bg);
+.btn.delete {
+  background-color: var(--delete-btn);
+}
+.btn.delete::before {
+  content: "🗑";
+}
+.btn.delete:hover {
+  background-color: var(--delete-btn-hover);
   color: var(--text-dark);
-  font-family: "dyslexic";
-  font-size: 100%;
+}
+.btn.edit {
+  background-color: var(--edit-btn);
+}
+.btn.edit::before {
+  content: "🖉";
+}
+.btn.edit:hover {
+  background-color: var(--edit-btn-hover);
+  color: var(--text-dark);
+}
+.btn.cancel {
+  background-color: var(--cancel-btn);
+}
+.btn.cancel:hover {
+  background-color: var(--cancel-btn-hover);
+  color: var(--text-dark);
 }
 
 /* *****************************************************************
-    VERSION MOBILE
+    FORMULAIRES
 ***************************************************************** */
-@media screen and (min-width: 360px) and (max-width: 779px) {
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: var(--form-bg);
+  padding: 20px;
+  margin: 10px auto;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgb(0, 0, 0);
+}
+form > div {
+  margin: 10px 0;
+}
+
+.label-radio-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+input[type=text],
+input[type=password],
+input[type=email],
+input[type=radio],
+input[type=submit] {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid #000;
+  border-radius: 4px;
+}
+
+input[type=radio] {
+  margin-right: 5px;
+}
+
+input[type=submit] {
+  background-color: #4caf50;
+  color: #fff;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+input[type=radio]:checked {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+/* *****************************************************************
+    TABLEAU
+***************************************************************** */
+.userList {
+  text-align: left;
+  border-collapse: collapse;
+  width: 90%;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.userList > tbody > tr:nth-child(odd) {
+  background-color: #aaa;
+}
+
+/* *****************************************************************
+    SAMSUNG
+***************************************************************** */
+@media screen and (min-width: 361px) {
   a {
     color: var(--accent-color);
   }
-  .login {
-    padding: 25px;
-    flex: 1;
-    display: inline-block;
-  }
-  /* Styles pour les états ou les interactions */
 }
 /* *****************************************************************
-    VERSION TABLETTE
+    IPHONE
 ***************************************************************** */
-@media screen and (min-width: 780px) and (max-width: 980px) {
-  /* *****************************************************************
-  BODY
-  ***************************************************************** */
-  body {
-    max-width: 980px;
-  }
-}
 /* *****************************************************************
-    VERSION DESKTOP
+    NEXUS ANDROID
 ***************************************************************** */
-@media screen and (min-width: 980px) {
-  /* *****************************************************************
-  BODY
-  ***************************************************************** */
-}
+/* *****************************************************************
+    IPAD
+***************************************************************** */
+/* *****************************************************************
+    DESKTOP
+***************************************************************** */
 
 /*# sourceMappingURL=style.css.map */

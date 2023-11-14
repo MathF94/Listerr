@@ -22,7 +22,6 @@
                         type="text"
                         name="name"
                         id="name"
-                        placeholder="Votre nom"
                         pattern="[A-Za-zÀ-ÿ' \-]+"
                         required
                     />
@@ -33,7 +32,6 @@
                         type="text"
                         name="firstname"
                         id="firstname"
-                        placeholder="Votre prénom"
                         pattern="[A-Za-zÀ-ÿ' \-]+"
                         required
                     />
@@ -44,7 +42,6 @@
                         type="text"
                         name="login"
                         id="login"
-                        placeholder="Votre login"
                         required
                     />
                 </div>
@@ -54,14 +51,13 @@
                         type="email"
                         name="email"
                         id="email"
-                        placeholder="Votre email"
                         pattern="[^@\s]+@[^@\s]+\.[a-zA-Z]{2,}"
                         required
                     />
                 </div>
                 <div>
-                    <button id="update" type="submit" value="update">Valider</button>
-                    <button id="updateCancelBtn" type="button" value="updateCancelBtn">Retour</button>
+                    <button class="btn valid" id="update" type="submit" value="update">Valider</button>
+                    <button class="btn delete" id="updateCancelBtn" type="button" value="updateCancelBtn">Retour</button>
                 </div>
             </form>
         </section>
