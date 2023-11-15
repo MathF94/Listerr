@@ -13,25 +13,26 @@
   --primary-bg: rgb(217, 199, 32)
   --text-dark: rgb(51, 51, 51);
   --text-light: rgb(221, 221, 221);
-  --burger-bg: rgb(255, 241, 198);
+  --burger-bg: rgba(255, 241, 198, 0.85);
   --burger-item: rgb(121, 2, 2);
-  --burger-btn: rgb(97, 97, 97);
+  --burger-item-shadow: rgba(121, 2, 2, 0.4);
+  --burger-btn: rgb(51, 51, 51);
   --list-bg: rgba(210, 194, 42, 0.6);
   --card-bg: rgba(112, 191, 132, 0.6);
   --valid-btn: rgb(32, 170, 6);
   --valid-btn-hover: rgb(32, 170, 6);
-  --delete-btn: rgb(170, 6, 6);
-  --delete-btn-hover: rgba(170, 6, 6, 0.8);
+  --delete-btn: rgba(225, 31, 31, 0.7);
+  --delete-btn-hover: rgba(225, 31, 31, 1);
   --edit-btn: rgb(8, 62, 166);
   --edit-btn-hover: rgba(8, 62, 166, 0.8);
-  --view-btn: rgb(213, 190, 3);
-  --view-btn-hover: rgba(213, 190, 3, 0.8);
+  --view-btn: rgb(238, 214, 33);
+  --view-btn-hover: rgba(213, 188, 3, 0.904);
   --way-btn: rgb(117, 117, 117);
   --way-btn-hover: rgba(117, 117, 117, 0.8);
-  --cancel-btn: rgb(213, 190, 3);
-  --cancel-btn-hover: rgba(213, 190, 3, 0.8);
+  --way-btn: rgb(213, 190, 3);
+  --way-btn-hover: rgba(213, 190, 3, 0.8);
   --form-bg: rgb(255, 241, 198);
-  --dialog-bg: rgba(200, 236, 39, 0.5);
+  --dialog-bg: rgba(238, 234, 13, 0.51);
   --border-color: rgb(221, 221, 221);
 }
 
@@ -39,7 +40,15 @@
     HEADER & NAVIGATION (MENU BURGER)
 ***************************************************************** */
 header {
-  margin-bottom: 100px;
+  margin: 0px 20px 40px 20px;
+  background-image: url(./resources/images/pen.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+#hamburger-menu {
+  z-index: 10;
 }
 
 #menu__toggle {
@@ -62,7 +71,7 @@ header {
 
 .menu__btn {
   position: fixed;
-  top: 20px;
+  top: 31px;
   left: 20px;
   width: 26px;
   height: 26px;
@@ -97,7 +106,7 @@ header {
   padding: 80px 0;
   list-style: none;
   background-color: var(--burger-bg);
-  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+  box-shadow: 2px 2px 6px var(--burger-item-shadow);
   transition-duration: 0.25s;
 }
 .menu__item {
@@ -119,7 +128,7 @@ h1 {
   text-align: right;
   text-transform: uppercase;
   font-style: italic;
-  margin-right: 50px;
+  margin-top: 20px;
 }
 
 ul {
@@ -136,12 +145,17 @@ li {
 ***************************************************************** */
 body {
   margin: 0 auto;
-  max-width: 780px;
-  background-color: var(--primary-bg);
+  max-width: 100%;
+  min-height: 100vh;
   color: var(--text-dark);
   font-family: "dyslexic";
   font-size: 80%;
   text-align: center;
+  background-image: url(./resources/images/paper.JPG);
+  background-size: 100%;
+  border-width: 0px 15px;
+  border-style: solid;
+  border-color: rgb(88, 53, 9);
 }
 
 .login, .register, .sectionList {
@@ -153,13 +167,17 @@ h3, h4 {
   margin: 10px auto;
 }
 
-.dialog {
-  position: absolute;
+dialog {
+  position: sticky;
   top: 10px;
   height: 100px;
   border-radius: 10px;
   background: var(--dialog-bg);
-  width: 36%;
+  width: 30%;
+  top: 26%;
+  width: 250px;
+  padding-top: 0px;
+  padding-bottom: 25px;
 }
 
 /* *****************************************************************
@@ -218,7 +236,7 @@ small {
 .btn {
   border: none;
   border-radius: 10px;
-  color: white;
+  color: var(--text-dark);
   padding: 5px 10px;
   text-decoration: none;
   font-size: 16px;
@@ -228,7 +246,7 @@ small {
 }
 .btn.view {
   background-color: var(--view-btn);
-  color: var(--text-dark);
+  color: var(--text-light);
 }
 .btn.view::before {
   content: "👁";
@@ -253,13 +271,14 @@ small {
 }
 .btn.delete {
   background-color: var(--delete-btn);
+  color: var(--text-light);
 }
 .btn.delete::before {
   content: "🗑";
 }
 .btn.delete:hover {
   background-color: var(--delete-btn-hover);
-  color: var(--text-dark);
+  color: var(--text-light);
 }
 .btn.edit {
   background-color: var(--edit-btn);
@@ -366,7 +385,7 @@ input[type=radio]:checked {
   }
 }
 /* *****************************************************************
-    IPHONE
+    GALAXY
 ***************************************************************** */
 /* *****************************************************************
     NEXUS ANDROID

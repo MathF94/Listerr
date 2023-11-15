@@ -188,10 +188,13 @@ function list() {
                         } else if (confirm('Voulez-vous vraiment vous supprimer la liste ?') === true) {
                             fetchDeleteList(data.id)
                             .then(() => {
+
                                 dialog({title: "Suppression de la liste",
-                                content: `<p>Votre liste a bien été supprimée.</p>`
-                                });
-                                redirect(`${configPath.basePath}/list/pages/lists.html`);
+                                content: `<p>Votre liste a bien été supprimée.</p>`});
+                                const dialogSection = document.querySelector("#dialog");
+                                console.log(dialogSection);
+                                document.body.scrollTop = 0;
+                                // redirect(`${configPath.basePath}/list/pages/lists.html`);
                             });
                         };
                     });

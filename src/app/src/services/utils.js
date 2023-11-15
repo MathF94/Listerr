@@ -50,7 +50,6 @@ function dialog({title, content, hasTimeOut}) {
 
     const dialog = document.createElement("dialog");
     dialog.open = "open";
-    dialog.classList.add("dialog");
     dialog.prepend(titleH2);
 
     if (typeof(content) === "string")  {
@@ -91,4 +90,11 @@ function notAllowedRedirection(type) {
     }
 }
 
-export { configPath, redirect, dialog, notAllowedRedirection, mandatoryStar };
+function scroll() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+        });
+    }
+
+export { configPath, redirect, dialog, notAllowedRedirection, mandatoryStar, scroll };

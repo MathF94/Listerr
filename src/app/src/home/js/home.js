@@ -22,9 +22,10 @@ function readAllLists() {
             dialog({
                 title: "Vous n'êtes pas encore connecté ?",
                 content:
-                    "Vous allez être redirigé(e) vers la page de connexion",
-                hasTimeOut: true,
+                "Vous allez être redirigé(e) vers la page de connexion"
             });
+            const dialogMsg = document.querySelector("dialog");
+            dialogMsg.classList.add("dialog");
             redirect(`${configPath.basePath}/user/pages/login.html`);
         });
         return;

@@ -10,7 +10,8 @@ import {
     configPath,
     redirect,
     dialog,
-    notAllowedRedirection
+    notAllowedRedirection,
+    scroll
 } from "../../services/utils.js";
 import { displayFormList } from "./form_list.js";
 
@@ -135,11 +136,14 @@ function lists() {
                         console.warn("pas touche");
                         return;
                     } else if (confirm('Voulez-vous vraiment vous supprimer la liste ?') === true) {
+                        scroll();
                         fetchDeleteList(objectList.id)
                         .then(() => {
                             dialog({title: "Suppression de la liste",
                             content: `<p>Votre liste a bien été supprimée.</p>`
                             });
+                            const dialogMsg = document.querySelector("dialog");
+                            console.log(dialogMsg);
                             redirect(`${configPath.basePath}/list/pages/lists.html`);
                         });
                     }

@@ -98,7 +98,7 @@ function card(canCreateCard) {
 
                 }
                 if (response.status === "errors") {
-                    dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
+                    dialog({title: "Erreurs", content: response.errors});
                     redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
                 }
             })
