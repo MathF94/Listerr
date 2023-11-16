@@ -33,10 +33,16 @@ function read() {
             const item = document.createElement("li");
             const column = response[index];
 
-            if (["status", "id"].includes(index)) {
-                continue;
+            if (JSON.parse(localStorage.user).role === "Admin") {
+                if (["status", "id"].includes(index)) {
+                    continue;
+                }
             }
-
+            if (JSON.parse(localStorage.user).role === "User") {
+                if (["status", "id", "role"].includes(index)) {
+                    continue;
+                }
+            }
             item.innerText = `${column.label} : ${column.value}`;
             list.appendChild(item);
         }

@@ -57,8 +57,13 @@ function card(canCreateCard) {
 
     const updateProfilList = document.querySelector(`#updateProfilList-${id}`);
     const deleteProfilList = document.querySelector(`#deleteProfilList-${id}`);
-    updateProfilList.title = "Modifier une liste";
-    deleteProfilList.title = "Supprimer une liste";
+    if (updateProfilList) {
+        updateProfilList.title = "Modifier une liste";
+    }
+    if (deleteProfilList) {
+        deleteProfilList.title = "Modifier une liste";
+    }
+
     // Affichage du formulaire au click du bouton
     createCardFormBtn.addEventListener("click", function(e) {
         if (createCardFormBtn.value !== "cardFormBtn") {
@@ -67,11 +72,16 @@ function card(canCreateCard) {
 
         // Bouton rendu inutilisable
         createCardFormBtn.disabled = true;
+        createCardFormBtn.classList.add("disable");
         if (updateProfilList) {
             updateProfilList.disabled = true;
+            updateProfilList.classList.remove("edit");
+            updateProfilList.classList.add("disableUpdate");
         }
         if (deleteProfilList) {
             deleteProfilList.disabled = true;
+            deleteProfilList.classList.remove("delete");
+            deleteProfilList.classList.add("disableDelete");
         }
 
         cardSectionForm.appendChild(titleForm);
@@ -87,6 +97,14 @@ function card(canCreateCard) {
             updateProfilList.disabled = false;
             deleteProfilList.disabled = false;
             createCardFormBtn.disabled = false;
+
+            createCardFormBtn.classList.remove("disable");
+            createCardFormBtn.classList.add("way");
+            updateProfilList.classList.remove("disableUpdate");
+            updateProfilList.classList.add("edit");
+            deleteProfilList.classList.remove("disableDelete");
+            deleteProfilList.classList.add("delete");
+
             titleFormCard.remove();
             cardForm.remove();
         })
@@ -171,15 +189,6 @@ function card(canCreateCard) {
                 check.type = "checkbox";
                 check.value = objectCard.checked;
 
-                if (check.value === "1") {
-                    let checklabel = "Réservé";
-                    if (localStorage.getItem("typeList") === "TodoList") {
-                        checklabel = "Réalisé";
-                    }
-                    labelCheck.innerText = checklabel
-                    check.title = checklabel;
-                }
-
                 const actionBtn = document.createElement("div");
 
                 const updateBtnCard = document.createElement("button");
@@ -204,6 +213,17 @@ function card(canCreateCard) {
 
                 const priorityValue = objectCard.priority;
 
+                if (check.value === "1") {
+                    updateBtnCard.disabled = true;
+                    updateBtnCard.classList.remove("edit");
+                    updateBtnCard.classList.add("disableUpdate");
+                    let checklabel = "Réservé";
+                    if (localStorage.getItem("typeList") === "TodoList") {
+                        checklabel = "Réalisé";
+                    }
+                    labelCheck.innerText = checklabel
+                    check.title = checklabel;
+                }
                 // Boucle de création des étoiles (pleines ou vides) en fonction de la priorité
                 for (let i = 0 ; i < 5; i++) {
                     const priority = document.createElement("span");
@@ -254,12 +274,17 @@ function card(canCreateCard) {
                         e.preventDefault();
                         if (updateProfilList.disabled === true) {
                             createCardFormBtn.disabled = true;
+                            createCardFormBtn.classList.remove("way");
+                            createCardFormBtn.classList.add("disable");
+
 
                             // Réactive le bouton de création de cartes si annulation update de liste
                             cancelForm.addEventListener("click", function(e) {
                                 e.preventDefault();
                                 if (createCardFormBtn.disabled === true) {
                                     createCardFormBtn.disabled = false
+                                    createCardFormBtn.classList.remove("disable");
+                                    createCardFormBtn.classList.add("way");
                                 }
                             })
                         }
@@ -285,15 +310,26 @@ function card(canCreateCard) {
                         displayFormCard(updateCardSection);
 
                         cardSectionContent.classList.add("hidden");
+
                         updateBtnCard.disabled = true;
+                        updateBtnCard.classList.remove("edit");
+                        updateBtnCard.classList.add("disableUpdate");
+
                         deleteBtnCard.disabled = true;
+                        deleteBtnCard.classList.remove("delete");
+                        deleteBtnCard.classList.add("disableDelete");
 
                         // Affichage de la carte + suppression du formulaire d'édition
                         const updateFormCard  = document.querySelector("#formCard");
                         const cardCancelBtn = document.querySelector("#cardCancelBtn");
                         cardCancelBtn.addEventListener("click", function() {
                             updateBtnCard.disabled = false;
+                            updateBtnCard.classList.add("edit");
+                            updateBtnCard.classList.remove("disableUpdate");
+
                             deleteBtnCard.disabled = false;
+                            deleteBtnCard.classList.add("delete");
+                            deleteBtnCard.classList.remove("disableDelete");
                             updateFormCard.remove();
                             titleForm.remove();
                             cardSectionContent.classList.remove("hidden");

@@ -24,6 +24,7 @@ notAllowedRedirection();
 function lists() {
     const createListBtn = document.querySelector("#listCreater");
     createListBtn.title = "Créer une nouvelle liste";
+
     // Affiche le formulaire de création de liste lorsqu'on clique sur le bouton "Créer une nouvelle liste".
     createListBtn.addEventListener("click", function(){
         if (createListBtn.value === "newList") {
@@ -33,6 +34,9 @@ function lists() {
             displayFormList(divList)
             titleFormList.innerText = "Formulaire de création de la liste";
             createListBtn.disabled = true;
+            createListBtn.classList.remove("way");
+            createListBtn.classList.add("disable");
+
             const listForm = document.querySelector("#listFormSection");
             const formList = document.querySelector("#formList");
 
@@ -41,12 +45,15 @@ function lists() {
                 e.preventDefault();
                 listForm.remove();
                 createListBtn.disabled = false;
+                createListBtn.classList.remove("disable");
+                createListBtn.classList.add("way");
             })
 
             // Gère la soumission du formulaire de création de liste.
             CSRFToken(formList.id);
             formList.addEventListener("submit", function(e){
                 e.preventDefault();
+
                 // Validation de pattern du formulaire
                 const inputTitle = document.querySelector("#titleList");
                 const inputDescription = document.querySelector("#descriptionList");
@@ -61,6 +68,7 @@ function lists() {
                     validate(e.target)
                 });
 
+                // Remonte en haut de page après action
                 scroll();
                 fetchCreateList(formList)
                 .then(response => {
@@ -105,6 +113,7 @@ function lists() {
                 deleteBtnLists.id = `deleteProfilList-${objectList.id}`;
                 deleteBtnLists.title = "Supprimer la liste";
                 deleteBtnLists.name = "deleteProfilList";
+                deleteBtnLists.title = "Supprimer la liste";
                 deleteBtnLists.type = "submit";
                 deleteBtnLists.value = `${objectList.id}`;
                 deleteBtnLists.textContent = "";

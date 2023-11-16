@@ -22,9 +22,9 @@ function readAllLists() {
         listBtn.addEventListener("click", function (e) {
             dialog({
                 title: "Vous n'êtes pas encore connecté ?",
-                content:
-                "Vous allez être redirigé(e) vers la page de connexion"
+                content: "Vous allez être redirigé(e) vers la page de connexion"
             });
+            listBtn.disabled = true;
             const dialogMsg = document.querySelector("dialog");
             dialogMsg.classList.add("home");
             redirect(`${configPath.basePath}/user/pages/login.html`);
@@ -43,8 +43,7 @@ function readAllLists() {
     fetchAllListsByUsers().then((response) => {
         const data = response.data;
         if (response.status === "readAllListsAllUsers") {
-            const homeDisplayLists =
-                document.querySelector("#homeDisplayLists");
+            const homeDisplayLists = document.querySelector("#homeDisplayLists");
 
             const allListsSection = document.createElement("section");
             allListsSection.id = "allListsSection";
@@ -114,11 +113,11 @@ function readAllLists() {
                     redirect(
                         `${configPath.basePath}/list/pages/list.html?id=${object.id}`,
                         0
-                    );
-                });
+                    )
+                })
             }
         }
-    });
+    })
 }
 
 document.addEventListener("DOMContentLoaded", () => {

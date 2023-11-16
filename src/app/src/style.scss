@@ -40,9 +40,13 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     --delete-btn-hover: rgba(225, 31, 31, 1);
     --edit-btn: rgba(8, 62, 166, 0.7);
     --edit-btn-hover: rgba(31, 93, 213, 1);
+    --disable-btn: rgba(141, 125, 125, 0.63);
+    --disable-btn-hover: rgba(141, 125, 125, 1);
 
     // Formulaire
     --form-bg: rgb(255, 241, 198);
+    --border: rgb(0, 0, 0);
+    --mandatory: rgba(225, 31, 31, 0.7);
 
     // Dialog
     --dialog-bg: rgb(238, 234, 13);
@@ -366,6 +370,33 @@ small {
             color: var(--text-dark);
         }
     }
+    &.disable {
+        background-color: var(--disable-btn);
+        &:hover {
+            background-color: var(--disable-btn-hover);
+            color: var(--text-dark);
+        }
+    }
+    &.disableUpdate {
+        background-color: var(--disable-btn);
+        &::before {
+            content: "🖉";
+        }
+        &:hover {
+            background-color: var(--disable-btn-hover);
+            color: var(--text-dark);
+        }
+    }
+    &.disableDelete {
+        background-color: var(--disable-btn);
+        &::before {
+            content: "🗑";
+        }
+        &:hover {
+            background-color: var(--disable-btn-hover);
+            color: var(--text-dark);
+        }
+    }
 }
 
 /* *****************************************************************
@@ -376,11 +407,11 @@ form {
     flex-direction: column;
     justify-content: center;
     background-color: var(--form-bg);
-    width: 75%; // petit mobile ?
+    width: 75%; 
     padding: 10px 20px;
     margin: 0px auto;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgb(0, 0, 0);
+    box-shadow: 0 0 10px var(--border);
     &> div {
         margin: 10px 0;
     }
@@ -397,6 +428,7 @@ label {
     margin: 10px auto;
 }
 
+select,
 input[type="text"],
 input[type="password"],
 input[type="email"],
@@ -407,7 +439,7 @@ input[type="submit"] {
     margin: 10px 0;
     padding: 10px;
     box-sizing: border-box;
-    border: 1px solid rgb(0, 0, 0);
+    border: 1px solid var(--border);
     border-radius: 5px;
 }
 
@@ -420,20 +452,8 @@ input[type="submit"] {
     }
 }
 
-input[type="radio"]{
-    width: 10%;
-    padding: 10px;
-    box-sizing: border-box;
-    border: 1px solid rgb(0, 0, 0);
-    border-radius: 5px;
-    &:checked {
-        background-color:  var(--valid-btn-hover);
-        color: #fff;
-    }
-}
-
 .mandatory {
-    color: red;
+    color: var(--mandatory);
     font-size:16px;
 }
 
@@ -467,7 +487,6 @@ input[type="radio"]{
 
         }
     }
-
 }
 
 /* *****************************************************************
@@ -515,8 +534,6 @@ input[type="radio"]{
         }
     }
 }
-
-
 
 @media screen and (min-width: 1025px) {
 

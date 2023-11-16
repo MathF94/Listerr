@@ -31,7 +31,11 @@
   --delete-btn-hover: rgba(225, 31, 31, 1);
   --edit-btn: rgba(8, 62, 166, 0.7);
   --edit-btn-hover: rgba(31, 93, 213, 1);
+  --disable-btn: rgba(141, 125, 125, 0.63);
+  --disable-btn-hover: rgba(141, 125, 125, 1);
   --form-bg: rgb(255, 241, 198);
+  --border: rgb(0, 0, 0);
+  --mandatory: rgba(225, 31, 31, 0.7);
   --dialog-bg: rgb(238, 234, 13);
   --dialog-bg-valid: rgba(89, 230, 60, 0.7);
   --dialog-bg-errors: rgba(225, 31, 31, 0.7);
@@ -337,6 +341,33 @@ small {
   background-color: var(--cancel-btn-hover);
   color: var(--text-dark);
 }
+.btn.disable {
+  background-color: var(--disable-btn);
+}
+.btn.disable:hover {
+  background-color: var(--disable-btn-hover);
+  color: var(--text-dark);
+}
+.btn.disableUpdate {
+  background-color: var(--disable-btn);
+}
+.btn.disableUpdate::before {
+  content: "🖉";
+}
+.btn.disableUpdate:hover {
+  background-color: var(--disable-btn-hover);
+  color: var(--text-dark);
+}
+.btn.disableDelete {
+  background-color: var(--disable-btn);
+}
+.btn.disableDelete::before {
+  content: "🗑";
+}
+.btn.disableDelete:hover {
+  background-color: var(--disable-btn-hover);
+  color: var(--text-dark);
+}
 
 /* *****************************************************************
     FORMULAIRES
@@ -350,7 +381,7 @@ form {
   padding: 10px 20px;
   margin: 0px auto;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgb(0, 0, 0);
+  box-shadow: 0 0 10px var(--border);
 }
 form > div {
   margin: 10px 0;
@@ -367,6 +398,7 @@ label {
   margin: 10px auto;
 }
 
+select,
 input[type=text],
 input[type=password],
 input[type=email],
@@ -377,7 +409,7 @@ input[type=submit] {
   margin: 10px 0;
   padding: 10px;
   box-sizing: border-box;
-  border: 1px solid rgb(0, 0, 0);
+  border: 1px solid var(--border);
   border-radius: 5px;
 }
 
@@ -390,20 +422,8 @@ input[type=submit]:hover {
   background-color: var(--valid-btn-hover);
 }
 
-input[type=radio] {
-  width: 10%;
-  padding: 10px;
-  box-sizing: border-box;
-  border: 1px solid rgb(0, 0, 0);
-  border-radius: 5px;
-}
-input[type=radio]:checked {
-  background-color: var(--valid-btn-hover);
-  color: #fff;
-}
-
 .mandatory {
-  color: red;
+  color: var(--mandatory);
   font-size: 16px;
 }
 

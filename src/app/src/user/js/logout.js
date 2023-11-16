@@ -50,25 +50,28 @@ function logout() {
                     localStorage.removeItem("user");
                     dialog({
                         title: `A bientôt ${response.login} !`,
-                        content:
-                            "Vous allez être redirigé(e) dans quelques instants vers la page de connexion...",
+                        content: "Vous allez être redirigé(e) dans quelques instants vers la page de connexion..."
                     });
 
                     const dialogMsg = document.querySelector("dialog");
                     dialogMsg.classList.add("logout");
+
                     const nav = document.querySelector("#mainNav");
                     nav.classList.add("hidden");
+
                     const labelBurger = document.querySelector("#labelBurger");
                     labelBurger.classList.add("hidden");
-                    const allListsSection =
-                        document.querySelector("#allListsSection");
-                    allListsSection.classList.add("hidden");
+
+                    const allListsSection = document.querySelector("#allListsSection");
+                    if (allListsSection) {
+                        allListsSection.classList.add("hidden");
+                    }
 
                     redirect(`${configPath.basePath}/home/pages/home.html`);
                 }
             }
-        });
-    });
+        })
+    })
 }
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -40,11 +40,11 @@ class Users extends Database
             VALUES (:login, :password, :name, :firstname, :email, :role_id)";
 
             $params = [
-                'login' => $params['login'],
+                'login' => mb_strtolower($params['login']),
                 'password' => $params['password'],
                 'name' => $params['name'],
                 'firstname' => $params['firstname'],
-                'email' => $params['email'],
+                'email' => mb_strtolower($params['email']),
                 'role_id' => $params['role_id']
             ];
             $exect = $this->executeReq($req, $params);
@@ -79,7 +79,7 @@ class Users extends Database
                         `role_id`
                     FROM `user`
                     WHERE `login` = :login
-                    AND `password` = :password";
+                    AND BINARY `password` = BINARY :password";
 
             $result = $this->findOne($req, [
                 'login'    => $login,
