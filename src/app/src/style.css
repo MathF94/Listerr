@@ -402,6 +402,7 @@ select,
 input[type=text],
 input[type=password],
 input[type=email],
+input[type=number],
 input[type=submit] {
   width: 100%;
   text-align: center;
@@ -479,7 +480,7 @@ input[type=submit]:hover {
     width: 95%;
   }
 }
-@media screen and (min-width: 620px) {
+@media screen and (min-width: 810px) {
   body {
     background-size: 609px;
     background-repeat: repeat-y;
@@ -488,6 +489,55 @@ input[type=submit]:hover {
   }
   .profil_role {
     display: none;
+  }
+}
+@media screen and (min-width: 1025px) {
+  .menu__btn {
+    display: none;
+  }
+  .menu__box {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0%;
+    width: 203px;
+    height: 100%;
+    margin: 0;
+    padding: 80px 0;
+    list-style: none;
+    background-color: var(--burger-bg);
+    box-shadow: 2px 2px 6px var(--burger-item-shadow);
+    transition-duration: 0.25s;
+  }
+  .menu__item {
+    display: block;
+    padding: 12px 24px;
+    color: var(--text-dark);
+    font-family: "dyslexic";
+    font-size: 20px;
+    font-weight: 600;
+    text-decoration: none;
+    transition-duration: 0.25s;
+  }
+  .menu__item:hover {
+    background-color: var(--burger-item);
+    color: var(--text-light);
+  }
+  #allListsWrapper, #listsWrapper {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .sectionList {
+    display: flex;
+    align-items: center;
+  }
+  .sectionList > article {
+    width: 600px;
+  }
+  .list {
+    width: 45%;
+    margin: 10px;
+    border-radius: 15px;
   }
 }
 
