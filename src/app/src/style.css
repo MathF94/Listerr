@@ -19,12 +19,12 @@
   --burger-btn: rgb(51, 51, 51);
   --list-bg: rgba(210, 194, 42, 0.6);
   --card-bg: rgba(112, 191, 132, 0.6);
-  --valid-btn: rgb(32, 170, 6);
-  --valid-btn-hover: rgb(32, 170, 6);
+  --valid-btn: rgba(89, 230, 60, 0.7);
+  --valid-btn-hover: rgb(61, 156, 41);
   --delete-btn: rgba(225, 31, 31, 0.7);
   --delete-btn-hover: rgba(225, 31, 31, 1);
-  --edit-btn: rgb(8, 62, 166);
-  --edit-btn-hover: rgba(8, 62, 166, 0.8);
+  --edit-btn: rgba(8, 62, 166, 0.7);
+  --edit-btn-hover: rgba(31, 93, 213, 1);
   --view-btn: rgb(238, 214, 33);
   --view-btn-hover: rgba(213, 188, 3, 0.904);
   --way-btn: rgb(117, 117, 117);
@@ -40,7 +40,7 @@
     HEADER & NAVIGATION (MENU BURGER)
 ***************************************************************** */
 header {
-  margin: 0px 20px 40px 20px;
+  margin: -4px 20px 40px 20px;
   background-image: url(./resources/images/pen.png);
   background-repeat: no-repeat;
   background-size: contain;
@@ -180,13 +180,17 @@ dialog {
   padding-bottom: 25px;
 }
 
+.hidden {
+  display: none;
+}
+
 /* *****************************************************************
     LISTE & CARTE
 ***************************************************************** */
 .list {
   background: var(--list-bg);
-  max-width: 700px;
-  width: 75%;
+  max-width: 450px;
+  width: 100%;
   text-align: center;
   box-shadow: 0px 0px 10px 2px rgba(210, 194, 42, 0.6);
   border-radius: 20px;
@@ -214,19 +218,18 @@ small {
   padding: 5px 0;
   cursor: pointer;
 }
-
-.flex {
+.card.flex {
   display: flex;
   flex-direction: column;
 }
 
 .star {
   font-size: 25px;
-  color: red;
+  color: rgb(238, 224, 19);
 }
 
 .sectionList {
-  width: 60%;
+  width: 80%;
   margin: 0 auto;
 }
 
@@ -243,6 +246,9 @@ small {
   margin: 10px auto;
   font-family: "dyslexic";
   cursor: pointer;
+}
+.btn:disabled {
+  cursor: not-allowed;
 }
 .btn.view {
   background-color: var(--view-btn);
@@ -264,10 +270,11 @@ small {
 }
 .btn.valid {
   background-color: var(--valid-btn);
+  color: var(--text-dark);
 }
 .btn.valid:hover {
   background-color: var(--valid-btn-hover);
-  color: var(--text-dark);
+  color: var(--text-light);
 }
 .btn.delete {
   background-color: var(--delete-btn);
@@ -282,13 +289,14 @@ small {
 }
 .btn.edit {
   background-color: var(--edit-btn);
+  color: var(--text-light);
 }
 .btn.edit::before {
   content: "🖉";
 }
 .btn.edit:hover {
   background-color: var(--edit-btn-hover);
-  color: var(--text-dark);
+  color: var(--text-light);
 }
 .btn.cancel {
   background-color: var(--cancel-btn);
@@ -359,6 +367,11 @@ input[type=radio]:checked {
   color: #fff;
 }
 
+.mandatory {
+  color: red;
+  font-size: 16px;
+}
+
 /* *****************************************************************
     TABLEAU
 ***************************************************************** */
@@ -384,17 +397,42 @@ input[type=radio]:checked {
     color: var(--accent-color);
   }
 }
-/* *****************************************************************
-    GALAXY
-***************************************************************** */
-/* *****************************************************************
-    NEXUS ANDROID
-***************************************************************** */
-/* *****************************************************************
-    IPAD
-***************************************************************** */
-/* *****************************************************************
-    DESKTOP
-***************************************************************** */
+@media screen and (max-width: 414px) {
+  .profil_email {
+    display: none;
+  }
+}
+@media screen and (min-width: 500px) {
+  header {
+    background-size: 433px;
+  }
+}
+@media screen and (min-width: 594px) {
+  .list {
+    width: 594px;
+  }
+}
+@media screen and (max-width: 594px) {
+  .profil_name {
+    display: none;
+  }
+  .profil_firstname {
+    display: none;
+  }
+  .profil_role {
+    display: none;
+  }
+  .list {
+    width: 95%;
+  }
+}
+@media screen and (min-width: 617px) {
+  body {
+    background-size: 609px;
+    background-repeat: repeat-y;
+    background-position: center;
+    width: 590px;
+  }
+}
 
 /*# sourceMappingURL=style.css.map */

@@ -44,11 +44,12 @@ function card(canCreateCard) {
 
     // Affichage du contenu du bouton en fonction du type de liste
     let btnLabel = "Nouveau souhait";
-    let checklabel = "Réservé";
+    let checklabel = "Réserver";
     if (localStorage.getItem("typeList") === "TodoList") {
         btnLabel = "Nouvelle tâche";
-        checklabel = "Réalisé";
+        checklabel = "Réaliser";
     }
+
     createCardFormBtn.textContent = "+";
     createCardFormBtn.title = btnLabel;
 
@@ -63,9 +64,13 @@ function card(canCreateCard) {
 
         // Bouton rendu inutilisable
         createCardFormBtn.disabled = true;
-        updateProfilList.disabled = true;
-        deleteProfilList.disabled = true;
-        ;
+        if (updateProfilList) {
+            updateProfilList.disabled = true;
+        }
+        if (deleteProfilList) {
+            deleteProfilList.disabled = true;
+        }
+
         cardSectionForm.appendChild(titleForm);
         // Appel du formulaire de création d'une carte
         displayFormCard(cardSectionForm);
@@ -127,6 +132,7 @@ function card(canCreateCard) {
                 cardSectionContent.classList.add("flex");
 
                 const divStar = document.createElement("div");
+
                 divStar.classList.add("stars");
                 const titleH3 = document.createElement("h3");
 
@@ -138,12 +144,25 @@ function card(canCreateCard) {
 
                 const check = document.createElement("input");
                 check.id = `checked-${objectCard.id}`;
+                check.title = checklabel;
                 check.type = "checkbox";
                 check.value = objectCard.checked;
+
+                if (check.value === "1") {
+                    let checklabel = "Réservé";
+                    if (localStorage.getItem("typeList") === "TodoList") {
+                        checklabel = "Réalisé";
+                    }
+                    labelCheck.innerText = checklabel
+                    check.title = checklabel;
+                }
+
+                const actionBtn = document.createElement("div");
 
                 const updateBtnCard = document.createElement("button");
                 updateBtnCard.id = `updateCard-${objectCard.id}`;
                 updateBtnCard.name = "updateCard";
+                updateBtnCard.title = "Modifier la carte";
                 updateBtnCard.type = "submit";
                 updateBtnCard.value = objectCard.id;
                 updateBtnCard.textContent = "";
@@ -153,6 +172,7 @@ function card(canCreateCard) {
                 const deleteBtnCard = document.createElement("button");
                 deleteBtnCard.id = `deleteCard-${objectCard.id}`;
                 deleteBtnCard.name = "deleteCard";
+                deleteBtnCard.title = "Supprimer la carte";
                 deleteBtnCard.type = "button";
                 deleteBtnCard.value = objectCard.id;
                 deleteBtnCard.textContent = "";
@@ -167,6 +187,7 @@ function card(canCreateCard) {
                     priority.classList.add("star");
                     priority.setAttribute("data-star", i+1);
                     priority.textContent = i < priorityValue ? "\u2605" : "\u2606" ;
+                    divStar.title = `nombre d'étoiles ${priorityValue}`;
                     divStar.appendChild(priority);
                 }
 
@@ -201,11 +222,12 @@ function card(canCreateCard) {
 
                 // Rend visible les boutons pour l'utilisateur courant uniquement
                 if (canCreateCard) {
-                    cardSectionContent.appendChild(updateBtnCard);
-                    cardSectionContent.appendChild(deleteBtnCard);
+                    cardSectionContent.appendChild(actionBtn);
+                    actionBtn.appendChild(updateBtnCard);
+                    actionBtn.appendChild(deleteBtnCard);
 
                     // Désactive le bouton de création de cartes si update de liste en cours
-                    updateProfilList.addEventListener("click", function(e) {
+                    updateProfilList?.addEventListener("click", function(e) {
                         e.preventDefault();
                         if (updateProfilList.disabled === true) {
                             createCardFormBtn.disabled = true;

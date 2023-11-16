@@ -28,12 +28,12 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     --card-bg: rgba(112, 191, 132, 0.6);
 
     // Boutons
-    --valid-btn: rgb(32, 170, 6);
-    --valid-btn-hover: rgb(32, 170, 6);
+    --valid-btn: rgba(89, 230, 60, 0.7);
+    --valid-btn-hover: rgb(61, 156, 41);
     --delete-btn: rgba(225, 31, 31, 0.7);
     --delete-btn-hover: rgba(225, 31, 31, 1);
-    --edit-btn: rgb(8, 62, 166);
-    --edit-btn-hover: rgba(8, 62, 166, 0.8);
+    --edit-btn: rgba(8, 62, 166, 0.7);
+    --edit-btn-hover: rgba(31, 93, 213, 1);
     --view-btn: rgb(238, 214, 33);
     --view-btn-hover: rgba(213, 188, 3, 0.904);
     --way-btn: rgb(117, 117, 117);
@@ -55,7 +55,7 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     HEADER & NAVIGATION (MENU BURGER)
 ***************************************************************** */
 header {
-    margin: 0px 20px 40px 20px;
+    margin: -4px 20px 40px 20px;
     background-image: url(./resources/images/pen.png);
     background-repeat: no-repeat;
     background-size: contain;
@@ -207,13 +207,16 @@ dialog {
     padding-bottom: 25px;
 }
 
+.hidden {
+    display: none;
+}
 /* *****************************************************************
     LISTE & CARTE
 ***************************************************************** */
 .list {
     background: var(--list-bg);
-    max-width: 700px;
-    width: 75%;
+    max-width: 450px;
+    width: 100%;
     text-align: center;
     box-shadow: 0px 0px 10px 2px rgba(210, 194, 42, 0.6);
     border-radius: 20px;
@@ -240,20 +243,19 @@ small {
     margin: 20px auto;
     padding: 5px 0;
     cursor: pointer;
-}
-
-.flex {
-    display: flex;
-    flex-direction: column;
+    &.flex {
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 .star {
     font-size: 25px;
-    color: red;
+    color: rgb(238, 224, 19);
 }
 
 .sectionList {
-    width: 60%;
+    width: 80%;
     margin: 0 auto;
 }
 
@@ -270,6 +272,9 @@ small {
     margin: 10px auto;
     font-family: $font-family-name;
     cursor: pointer;
+    &:disabled {
+        cursor: not-allowed;
+    }
     &.view {
         background-color: var(--view-btn);
         color: var(--text-light);
@@ -290,9 +295,10 @@ small {
     }
     &.valid {
         background-color: var(--valid-btn);
+        color: var(--text-dark);
         &:hover {
             background-color: var(--valid-btn-hover);
-            color: var(--text-dark);
+            color: var(--text-light);
         }
     }
     &.delete {
@@ -308,12 +314,13 @@ small {
     }
     &.edit {
         background-color: var(--edit-btn);
+        color: var(--text-light);
         &::before {
             content: "🖉";
         }
         &:hover {
             background-color: var(--edit-btn-hover);
-            color: var(--text-dark);
+            color: var(--text-light);
         }
     }
     &.cancel {
@@ -384,6 +391,12 @@ input[type="radio"]{
         color: #fff;
     }
 }
+.mandatory {
+    color: red;
+    font-size:16px;
+}
+
+
 
 /* *****************************************************************
     TABLEAU
@@ -415,26 +428,54 @@ input[type="radio"]{
     a {
         color: var(--accent-color);
     }
-
-}
-/* *****************************************************************
-    GALAXY
-***************************************************************** */
-@media screen and (min-width: 412px) {
 }
 
-/* *****************************************************************
-    NEXUS ANDROID
-***************************************************************** */
-@media screen and (min-width: 801px) {
+@media screen and (max-width: 414px) {
+    .profil {
+        &_email{
+            display: none;
+        }
+
+    }
 }
-/* *****************************************************************
-    IPAD
-***************************************************************** */
-@media screen and (min-width: 811px) {
+
+@media screen and (min-width: 500px) {
+    header {
+        background-size: 433px;
+    }
 }
-/* *****************************************************************
-    DESKTOP
-***************************************************************** */
+
+@media screen and (min-width: 594px) {
+    .list {
+        width: 594px;
+    }
+}
+
+@media screen and (max-width: 594px) {
+    .profil {
+        &_name{
+            display: none;
+        }
+        &_firstname{
+            display: none;
+        }
+        &_role{
+            display: none;
+        }
+    }
+    .list {
+        width: 95%;
+    }
+}
+
+@media screen and (min-width: 617px) {
+    body{
+        background-size: 609px;
+        background-repeat: repeat-y;
+        background-position: center;
+        width: 590px;
+    }
+}
+
 @media screen and (min-width: 1025px) {
 }

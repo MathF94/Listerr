@@ -67,8 +67,11 @@ function list() {
 
                 const text = document.createElement("p");
 
+                const actionBtn = document.createElement("div");
+
                 const updateBtnList = document.createElement("button");
                 updateBtnList.id = `updateProfilList-${data.id}`;
+                updateBtnList.title = "Modifier la liste";
                 updateBtnList.name = "updateProfilList";
                 updateBtnList.type = "button";
                 updateBtnList.value = `${data.id}`;
@@ -78,6 +81,7 @@ function list() {
 
                 const deleteBtnList = document.createElement("button");
                 deleteBtnList.id = `deleteProfilList-${data.id}`;
+                deleteBtnList.title = "Supprimer la liste";
                 deleteBtnList.name = "deleteProfilList";
                 deleteBtnList.type = "button";
                 deleteBtnList.value = `${data.id}`;
@@ -111,8 +115,9 @@ function list() {
                 // Rend visible les boutons "Supprimer" et "Modifier" pour l'utilisateur en cours uniquement
                 localStorage.setItem("canCreateCard", userId === data.user.id)
                 if (userId === data.user.id) {
-                    oneList.appendChild(updateBtnList);
-                    oneList.appendChild(deleteBtnList);
+                    oneList.appendChild(actionBtn);
+                    actionBtn.appendChild(updateBtnList);
+                    actionBtn.appendChild(deleteBtnList);
 
                     // Gestion de la mise à jour de la liste
                     updateBtnList.addEventListener("click", function(e) {

@@ -17,7 +17,7 @@ const configPath = {
  */
 const mandatoryStar = document.createElement("span");
 mandatoryStar.innerText = "*";
-mandatoryStar.classList.add("star");
+mandatoryStar.classList.add("mandatory");
 
 /**
  * Redirige l'utilisateur vers une autre URL.
