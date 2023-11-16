@@ -21,6 +21,9 @@ function read() {
     const deleteBtn = document.querySelector("#delete");
     const updateBtn = document.querySelector("#update");
     const listBtn = document.querySelector("#listsUser");
+    listBtn.title ="Accéder à mes listes";
+    updateBtn.title = "Modifier le profil";
+    deleteBtn.title = "Supprimer le profil";
 
     function displayUser(response) {
         const profilWrapper = document.querySelector("#profilWrapper");
@@ -61,10 +64,12 @@ function read() {
                     returnBtn.classList.add("cancel");
                     returnBtn.innerText = "Retour";
                     returnBtn.type = "button";
+                    returnBtn.title = "Revenir à la liste d'utilisateurs";
 
                     // En tant qu'Admin, modifie le texte du bouton
                     const listsUser = document.querySelector("#listsUser");
                     listsUser.innerText = "Listes de l'utilisateur";
+                    listsUser.title = "Listes de l'utilisateur";
                     listsUser.after(returnBtn);
 
                     updateBtn.addEventListener("click", function (e) {

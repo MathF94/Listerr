@@ -28,24 +28,26 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     --card-bg: rgba(112, 191, 132, 0.6);
 
     // Boutons
+    --way-btn: rgb(213, 190, 3);
+    --way-btn-hover: rgba(213, 190, 3, 0.8);
     --valid-btn: rgba(89, 230, 60, 0.7);
     --valid-btn-hover: rgb(61, 156, 41);
+    --cancel-btn: rgb(117, 117, 117);
+    --cancel-btn-hover: rgba(117, 117, 117, 0.8);
+    --view-btn: rgb(238, 214, 33);
+    --view-btn-hover: rgba(213, 188, 3, 0.904);
     --delete-btn: rgba(225, 31, 31, 0.7);
     --delete-btn-hover: rgba(225, 31, 31, 1);
     --edit-btn: rgba(8, 62, 166, 0.7);
     --edit-btn-hover: rgba(31, 93, 213, 1);
-    --view-btn: rgb(238, 214, 33);
-    --view-btn-hover: rgba(213, 188, 3, 0.904);
-    --way-btn: rgb(117, 117, 117);
-    --way-btn-hover: rgba(117, 117, 117, 0.8);
-    --way-btn: rgb(213, 190, 3);
-    --way-btn-hover: rgba(213, 190, 3, 0.8);
 
     // Formulaire
     --form-bg: rgb(255, 241, 198);
 
     // Dialog
-    --dialog-bg: rgba(238, 234, 13, 0.51); // utilisé ?
+    --dialog-bg: rgb(238, 234, 13);
+    --dialog-bg-valid: rgba(89, 230, 60, 0.7);
+    --dialog-bg-errors: rgba(225, 31, 31, 0.7);
 
 
     --border-color: rgb(221, 221, 221); // utilisé ?
@@ -55,15 +57,17 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     HEADER & NAVIGATION (MENU BURGER)
 ***************************************************************** */
 header {
-    margin: -4px 20px 40px 20px;
+    margin: -20px 20px 0px 20px;
     background-image: url(./resources/images/pen.png);
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
 }
+
 #hamburger-menu {
     z-index: 10;
 }
+
 #menu {
     &__toggle {
         opacity: 0;
@@ -155,7 +159,7 @@ h1 {
     text-align: right;
     text-transform: uppercase;
     font-style: italic;
-    margin-top: 20px;
+    margin-top: 35px;
 }
 
 ul {
@@ -174,9 +178,7 @@ body {
     margin: 0 auto;
     max-width: 100%;
     min-height: 100vh;
-    color: var(--text-dark);
-    font-family: "dyslexic";
-    font-size: 80%;
+    font-family: $font-family-name;
     text-align: center;
     background-image: url(./resources/images/paper.JPG);
     background-size: 100%;
@@ -194,22 +196,55 @@ h3, h4 {
     margin: 10px auto;
 }
 
-dialog {
-    position: sticky;
-    top: 10px;
-    height: 100px;
-    border-radius: 10px;
-    background: var(--dialog-bg);
-    width: 30%;
-    top: 26%;
-    width: 250px;
-    padding-top: 0px;
-    padding-bottom: 25px;
+a {
+    margin-top: 10px;
+    color: var(--burger-item);
 }
 
 .hidden {
     display: none;
 }
+/* *****************************************************************
+    DIALOG
+***************************************************************** */
+dialog {
+    position: sticky;
+    width: 50%;
+    height: auto;
+    border-radius: 10px;
+    background: var(--dialog-bg);
+    &.valid {
+        background: var(--dialog-bg-valid);
+    }
+    &.register {
+        padding: 10px 0px;
+        > h2 {
+            margin: 0px auto
+        }
+    }
+    &.login {
+        > h2 {
+            margin: -10px auto;
+        }
+    }
+    &.errors {
+        background: var(--dialog-bg-errors);
+        > h2 {
+            margin: 0px auto;
+            padding-top: 0px;
+        }
+        > div {
+            padding-top:20px;
+        }
+        &_fields {
+            background: var(--dialog-bg-errors);
+            > h2 {
+                margin-top: 5px;
+            }
+        }
+    }
+}
+
 /* *****************************************************************
     LISTE & CARTE
 ***************************************************************** */
@@ -277,7 +312,7 @@ small {
     }
     &.view {
         background-color: var(--view-btn);
-        color: var(--text-light);
+        color: var(--text-dark);
         &::before {
             content: "👁";
         }
@@ -288,6 +323,7 @@ small {
     }
     &.way {
         background-color: var(--way-btn);
+        margin-right: 5px;
         &:hover {
             background-color: var(--way-btn-hover);
             color: var(--text-dark);
@@ -340,8 +376,9 @@ form {
     flex-direction: column;
     justify-content: center;
     background-color: var(--form-bg);
-    padding: 20px;
-    margin: 10px auto;
+    width: 75%; // petit mobile ?
+    padding: 10px 20px;
+    margin: 0px auto;
     border-radius: 8px;
     box-shadow: 0 0 10px rgb(0, 0, 0);
     &> div {
@@ -365,6 +402,8 @@ input[type="password"],
 input[type="email"],
 input[type="submit"] {
     width: 100%;
+    text-align: center;
+    font-family: $font-family-name;
     margin: 10px 0;
     padding: 10px;
     box-sizing: border-box;
@@ -380,6 +419,7 @@ input[type="submit"] {
         background-color: var(--valid-btn-hover);
     }
 }
+
 input[type="radio"]{
     width: 10%;
     padding: 10px;
@@ -391,25 +431,25 @@ input[type="radio"]{
         color: #fff;
     }
 }
+
 .mandatory {
     color: red;
     font-size:16px;
 }
 
-
-
 /* *****************************************************************
     TABLEAU
 ***************************************************************** */
 .userList {
+    width: 100%;
+    table-layout: fixed;
+    font-size: 80%;
     text-align: center;
     border-collapse: collapse;
-    width: 90%;
-    max-width: 900px;
     margin: 20px auto;
     & > thead {
         & > tr {
-            height: 36px;
+            height: 50px;
         }
     }
     & > tbody {
@@ -418,27 +458,21 @@ input[type="radio"]{
                 background-color: #aaa;
             }
         }
+        & td {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            &.profil_email {
+                width: 60%;
+            }
+
+        }
     }
+
 }
 
 /* *****************************************************************
-    SAMSUNG
+    MEDIA
 ***************************************************************** */
-@media screen and (min-width: 361px) {
-    a {
-        color: var(--accent-color);
-    }
-}
-
-@media screen and (max-width: 414px) {
-    .profil {
-        &_email{
-            display: none;
-        }
-
-    }
-}
-
 @media screen and (min-width: 500px) {
     header {
         background-size: 433px;
@@ -447,11 +481,11 @@ input[type="radio"]{
 
 @media screen and (min-width: 594px) {
     .list {
-        width: 594px;
+        width: 579px;
     }
 }
 
-@media screen and (max-width: 594px) {
+@media screen and (max-width: 619px) {
     .profil {
         &_name{
             display: none;
@@ -468,14 +502,22 @@ input[type="radio"]{
     }
 }
 
-@media screen and (min-width: 617px) {
+@media screen and (min-width: 620px) {
     body{
         background-size: 609px;
         background-repeat: repeat-y;
         background-position: center;
         width: 590px;
     }
+    .profil {
+        &_role {
+            display: none;
+        }
+    }
 }
 
+
+
 @media screen and (min-width: 1025px) {
+
 }

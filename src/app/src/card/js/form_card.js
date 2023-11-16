@@ -20,6 +20,7 @@ function displayFormCard(elementDOM) {
     inputTitle.name = "titleCard";
     inputTitle.id = "titleCard";
     inputTitle.placeholder = "Votre titre";
+    inputTitle.setAttribute("max", 20);
     inputTitle.value = "";
     inputTitle.required = true;
 
@@ -52,6 +53,7 @@ function displayFormCard(elementDOM) {
     CardValidFormBtn.id = "cardValidBtn";
     CardValidFormBtn.type = "submit";
     CardValidFormBtn.value = "cardValidBtn";
+    CardValidFormBtn.title = "Valider la création d'une carte";
     CardValidFormBtn.innerText = "Valider";
     CardValidFormBtn.classList.add("btn");
     CardValidFormBtn.classList.add("valid");
@@ -60,6 +62,7 @@ function displayFormCard(elementDOM) {
     CardCancelFormBtn.id = "cardCancelBtn";
     CardCancelFormBtn.type = "button";
     CardCancelFormBtn.value = "cardCancelBtn";
+    CardCancelFormBtn.title = "Annuler la création d'une carte";
     CardCancelFormBtn.innerText = "Annuler";
     CardCancelFormBtn.classList.add("btn");
     CardCancelFormBtn.classList.add("cancel");

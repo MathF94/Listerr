@@ -10,6 +10,7 @@ function readAllLists() {
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("user");
     const listBtn = document.querySelector("#newList");
+    listBtn.title = "Créer une nouvelle liste";
 
     // Vérifie si l'utilisateur est connecté
     if (
@@ -25,7 +26,7 @@ function readAllLists() {
                 "Vous allez être redirigé(e) vers la page de connexion"
             });
             const dialogMsg = document.querySelector("dialog");
-            dialogMsg.classList.add("dialog");
+            dialogMsg.classList.add("home");
             redirect(`${configPath.basePath}/user/pages/login.html`);
         });
         return;

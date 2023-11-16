@@ -7,6 +7,7 @@ import {
     redirect,
     dialog,
     notAllowedRedirection,
+    validate
 } from "../../services/utils.js";
 
 notAllowedRedirection();
@@ -17,7 +18,8 @@ notAllowedRedirection();
  */
 function updateUser() {
     // Récupère les données actuelles de l'utilisateur.
-    fetchRead().then((response) => {
+    fetchRead()
+    .then((response) => {
         const dataUser = response;
         for (const index in dataUser) {
             const column = dataUser[index];
@@ -31,16 +33,35 @@ function updateUser() {
     cancelBtn.addEventListener("click", function (e) {
         redirect(`${configPath.basePath}/user/pages/profil.html`, 0);
     });
-    
+
     updateForm.addEventListener("submit", function (e) {
         e.preventDefault();
-        // const userLogin = e.target.login.value;
+        const userLogin = e.target.login.value;
+
+        // Validation de pattern du formulaire
+        const inputLogin = document.querySelector("#login");
+        const inputName = document.querySelector("#name");
+        const inputFirstname = document.querySelector("#firstname");
+        const inputEmail = document.querySelector("#email");
+        inputLogin.addEventListener("invalid", function(e) {
+            validate(e.target)
+        });
+        inputName.addEventListener("invalid", function(e) {
+            validate(e.target)
+        });
+        inputFirstname.addEventListener("invalid", function(e) {
+            validate(e.target)
+        });
+        inputEmail.addEventListener("invalid", function(e) {
+            validate(e.target)
+        });
 
         // Appelle la fonction fetchUpdate pour envoyer les données du formulaire de mise à jour au serveur.
-        fetchUpdate(updateForm).then((response) => {
+        fetchUpdate(updateForm)
+        .then((response) => {
             localStorage.removeItem("csrfToken");
             const user = JSON.parse(localStorage.getItem("user"));
-
+            const updateProfil = document.querySelector("#updateProfil");
             if (response.status === "updateUser") {
                 if (userLogin !== user.login) {
                     // En cas de modification du login, déconnecte l'utilisateur et le redirige vers la page de connexion.
@@ -50,8 +71,11 @@ function updateUser() {
                     dialog({
                         title: `A tout de suite ${e.target.login.value} !`,
                         content: `<p>Votre login a bien été modifié.</p>
-                                        <p>Vous allez être redirigé(e) vers la page de connexion, afin de vous reconnecter avec votre nouveau login.</p>`,
+                                    <p>Vous allez être redirigé(e) vers la page de connexion, afin de vous reconnecter avec votre nouveau login.</p>`,
                     });
+                    const dialogMsg = document.querySelector("dialog");
+                    dialogMsg.classList.add("valid");
+                    updateProfil.classList.add("hidden");
                     redirect(`${configPath.basePath}/user/pages/login.html`);
                 } else {
                     // Affiche un message de succès et redirige l'utilisateur vers la page de profil.
@@ -59,6 +83,9 @@ function updateUser() {
                         title: "Modification du profil",
                         content: "Votre profil a bien été mis à jour.",
                     });
+                    const dialogMsg = document.querySelector("dialog");
+                    dialogMsg.classList.add("valid");
+                    updateProfil.classList.add("hidden");
                     redirect(`${configPath.basePath}/user/pages/profil.html`);
                 }
             }
@@ -68,8 +95,10 @@ function updateUser() {
                 dialog({
                     title: "Erreurs",
                     content: response.errors,
-                    hasTimeOut: true,
                 });
+                const dialogMsg = document.querySelector("dialog");
+                dialogMsg.classList.add("errors");
+                updateForm.classList.add("hidden");
                 redirect(`${configPath.basePath}/user/pages/profil.html`);
             }
         });

@@ -316,8 +316,8 @@ class ListController
                 if (empty(count($errors))) {
                     $listId = $list->id;
                     $params = [
+                        'type' => $_POST['typeList'],
                         'title' => $_POST['titleList'],
-                        'type' => $_POST['type'],
                         'description' => $_POST['descriptionList']
                     ];
                     $model->updateList($params, $listId);

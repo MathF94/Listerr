@@ -25,10 +25,10 @@ mandatoryStar.classList.add("mandatory");
  * @param {number} [duration=3000] - La durée en millisecondes avant la redirection.
  */
 function redirect(url, duration = 3000) {
-    window.setTimeout(function() {
-        window.location.href = url
-        }, duration)
-};
+    window.setTimeout(function () {
+        window.location.href = url;
+    }, duration);
+}
 
 /**
  * Affiche une boîte de dialogue modale.
@@ -37,12 +37,12 @@ function redirect(url, duration = 3000) {
  * @param {string|Array|Object} options.content - Le contenu de la boîte de dialogue.
  * @param {boolean} [options.hasTimeOut] - Indique si la boîte de dialogue doit disparaître automatiquement après 2 secondes.
  */
-function dialog({title, content, hasTimeOut}) {
+function dialog({ title, content, hasTimeOut }) {
     const header = document.querySelector("#navWrapper");
-    title = title || "Notification" ;
+    title = title || "Notification";
 
     const titleH2 = document.createElement("h2");
-    titleH2.innerHTML = title ;
+    titleH2.innerHTML = title;
 
     const dialogSection = document.createElement("section");
     dialogSection.id = "dialog";
@@ -52,35 +52,35 @@ function dialog({title, content, hasTimeOut}) {
     dialog.open = "open";
     dialog.prepend(titleH2);
 
-    if (typeof(content) === "string")  {
+    if (typeof content === "string") {
         const div = document.createElement("div");
         div.innerHTML = content;
         dialog.appendChild(div);
         dialogSection.append(dialog);
-    };
+    }
 
-    if (["array", "object"].includes(typeof(content))) {
+    if (["array", "object"].includes(typeof content)) {
         const list = document.createElement("ul");
-        for(const index in content){
+        for (const index in content) {
             const item = document.createElement("li");
             const column = content[index];
             item.innerText = column;
 
             list.appendChild(item);
-        };
+        }
         dialog.appendChild(list);
         dialogSection.appendChild(dialog);
-    };
+    }
 
     if (hasTimeOut) {
-        const msg = document.createElement('div');
-        msg.innerHTML = "Ce message s'effacera dans 2 secondes...";
+        const msg = document.createElement("div");
+        msg.innerHTML = "Ce message s'effacera dans 3 secondes...";
         dialog.appendChild(msg);
         setTimeout(() => {
             document.body.removeChild(dialogSection);
-        }, 2000);
-    };
-};
+        }, 3000);
+    }
+}
 
 function notAllowedRedirection(type) {
     if (type !== "WishList" || type === null) {
@@ -93,8 +93,40 @@ function notAllowedRedirection(type) {
 function scroll() {
     window.scrollTo({
         top: 0,
-        behavior: 'smooth'
-        });
-    }
+        behavior: "smooth",
+    });
+}
 
-export { configPath, redirect, dialog, notAllowedRedirection, mandatoryStar, scroll };
+function validate(input) {
+    const errors = {
+        password: "Le mot de passe doit contenir au moins 12 caractères dont une majuscule, un chiffre et un caractère spécial.",
+        name: "Le champ 'Nom' ne peut contenir que des lettres, des espaces, des tirets et des apostrophes.",
+        firstname: "Le champ 'Prénom' ne peut contenir que des lettres, des espaces, des tirets et des apostrophes.",
+        email: "L'adresse email n'est pas valide.",
+        titleList: "Le champ 'titre' ne doit pas dépasser 20 caractères.",
+        titleCard: "Le champ 'titre' ne doit pas dépasser 20 caractères.",
+        priority: "La chaîne ne doit contenir que les chiffres allant de 1 à 5."
+    }
+    const validityState = input.validity;
+    if (validityState.valueMissing) {
+        input.setCustomValidity("Ce champs est requis.");
+    }
+    if (validityState.patternMismatch) {
+        input.setCustomValidity(errors[input.id]);
+    }
+    if (validityState.tooShort || validityState.tooLong) {
+        input.setCustomValidity(errors[input.id]);
+    }
+    if (validityState.rangeOverflow || validityState.rangeUnderflow) {
+        input.setCustomValidity(errors[input.id]);
+    }
+}
+
+export {
+    configPath,
+    redirect,
+    dialog,
+    notAllowedRedirection,
+    mandatoryStar,
+    scroll,
+    validate};

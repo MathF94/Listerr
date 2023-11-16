@@ -13,7 +13,9 @@ import { CSRFToken } from "../../services/CSRFToken.js";
 import {
     configPath,
     redirect,
-    dialog
+    dialog,
+    scroll,
+    validate
 } from "../../services/utils.js";
 
 import { displayFormCard } from "./form_card.js";
@@ -55,7 +57,8 @@ function card(canCreateCard) {
 
     const updateProfilList = document.querySelector(`#updateProfilList-${id}`);
     const deleteProfilList = document.querySelector(`#deleteProfilList-${id}`);
-
+    updateProfilList.title = "Modifier une liste";
+    deleteProfilList.title = "Supprimer une liste";
     // Affichage du formulaire au click du bouton
     createCardFormBtn.addEventListener("click", function(e) {
         if (createCardFormBtn.value !== "cardFormBtn") {
@@ -76,6 +79,7 @@ function card(canCreateCard) {
         displayFormCard(cardSectionForm);
         titleForm.innerText = "Formulaire de création d'une carte";
         const cardCancelBtn = document.querySelector("#cardCancelBtn");
+        cardCancelBtn.title = "Revenir aux listes";
         const cardForm = document.querySelector("#formCard");
 
         // Suppression du formulaire d'édition au click du bouton
@@ -92,6 +96,21 @@ function card(canCreateCard) {
             e.preventDefault();
             createCardFormBtn.disabled = false;
 
+            // Validation de pattern du formulaire
+            const inputTitle = document.querySelector("#titleCard");
+            const inputDescription = document.querySelector("#descriptionCard");
+            const inputPriority = document.querySelector("#priority");
+            inputTitle.addEventListener("invalid", function(e) {
+                validate(e.target)
+            });
+            inputDescription.addEventListener("invalid", function(e) {
+                validate(e.target)
+            });
+            inputPriority.addEventListener("invalid", function(e) {
+                validate(e.target)
+            });
+
+            scroll();
             // Création d'une carte
             fetchCreateCard(cardForm, id)
             .then(response => {
@@ -99,11 +118,15 @@ function card(canCreateCard) {
 
                 if (response.status === "createCard") {
                     dialog({title: "Et voilà la carte !", content:"à la suivante !"});
+                    const dialogMsg = document.querySelector("dialog");
+                    dialogMsg.classList.add("valid");
                     redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
 
                 }
                 if (response.status === "errors") {
                     dialog({title: "Erreurs", content: response.errors});
+                    const dialogMsg = document.querySelector("dialog");
+                    dialogMsg.classList.add("errors");
                     redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
                 }
             })
@@ -289,17 +312,21 @@ function card(canCreateCard) {
                         CSRFToken(updateFormCard.id);
                         updateFormCard.addEventListener("submit", function(e) {
                             e.preventDefault();
-
+                            scroll();
                             fetchUpdateCard(updateFormCard, objectCard.id)
                             .then(response => {
                                 localStorage.removeItem("csrfToken");
 
                                 if (response.status === "updateCard") {
                                     dialog({title: "Modification de la carte", content: "Votre carte a bien été mise à jour."});
+                                    const dialogMsg = document.querySelector("dialog");
+                                    dialogMsg.classList.add("valid");
                                     redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
                                 }
                                 if (response.status === "errors") {
-                                    dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
+                                    dialog({title: "Erreurs", content: response.errors});
+                                    const dialogMsg = document.querySelector("dialog");
+                                    dialogMsg.classList.add("errors");
                                     redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
                                 }
                             })
@@ -312,18 +339,21 @@ function card(canCreateCard) {
                 check.addEventListener("change", function(e) {
                     objectCard.checked = check.checked === true ? 1 : 0
                     check.value = objectCard.checked
-
+                    scroll();
                     fetchUpdateReservation(objectCard.checked, objectCard.id)
                     .then(response => {
                         localStorage.removeItem("csrfToken");
 
                         if (response.status === "updateChecked") {
-
                             dialog({title: "Modification de la réservation", content: "Votre réservation a bien été prise en compte."});
+                            const dialogMsg = document.querySelector("dialog");
+                            dialogMsg.classList.add("valid");
                             redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
                         }
                         if (response.status === "errors") {
-                            dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
+                            dialog({title: "Erreurs", content: response.errors});
+                            const dialogMsg = document.querySelector("dialog");
+                            dialogMsg.classList.add("errors");
                             redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
                         }
                     })
@@ -338,12 +368,13 @@ function card(canCreateCard) {
                         console.warn("pas touche");
                         return;
                     } else if (confirm('Voulez-vous vraiment vous supprimer la carte ?') === true) {
+                        scroll();
                         fetchDeleteCard(objectCard.id)
                         .then((response) => {
                             if (response.status === "deleteCard") {
-                                dialog({title: "Suppression de la carte",
-                                content: `<p>Votre carte a bien été supprimée.</p>`
-                                });
+                                dialog({title: "Suppression de la carte", content: `<p>Votre carte a bien été supprimée.</p>`});
+                                const dialogMsg = document.querySelector("dialog");
+                                dialogMsg.classList.add("valid");
                                 redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
                             }
                         })

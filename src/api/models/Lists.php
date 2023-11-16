@@ -22,9 +22,8 @@ class Lists extends Database
         try {
             $req = "INSERT INTO `list` (`type`, `title`, `description`, `user_id`)
             VALUES (:type, :title, :description, :user_id)";
-
             $params = [
-                'type' => $params['type'],
+                'type' => $params['typeList'],
                 'title' => $params['titleList'],
                 'description' => $params['descriptionList'],
                 'user_id' => $userId

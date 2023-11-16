@@ -11,7 +11,8 @@ import {
     redirect,
     dialog,
     notAllowedRedirection,
-    scroll
+    scroll,
+    validate
 } from "../../services/utils.js";
 import { displayFormList } from "./form_list.js";
 
@@ -22,6 +23,7 @@ notAllowedRedirection();
  */
 function lists() {
     const createListBtn = document.querySelector("#listCreater");
+    createListBtn.title = "Créer une nouvelle liste";
     // Affiche le formulaire de création de liste lorsqu'on clique sur le bouton "Créer une nouvelle liste".
     createListBtn.addEventListener("click", function(){
         if (createListBtn.value === "newList") {
@@ -45,17 +47,35 @@ function lists() {
             CSRFToken(formList.id);
             formList.addEventListener("submit", function(e){
                 e.preventDefault();
+                // Validation de pattern du formulaire
+                const inputTitle = document.querySelector("#titleList");
+                const inputDescription = document.querySelector("#descriptionList");
+                const selectType = document.querySelector("#typeList")
+                inputTitle.addEventListener("invalid", function(e) {
+                    validate(e.target)
+                });
+                inputDescription.addEventListener("invalid", function(e) {
+                    validate(e.target)
+                });
+                selectType.addEventListener("invalid", function(e) {
+                    validate(e.target)
+                });
+
+                scroll();
                 fetchCreateList(formList)
                 .then(response => {
                     localStorage.removeItem("csrfToken");
 
                     if (response.status === "createList") {
                         dialog({title: "Et une liste de créée, une !", content:"aux cartes maintenant !"});
+                        const dialogMsg = document.querySelector("dialog");
+                        dialogMsg.classList.add("valid");
                         redirect(`${configPath.basePath}/list/pages/lists.html`);
-
                     }
                     if (response.status === "errors") {
-                        dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
+                        dialog({title: "Erreurs", content: response.errors});
+                        const dialogMsg = document.querySelector("dialog");
+                        dialogMsg.classList.add("errors");
                         redirect(`${configPath.basePath}/list/pages/lists.html`);
                     };
                 })
@@ -83,6 +103,7 @@ function lists() {
 
                 const deleteBtnLists = document.createElement("button");
                 deleteBtnLists.id = `deleteProfilList-${objectList.id}`;
+                deleteBtnLists.title = "Supprimer la liste";
                 deleteBtnLists.name = "deleteProfilList";
                 deleteBtnLists.type = "submit";
                 deleteBtnLists.value = `${objectList.id}`;
@@ -139,11 +160,9 @@ function lists() {
                         scroll();
                         fetchDeleteList(objectList.id)
                         .then(() => {
-                            dialog({title: "Suppression de la liste",
-                            content: `<p>Votre liste a bien été supprimée.</p>`
-                            });
+                            dialog({title: "Suppression de la liste", content: `<p>Votre liste a bien été supprimée.</p>`});
                             const dialogMsg = document.querySelector("dialog");
-                            console.log(dialogMsg);
+                            dialogMsg.classList.add("valid");
                             redirect(`${configPath.basePath}/list/pages/lists.html`);
                         });
                     }

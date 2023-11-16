@@ -19,6 +19,8 @@ function navigation(template) {
     input.type = "checkbox";
 
     const label = document.createElement("label");
+    label.id = "labelBurger";
+    label.title = "Menu";
     label.classList.add("menu__btn");
     label.htmlFor = "menu__toggle";
 

@@ -10,7 +10,8 @@ import {
     configPath,
     redirect,
     dialog,
-    notAllowedRedirection
+    notAllowedRedirection,
+    validate
 } from "../../services/utils.js";
 import { displayFormList } from "./form_list.js";
 import { card } from "../../card/js/card.js";
@@ -29,6 +30,7 @@ function list() {
         fetchReadOneListById(id)
         .then(response => {
             const returnLists = document.querySelector("#cancelBtn");
+            returnLists.title = "Revenir aux listes";
             returnLists.href = `${configPath.basePath}/list/pages/lists.html`;
 
             if (JSON.parse(localStorage.user).role === "Admin" && response.data.user.role !== "Admin") {
@@ -151,8 +153,11 @@ function list() {
 
                             // Insertion des éléments de la liste dans les inputs
                             if (data.type === "TodoList") {
-                                const radio = document.querySelector("#todo");
-                                radio.checked = true;
+                                const selectType = document.querySelector("#typeList");
+                                selectType.value = 0;
+                                const optionTodo = document.querySelector("#optTodoList");
+                                optionTodo.setAttribute("value", "TodoList");
+                                optionTodo.selected = true
                             };
                             const inputTitle = document.querySelector("#titleList");
                             inputTitle.value = data.title;
@@ -164,16 +169,34 @@ function list() {
                             updateFormList.addEventListener("submit", function(e) {
                                 e.preventDefault();
 
+                                // Validation de pattern du formulaire
+                                const inputTitle = document.querySelector("#titleList");
+                                const inputDescription = document.querySelector("#descriptionList");
+                                const selectType = document.querySelector("#typeList")
+                                inputTitle.addEventListener("invalid", function(e) {
+                                    validate(e.target)
+                                });
+                                inputDescription.addEventListener("invalid", function(e) {
+                                    validate(e.target)
+                                });
+                                selectType.addEventListener("invalid", function(e) {
+                                    validate(e.target)
+                                });
+                                scroll();
                                 fetchUpdateList(updateFormList, data.id)
                                 .then(response => {
                                     localStorage.removeItem("csrfToken");
 
                                     if (response.status === "updateList") {
                                         dialog({title: "Modification de la liste", content: "Votre liste a bien été mise à jour."});
+                                        const dialogMsg = document.querySelector("dialog");
+                                        dialogMsg.classList.add("valid");
                                         redirect(`${configPath.basePath}/list/pages/list.html?id=${updtBtnListId}`);
                                     };
                                     if (response.status === "errors") {
                                         dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
+                                        const dialogMsg = document.querySelector("dialog");
+                                        dialogMsg.classList.add("errors");
                                         redirect(`${configPath.basePath}/list/pages/list.html?id=${updtBtnListId}`);
                                     };
                                 });
@@ -191,15 +214,14 @@ function list() {
                             return;
 
                         } else if (confirm('Voulez-vous vraiment vous supprimer la liste ?') === true) {
+                            scroll();
                             fetchDeleteList(data.id)
                             .then(() => {
-
-                                dialog({title: "Suppression de la liste",
-                                content: `<p>Votre liste a bien été supprimée.</p>`});
-                                const dialogSection = document.querySelector("#dialog");
-                                console.log(dialogSection);
+                                dialog({title: "Suppression de la liste", content: `<p>Votre liste a bien été supprimée.</p>`});
+                                const dialogMsg = document.querySelector("dialog");
+                                dialogMsg.classList.add("valid");
                                 document.body.scrollTop = 0;
-                                // redirect(`${configPath.basePath}/list/pages/lists.html`);
+                                redirect(`${configPath.basePath}/list/pages/lists.html`);
                             });
                         };
                     });

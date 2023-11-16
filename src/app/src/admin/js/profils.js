@@ -20,6 +20,7 @@ function readAdmin() {
             const table = document.querySelector("table");
             table.classList.add("userList");
             const listUser = document.querySelector("#newUser");
+            listUser.title ="Créer un nouvel utilisateur";
 
             // Bouton de redirection pour création d'utilisateur
             listUser.addEventListener("click", function (e) {
@@ -64,23 +65,20 @@ function readAdmin() {
                 tdRole.innerHTML = `${column["role"]}`;
                 tr.appendChild(tdRole);
 
-                const tdReadBtn = document.createElement("td");
-                tdReadBtn.classList.add("profil_read");
+                const tdBtn = document.createElement("td");
+                tdBtn.classList.add("profil_read");
+                tdBtn.classList.add("edit");
+                tdBtn.classList.add("delete");
+
                 const readBtn = document.createElement("button");
                 readBtn.id = `readUserProfil-${column.id}`;
                 readBtn.type = "button";
-                readBtn.title =
-                    "Amène vers le profil d'un utilisateur et ses listes";
+                readBtn.title = "Affiche le profil d'un utilisateur et ses listes";
                 readBtn.textContent = "";
                 readBtn.value = column.id;
                 readBtn.classList.add("btn");
                 readBtn.classList.add("view");
 
-                tdReadBtn.appendChild(readBtn);
-                tr.appendChild(tdReadBtn);
-
-                const tdEditBtn = document.createElement("td");
-                tdEditBtn.classList.add("profil_edit");
                 const editBtn = document.createElement("button");
                 editBtn.textContent = "";
                 editBtn.title = "Modifier le profil d'un utilisateur";
@@ -90,11 +88,7 @@ function readAdmin() {
                 editBtn.classList.add("btn");
                 editBtn.classList.add("valid");
                 editBtn.classList.add("edit");
-                tdEditBtn.appendChild(editBtn);
-                tr.appendChild(tdEditBtn);
 
-                const tdDeleteBtn = document.createElement("td");
-                tdDeleteBtn.classList.add("profil_delete");
                 const deleteBtn = document.createElement("button");
                 deleteBtn.title = "Supprimer le profil d'un utilisateur";
                 deleteBtn.value = column.id;
@@ -103,8 +97,11 @@ function readAdmin() {
                 deleteBtn.id = `deleteUserProfil-${column.id}`;
                 deleteBtn.type = "click";
                 deleteBtn.textContent = "";
-                tdDeleteBtn.appendChild(deleteBtn);
-                tr.appendChild(tdDeleteBtn);
+
+                tdBtn.appendChild(readBtn);
+                tdBtn.appendChild(editBtn);
+                tdBtn.appendChild(deleteBtn);
+                tr.appendChild(tdBtn);
 
                 readBtn.addEventListener("click", function (e) {
                     e.preventDefault();
