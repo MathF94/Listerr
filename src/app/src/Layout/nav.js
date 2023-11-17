@@ -59,7 +59,7 @@ function navigation(template) {
             {
                 text: "Connexion",
                 href: `${configPath.basePath}/user/pages/login.html`,
-                id: "login",
+                id: "connexion",
             },
         ];
         addLinks(links);
@@ -94,7 +94,7 @@ function navigation(template) {
         if (dataUser.role === "Admin") {
             const links = [
                 {
-                    text: "Les utilisateurs",
+                    text: "Utilisateurs",
                     href: `${configPath.basePath}/admin/pages/profils.html`,
                     id: "usersProfil",
                 },

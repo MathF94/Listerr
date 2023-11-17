@@ -16,8 +16,6 @@ import {
 import { displayFormList } from "./form_list.js";
 import { card } from "../../card/js/card.js";
 
-notAllowedRedirection();
-
 /**
  * Fonction principale pour gérer la page de détails d'une liste.
  */
@@ -37,10 +35,6 @@ function list() {
             returnLists.title = "Revenir aux listes";
             returnLists.href = `${configPath.basePath}/list/pages/lists.html`;
 
-            if (JSON.parse(localStorage.user).role === "Admin" && response.data.user.role !== "Admin") {
-                returnLists.href = `${configPath.basePath}/user/pages/profil.html?id=${response.data.userId}`;
-            }
-
             if(response.message === "ID not numeric" || id === "") {
                 redirect(`${configPath.basePath}/home/pages/home.html`, 0)
             }
@@ -54,6 +48,9 @@ function list() {
             localStorage.setItem("typeList", data?.type);
             if (localStorage.user) {
                 userId = JSON.parse(localStorage.user).id; // user courant
+                if (JSON.parse(localStorage.user).role === "Admin" && response.data.user.role !== "Admin") {
+                    returnLists.href = `${configPath.basePath}/user/pages/profil.html?id=${response.data.userId}`;
+                }
             }
 
             if (response.status === "readOneList") {
@@ -198,7 +195,7 @@ function list() {
                                         redirect(`${configPath.basePath}/list/pages/list.html?id=${updtBtnListId}`);
                                     };
                                     if (response.status === "errors") {
-                                        dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
+                                        dialog({title: "Erreurs", content: response.errors});
                                         const dialogMsg = document.querySelector("dialog");
                                         dialogMsg.classList.add("errors");
                                         redirect(`${configPath.basePath}/list/pages/list.html?id=${updtBtnListId}`);
@@ -233,6 +230,7 @@ function list() {
                 card(userId === data?.user.id);
             };
         })
+        // Permet de récupérer les erreurs du .then
         .catch(e=>console.error(e))
     }
 };

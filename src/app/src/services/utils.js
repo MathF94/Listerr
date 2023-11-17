@@ -35,9 +35,8 @@ function redirect(url, duration = 3000) {
  * @param {Object} options - Les options de la boîte de dialogue.
  * @param {string} [options.title="Notification"] - Le titre de la boîte de dialogue.
  * @param {string|Array|Object} options.content - Le contenu de la boîte de dialogue.
- * @param {boolean} [options.hasTimeOut] - Indique si la boîte de dialogue doit disparaître automatiquement après 2 secondes.
  */
-function dialog({ title, content, hasTimeOut }) {
+function dialog({ title, content}) {
     const header = document.querySelector("#navWrapper");
     title = title || "Notification";
 
@@ -70,15 +69,6 @@ function dialog({ title, content, hasTimeOut }) {
         }
         dialog.appendChild(list);
         dialogSection.appendChild(dialog);
-    }
-
-    if (hasTimeOut) {
-        const msg = document.createElement("div");
-        msg.innerHTML = "Ce message s'effacera dans 3 secondes...";
-        dialog.appendChild(msg);
-        setTimeout(() => {
-            document.body.removeChild(dialogSection);
-        }, 3000);
     }
 }
 

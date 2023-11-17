@@ -95,7 +95,7 @@ function readAdmin() {
                 deleteBtn.classList.add("btn");
                 deleteBtn.classList.add("delete");
                 deleteBtn.id = `deleteUserProfil-${column.id}`;
-                deleteBtn.type = "click";
+                deleteBtn.type = "button";
                 deleteBtn.textContent = "";
 
                 tdBtn.appendChild(readBtn);

@@ -16,6 +16,7 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     --primary-bg: rgb(217, 199, 32)
     --text-dark: rgb(51, 51, 51);
     --text-light: rgb(221, 221, 221);
+    --border-color: rgb(88, 53, 9);
 
     // Burger
     --burger-bg: rgba(255, 241, 198, 0.85);
@@ -47,14 +48,12 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     --form-bg: rgb(255, 241, 198);
     --border: rgb(0, 0, 0);
     --mandatory: rgba(225, 31, 31, 0.7);
+    --select: rgb(255, 255, 255);
 
     // Dialog
     --dialog-bg: rgb(238, 234, 13);
     --dialog-bg-valid: rgba(89, 230, 60, 0.7);
     --dialog-bg-errors: rgba(225, 31, 31, 0.7);
-
-
-    --border-color: rgb(221, 221, 221); // utilisé ?
 }
 
 /* *****************************************************************
@@ -188,7 +187,7 @@ body {
     background-size: 100%;
     border-width: 0px 15px;
     border-style: solid;
-    border-color: rgb(88, 53, 9);
+    border-color: var(--border-color);
 }
 
 .login, .register, .sectionList {
@@ -444,6 +443,9 @@ input[type="submit"] {
     border-radius: 5px;
 }
 
+select {
+    background: var(--select);
+}
 input[type="submit"] {
     background-color: var(--valid-btn);
     color: var(--text-light);
@@ -543,7 +545,7 @@ input[type="submit"] {
         }
         &__box {
         display: block;
-        position: fixed;
+        position: absolute;
         top: 0;
         left: 0%;
         width: 203px;

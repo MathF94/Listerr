@@ -29,9 +29,9 @@ function card(canCreateCard) {
     const id = urlParams.get("id");
     const oneList = document.querySelector("#oneList");
 
-    const cardSectionForm = document.createElement("section");
-    cardSectionForm.id = "cardSectionForm";
-    cardSectionForm.classList.add("form");
+    const cardDivForm = document.createElement("div");
+    cardDivForm.id = "cardSectionForm";
+    cardDivForm.classList.add("form");
 
     const titleForm = document.createElement("h3");
     titleForm.id = "titleFormCard";
@@ -84,9 +84,9 @@ function card(canCreateCard) {
             deleteProfilList.classList.add("disableDelete");
         }
 
-        cardSectionForm.appendChild(titleForm);
+        cardDivForm.appendChild(titleForm);
         // Appel du formulaire de création d'une carte
-        displayFormCard(cardSectionForm);
+        displayFormCard(cardDivForm);
         titleForm.innerText = "Formulaire de création d'une carte";
         const cardCancelBtn = document.querySelector("#cardCancelBtn");
         cardCancelBtn.title = "Revenir aux listes";
@@ -152,8 +152,8 @@ function card(canCreateCard) {
     })
 
     if (canCreateCard) {
-        oneList.appendChild(cardSectionForm);
-        cardSectionForm.appendChild(createCardFormBtn);
+        oneList.appendChild(cardDivForm);
+        cardDivForm.appendChild(createCardFormBtn);
     }
 
     fetchReadAllCardsByList(id)
@@ -163,6 +163,11 @@ function card(canCreateCard) {
             const cardArticleContent = document.createElement("article");
             cardArticleContent.id = "cardArticleContent";
             cardArticleContent.classList.add("list");
+
+            const titleCards = document.createElement("h3");
+            titleCards.innerText = "Plus en détails";
+
+            cardArticleContent.appendChild(titleCards);
 
             for (const indexCard in dataCards) {
                 const objectCard = dataCards[indexCard];
@@ -371,7 +376,7 @@ function card(canCreateCard) {
                 })
 
                 // Gestion de la réservation d'une carte
-                CSRFToken("checkForm");
+                // CSRFToken("checkForm");
                 check.addEventListener("change", function(e) {
                     objectCard.checked = check.checked === true ? 1 : 0
                     check.value = objectCard.checked
