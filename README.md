@@ -1,3 +1,8 @@
+# Présentation
+
+Je m'appelle Mathieu FAGOT, 36 ans, né à Fontainebleau.
+Après 10 ans d'expérience, j'ai décidé de faire une reconversion professionnelle (TransitionPro) pour être développeur Fullstack.
+
 # Listerr
 
 Listerr est une application web écrite en PHP et Javascript sans framework.
@@ -32,6 +37,8 @@ Pour la première connexion, il faut se rendre à la page home et se connecter e
 - login : Admin
 - password : passwordAdmin1+
 
-Ensuite, créer son premier utilisateur et commencer à jouer avec les listes.
+Un utilisateur est d’ors et déjà créé pour commencer à jouer avec les listes :
+- login : User
+- password : passwordUser2+
 
 Il est possible également de se créer un nouvel utilisateur, à partir de la page home, via le lien **inscription**.

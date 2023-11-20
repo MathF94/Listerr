@@ -1,24 +1,30 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listerr</title>
-    <script type="module" src="../../actions/actions_lists.js"></script>
-    <script type="module" src="../../layout/header.js"></script>
-    <script type="module" src="../../user/js/logout.js"></script>
-    <script type="module" src="../js/lists.js"></script>
-</head>
-<body>
-    <section class="list">
-        <h2>Vos listes sont listées dans cette page de listes de Listerr</h2>
-        <div id="divList">
-            <button id="listCreater" type="button" value="newList">Créer une nouvelle liste</button>
-        </div>
-    </section>
-    <section id="listSection">
-        <h3>Affichage des listes de souhaits et de tâches</h3>
-        <div id="listsWrapper"></div>
-    </section>
-</body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content="Listerr, le gestionnaire qui liste des listes">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Listerr</title>
+        <script type="module" src="../../actions/actions_lists.js"></script>
+        <script type="module" src="../../layout/header.js"></script>
+        <script type="module" src="../../user/js/logout.js"></script>
+        <script type="module" src="../js/lists.js"></script>
+        <link rel="stylesheet" href="../../style.css" />
+    </head>
+    <body>
+        <section class="sectionList">
+            <h2>
+                Vos listes sont listées dans cette page de listes de Listerr
+            </h2>
+            <div id="divList">
+                <button id="listCreater" class="btn way" type="button" value="newList">
+                    Créer une nouvelle liste
+                </button>
+            </div>
+        </section>
+        <section id="listSection" class="sectionList">
+            <h3>Affichage des listes de souhaits et de tâches</h3>
+            <div id="listsWrapper"></div>
+        </section>
+    </body>
 </html>

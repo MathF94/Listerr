@@ -17,29 +17,29 @@ function displayFormList(elementDOM) {
     const titleForm = document.createElement("h3");
     titleForm.id = "titleFormList";
 
-    const radioW = document.createElement("input");
-    radioW.type = "radio";
-    radioW.name = "type";
-    radioW.id = "wish";
-    radioW.value = "WishList";
-    radioW.checked = true;
+    const labelType = document.createElement("label");
+    labelType.htmlFor  = "typeList";
+    labelType.innerText = "Type de liste";
 
-    const labelW = document.createElement("label");
-    labelW.for = "wish";
-    labelW.innerText = "WishList";
+    const selectType = document.createElement("select");
+    selectType.id = "typeList";
+    selectType.name = "typeList";
+    selectType.value = 0;
 
-    const radioT = document.createElement("input");
-    radioT.type = "radio";
-    radioT.name = "type";
-    radioT.id = "todo";
-    radioT.value = "TodoList";
+    const optionWish = document.createElement("option");
+    optionWish.value = "Type de liste";
+    optionWish.id = "optWishList";
+    optionWish.setAttribute("value", "WishList");
+    optionWish.innerText = "WishList"
 
-    const labelT = document.createElement("label");
-    labelT.for = "todo";
-    labelT.innerText = "TodoList";
+    const optionTodo = document.createElement("option");
+    optionTodo.value = "Type de liste";
+    optionTodo.id = "optTodoList";
+    optionTodo.setAttribute("value", "TodoList");
+    optionTodo.innerText = "TodoList"
 
     const labelTitle = document.createElement("label");
-    labelTitle.for = "titleList";
+    labelTitle.htmlFor  = "titleList";
     labelTitle.innerText = "Titre de la liste";
 
     const inputTitle = document.createElement("input");
@@ -47,11 +47,12 @@ function displayFormList(elementDOM) {
     inputTitle.name = "titleList";
     inputTitle.id = "titleList";
     inputTitle.placeholder = "Votre titre";
+    inputTitle.setAttribute("max", 20);
     inputTitle.value = "";
     inputTitle.required = true;
 
     const labelDescription = document.createElement("label");
-    labelDescription.for = "descriptionList";
+    labelDescription.htmlFor  = "descriptionList";
     labelDescription.innerText = "Description (facultative)";
 
     const inputDescription = document.createElement("input");
@@ -63,22 +64,26 @@ function displayFormList(elementDOM) {
 
     const validListBtn = document.createElement("button");
     validListBtn.id = "validForm";
+    validListBtn.classList.add("btn");
+    validListBtn.classList.add("valid");
     validListBtn.type = "submit";
     validListBtn.value = "validForm";
     validListBtn.innerText = "Valider";
 
     const cancelListBtn = document.createElement("button");
     cancelListBtn.id = "cancelForm";
+    cancelListBtn.classList.add("btn");
+    cancelListBtn.classList.add("cancel");
     cancelListBtn.type = "button";
     cancelListBtn.value = "cancelForm";
     cancelListBtn.innerText = "Annuler";
 
     sectionForm.appendChild(titleForm);
     sectionForm.appendChild(formList);
-    formList.appendChild(radioW);
-    formList.appendChild(labelW);
-    formList.appendChild(radioT);
-    formList.appendChild(labelT);
+    formList.appendChild(labelType);
+    formList.appendChild(selectType);
+    selectType.appendChild(optionWish);
+    selectType.appendChild(optionTodo);
     formList.appendChild(labelTitle);
     labelTitle.appendChild(mandatoryStar);
     formList.appendChild(inputTitle);

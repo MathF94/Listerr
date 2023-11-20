@@ -216,7 +216,7 @@ class Validator
     private function isValidListParams(array $params): array
     {
         $errors = [];
-        $expectedKeys = ['type', 'titleList', 'descriptionList'];
+        $expectedKeys = ['typeList', 'titleList', 'descriptionList'];
         $paramKeys = array_keys($params);
 
         if (!empty(array_diff($expectedKeys, $paramKeys))) {

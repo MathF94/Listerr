@@ -99,13 +99,13 @@ class UserController
                 if ($create) {
                     return json_encode([
                         "status" => "createUser",
-                        "message" => "l'utilisateur a bien été créé."
+                        "message" => "L'utilisateur a bien été créé."
                     ]);
                 }
-                // si $create est false, il s'agit d'un duplicata de login
+                // si $create est false, il s'agit d'un duplicata d'un champ
                 return json_encode([
                     "status" => "errors",
-                    "errors" => "Ce login existe déjà, veuillez en trouver un autre svp, merci :)"
+                    "errors" => "Cet utilisateur existe déjà (login ou email), veuillez en trouver un autre svp, merci :)"
                 ]);
             }
             return json_encode([
@@ -114,7 +114,10 @@ class UserController
             ]);
         } catch (\Exception $e) {
             $message = "Une erreur est survenue";
-            if (strpos($e->getMessage(), "SQLSTATE[23000]") !== false) {
+            if (strpos($e->getMessage(), "user.email") !== false) {
+                $message = "Cette adresse mail existe déjà, veuillez en trouver un autre svp, merci :)";
+            }
+            if (strpos($e->getMessage(), "user.login") !== false) {
                 $message = "Ce login existe déjà, veuillez en trouver un autre svp, merci :)";
             }
             return json_encode([
@@ -392,7 +395,7 @@ class UserController
                         "message" => "Le profil a bien été mis à jour."
                     ]);
                 }
-                // si $create est false, il s'agit d'un duplicata de login
+                // si $update est false, il s'agit d'un duplicata d'un champ
                 return json_encode([
                     "status" => "errors",
                     "errors" => "Ce login existe déjà, veuillez en trouver un autre svp, merci :)"
@@ -404,7 +407,10 @@ class UserController
             ]);
         } catch (\Exception $e) {
             $message = "Une erreur est survenue";
-            if (strpos($e->getMessage(), "SQLSTATE[23000]") !== false) {
+            if (strpos($e->getMessage(), "user.email") !== false) {
+                $message = "Cette adresse mail existe déjà, veuillez en trouver un autre svp, merci :)";
+            }
+            if (strpos($e->getMessage(), "user.login") !== false) {
                 $message = "Ce login existe déjà, veuillez en trouver un autre svp, merci :)";
             }
             return json_encode([

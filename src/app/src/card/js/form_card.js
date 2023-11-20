@@ -12,7 +12,7 @@ function displayFormCard(elementDOM) {
     createFormCard.id = "formCard";
 
     const labelTitle = document.createElement("label");
-    labelTitle.for = "titleCard";
+    labelTitle.htmlFor  = "titleCard";
     labelTitle.innerText = "Titre de la carte";
 
     const inputTitle = document.createElement("input");
@@ -20,11 +20,12 @@ function displayFormCard(elementDOM) {
     inputTitle.name = "titleCard";
     inputTitle.id = "titleCard";
     inputTitle.placeholder = "Votre titre";
+    inputTitle.setAttribute("max", 20);
     inputTitle.value = "";
     inputTitle.required = true;
 
     const labelDescription = document.createElement("label");
-    labelDescription.for = "descriptionCard";
+    labelDescription.htmlFor  = "descriptionCard";
     labelDescription.innerText = "Description";
 
     const inputDescription = document.createElement("input");
@@ -35,7 +36,7 @@ function displayFormCard(elementDOM) {
     inputDescription.value = "";
 
     const labelPriority = document.createElement("label");
-    labelPriority.for = "priority";
+    labelPriority.htmlFor  = "priority";
     labelPriority.innerText = "Priorité";
 
     const inputPriority = document.createElement("input");
@@ -52,13 +53,19 @@ function displayFormCard(elementDOM) {
     CardValidFormBtn.id = "cardValidBtn";
     CardValidFormBtn.type = "submit";
     CardValidFormBtn.value = "cardValidBtn";
+    CardValidFormBtn.title = "Valider la création d'une carte";
     CardValidFormBtn.innerText = "Valider";
+    CardValidFormBtn.classList.add("btn");
+    CardValidFormBtn.classList.add("valid");
 
     const CardCancelFormBtn = document.createElement("button");
     CardCancelFormBtn.id = "cardCancelBtn";
     CardCancelFormBtn.type = "button";
     CardCancelFormBtn.value = "cardCancelBtn";
+    CardCancelFormBtn.title = "Annuler la création d'une carte";
     CardCancelFormBtn.innerText = "Annuler";
+    CardCancelFormBtn.classList.add("btn");
+    CardCancelFormBtn.classList.add("cancel");
 
     createFormCard.appendChild(labelTitle);
     labelTitle.appendChild(mandatoryStar.cloneNode(true));

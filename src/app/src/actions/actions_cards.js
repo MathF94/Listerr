@@ -79,10 +79,6 @@ async function fetchUpdateReservation(checked, id) {
 
         const url = `${configPath.apiPath}/?route=update_checked`;
         return await fetch(url, {
-            headers: {
-                "Authorization": localStorage.getItem("token"),
-                "X-CSRFToken": localStorage.getItem("csrfToken")
-            },
             method: "POST",
             body: formData,
             }).then(response => response.json());

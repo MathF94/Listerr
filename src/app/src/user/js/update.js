@@ -2,7 +2,13 @@
 
 import { fetchRead, fetchUpdate } from "../../actions/actions_user.js";
 import { CSRFToken } from "../../services/CSRFToken.js";
-import { configPath, redirect, dialog, notAllowedRedirection } from "../../services/utils.js";
+import {
+    configPath,
+    redirect,
+    dialog,
+    notAllowedRedirection,
+    validate
+} from "../../services/utils.js";
 
 notAllowedRedirection();
 
@@ -13,57 +19,89 @@ notAllowedRedirection();
 function updateUser() {
     // Récupère les données actuelles de l'utilisateur.
     fetchRead()
-    .then(response => {
+    .then((response) => {
         const dataUser = response;
         for (const index in dataUser) {
             const column = dataUser[index];
-            const input = document.querySelector(`input#${index}`)
+            const input = document.querySelector(`input#${index}`);
             if (input) {
                 input.value = column.value;
-            };
-        };
+            }
+        }
+    });
+    const cancelBtn = document.querySelector("#updateCancelBtn");
+    cancelBtn.addEventListener("click", function (e) {
+        redirect(`${configPath.basePath}/user/pages/profil.html`, 0);
     });
 
-    // Ajoute un gestionnaire d'événements pour soumettre le formulaire de mise à jour.
-    updateForm.addEventListener("submit", function(e) {
+    updateForm.addEventListener("submit", function (e) {
         e.preventDefault();
         const userLogin = e.target.login.value;
 
-        if (e.submitter.value === "updateCancelBtn") {
-            redirect(`${configPath.basePath}/user/pages/profil.html`, 0);
-        } else {
-            // Appelle la fonction fetchUpdate pour envoyer les données du formulaire de mise à jour au serveur.
-            fetchUpdate(updateForm)
-            .then(response => {
-                console.log(response);
-                localStorage.removeItem("csrfToken");
-                const user = JSON.parse(localStorage.getItem("user"));
+        // Validation de pattern du formulaire
+        const inputLogin = document.querySelector("#login");
+        const inputName = document.querySelector("#name");
+        const inputFirstname = document.querySelector("#firstname");
+        const inputEmail = document.querySelector("#email");
+        inputLogin.addEventListener("invalid", function(e) {
+            validate(e.target)
+        });
+        inputName.addEventListener("invalid", function(e) {
+            validate(e.target)
+        });
+        inputFirstname.addEventListener("invalid", function(e) {
+            validate(e.target)
+        });
+        inputEmail.addEventListener("invalid", function(e) {
+            validate(e.target)
+        });
 
-                if (response.status === "updateUser") {
-                    if (userLogin !== user.login) {
-                        // En cas de modification du login, déconnecte l'utilisateur et le redirige vers la page de connexion.
-                        localStorage.removeItem("token");
-                        localStorage.removeItem("user");
+        // Appelle la fonction fetchUpdate pour envoyer les données du formulaire de mise à jour au serveur.
+        fetchUpdate(updateForm)
+        .then((response) => {
+            localStorage.removeItem("csrfToken");
+            const user = JSON.parse(localStorage.getItem("user"));
+            const updateProfil = document.querySelector("#updateProfil");
+            if (response.status === "updateUser") {
+                if (userLogin !== user.login) {
+                    // En cas de modification du login, déconnecte l'utilisateur et le redirige vers la page de connexion.
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("user");
 
-                        dialog({title: `A tout de suite ${e.target.login.value} !`,
-                                content: `<p>Votre login a bien été modifié.</p>
-                                        <p>Vous allez être redirigé(e) vers la page de connexion, afin de vous reconnecter avec votre nouveau login.</p>`
-                                    })
-                        redirect(`${configPath.basePath}/user/pages/login.html`);
-                    } else {
-                        // Affiche un message de succès et redirige l'utilisateur vers la page de profil.
-                        dialog({title: "Modification du profil", content: "Votre profil a bien été mis à jour."});
-                        redirect(`${configPath.basePath}/user/pages/profil.html`);
-                    }
-                }
-
-                if (response.status === "errors") {
-                    // En cas d'échec, affiche les erreurs rencontrées et redirige l'utilisateur vers la page de profil.
-                    dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
+                    dialog({
+                        title: `A tout de suite ${e.target.login.value} !`,
+                        content: `<p>Votre login a bien été modifié.</p>
+                                    <p>Vous allez être redirigé(e) vers la page de connexion, afin de vous reconnecter avec votre nouveau login.</p>`,
+                    });
+                    const dialogMsg = document.querySelector("dialog");
+                    dialogMsg.classList.add("valid");
+                    updateProfil.classList.add("hidden");
+                    redirect(`${configPath.basePath}/user/pages/login.html`);
+                } else {
+                    // Affiche un message de succès et redirige l'utilisateur vers la page de profil.
+                    dialog({
+                        title: "Modification du profil",
+                        content: "Votre profil a bien été mis à jour.",
+                    });
+                    const dialogMsg = document.querySelector("dialog");
+                    dialogMsg.classList.add("valid");
+                    updateProfil.classList.add("hidden");
                     redirect(`${configPath.basePath}/user/pages/profil.html`);
-                };
-            });
-        }
+                }
+            }
+
+            if (response.status === "errors") {
+                // En cas d'échec, affiche les erreurs rencontrées et redirige l'utilisateur vers la page de profil.
+                dialog({
+                    title: "Erreurs",
+                    content: response.errors,
+                });
+                const dialogMsg = document.querySelector("dialog");
+                dialogMsg.classList.add("errors");
+                updateForm.classList.add("hidden");
+                redirect(`${configPath.basePath}/user/pages/profil.html`);
+            }
+        });
     });
 }
 
@@ -71,4 +109,4 @@ document.addEventListener("DOMContentLoaded", () => {
     const updateForm = document.querySelector("#updateForm");
     CSRFToken(updateForm.attributes.id.value);
     updateUser();
-})
+});

@@ -23,19 +23,24 @@ class CardController
      * Ce constructeur initialise les dépendances nécessaires et authentifie un utilisateur, en utilisant un jeton fourni.
      * Il est appelé lors de la création d'une instance de CardController.
      *
+     * $tokenUser peut être à null dans le cas d'un partage de liste vers un utilisateur visiteur, non connecté à l'application,
+     * dans le cas d'une réservation d'une carte appartenant à une WishList uniquement.
+     *
      * @param string $tokenUser - Le jeton d'utilisateur utilisé pour l'authentification.
      */
-    public function __construct($tokenUser)
+    public function __construct($tokenUser = null)
     {
-        $this->csrfToken = new CSRFToken();
-        $this->validator = new Validator();
-        $session = new Session();
+        if ($tokenUser !== null) {
+            $this->csrfToken = new CSRFToken();
+            $this->validator = new Validator();
+            $session = new Session();
 
-        // Si un jeton d'utilisateur est fourni, l'utilisateur est décrypté et d'authentifié.
-        if (!empty($tokenUser)) {
-            $decrypt = $session->decrypt($tokenUser);
-            $model = new Users();
-            $this->user = $model->auth($decrypt["login"], $decrypt["password"]);
+            // Si un jeton d'utilisateur est fourni, l'utilisateur est décrypté et d'authentifié.
+            if (!empty($tokenUser)) {
+                $decrypt = $session->decrypt($tokenUser);
+                $model = new Users();
+                $this->user = $model->auth($decrypt["login"], $decrypt["password"]);
+            }
         }
     }
 
@@ -197,47 +202,31 @@ class CardController
      *
      * @param int $id - L'ID de l'input checked à mettre à jour.
      * @param int $id - L'ID de la carte à mettre à jour.
-     * @param string $csrfToken - Jeton CSRF pour valider la requête.
      *
      * @return string - Réponse JSON : "updatedChecked" avec un message, en cas de succès.
-     *                                 "updatedChecked failed" avec un message d'erreur, si l'utilisateur est introuvable.
-     *                                 "fail" avec un message d'erreur, si le jeton est invalide.
      *                                 "fail" avec un message d'erreur, si la carte est introuvable.
      *                                 "errors" avec un message d'erreur, en cas d'échec.
      */
-    public function updateChecked(int $id, int $checked, string $csrfToken): string
+    public function updateChecked(int $id, int $checked): string
     {
         try {
-            $validToken = $this->csrfToken->isValidToken($csrfToken, "checkForm");
+            $model = new Cards();
+            $card = $model->getOneCardById($id);
 
-            if (!$validToken) {
+            if (empty($card)) {
                 return json_encode([
                     "status" => "fail",
-                    "message" => "no valid csrfToken"
+                    "errors" => "no card found"
                 ]);
             }
-            if (!empty($this->user->id)) {
-                $model = new Cards();
-                $card = $model->getOneCardById($id);
 
-                if (empty($card)) {
-                    return json_encode([
-                        "status" => "fail",
-                        "errors" => "no card found"
-                    ]);
-                }
-
-                $params = ["checked" => $checked];
-                $model->updateChecked($params, $card->id);
-                return json_encode([
-                    "status" => "updateChecked",
-                    "message" => "la reservation a bien été mise à jour."
-                ]);
-            }
+            $params = ["checked" => $checked];
+            $model->updateChecked($params, $card->id);
             return json_encode([
-                "status" => "updateChecked failed",
-                "message" => "no user found"
+                "status" => "updateChecked",
+                "message" => "la reservation a bien été mise à jour."
             ]);
+
         } catch (\Exception $e) {
             return json_encode([
                 "status" => "errors",

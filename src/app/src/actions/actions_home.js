@@ -1,6 +1,12 @@
 "use strict";
 
-import { configPath } from "../services/utils.js";
+import { configPath, redirect } from "../services/utils.js";
+const urlParams = new URLSearchParams(document.location);
+const pathname = urlParams.get("pathname");
+const test = "home/pages/home.html";
+if(!pathname.match(test)) {
+    redirect(`${configPath.basePath}/home/pages/home.html`, 0);
+}
 
 /**
  * Effectue une requête pour récupérer la liste de toutes les listes de tous les utilisateurs depuis l'API.

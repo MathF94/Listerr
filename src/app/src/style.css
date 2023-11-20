@@ -1,0 +1,553 @@
+@charset "UTF-8";
+/* *****************************************************************
+    POLICE
+***************************************************************** */
+@font-face {
+  font-family: "dyslexic";
+  src: url(./resources/fonts/open-dyslexic.woff) format("woff");
+}
+/* *****************************************************************
+    COULEURS PRINCIPALES
+***************************************************************** */
+:root {
+  --text-dark: rgb(51, 51, 51);
+  --text-light: rgb(221, 221, 221);
+  --border-color: rgb(88, 53, 9);
+  --burger-bg: rgb(255, 241, 198);
+  --burger-item: rgb(121, 2, 2);
+  --burger-item-shadow: rgba(121, 2, 2, 0.4);
+  --burger-btn: rgb(51, 51, 51);
+  --list-bg: rgba(210, 194, 42, 0.6);
+  --card-bg: rgba(112, 191, 132, 0.6);
+  --way-btn: rgb(213, 190, 3);
+  --way-btn-hover: rgba(213, 190, 3, 0.8);
+  --valid-btn: rgba(89, 230, 60, 0.7);
+  --valid-btn-hover: rgb(61, 156, 41);
+  --cancel-btn: rgb(117, 117, 117);
+  --cancel-btn-hover: rgba(117, 117, 117, 0.8);
+  --view-btn: rgb(238, 214, 33);
+  --view-btn-hover: rgba(213, 188, 3, 0.904);
+  --delete-btn: rgba(225, 31, 31, 0.7);
+  --delete-btn-hover: rgba(225, 31, 31, 1);
+  --edit-btn: rgba(8, 62, 166, 0.7);
+  --edit-btn-hover: rgba(31, 93, 213, 1);
+  --disable-btn: rgba(141, 125, 125, 0.63);
+  --disable-btn-hover: rgba(141, 125, 125, 1);
+  --form-bg: rgb(255, 241, 198);
+  --border: rgb(0, 0, 0);
+  --mandatory: rgba(225, 31, 31, 0.7);
+  --select: rgb(255, 255, 255);
+  --dialog-bg: rgb(238, 234, 13);
+  --dialog-bg-valid: rgba(89, 230, 60, 0.7);
+  --dialog-bg-errors: rgba(225, 31, 31, 0.7);
+}
+
+/* *****************************************************************
+    HEADER & NAVIGATION (MENU BURGER)
+***************************************************************** */
+header {
+  margin: -20px 20px 0px 20px;
+  background-image: url(./resources/images/pen.webp);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+#hamburger-menu {
+  z-index: 10;
+}
+
+#menu__toggle {
+  opacity: 0;
+}
+#menu__toggle:checked + .menu__btn > span {
+  transform: rotate(45deg);
+}
+#menu__toggle:checked + .menu__btn > span::before {
+  top: 0;
+  transform: rotate(0deg);
+}
+#menu__toggle:checked + .menu__btn > span::after {
+  top: 0;
+  transform: rotate(90deg);
+}
+#menu__toggle:checked ~ .menu__box {
+  left: 0 !important;
+}
+
+.menu__btn {
+  position: fixed;
+  top: 31px;
+  left: 20px;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  z-index: 1;
+}
+.menu__btn > span, .menu__btn > span::before, .menu__btn > span::after {
+  display: block;
+  position: absolute;
+  top: 12px;
+  width: 100%;
+  height: 2px;
+  background-color: var(--burger-btn);
+  transition-duration: 0.25s;
+}
+.menu__btn > span::before {
+  content: "";
+  top: -8px;
+}
+.menu__btn > span::after {
+  content: "";
+  top: 8px;
+}
+.menu__box {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 210px;
+  height: 100%;
+  margin: 0;
+  padding: 80px 0;
+  list-style: none;
+  background-color: var(--burger-bg);
+  box-shadow: 2px 2px 6px var(--burger-item-shadow);
+  transition-duration: 0.25s;
+}
+.menu__item {
+  display: block;
+  padding: 12px 24px;
+  color: var(--text-dark);
+  font-family: "dyslexic";
+  font-size: 20px;
+  font-weight: 600;
+  text-decoration: none;
+  transition-duration: 0.25s;
+}
+.menu__item:hover {
+  background-color: var(--burger-item);
+  color: var(--text-light);
+}
+
+h1 {
+  text-align: right;
+  text-transform: uppercase;
+  font-style: italic;
+  margin-top: 35px;
+}
+
+ul {
+  padding: 0;
+}
+
+li {
+  list-style-type: none;
+  padding: 0 auto;
+}
+
+/* *****************************************************************
+    GENERALE
+***************************************************************** */
+body {
+  margin: 0 auto;
+  max-width: 100%;
+  min-height: 100vh;
+  font-family: "dyslexic";
+  text-align: center;
+  background-image: url(./resources/images/paper.webp);
+  background-size: 100%;
+  border-width: 0px 15px;
+  border-style: solid;
+  border-color: var(--border-color);
+}
+
+.login, .register, .sectionList {
+  display: flex;
+  flex-direction: column;
+}
+
+h3, h4 {
+  margin: 10px auto;
+}
+
+a {
+  margin-top: 10px;
+  color: var(--burger-item);
+}
+
+.hidden {
+  display: none;
+}
+
+/* *****************************************************************
+    DIALOG
+***************************************************************** */
+dialog {
+  position: sticky;
+  width: 50%;
+  height: auto;
+  border-radius: 10px;
+  background: var(--dialog-bg);
+}
+dialog.valid {
+  background: var(--dialog-bg-valid);
+}
+dialog.register {
+  padding: 10px 0px;
+}
+dialog.register > h2 {
+  margin: 0px auto;
+}
+dialog.login > h2 {
+  margin: -10px auto;
+}
+dialog.errors {
+  background: var(--dialog-bg-errors);
+}
+dialog.errors > h2 {
+  margin: 0px auto;
+  padding-top: 0px;
+}
+dialog.errors > div {
+  padding-top: 20px;
+}
+dialog.errors_fields {
+  background: var(--dialog-bg-errors);
+}
+dialog.errors_fields > h2 {
+  margin-top: 5px;
+}
+
+/* *****************************************************************
+    LISTE & CARTE
+***************************************************************** */
+.list {
+  background: var(--list-bg);
+  max-width: 450px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0px 0px 10px 2px rgba(210, 194, 42, 0.6);
+  border-radius: 20px;
+  margin: 20px auto;
+  padding: 5px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+small {
+  display: block;
+  margin: 0 auto;
+}
+
+.card {
+  background: var(--card-bg);
+  max-width: 700px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0px 0px 10px 2px rgba(210, 194, 42, 0.6);
+  border-radius: 20px;
+  margin: 20px auto;
+  padding: 5px 0;
+  cursor: pointer;
+}
+.card.flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.star {
+  font-size: 25px;
+  color: rgb(238, 224, 19);
+}
+
+.sectionList {
+  width: 80%;
+  margin: 0 auto;
+}
+
+/* *****************************************************************
+    BOUTONS
+***************************************************************** */
+.btn {
+  border: none;
+  border-radius: 10px;
+  color: var(--text-dark);
+  padding: 5px 10px;
+  text-decoration: none;
+  font-size: 16px;
+  margin: 10px auto;
+  font-family: "dyslexic";
+  cursor: pointer;
+}
+.btn:disabled {
+  cursor: not-allowed;
+}
+.btn.view {
+  background-color: var(--view-btn);
+  color: var(--text-dark);
+}
+.btn.view::before {
+  content: "👁";
+}
+.btn.view:hover {
+  background-color: var(--view-btn-hover);
+  color: var(--text-light);
+}
+.btn.way {
+  background-color: var(--way-btn);
+  margin-right: 5px;
+}
+.btn.way:hover {
+  background-color: var(--way-btn-hover);
+  color: var(--text-dark);
+}
+.btn.valid {
+  background-color: var(--valid-btn);
+  color: var(--text-dark);
+}
+.btn.valid:hover {
+  background-color: var(--valid-btn-hover);
+  color: var(--text-light);
+}
+.btn.delete {
+  background-color: var(--delete-btn);
+  color: var(--text-light);
+}
+.btn.delete::before {
+  content: "🗑";
+}
+.btn.delete:hover {
+  background-color: var(--delete-btn-hover);
+  color: var(--text-light);
+}
+.btn.edit {
+  background-color: var(--edit-btn);
+  color: var(--text-light);
+}
+.btn.edit::before {
+  content: "🖉";
+}
+.btn.edit:hover {
+  background-color: var(--edit-btn-hover);
+  color: var(--text-light);
+}
+.btn.cancel {
+  background-color: var(--cancel-btn);
+}
+.btn.cancel:hover {
+  background-color: var(--cancel-btn-hover);
+  color: var(--text-dark);
+}
+.btn.disable {
+  background-color: var(--disable-btn);
+}
+.btn.disable:hover {
+  background-color: var(--disable-btn-hover);
+  color: var(--text-dark);
+}
+.btn.disableUpdate {
+  background-color: var(--disable-btn);
+}
+.btn.disableUpdate::before {
+  content: "🖉";
+}
+.btn.disableUpdate:hover {
+  background-color: var(--disable-btn-hover);
+  color: var(--text-dark);
+}
+.btn.disableDelete {
+  background-color: var(--disable-btn);
+}
+.btn.disableDelete::before {
+  content: "🗑";
+}
+.btn.disableDelete:hover {
+  background-color: var(--disable-btn-hover);
+  color: var(--text-dark);
+}
+
+/* *****************************************************************
+    FORMULAIRES
+***************************************************************** */
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: var(--form-bg);
+  width: 75%;
+  padding: 10px 20px;
+  margin: 0px auto;
+  border-radius: 8px;
+  box-shadow: 0 0 10px var(--border);
+}
+form > div {
+  margin: 10px 0;
+}
+
+.label-radio-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+label {
+  font-weight: bold;
+  margin: 10px auto;
+}
+
+select,
+input[type=text],
+input[type=password],
+input[type=email],
+input[type=number],
+input[type=submit] {
+  width: 100%;
+  text-align: center;
+  font-family: "dyslexic";
+  margin: 10px 0;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+}
+
+select {
+  background: var(--select);
+}
+
+input[type=submit] {
+  background-color: var(--valid-btn);
+  color: var(--text-light);
+  cursor: pointer;
+}
+input[type=submit]:hover {
+  background-color: var(--valid-btn-hover);
+}
+
+.mandatory {
+  color: var(--mandatory);
+  font-size: 16px;
+}
+
+/* *****************************************************************
+    TABLEAU
+***************************************************************** */
+.userList {
+  width: 100%;
+  table-layout: fixed;
+  font-size: 80%;
+  text-align: center;
+  border-collapse: collapse;
+  margin: 20px auto;
+}
+.userList > thead > tr {
+  height: 50px;
+}
+.userList > tbody > tr:nth-child(odd) {
+  background-color: #aaa;
+}
+.userList > tbody td {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.userList > tbody td.profil_email {
+  width: 60%;
+}
+
+/* *****************************************************************
+    MEDIA
+***************************************************************** */
+@media screen and (min-width: 500px) {
+  header {
+    background-size: 433px;
+  }
+}
+@media screen and (min-width: 594px) {
+  .list {
+    width: 579px;
+  }
+}
+@media screen and (max-width: 619px) {
+  .profil_name {
+    display: none;
+  }
+  .profil_firstname {
+    display: none;
+  }
+  .profil_role {
+    display: none;
+  }
+  .list {
+    width: 95%;
+  }
+}
+@media screen and (min-width: 810px) {
+  body {
+    background-size: 609px;
+    background-repeat: repeat-y;
+    background-position: center;
+    width: 590px;
+  }
+  .profil_role {
+    display: none;
+  }
+}
+@media screen and (min-width: 1025px) {
+  body {
+    min-height: 120vh;
+  }
+  .menu__btn {
+    display: none;
+  }
+  .menu__box {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0%;
+    width: 203px;
+    height: 100%;
+    margin: 0;
+    padding: 80px 0;
+    list-style: none;
+    background-color: var(--burger-bg);
+    box-shadow: 2px 2px 6px var(--burger-item-shadow);
+    transition-duration: 0.25s;
+  }
+  .menu__item {
+    display: block;
+    padding: 12px 24px;
+    color: var(--text-dark);
+    font-family: "dyslexic";
+    font-size: 20px;
+    font-weight: 600;
+    text-decoration: none;
+    transition-duration: 0.25s;
+  }
+  .menu__item:hover {
+    background-color: var(--burger-item);
+    color: var(--text-light);
+  }
+  #allListsWrapper, #listsWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px;
+  }
+  .sectionList {
+    display: flex;
+    align-items: center;
+  }
+  .sectionList > article {
+    width: 600px;
+  }
+  .list {
+    width: 45%;
+    margin: 10px;
+    border-radius: 15px;
+  }
+}
+
+/*# sourceMappingURL=style.css.map */

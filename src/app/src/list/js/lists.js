@@ -10,7 +10,9 @@ import {
     configPath,
     redirect,
     dialog,
-    notAllowedRedirection
+    notAllowedRedirection,
+    scroll,
+    validate
 } from "../../services/utils.js";
 import { displayFormList } from "./form_list.js";
 
@@ -21,6 +23,8 @@ notAllowedRedirection();
  */
 function lists() {
     const createListBtn = document.querySelector("#listCreater");
+    createListBtn.title = "Créer une nouvelle liste";
+
     // Affiche le formulaire de création de liste lorsqu'on clique sur le bouton "Créer une nouvelle liste".
     createListBtn.addEventListener("click", function(){
         if (createListBtn.value === "newList") {
@@ -30,6 +34,9 @@ function lists() {
             displayFormList(divList)
             titleFormList.innerText = "Formulaire de création de la liste";
             createListBtn.disabled = true;
+            createListBtn.classList.remove("way");
+            createListBtn.classList.add("disable");
+
             const listForm = document.querySelector("#listFormSection");
             const formList = document.querySelector("#formList");
 
@@ -38,23 +45,45 @@ function lists() {
                 e.preventDefault();
                 listForm.remove();
                 createListBtn.disabled = false;
+                createListBtn.classList.remove("disable");
+                createListBtn.classList.add("way");
             })
 
             // Gère la soumission du formulaire de création de liste.
             CSRFToken(formList.id);
             formList.addEventListener("submit", function(e){
                 e.preventDefault();
+
+                // Validation de pattern du formulaire
+                const inputTitle = document.querySelector("#titleList");
+                const inputDescription = document.querySelector("#descriptionList");
+                const selectType = document.querySelector("#typeList")
+                inputTitle.addEventListener("invalid", function(e) {
+                    validate(e.target)
+                });
+                inputDescription.addEventListener("invalid", function(e) {
+                    validate(e.target)
+                });
+                selectType.addEventListener("invalid", function(e) {
+                    validate(e.target)
+                });
+
+                // Remonte en haut de page après action
+                scroll();
                 fetchCreateList(formList)
                 .then(response => {
                     localStorage.removeItem("csrfToken");
 
                     if (response.status === "createList") {
                         dialog({title: "Et une liste de créée, une !", content:"aux cartes maintenant !"});
+                        const dialogMsg = document.querySelector("dialog");
+                        dialogMsg.classList.add("valid");
                         redirect(`${configPath.basePath}/list/pages/lists.html`);
-
                     }
                     if (response.status === "errors") {
-                        dialog({title: "Erreurs", content: response.errors, hasTimeOut: true});
+                        dialog({title: "Erreurs", content: response.errors});
+                        const dialogMsg = document.querySelector("dialog");
+                        dialogMsg.classList.add("errors");
                         redirect(`${configPath.basePath}/list/pages/lists.html`);
                     };
                 })
@@ -71,54 +100,61 @@ function lists() {
 
             for (const index in data) {
                 const objectList = data[index]
-                const profilList = document.createElement("div");
-                profilList.id = `profilList-${objectList.id}`;
-                profilList.classList.add("profilList");
+                const articleList = document.createElement("article");
+                articleList.id = `profilList-${objectList.id}`;
+                articleList.classList.add("list");
 
-                const contentList = document.createElement("div");
-                contentList.id = `contentList-${objectList.id}`;
-                contentList.classList.add("contentList");
+                const sectionList = document.createElement("section");
 
-                const titleH3 = document.createElement("h3");
-                const list = document.createElement("ul");
+                const typeH3 = document.createElement("h3");
+                const titleH4 = document.createElement("h4");
 
                 const deleteBtnLists = document.createElement("button");
                 deleteBtnLists.id = `deleteProfilList-${objectList.id}`;
+                deleteBtnLists.title = "Supprimer la liste";
                 deleteBtnLists.name = "deleteProfilList";
+                deleteBtnLists.title = "Supprimer la liste";
                 deleteBtnLists.type = "submit";
                 deleteBtnLists.value = `${objectList.id}`;
-                deleteBtnLists.textContent = "Supprimer";
-                deleteBtnLists.classList.add("deleteProfilList");
+                deleteBtnLists.textContent = "";
+                deleteBtnLists.classList.add("btn");
+                deleteBtnLists.classList.add("delete");
 
                 for (const key in objectList) {
                     const value = objectList[key];
-                    const item = document.createElement("li");
+                    const text = document.createElement("p");
 
-                    if (key === "type") {
-                        titleH3.innerText = `${objectList.type} - ${objectList.title}`;
+                    if (key === "title") {
+                        titleH4.innerText = `${objectList.title}`;
+                    } else if (key === "type") {
+                        typeH3.innerText = `${objectList.type}`;
                     }
-                    if (["status", "id", "userId", "type", "title", "cards"].includes(`${key}`)) {
-                        continue;
-                    }
+
                     if (key === "user" && typeof(value) === "object") {
-                        item.innerText = `Par ${objectList[key].login}.`;
+                        const small = document.createElement("small");
+                        small.innerText = `Par ${objectList[key].login}.`;
+                        sectionList.appendChild(small);
                     }
                     else {
-                        if (key === "createdAt") {
-                            item.innerText = `Créée le ${objectList[key]}`;
-                        } else if (key === "updatedAt")  {
-                            item.innerText = `Modifiée le ${objectList[key]}`;
+                        if (key === "updatedAt") {
+                            const small = document.createElement("small");
+                            small.innerText = `Dernière modification le ${objectList[key]}`;
+                            sectionList.appendChild(small);
                         } else {
-                            item.innerText = `${objectList[key]}`;
                         }
                     }
 
-                    contentList.appendChild(titleH3);
-                    list.appendChild(item);
-                    contentList.appendChild(list);
-                    profilList.appendChild(contentList);
-                    profilList.appendChild(deleteBtnLists);
-                    listWrapper.append(profilList);
+                    // Exclut certains éléments de la liste (id, userId, type, title, cards, createdAd)
+                    if (["status", "id", "userId", "user", "type", "title", "cards", "createdAt", "updatedAt"].includes(`${key}`)) {
+                        continue;
+                    }
+                    text.innerText = `${objectList[key]}`;
+                    listWrapper.append(articleList);
+                    articleList.appendChild(typeH3);
+                    sectionList.appendChild(titleH4);
+                    articleList.appendChild(sectionList);
+                    sectionList.appendChild(text);
+                    articleList.appendChild(deleteBtnLists);
                 }
 
                 // Gestion de la suppression de liste
@@ -130,18 +166,19 @@ function lists() {
                         console.warn("pas touche");
                         return;
                     } else if (confirm('Voulez-vous vraiment vous supprimer la liste ?') === true) {
+                        scroll();
                         fetchDeleteList(objectList.id)
                         .then(() => {
-                            dialog({title: "Suppression de la liste",
-                            content: `<p>Votre liste a bien été supprimée.</p>`
-                            });
+                            dialog({title: "Suppression de la liste", content: `<p>Votre liste a bien été supprimée.</p>`});
+                            const dialogMsg = document.querySelector("dialog");
+                            dialogMsg.classList.add("valid");
                             redirect(`${configPath.basePath}/list/pages/lists.html`);
                         });
                     }
                 })
 
                 // Redirige vers la page de détails de la liste en cliquant sur la liste.
-                contentList.addEventListener("click", function(){
+                sectionList.addEventListener("click", function(){
                     if (objectList.type === "TodoList" && objectList.user.id !== JSON.parse(localStorage.getItem("user")).id) {
                         return false;
                     }

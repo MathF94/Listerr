@@ -155,8 +155,8 @@ class Router
 
                 case 'update_checked':
                     if ($this->isAllowedMethod('POST')) {
-                        $card = new CardController($headers['Authorization']);
-                        echo $card->updateChecked($_POST['id'], $_POST['checked'], $headers['X-CSRFToken']); // update
+                        $card = new CardController();
+                        echo $card->updateChecked($_POST['id'], $_POST['checked']); // update
                     }
                     break;
 
