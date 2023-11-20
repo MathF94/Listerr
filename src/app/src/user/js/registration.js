@@ -9,6 +9,12 @@ import { configPath, redirect, dialog } from "../../services/utils.js";
  * la validation des données et la redirection de l'utilisateur.
  */
 function registration() {
+    const registerBtn = document.querySelector("#registerBtn");
+    registerBtn.title = "Valider l'inscription";
+
+    const noRegisterYet = document.querySelector("#noRegisterYet");
+    noRegisterYet.title = "Redirection vers la page de connexion";
+    
     // Ajoute un gestionnaire d'événements pour soumettre le formulaire d'inscription.
     registerForm.addEventListener("submit", function(e){
         e.preventDefault();
@@ -43,7 +49,7 @@ function registration() {
             if (response.status === "createUser") {
                 // En cas de succès, affiche un message de bienvenue et redirige l'utilisateur vers la page de connexion.
                 const name = e.target.name.value;
-                const firstname = e.target.firstname.value; 
+                const firstname = e.target.firstname.value;
                 const login = e.target.login.value;
                 const email = e.target.email.value;
                 dialog({title: `<p>Bienvenue !</p>`,

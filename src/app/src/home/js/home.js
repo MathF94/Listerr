@@ -25,6 +25,9 @@ function readAllLists() {
                 content: "Vous allez être redirigé(e) vers la page de connexion"
             });
             listBtn.disabled = true;
+            listBtn.classList.remove("way");
+            listBtn.classList.add("disable");
+            
             const dialogMsg = document.querySelector("dialog");
             dialogMsg.classList.add("home");
             redirect(`${configPath.basePath}/user/pages/login.html`);

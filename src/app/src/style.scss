@@ -13,13 +13,12 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     COULEURS PRINCIPALES
 ***************************************************************** */
 :root {
-    --primary-bg: rgb(217, 199, 32)
     --text-dark: rgb(51, 51, 51);
     --text-light: rgb(221, 221, 221);
     --border-color: rgb(88, 53, 9);
 
     // Burger
-    --burger-bg: rgba(255, 241, 198, 0.85);
+    --burger-bg: rgb(255, 241, 198);
     --burger-item: rgb(121, 2, 2);
     --burger-item-shadow: rgba(121, 2, 2, 0.4);
     --burger-btn: rgb(51, 51, 51);
@@ -61,7 +60,7 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
 ***************************************************************** */
 header {
     margin: -20px 20px 0px 20px;
-    background-image: url(./resources/images/pen.png);
+    background-image: url(./resources/images/pen.webp);
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
@@ -183,7 +182,7 @@ body {
     min-height: 100vh;
     font-family: $font-family-name;
     text-align: center;
-    background-image: url(./resources/images/paper.JPG);
+    background-image: url(./resources/images/paper.webp);
     background-size: 100%;
     border-width: 0px 15px;
     border-style: solid;
@@ -539,6 +538,9 @@ input[type="submit"] {
 }
 
 @media screen and (min-width: 1025px) {
+    body {
+        min-height: 120vh;
+    }
     .menu {
         &__btn {
             display: none;
@@ -576,6 +578,8 @@ input[type="submit"] {
     #allListsWrapper, #listsWrapper {
         display: flex;
         flex-wrap: wrap;
+        justify-content: center;
+        margin: 20px;
     }
     .sectionList {
         display: flex;

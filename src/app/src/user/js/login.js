@@ -9,10 +9,10 @@ import { configPath, redirect, dialog, validate } from "../../services/utils.js"
  */
 function login() {
     const loginBtn = document.querySelector("#loginBtn");
-    loginBtn.title = "Validation pour la connexion";
+    loginBtn.title = "Valider la connexion";
 
     const noRegisterYet = document.querySelector("#noRegisterYet");
-    noRegisterYet.title = "Pas encore de compte ?";
+    noRegisterYet.title = "Redirection pour création de compte";
 
     // Validation de pattern du formulaire
     const inputLogin = document.querySelector("#login");
@@ -30,7 +30,7 @@ function login() {
         fetchLogin(loginForm)
         .then(response => {
             localStorage.removeItem("csrfToken");
-
+            console.log(response.status);
             if (response.status === "loginUser") {
                 // Ces deux informations permettront de vérifier si la session utilisateur est active
                 //                                   de vérifier si la déconnexion est réalisable (Cf. logout.js).
