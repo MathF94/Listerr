@@ -12,9 +12,9 @@ function registration() {
     const registerBtn = document.querySelector("#registerBtn");
     registerBtn.title = "Valider l'inscription";
 
-    const noRegisterYet = document.querySelector("#noRegisterYet");
-    noRegisterYet.title = "Redirection vers la page de connexion";
-    
+    const alreadyRegistered = document.querySelector("#alreadyRegistered");
+    alreadyRegistered.title = "Redirection vers la page de connexion";
+
     // Ajoute un gestionnaire d'événements pour soumettre le formulaire d'inscription.
     registerForm.addEventListener("submit", function(e){
         e.preventDefault();
