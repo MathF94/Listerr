@@ -45,13 +45,13 @@ function registration() {
         fetchRegister(registerForm)
         .then(response => {
             localStorage.removeItem("csrfToken");
-
             if (response.status === "createUser") {
                 // En cas de succès, affiche un message de bienvenue et redirige l'utilisateur vers la page de connexion.
                 const name = e.target.name.value;
                 const firstname = e.target.firstname.value;
                 const login = e.target.login.value;
                 const email = e.target.email.value;
+                console.log(JSON.parse(localStorage.user).role === 'Admin');
                 dialog({title: `<p>Bienvenue !</p>`,
                         content: `<p>Bonjour ${firstname} ${name}.</p>
                             <p>Votre compte lié à l'adresse ${email} est maintenant créé sous le login ${login}.</p>
@@ -61,7 +61,12 @@ function registration() {
                 dialogMsg.classList.add("valid");
                 dialogMsg.classList.add("register");
                 registerForm.classList.add("hidden");
-                redirect(`${configPath.basePath}/user/pages/login.html`)
+
+                if(localStorage.user && JSON.parse(localStorage.user).role === 'Admin') {
+                    redirect(`${configPath.basePath}/admin/pages/profils.html`);
+                } else {
+                    redirect(`${configPath.basePath}/user/pages/login.html`)
+                }
             }
 
             if (response.status === "errors") {

@@ -161,7 +161,7 @@ h1 {
     text-align: right;
     text-transform: uppercase;
     font-style: italic;
-    margin-top: 35px;
+    margin-top: 40px;
 }
 
 ul {
@@ -196,6 +196,7 @@ body {
 
 h3, h4 {
     margin: 10px auto;
+    padding: 5px;
 }
 
 a {
@@ -206,6 +207,7 @@ a {
 .hidden {
     display: none;
 }
+
 /* *****************************************************************
     DIALOG
 ***************************************************************** */
@@ -248,7 +250,7 @@ dialog {
 }
 
 /* *****************************************************************
-    LISTE & CARTE
+    UTILISATEURS / ADMIN, LISTE & CARTE
 ***************************************************************** */
 .list {
     background: var(--list-bg);
@@ -291,6 +293,15 @@ small {
     color: rgb(238, 224, 19);
 }
 
+.adminSection,
+.userFormSection {
+    margin-top: 35px;
+}
+
+.createUser {
+    margin-top: 28px;
+}
+
 .sectionList {
     width: 80%;
     margin: 0 auto;
@@ -306,7 +317,7 @@ small {
     padding: 5px 10px;
     text-decoration: none;
     font-size: 16px;
-    margin: 10px auto;
+    margin: 5px auto;
     font-family: $font-family-name;
     cursor: pointer;
     &:disabled {
@@ -321,6 +332,9 @@ small {
         &:hover {
             background-color: var(--view-btn-hover);
             color: var(--text-light);
+        }
+        &.admin {
+            border-radius: 10px 0px 0px 10px;
         }
     }
     &.way {
@@ -349,9 +363,16 @@ small {
             background-color: var(--delete-btn-hover);
             color: var(--text-light);
         }
+        &.admin {
+            border-radius: 0px 10px 10px 0px;
+        }
+        &.listBtn {
+            border-radius: 0px 10px 10px 0px;
+        }
     }
     &.edit {
         background-color: var(--edit-btn);
+
         color: var(--text-light);
         &::before {
             content: "🖉";
@@ -360,6 +381,12 @@ small {
             background-color: var(--edit-btn-hover);
             color: var(--text-light);
         }
+        &.admin {
+            border-radius: 0px;
+        }
+        &.listBtn {
+            border-radius: 10px 0px 0px 10px;
+        }
     }
     &.cancel {
         background-color: var(--cancel-btn);
@@ -367,6 +394,7 @@ small {
             background-color: var(--cancel-btn-hover);
             color: var(--text-dark);
         }
+
     }
     &.disable {
         background-color: var(--disable-btn);
@@ -375,6 +403,7 @@ small {
             color: var(--text-dark);
         }
     }
+
     &.disableUpdate {
         background-color: var(--disable-btn);
         &::before {
@@ -383,6 +412,9 @@ small {
         &:hover {
             background-color: var(--disable-btn-hover);
             color: var(--text-dark);
+        }
+        &.listBtn {
+            border-radius: 10px 0px 0px 10px;
         }
     }
     &.disableDelete {
@@ -394,8 +426,12 @@ small {
             background-color: var(--disable-btn-hover);
             color: var(--text-dark);
         }
+        &.listBtn {
+            border-radius: 0px 10px 10px 0px;
+        }
     }
 }
+
 
 /* *****************************************************************
     FORMULAIRES
@@ -413,6 +449,10 @@ form {
     &> div {
         margin: 10px 0;
     }
+}
+
+.formUpdateUser {
+    margin-top: 32px;
 }
 
 .label-radio-container {
@@ -440,11 +480,39 @@ input[type="submit"] {
     box-sizing: border-box;
     border: 1px solid var(--border);
     border-radius: 5px;
+    &:focus {
+        outline: none;
+    }
+    &:focus-visible {
+        outline: none;
+    }
+}
+
+.fieldIcon {
+    background: white;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    display: flex;
+    &> input {
+        border: none;
+        margin: 0;
+        border-radius: 5px 0 0 5px;
+    }
+    &> .icon {
+        display: inline-block;
+        &::before {
+            content: "👁"
+        }
+    }
 }
 
 select {
     background: var(--select);
 }
+
 input[type="submit"] {
     background-color: var(--valid-btn);
     color: var(--text-light);
@@ -459,6 +527,7 @@ input[type="submit"] {
     font-size:16px;
 }
 
+
 /* *****************************************************************
     TABLEAU
 ***************************************************************** */
@@ -468,10 +537,10 @@ input[type="submit"] {
     font-size: 80%;
     text-align: center;
     border-collapse: collapse;
-    margin: 20px auto;
+    margin: 30px auto;
     & > thead {
         & > tr {
-            height: 50px;
+            height: 30px;
         }
     }
     & > tbody {
@@ -486,7 +555,6 @@ input[type="submit"] {
             &.profil_email {
                 width: 60%;
             }
-
         }
     }
 }
@@ -541,6 +609,7 @@ input[type="submit"] {
     body {
         min-height: 120vh;
     }
+
     .menu {
         &__btn {
             display: none;
@@ -575,12 +644,13 @@ input[type="submit"] {
         }
     }
 
-    #allListsWrapper, #listsWrapper {
+    #allListsWrapper, .listsWrapper {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
         margin: 20px;
     }
+
     .sectionList {
         display: flex;
         align-items: center;
@@ -588,6 +658,7 @@ input[type="submit"] {
             width: 600px;
         }
     }
+
     .list {
         width: 45%;
         margin: 10px;

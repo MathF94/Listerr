@@ -134,7 +134,7 @@ h1 {
   text-align: right;
   text-transform: uppercase;
   font-style: italic;
-  margin-top: 35px;
+  margin-top: 40px;
 }
 
 ul {
@@ -169,6 +169,7 @@ body {
 
 h3, h4 {
   margin: 10px auto;
+  padding: 5px;
 }
 
 a {
@@ -220,7 +221,7 @@ dialog.errors_fields > h2 {
 }
 
 /* *****************************************************************
-    LISTE & CARTE
+    UTILISATEURS / ADMIN, LISTE & CARTE
 ***************************************************************** */
 .list {
   background: var(--list-bg);
@@ -263,6 +264,15 @@ small {
   color: rgb(238, 224, 19);
 }
 
+.adminSection,
+.userFormSection {
+  margin-top: 35px;
+}
+
+.createUser {
+  margin-top: 28px;
+}
+
 .sectionList {
   width: 80%;
   margin: 0 auto;
@@ -278,7 +288,7 @@ small {
   padding: 5px 10px;
   text-decoration: none;
   font-size: 16px;
-  margin: 10px auto;
+  margin: 5px auto;
   font-family: "dyslexic";
   cursor: pointer;
 }
@@ -295,6 +305,9 @@ small {
 .btn.view:hover {
   background-color: var(--view-btn-hover);
   color: var(--text-light);
+}
+.btn.view.admin {
+  border-radius: 10px 0px 0px 10px;
 }
 .btn.way {
   background-color: var(--way-btn);
@@ -323,6 +336,12 @@ small {
   background-color: var(--delete-btn-hover);
   color: var(--text-light);
 }
+.btn.delete.admin {
+  border-radius: 0px 10px 10px 0px;
+}
+.btn.delete.listBtn {
+  border-radius: 0px 10px 10px 0px;
+}
 .btn.edit {
   background-color: var(--edit-btn);
   color: var(--text-light);
@@ -333,6 +352,12 @@ small {
 .btn.edit:hover {
   background-color: var(--edit-btn-hover);
   color: var(--text-light);
+}
+.btn.edit.admin {
+  border-radius: 0px;
+}
+.btn.edit.listBtn {
+  border-radius: 10px 0px 0px 10px;
 }
 .btn.cancel {
   background-color: var(--cancel-btn);
@@ -358,6 +383,9 @@ small {
   background-color: var(--disable-btn-hover);
   color: var(--text-dark);
 }
+.btn.disableUpdate.listBtn {
+  border-radius: 10px 0px 0px 10px;
+}
 .btn.disableDelete {
   background-color: var(--disable-btn);
 }
@@ -367,6 +395,9 @@ small {
 .btn.disableDelete:hover {
   background-color: var(--disable-btn-hover);
   color: var(--text-dark);
+}
+.btn.disableDelete.listBtn {
+  border-radius: 0px 10px 10px 0px;
 }
 
 /* *****************************************************************
@@ -385,6 +416,10 @@ form {
 }
 form > div {
   margin: 10px 0;
+}
+
+.formUpdateUser {
+  margin-top: 32px;
 }
 
 .label-radio-container {
@@ -412,6 +447,43 @@ input[type=submit] {
   box-sizing: border-box;
   border: 1px solid var(--border);
   border-radius: 5px;
+}
+select:focus,
+input[type=text]:focus,
+input[type=password]:focus,
+input[type=email]:focus,
+input[type=number]:focus,
+input[type=submit]:focus {
+  outline: none;
+}
+select:focus-visible,
+input[type=text]:focus-visible,
+input[type=password]:focus-visible,
+input[type=email]:focus-visible,
+input[type=number]:focus-visible,
+input[type=submit]:focus-visible {
+  outline: none;
+}
+
+.fieldIcon {
+  background: white;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  display: flex;
+}
+.fieldIcon > input {
+  border: none;
+  margin: 0;
+  border-radius: 5px 0 0 5px;
+}
+.fieldIcon > .icon {
+  display: inline-block;
+}
+.fieldIcon > .icon::before {
+  content: "👁";
 }
 
 select {
@@ -441,10 +513,10 @@ input[type=submit]:hover {
   font-size: 80%;
   text-align: center;
   border-collapse: collapse;
-  margin: 20px auto;
+  margin: 30px auto;
 }
 .userList > thead > tr {
-  height: 50px;
+  height: 30px;
 }
 .userList > tbody > tr:nth-child(odd) {
   background-color: #aaa;
@@ -530,7 +602,7 @@ input[type=submit]:hover {
     background-color: var(--burger-item);
     color: var(--text-light);
   }
-  #allListsWrapper, #listsWrapper {
+  #allListsWrapper, .listsWrapper {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;

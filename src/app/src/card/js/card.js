@@ -205,6 +205,7 @@ function card(canCreateCard) {
                 updateBtnCard.textContent = "";
                 updateBtnCard.classList.add("btn");
                 updateBtnCard.classList.add("edit");
+                updateBtnCard.classList.add("listBtn");
 
                 const deleteBtnCard = document.createElement("button");
                 deleteBtnCard.id = `deleteCard-${objectCard.id}`;
@@ -215,6 +216,7 @@ function card(canCreateCard) {
                 deleteBtnCard.textContent = "";
                 deleteBtnCard.classList.add("btn");
                 deleteBtnCard.classList.add("delete");
+                deleteBtnCard.classList.add("listBtn");
 
                 const priorityValue = objectCard.priority;
 
