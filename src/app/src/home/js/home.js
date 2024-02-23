@@ -27,7 +27,7 @@ function readAllLists() {
             listBtn.disabled = true;
             listBtn.classList.remove("way");
             listBtn.classList.add("disable");
-            
+
             const dialogMsg = document.querySelector("dialog");
             dialogMsg.classList.add("home");
             redirect(`${configPath.basePath}/user/pages/login.html`);
@@ -63,6 +63,7 @@ function readAllLists() {
 
             for (const index in data) {
                 const object = data[index];
+
                 const articleList = document.createElement("article");
                 articleList.id = `homeList-${object.id}`;
                 articleList.classList.add("list");
@@ -71,38 +72,41 @@ function readAllLists() {
                 const typeH3 = document.createElement("h3");
                 const titleH4 = document.createElement("h4");
 
-                for (const key in object) {
-                    const value = object[key];
-                    const text = document.createElement("p");
+                // N'affiche que les WishList
+                if(object.type ==="WishList"){
+                    for (const key in object) {
+                        const value = object[key];
+                        const text = document.createElement("p");
 
-                    if (key === "title") {
-                        titleH4.innerText = `${object.title}`;
-                        sectionList.appendChild(titleH4);
-                    } else if (key === "type") {
-                        typeH3.innerText = `${object.type}`;
-                    }
-
-                    if (key === "user" && typeof value === "object") {
-                        const small = document.createElement("small");
-                        small.innerText = `Par ${object[key].login}`;
-                        sectionList.appendChild(small);
-                    } else {
-                        if (key === "updatedAt") {
-                            const small = document.createElement("small");
-                            small.innerText = `Dernière modification le ${object[key]}`;
-                            sectionList.appendChild(small);
+                        if (key === "title") {
+                            titleH4.innerText = `${object.title}`;
+                            sectionList.appendChild(titleH4);
+                        } else if (key === "type") {
+                            typeH3.innerText = `${object.type}`;
                         }
-                    }
 
-                    if (["status", "id", "userId", "user", "type", "title", "cards", "createdAt", "updatedAt"].includes(`${key}`)) {
-                        continue;
+                        if (key === "user" && typeof value === "object") {
+                            const small = document.createElement("small");
+                            small.innerText = `Par ${object[key].login}`;
+                            sectionList.appendChild(small);
+                        } else {
+                            if (key === "updatedAt") {
+                                const small = document.createElement("small");
+                                small.innerText = `Dernière modification le ${object[key]}`;
+                                sectionList.appendChild(small);
+                            }
+                        }
+
+                        if (["status", "id", "userId", "user", "type", "title", "cards", "createdAt", "updatedAt"].includes(`${key}`)) {
+                            continue;
+                        }
+                        text.innerText = `${object[key]}`;
+                        titleLists.after(allListWrapper);
+                        allListWrapper.appendChild(articleList);
+                        articleList.appendChild(typeH3);
+                        articleList.appendChild(sectionList);
+                        sectionList.appendChild(text);
                     }
-                    text.innerText = `${object[key]}`;
-                    titleLists.after(allListWrapper);
-                    allListWrapper.appendChild(articleList);
-                    articleList.appendChild(typeH3);
-                    articleList.appendChild(sectionList);
-                    sectionList.appendChild(text);
                 }
 
                 articleList.addEventListener("click", function () {

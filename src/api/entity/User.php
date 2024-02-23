@@ -26,12 +26,12 @@ class User
     /**
      * Définit si l'utilisateur est un administrateur en fonction de la valeur booléenne fournie.
      *
-     * @param bool $value - Valeur booléenne indiquant si l'utilisateur est administrateur.
+     * @param int $value - Valeur numérique indiquant si l'utilisateur est administrateur.
      * @return User - L'objet utilisateur actuel pour permettre les appels en chaîne.
      */
-    public function setIsAdmin(bool $value): User
+    public function setIsAdmin(int $value): User
     {
-        $this->isAdmin = (int)$value === self::ROLE_ADMIN;
+        $this->isAdmin = $value === self::ROLE_ADMIN;
         return $this;
     }
 

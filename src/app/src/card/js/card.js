@@ -164,6 +164,13 @@ function card(canCreateCard) {
             cardArticleContent.id = "cardArticleContent";
             cardArticleContent.classList.add("list");
 
+            if(response.data.type === "WishList") {
+                cardArticleContent.classList.add("wish");
+            }
+            if(response.data.type === "TodoList") {
+                cardArticleContent.classList.add("todo");
+            }
+
             const titleCards = document.createElement("h3");
             titleCards.innerText = "Plus en détails";
 
@@ -205,6 +212,7 @@ function card(canCreateCard) {
                 updateBtnCard.textContent = "";
                 updateBtnCard.classList.add("btn");
                 updateBtnCard.classList.add("edit");
+                updateBtnCard.classList.add("listBtn");
 
                 const deleteBtnCard = document.createElement("button");
                 deleteBtnCard.id = `deleteCard-${objectCard.id}`;
@@ -215,6 +223,7 @@ function card(canCreateCard) {
                 deleteBtnCard.textContent = "";
                 deleteBtnCard.classList.add("btn");
                 deleteBtnCard.classList.add("delete");
+                deleteBtnCard.classList.add("listBtn");
 
                 const priorityValue = objectCard.priority;
 

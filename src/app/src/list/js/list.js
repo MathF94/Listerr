@@ -11,7 +11,8 @@ import {
     redirect,
     dialog,
     notAllowedRedirection,
-    validate
+    validate,
+    scroll
 } from "../../services/utils.js";
 import { displayFormList } from "./form_list.js";
 import { card } from "../../card/js/card.js";
@@ -58,6 +59,13 @@ function list() {
                 const oneList = document.querySelector("#oneList");
                 oneList.classList = "list";
 
+                if(data.type === "WishList"){
+                    oneList.classList.add("wish");
+                }
+                if(data.type === "TodoList"){
+                    oneList.classList.add("todo");
+                }
+
                 const typeList = document.createElement("h3");
                 typeList.innerText = `${data.type}`;
 
@@ -81,6 +89,7 @@ function list() {
                 updateBtnList.textContent = "";
                 updateBtnList.classList.add("btn");
                 updateBtnList.classList.add("edit");
+                updateBtnList.classList.add("listBtn");
 
                 const deleteBtnList = document.createElement("button");
                 deleteBtnList.id = `deleteProfilList-${data.id}`;
@@ -91,6 +100,7 @@ function list() {
                 deleteBtnList.textContent = "";
                 deleteBtnList.classList.add("btn");
                 deleteBtnList.classList.add("delete");
+                deleteBtnList.classList.add("listBtn");
 
                 for (const index in data) {
                     const object = data[index];

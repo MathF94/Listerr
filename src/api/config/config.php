@@ -39,7 +39,7 @@ function cors()
         'https://mathieufagot.sites.3wa.io'
     ];
 
-    if (!empty($_SERVER['HTTP_REFERER'])) {
+    if (!empty($_SERVER['REQUEST_SCHEME']) && !empty($_SERVER['HTTP_REFERER'])) {
         $domain = $_SERVER['REQUEST_SCHEME'] . '://' . parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
     }
 
