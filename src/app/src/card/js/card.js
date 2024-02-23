@@ -12,6 +12,7 @@ import { CSRFToken } from "../../services/CSRFToken.js";
 
 import {
     configPath,
+    type,
     redirect,
     dialog,
     scroll,
@@ -164,11 +165,15 @@ function card(canCreateCard) {
             cardArticleContent.id = "cardArticleContent";
             cardArticleContent.classList.add("list");
 
-            if(response.data.type === "WishList") {
-                cardArticleContent.classList.add("wish");
+            if (dataCards.length !== 0) {
+                oneList.style.borderRadius = "20px 20px 0 0";
+                oneList.style.marginBottom = "0";
+                cardArticleContent.style.borderRadius = "0 0 20px 20px";
+                cardArticleContent.style.marginTop = "0";
             }
-            if(response.data.type === "TodoList") {
-                cardArticleContent.classList.add("todo");
+
+            if (response.data.type === "WishList" || response.data.type === "TodoList"){
+                cardArticleContent.classList.add(type[response.data.type]);
             }
 
             const titleCards = document.createElement("h3");

@@ -9,6 +9,7 @@ import { CSRFToken } from "../../services/CSRFToken.js";
 import {
     configPath,
     redirect,
+    type,
     dialog,
     notAllowedRedirection,
     validate,
@@ -59,11 +60,8 @@ function list() {
                 const oneList = document.querySelector("#oneList");
                 oneList.classList = "list";
 
-                if(data.type === "WishList"){
-                    oneList.classList.add("wish");
-                }
-                if(data.type === "TodoList"){
-                    oneList.classList.add("todo");
+                if (data.type === "WishList" || data.type === "TodoList"){
+                    oneList.classList.add(type[data.type]);
                 }
 
                 const typeList = document.createElement("h3");

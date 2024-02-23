@@ -8,6 +8,13 @@ import { configPath, redirect, dialog, validate } from "../../services/utils.js"
  * Gère le processus de connexion de l'utilisateur.
  */
 function login() {
+    const item = document.querySelector("#mainNav").firstChild.childNodes
+    const connexion = document.querySelector("#connexion");
+    if(item[2].textContent === "Connexion") {
+        item[2].style.backgroundColor = "#790202";
+        connexion.style.color = "#dddddd";
+    }
+
     const loginBtn = document.querySelector("#loginBtn");
     loginBtn.title = "Valider la connexion";
 
@@ -30,7 +37,6 @@ function login() {
         fetchLogin(loginForm)
         .then(response => {
             localStorage.removeItem("csrfToken");
-            console.log(response.status);
             if (response.status === "loginUser") {
                 // Ces deux informations permettront de vérifier si la session utilisateur est active
                 //                                   de vérifier si la déconnexion est réalisable (Cf. logout.js).

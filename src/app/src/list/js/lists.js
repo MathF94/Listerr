@@ -8,6 +8,8 @@ import {
 import { CSRFToken } from "../../services/CSRFToken.js";
 import {
     configPath,
+    allowedIds,
+    type,
     redirect,
     dialog,
     notAllowedRedirection,
@@ -22,6 +24,13 @@ notAllowedRedirection();
  * Fonction principale pour gérer la page des listes.
  */
 function lists() {
+    const item = document.querySelector("#mainNav").firstChild.childNodes
+    const lists = document.querySelector("#lists");
+    if(item[3].textContent === "Vos listes") {
+        item[3].style.backgroundColor = "#790202";
+        lists.style.color = "#dddddd";
+    }
+
     const createListBtn = document.querySelector("#listCreater");
     createListBtn.title = "Créer une nouvelle liste";
 
@@ -75,7 +84,7 @@ function lists() {
                     localStorage.removeItem("csrfToken");
 
                     if (response.status === "createList") {
-                        dialog({title: "Et une liste de créée, une !", content:"aux cartes maintenant !"});
+                        dialog({title: "Et une liste de créée, une !", content:"Remplissez votre liste maintenant !"});
                         const dialogMsg = document.querySelector("dialog");
                         dialogMsg.classList.add("valid");
                         redirect(`${configPath.basePath}/list/pages/lists.html`);
@@ -100,17 +109,13 @@ function lists() {
 
             for (const index in data) {
                 const objectList = data[index]
-                console.log(objectList.type);
 
                 const articleList = document.createElement("article");
                 articleList.id = `profilList-${objectList.id}`;
                 articleList.classList.add("list");
 
-                if(objectList.type === "WishList"){
-                    articleList.classList.add("wish");
-                }
-                if(objectList.type === "TodoList"){
-                    articleList.classList.add("todo");
+                if (objectList.type === "WishList" || objectList.type === "TodoList"){
+                    articleList.classList.add(type[objectList.type]);
                 }
 
                 const sectionList = document.createElement("section");
@@ -154,7 +159,7 @@ function lists() {
                     }
 
                     // Exclut certains éléments de la liste (id, userId, type, title, cards, createdAd)
-                    if (["status", "id", "userId", "user", "type", "title", "cards", "createdAt", "updatedAt"].includes(`${key}`)) {
+                    if (allowedIds.includes(`${key}`)) {
                         continue;
                     }
                     text.innerText = `${objectList[key]}`;

@@ -73,7 +73,10 @@ function navigation(template) {
                 href: `${configPath.basePath}/home/pages/home.html`,
                 id: "home",
             },
-            { text: "Déconnexion", id: "logout" },
+            {
+                text: "Déconnexion",
+                id: "logout"
+            },
             {
                 text: "Votre profil",
                 href: `${configPath.basePath}/user/pages/profil.html`,
@@ -127,6 +130,11 @@ function navigation(template) {
             }
             list.appendChild(item);
             item.appendChild(link);
+
+            if (item.textContent === "Déconnexion") {
+                item.style.cursor = "pointer";
+            }
+
         });
         template.appendChild(wrapDiv);
     }

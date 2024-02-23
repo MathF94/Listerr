@@ -8,6 +8,8 @@ import {
 import { fetchReadAllLists } from "../../actions/actions_lists.js";
 import {
     configPath,
+    allowedIds,
+    type,
     dialog,
     redirect,
     notAllowedRedirection,
@@ -22,6 +24,13 @@ notAllowedRedirection();
  *      l'affichage des informations d'un profil utilisateur par l'admin
  */
 function read() {
+    const item = document.querySelector("#mainNav").firstChild.childNodes
+    const profil = document.querySelector("#profil");
+    if(item[2].textContent === "Votre profil") {
+        item[2].style.backgroundColor = "#790202";
+        profil.style.color = "#dddddd";
+    }
+
     // Appelle la fonction fetchRead pour obtenir les informations du profil de l'utilisateur.
     const urlParams = new URLSearchParams(document.location.search);
     const deleteBtn = document.querySelector("#delete");
@@ -220,6 +229,10 @@ function read() {
                                 articleList.id = `profilList-${objectList.id}`;
                                 articleList.classList.add("list");
 
+                                if (objectList.type === "WishList" || objectList.type === "TodoList"){
+                                    articleList.classList.add(type[objectList.type]);
+                                }
+
                                 const sectionList = document.createElement("section");
                                 const typeH3 = document.createElement("h3");
                                 const titleH4 = document.createElement("h4");
@@ -248,7 +261,7 @@ function read() {
                                     }
 
                                     // Exclut certains éléments de la liste
-                                    if (["status", "id", "userId", "user", "type", "title", "cards", "createdAt", "updatedAt"].includes(`${key}`)) {
+                                    if (allowedIds.includes(`${key}`)) {
                                         continue;
                                     }
                                     item.innerText = `${objectList[key]}`;
