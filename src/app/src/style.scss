@@ -24,7 +24,8 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     --burger-btn: rgb(51, 51, 51);
 
     // Listes et cartes
-    --list-bg: rgba(210, 194, 42, 0.6);
+    --wish-bg: rgba(210, 194, 42, 0.6);
+    --todo-bg: rgba(145, 10, 0, 0.6);
     --card-bg: rgba(112, 191, 132, 0.6);
 
     // Boutons
@@ -53,6 +54,9 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     --dialog-bg: rgb(238, 234, 13);
     --dialog-bg-valid: rgba(89, 230, 60, 0.7);
     --dialog-bg-errors: rgba(225, 31, 31, 0.7);
+
+    // Star
+    --star: rgb(238, 224, 19);
 }
 
 /* *****************************************************************
@@ -65,11 +69,9 @@ header {
     background-size: contain;
     background-position: center;
 }
-
 #hamburger-menu {
     z-index: 10;
 }
-
 #menu {
     &__toggle {
         opacity: 0;
@@ -97,7 +99,6 @@ header {
         }
     }
 }
-
 .menu {
     &__btn {
         position: fixed;
@@ -156,18 +157,15 @@ header {
         }
     }
 }
-
 h1 {
     text-align: right;
     text-transform: uppercase;
     font-style: italic;
     margin-top: 40px;
 }
-
 ul {
     padding: 0;
 }
-
 li {
     list-style-type: none;
     padding: 0 auto;
@@ -188,22 +186,18 @@ body {
     border-style: solid;
     border-color: var(--border-color);
 }
-
 .login, .register, .sectionList {
     display: flex;
     flex-direction: column;
 }
-
 h3, h4 {
     margin: 10px auto;
     padding: 5px;
 }
-
 a {
     margin-top: 10px;
     color: var(--burger-item);
 }
-
 .hidden {
     display: none;
 }
@@ -253,11 +247,9 @@ dialog {
     UTILISATEURS / ADMIN, LISTE & CARTE
 ***************************************************************** */
 .list {
-    background: var(--list-bg);
     max-width: 450px;
     width: 100%;
     text-align: center;
-    box-shadow: 0px 0px 10px 2px rgba(210, 194, 42, 0.6);
     border-radius: 20px;
     margin: 20px auto;
     padding: 5px 0;
@@ -265,19 +257,25 @@ dialog {
     flex-direction: column;
     align-items: center;
     cursor: pointer;
+    &.wish {
+        background: var(--wish-bg);
+        box-shadow: 0px 0px 10px 1px var(--wish-bg);
+    }
+    &.todo {
+        background: var(--todo-bg);
+        box-shadow: 0px 0px 10px 1px var(--todo-bg);
+    }
 }
-
 small {
     display: block;
     margin: 0 auto;
 }
-
 .card {
     background: var(--card-bg);
     max-width: 700px;
     width: 90%;
     text-align: center;
-    box-shadow: 0px 0px 10px 2px rgba(210, 194, 42, 0.6);
+    box-shadow: 0px 0px 10px 1px var(--card-bg);
     border-radius: 20px;
     margin: 20px auto;
     padding: 5px 0;
@@ -287,24 +285,28 @@ small {
         flex-direction: column;
     }
 }
-
 .star {
     font-size: 25px;
-    color: rgb(238, 224, 19);
+    color: var(--star);
 }
-
 .adminSection,
 .userFormSection {
     margin-top: 35px;
 }
-
 .createUser {
     margin-top: 28px;
 }
-
 .sectionList {
     width: 80%;
     margin: 0 auto;
+}
+#oneList {
+    margin-bottom: 0px;
+    border-radius: 20px 20px 0 0;
+}
+#cardArticleContent {
+    margin-top: 0px;
+    border-radius: 0 0 20px 20px;
 }
 
 /* *****************************************************************
@@ -648,7 +650,7 @@ input[type="submit"] {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        margin: 20px;
+        margin: 10px;
     }
 
     .sectionList {

@@ -164,6 +164,13 @@ function card(canCreateCard) {
             cardArticleContent.id = "cardArticleContent";
             cardArticleContent.classList.add("list");
 
+            if(response.data.type === "WishList") {
+                cardArticleContent.classList.add("wish");
+            }
+            if(response.data.type === "TodoList") {
+                cardArticleContent.classList.add("todo");
+            }
+
             const titleCards = document.createElement("h3");
             titleCards.innerText = "Plus en détails";
 

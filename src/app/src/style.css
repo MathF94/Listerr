@@ -17,7 +17,8 @@
   --burger-item: rgb(121, 2, 2);
   --burger-item-shadow: rgba(121, 2, 2, 0.4);
   --burger-btn: rgb(51, 51, 51);
-  --list-bg: rgba(210, 194, 42, 0.6);
+  --wish-bg: rgba(210, 194, 42, 0.6);
+  --todo-bg: rgba(145, 10, 0, 0.6);
   --card-bg: rgba(112, 191, 132, 0.6);
   --way-btn: rgb(213, 190, 3);
   --way-btn-hover: rgba(213, 190, 3, 0.8);
@@ -40,6 +41,7 @@
   --dialog-bg: rgb(238, 234, 13);
   --dialog-bg-valid: rgba(89, 230, 60, 0.7);
   --dialog-bg-errors: rgba(225, 31, 31, 0.7);
+  --star: rgb(238, 224, 19);
 }
 
 /* *****************************************************************
@@ -224,11 +226,9 @@ dialog.errors_fields > h2 {
     UTILISATEURS / ADMIN, LISTE & CARTE
 ***************************************************************** */
 .list {
-  background: var(--list-bg);
   max-width: 450px;
   width: 100%;
   text-align: center;
-  box-shadow: 0px 0px 10px 2px rgba(210, 194, 42, 0.6);
   border-radius: 20px;
   margin: 20px auto;
   padding: 5px 0;
@@ -236,6 +236,14 @@ dialog.errors_fields > h2 {
   flex-direction: column;
   align-items: center;
   cursor: pointer;
+}
+.list.wish {
+  background: var(--wish-bg);
+  box-shadow: 0px 0px 10px 1px var(--wish-bg);
+}
+.list.todo {
+  background: var(--todo-bg);
+  box-shadow: 0px 0px 10px 1px var(--todo-bg);
 }
 
 small {
@@ -248,7 +256,7 @@ small {
   max-width: 700px;
   width: 90%;
   text-align: center;
-  box-shadow: 0px 0px 10px 2px rgba(210, 194, 42, 0.6);
+  box-shadow: 0px 0px 10px 1px var(--card-bg);
   border-radius: 20px;
   margin: 20px auto;
   padding: 5px 0;
@@ -261,7 +269,7 @@ small {
 
 .star {
   font-size: 25px;
-  color: rgb(238, 224, 19);
+  color: var(--star);
 }
 
 .adminSection,
@@ -276,6 +284,16 @@ small {
 .sectionList {
   width: 80%;
   margin: 0 auto;
+}
+
+#oneList {
+  margin-bottom: 0px;
+  border-radius: 20px 20px 0 0;
+}
+
+#cardArticleContent {
+  margin-top: 0px;
+  border-radius: 0 0 20px 20px;
 }
 
 /* *****************************************************************
@@ -606,7 +624,7 @@ input[type=submit]:hover {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin: 20px;
+    margin: 10px;
   }
   .sectionList {
     display: flex;

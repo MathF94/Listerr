@@ -100,9 +100,18 @@ function lists() {
 
             for (const index in data) {
                 const objectList = data[index]
+                console.log(objectList.type);
+
                 const articleList = document.createElement("article");
                 articleList.id = `profilList-${objectList.id}`;
                 articleList.classList.add("list");
+
+                if(objectList.type === "WishList"){
+                    articleList.classList.add("wish");
+                }
+                if(objectList.type === "TodoList"){
+                    articleList.classList.add("todo");
+                }
 
                 const sectionList = document.createElement("section");
 
