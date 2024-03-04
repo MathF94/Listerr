@@ -229,9 +229,7 @@ function read() {
                                 articleList.id = `profilList-${objectList.id}`;
                                 articleList.classList.add("list");
 
-                                if (objectList.type === "WishList" || objectList.type === "TodoList"){
-                                    articleList.classList.add(type[objectList.type]);
-                                }
+                                articleList.classList.add(type[objectList.type]);
 
                                 const sectionList = document.createElement("section");
                                 const typeH3 = document.createElement("h3");
