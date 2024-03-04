@@ -250,7 +250,7 @@ dialog {
     max-width: 450px;
     width: 100%;
     text-align: center;
-    border-radius: 20px;
+    border-radius: 10px;
     margin: 20px auto;
     padding: 5px 0;
     display: flex;
@@ -276,7 +276,7 @@ small {
     width: 90%;
     text-align: center;
     box-shadow: 0px 0px 10px 1px var(--card-bg);
-    border-radius: 20px;
+    border-radius: 10px;
     margin: 20px auto;
     padding: 5px 0;
     cursor: pointer;
@@ -366,7 +366,6 @@ small {
     }
     &.edit {
         background-color: var(--edit-btn);
-
         color: var(--text-light);
         &::before {
             content: "🖉";
@@ -388,7 +387,6 @@ small {
             background-color: var(--cancel-btn-hover);
             color: var(--text-dark);
         }
-
     }
     &.disable {
         background-color: var(--disable-btn);
@@ -397,7 +395,6 @@ small {
             color: var(--text-dark);
         }
     }
-
     &.disableUpdate {
         background-color: var(--disable-btn);
         &::before {
@@ -426,7 +423,6 @@ small {
     }
 }
 
-
 /* *****************************************************************
     FORMULAIRES
 ***************************************************************** */
@@ -444,22 +440,18 @@ form {
         margin: 10px 0;
     }
 }
-
 .formUpdateUser {
     margin-top: 32px;
 }
-
 .label-radio-container {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
 }
-
 label {
     font-weight: bold;
     margin: 10px auto;
 }
-
 select,
 input[type="text"],
 input[type="password"],
@@ -481,7 +473,6 @@ input[type="submit"] {
         outline: none;
     }
 }
-
 .fieldIcon {
     background: white;
     margin: 0;
@@ -502,11 +493,9 @@ input[type="submit"] {
         }
     }
 }
-
 select {
     background: var(--select);
 }
-
 input[type="submit"] {
     background-color: var(--valid-btn);
     color: var(--text-light);
@@ -515,12 +504,10 @@ input[type="submit"] {
         background-color: var(--valid-btn-hover);
     }
 }
-
 .mandatory {
     color: var(--mandatory);
     font-size:16px;
 }
-
 
 /* *****************************************************************
     TABLEAU
@@ -603,7 +590,6 @@ input[type="submit"] {
     body {
         min-height: 120vh;
     }
-
     .menu {
         &__btn {
             display: none;
@@ -635,12 +621,8 @@ input[type="submit"] {
                 background-color: var(--burger-item);
                 color: var(--text-light);
             }
-            &:active {
-                color: var(--text-light);
-            }
         }
     }
-
     #allListsWrapper, .listsWrapper {
         display: flex;
         flex-wrap: wrap;
