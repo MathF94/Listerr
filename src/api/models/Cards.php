@@ -1,9 +1,9 @@
 <?php
 
-namespace Models;
+namespace Listerr\Model;
 
-use Entity\Card;
-use Services\Database;
+use Listerr\Entity\Card;
+use Listerr\Service\Database;
 
 /**
  * La classe Cards gère les opérations liées aux cartes dans la base de données.

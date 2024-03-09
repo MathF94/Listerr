@@ -1,6 +1,6 @@
 <?php
 
-namespace Entity;
+namespace Listerr\Entity;
 
 /**
  * Classe représentant un utilisateur, qui peut être de type "Admin" ou "User".

@@ -1,6 +1,6 @@
 <?php
 
-namespace Services;
+namespace Listerr\Service;
 
 /**
  * Classe pour le chiffrement et le déchiffrement des données.

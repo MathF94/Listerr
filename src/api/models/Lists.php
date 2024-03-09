@@ -1,9 +1,9 @@
 <?php
 
-namespace Models;
+namespace Listerr\Model;
 
-use Entity\Lister;
-use Services\Database;
+use Listerr\Entity\Lister;
+use Listerr\Service\Database;
 
 /**
  * La classe Lists gère les opérations liées aux listes dans la base de données.

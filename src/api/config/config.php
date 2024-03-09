@@ -34,9 +34,7 @@ function cors()
         'http://listerr.lan',
         'http://listerr.local',
         'http://localhost',
-        'http://127.0.0.1',
-        'https://mathieufagot.ide.3wa.io',
-        'https://mathieufagot.sites.3wa.io'
+        'http://127.0.0.1'
     ];
 
     if (!empty($_SERVER['REQUEST_SCHEME']) && !empty($_SERVER['HTTP_REFERER'])) {

@@ -1,13 +1,13 @@
 <?php
 
-namespace Controllers;
+namespace Listerr\Controller;
 
-use Entity\Lister;
-use Models\Lists;
-use Models\Users;
-use Services\CSRFToken;
-use Services\Session;
-use Services\Validator;
+use Listerr\Entity\Lister;
+use Listerr\Model\Lists;
+use Listerr\Model\Users;
+use Listerr\Service\CSRFToken;
+use Listerr\Service\Session;
+use Listerr\Service\Validator;
 
 /**
  * Classe représentant un objet d'une liste.
@@ -59,7 +59,7 @@ class ListController
                 "status" => "success",
                 "csrfToken" => $encryptedCSRFToken,
             ]);
-            
+
         } catch (\Exception $e) {
             return json_encode([
                 "status" => "errors",

@@ -1,9 +1,9 @@
 <?php
 
-namespace Services;
+namespace Listerr\Service;
 
 use DateTime;
-use Services\Encryption;
+use Listerr\Service\Encryption;
 
 /**
  * La classe CSRFToken gère la création et la validation de jetons CSRF pour prévenir les attaques CSRF.

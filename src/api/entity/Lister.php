@@ -1,8 +1,8 @@
 <?php
 
-namespace Entity;
+namespace Listerr\Entity;
 
-use Models\Cards;
+use Listerr\Model\Cards;
 /**
  * Classe représentant une liste, qui peut être de type "WishList" ou "TodoList".
  */

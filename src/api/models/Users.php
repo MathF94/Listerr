@@ -1,10 +1,10 @@
 <?php
 
-namespace Models;
+namespace Listerr\Model;
 
-use Entity\User;
-use Services\Database;
-use Services\Encryption;
+use Listerr\Entity\User;
+use Listerr\Service\Database;
+use Listerr\Service\Encryption;
 
 /**
  * La classe Users gère les opérations liées aux utilisateurs dans la base de données.

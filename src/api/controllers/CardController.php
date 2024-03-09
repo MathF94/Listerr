@@ -1,12 +1,12 @@
 <?php
 
-namespace Controllers;
+namespace Listerr\Controller;
 
-use Models\Cards;
-use Models\Users;
-use Services\CSRFToken;
-use Services\Session;
-use Services\Validator;
+use Listerr\Model\Cards;
+use Listerr\Model\Users;
+use Listerr\Service\CSRFToken;
+use Listerr\Service\Session;
+use Listerr\Service\Validator;
 
 /**
  * Classe représentant un objet d'une carte.

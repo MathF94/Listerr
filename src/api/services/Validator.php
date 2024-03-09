@@ -1,6 +1,6 @@
 <?php
 
-namespace Services;
+namespace Listerr\Service;
 
 /**
  * Classe pour la validation des paramètres en fonction du contexte.

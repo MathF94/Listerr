@@ -1,6 +1,6 @@
 <?php
 
-namespace Services;
+namespace Listerr\Service;
 
 /**
  * Classe de base pour la gestion de la base de données.

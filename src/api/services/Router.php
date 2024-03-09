@@ -1,10 +1,10 @@
 <?php
 
-namespace Services;
+namespace Listerr\Service;
 
-use Controllers\UserController;
-use Controllers\ListController;
-use Controllers\CardController;
+use Listerr\Controller\UserController;
+use Listerr\Controller\ListController;
+use Listerr\Controller\CardController;
 
 /**
  * Classe pour le routage des demandes HTTP vers les contrôleurs appropriés.

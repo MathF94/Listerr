@@ -1,6 +1,6 @@
 <?php
 
-namespace Entity;
+namespace Listerr\Entity;
 
 /**
  * Classe représentant une carte.

@@ -1,10 +1,10 @@
 <?php
 
-namespace Services;
+namespace Listerr\Service;
 
 use DateTime;
-use Entity\User;
-use Services\Encryption;
+use Listerr\Entity\User;
+use Listerr\Service\Encryption;
 
 /**
  * Classe pour la gestion des sessions utilisateur.

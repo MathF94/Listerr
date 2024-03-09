@@ -1,13 +1,13 @@
 <?php
 
-namespace Controllers;
+namespace Listerr\Controller;
 
-use Entity\User;
-use Models\Users;
-use Services\Session;
-use Services\CSRFToken;
-use Services\Encryption;
-use Services\Validator;
+use Listerr\Entity\User;
+use Listerr\Model\Users;
+use Listerr\Service\Session;
+use Listerr\Service\CSRFToken;
+use Listerr\Service\Encryption;
+use Listerr\Service\Validator;
 
 /**
  * Classe représentant un objet d'un utilisateur.
