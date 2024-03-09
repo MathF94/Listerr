@@ -9,6 +9,13 @@ import { configPath, redirect, dialog } from "../../services/utils.js";
  * la validation des données et la redirection de l'utilisateur.
  */
 function registration() {
+    const item = document.querySelector("#mainNav").firstChild.childNodes
+    const register = document.querySelector("#register");
+    if(item[1].textContent === "Inscription") {
+        item[1].style.backgroundColor = "#790202";
+        register.style.color = "#dddddd";
+    }
+
     const registerBtn = document.querySelector("#registerBtn");
     registerBtn.title = "Valider l'inscription";
 

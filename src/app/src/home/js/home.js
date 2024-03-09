@@ -1,7 +1,12 @@
 "use strict";
 
 import { fetchAllListsByUsers } from "../../actions/actions_home.js";
-import { configPath, redirect, dialog } from "../../services/utils.js";
+import {
+    configPath,
+    allowedIds,
+    redirect,
+    dialog
+} from "../../services/utils.js";
 
 /**
  * Affiche les listes depuis une API sur la page d'accueil.
@@ -67,13 +72,15 @@ function readAllLists() {
                 const articleList = document.createElement("article");
                 articleList.id = `homeList-${object.id}`;
                 articleList.classList.add("list");
+                articleList.classList.add("wish");
 
                 const sectionList = document.createElement("section");
                 const typeH3 = document.createElement("h3");
                 const titleH4 = document.createElement("h4");
 
                 // N'affiche que les WishList
-                if(object.type ==="WishList"){
+                if(object.type === "WishList"){
+
                     for (const key in object) {
                         const value = object[key];
                         const text = document.createElement("p");
@@ -97,9 +104,10 @@ function readAllLists() {
                             }
                         }
 
-                        if (["status", "id", "userId", "user", "type", "title", "cards", "createdAt", "updatedAt"].includes(`${key}`)) {
+                        if (allowedIds.includes(`${key}`)) {
                             continue;
                         }
+
                         text.innerText = `${object[key]}`;
                         titleLists.after(allListWrapper);
                         allListWrapper.appendChild(articleList);

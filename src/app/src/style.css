@@ -10,8 +10,8 @@
     COULEURS PRINCIPALES
 ***************************************************************** */
 :root {
-  --text-dark: rgb(51, 51, 51);
-  --text-light: rgb(221, 221, 221);
+  --text-dark: #333333;
+  --text-light: #dddddd;
   --border-color: rgb(88, 53, 9);
   --burger-bg: rgb(255, 241, 198);
   --burger-item: rgb(121, 2, 2);
@@ -20,6 +20,7 @@
   --wish-bg: rgba(210, 194, 42, 0.6);
   --todo-bg: rgba(145, 10, 0, 0.6);
   --card-bg: rgba(112, 191, 132, 0.6);
+  --common-bg: rgba(150, 150, 150, 0.6);
   --way-btn: rgb(213, 190, 3);
   --way-btn-hover: rgba(213, 190, 3, 0.8);
   --valid-btn: rgba(89, 230, 60, 0.7);
@@ -176,7 +177,11 @@ h3, h4 {
 
 a {
   margin-top: 10px;
-  color: var(--burger-item);
+  color: var(--text-dark);
+}
+a.active {
+  background-color: var(--burger-item);
+  color: var(--text-light);
 }
 
 .hidden {
@@ -229,7 +234,7 @@ dialog.errors_fields > h2 {
   max-width: 450px;
   width: 100%;
   text-align: center;
-  border-radius: 20px;
+  border-radius: 10px;
   margin: 20px auto;
   padding: 5px 0;
   display: flex;
@@ -245,6 +250,10 @@ dialog.errors_fields > h2 {
   background: var(--todo-bg);
   box-shadow: 0px 0px 10px 1px var(--todo-bg);
 }
+.list.common {
+  background: var(--common-bg);
+  box-shadow: 0px 0px 10px 1px var(--common-bg);
+}
 
 small {
   display: block;
@@ -257,7 +266,7 @@ small {
   width: 90%;
   text-align: center;
   box-shadow: 0px 0px 10px 1px var(--card-bg);
-  border-radius: 20px;
+  border-radius: 10px;
   margin: 20px auto;
   padding: 5px 0;
   cursor: pointer;
@@ -277,23 +286,13 @@ small {
   margin-top: 35px;
 }
 
-.createUser {
+#createUser {
   margin-top: 28px;
 }
 
 .sectionList {
   width: 80%;
   margin: 0 auto;
-}
-
-#oneList {
-  margin-bottom: 0px;
-  border-radius: 20px 20px 0 0;
-}
-
-#cardArticleContent {
-  margin-top: 0px;
-  border-radius: 0 0 20px 20px;
 }
 
 /* *****************************************************************
@@ -636,7 +635,7 @@ input[type=submit]:hover {
   .list {
     width: 45%;
     margin: 10px;
-    border-radius: 15px;
+    border-radius: 20px;
   }
 }
 

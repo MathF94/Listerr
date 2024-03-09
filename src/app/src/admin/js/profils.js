@@ -19,6 +19,7 @@ notAllowedRedirection();
 /**
  * Récupère et affiche la liste des utilisateurs (à l'exception de l'utilisateur avec le rôle "Admin") depuis l'API.
  */
+
 function readAdmin() {
     fetchReadAll().then((response) => {
         if (response.status === "ReadAllUsers") {

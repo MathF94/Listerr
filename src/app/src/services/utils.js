@@ -7,9 +7,25 @@
  */
 const configPath = {
     basePath: "http://localhost/listerr/src/app/src",
-    apiPath: "http://localhost/listerr/src/api",
-    // basePath: "https://mathieufagot.sites.3wa.io/listerr/src/app/src",
-    // apiPath: "https://mathieufagot.sites.3wa.io/listerr/src/api"
+    apiPath: "http://localhost/listerr/src/api"
+};
+
+const allowedIds = [
+    "status",
+    "id",
+    "userId",
+    "user",
+    "type",
+    "title",
+    "cards",
+    "createdAt",
+    "updatedAt"
+];
+
+const type = {
+    WishList: 'wish',
+    TodoList: 'todo',
+    Common: 'common'
 };
 
 /**
@@ -114,9 +130,12 @@ function validate(input) {
 
 export {
     configPath,
+    allowedIds,
+    type,
     redirect,
     dialog,
     notAllowedRedirection,
     mandatoryStar,
     scroll,
-    validate};
+    validate
+};

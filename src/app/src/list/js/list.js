@@ -9,6 +9,7 @@ import { CSRFToken } from "../../services/CSRFToken.js";
 import {
     configPath,
     redirect,
+    type,
     dialog,
     notAllowedRedirection,
     validate,
@@ -58,12 +59,11 @@ function list() {
                 notAllowedRedirection(data?.type);
                 const oneList = document.querySelector("#oneList");
                 oneList.classList = "list";
+                oneList.classList.add(type[data.type]);
 
-                if(data.type === "WishList"){
-                    oneList.classList.add("wish");
-                }
-                if(data.type === "TodoList"){
-                    oneList.classList.add("todo");
+                // Si suppression du type de liste, mettre une couleur grise aux listes
+                if(!['WishList', 'TodoList'].includes(data.type)) {
+                    oneList.classList.add(type.Common)
                 }
 
                 const typeList = document.createElement("h3");

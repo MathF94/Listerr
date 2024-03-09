@@ -25,9 +25,7 @@ function navigation(template) {
     label.htmlFor = "menu__toggle";
 
     const span = document.createElement("span");
-
     const list = document.createElement("ul");
-
     const nav = document.createElement("nav");
     nav.id = "mainNav";
     nav.className = "menu__box";
@@ -39,12 +37,7 @@ function navigation(template) {
     nav.appendChild(list);
 
     // Si l'utilisateur n'est pas connecté, affiche les liens d'inscription et de connexion.
-    if (
-        token === undefined ||
-        token === null ||
-        user === null ||
-        user === undefined
-    ) {
+    if (token === undefined || token === null || user === null || user === undefined) {
         const links = [
             {
                 text: "Accueil",
@@ -73,7 +66,10 @@ function navigation(template) {
                 href: `${configPath.basePath}/home/pages/home.html`,
                 id: "home",
             },
-            { text: "Déconnexion", id: "logout" },
+            {
+                text: "Déconnexion",
+                id: "logout"
+            },
             {
                 text: "Votre profil",
                 href: `${configPath.basePath}/user/pages/profil.html`,
@@ -117,7 +113,13 @@ function navigation(template) {
             if (linkData.href !== undefined) {
                 link.setAttribute("href", linkData.href);
                 link.id = linkData.id;
+                link.onclick = e => localStorage.setItem("nav_active", linkData.id)
                 link.innerText = linkData.text;
+                link.classList.remove("active");
+
+                if(localStorage.nav_active === linkData.id) {
+                    link.classList.add("active");
+                }
             } else {
                 const noLink = document.createElement("div");
                 noLink.id = linkData.id;
@@ -127,6 +129,10 @@ function navigation(template) {
             }
             list.appendChild(item);
             item.appendChild(link);
+
+            if (item.textContent === "Déconnexion") {
+                item.style.cursor = "pointer";
+            }
         });
         template.appendChild(wrapDiv);
     }

@@ -8,6 +8,8 @@ import {
 import { fetchReadAllLists } from "../../actions/actions_lists.js";
 import {
     configPath,
+    allowedIds,
+    type,
     dialog,
     redirect,
     notAllowedRedirection,
@@ -219,6 +221,12 @@ function read() {
                                 const articleList = document.createElement("article");
                                 articleList.id = `profilList-${objectList.id}`;
                                 articleList.classList.add("list");
+                                articleList.classList.add(type[objectList.type]);
+
+                                // Si suppression du type de liste, mettre une couleur grise aux listes
+                                if(!['WishList', 'TodoList'].includes(objectList.type)) {
+                                    articleList.classList.add(type.Common)
+                                }
 
                                 const sectionList = document.createElement("section");
                                 const typeH3 = document.createElement("h3");
@@ -248,7 +256,7 @@ function read() {
                                     }
 
                                     // Exclut certains éléments de la liste
-                                    if (["status", "id", "userId", "user", "type", "title", "cards", "createdAt", "updatedAt"].includes(`${key}`)) {
+                                    if (allowedIds.includes(`${key}`)) {
                                         continue;
                                     }
                                     item.innerText = `${objectList[key]}`;
