@@ -14,7 +14,6 @@ import {
     scroll
 } from "../../services/utils.js";
 import { CSRFToken } from "../../services/CSRFToken.js";
-import cacheNav from "../../../cache-nav.js";
 
 notAllowedRedirection();
 /**

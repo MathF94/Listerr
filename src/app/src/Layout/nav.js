@@ -1,7 +1,6 @@
 "use strict";
 
 import { configPath } from "../services/utils.js";
-import cacheNav from "../../cache-nav.js";
 
 /**
  * Génère la barre de navigation en fonction de l'état de connexion de l'utilisateur.
