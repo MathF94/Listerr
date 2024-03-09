@@ -24,13 +24,6 @@ notAllowedRedirection();
  *      l'affichage des informations d'un profil utilisateur par l'admin
  */
 function read() {
-    const item = document.querySelector("#mainNav").firstChild.childNodes
-    const profil = document.querySelector("#profil");
-    if(item[2].textContent === "Votre profil") {
-        item[2].style.backgroundColor = "#790202";
-        profil.style.color = "#dddddd";
-    }
-
     // Appelle la fonction fetchRead pour obtenir les informations du profil de l'utilisateur.
     const urlParams = new URLSearchParams(document.location.search);
     const deleteBtn = document.querySelector("#delete");
@@ -228,8 +221,12 @@ function read() {
                                 const articleList = document.createElement("article");
                                 articleList.id = `profilList-${objectList.id}`;
                                 articleList.classList.add("list");
-
                                 articleList.classList.add(type[objectList.type]);
+
+                                // Si suppression du type de liste, mettre une couleur grise aux listes
+                                if(!['WishList', 'TodoList'].includes(objectList.type)) {
+                                    articleList.classList.add(type.Common)
+                                }
 
                                 const sectionList = document.createElement("section");
                                 const typeH3 = document.createElement("h3");

@@ -24,13 +24,6 @@ notAllowedRedirection();
  * Fonction principale pour gérer la page des listes.
  */
 function lists() {
-    const item = document.querySelector("#mainNav").firstChild.childNodes
-    const lists = document.querySelector("#lists");
-    if(item[3].textContent === "Vos listes") {
-        item[3].style.backgroundColor = "#790202";
-        lists.style.color = "#dddddd";
-    }
-
     const createListBtn = document.querySelector("#listCreater");
     createListBtn.title = "Créer une nouvelle liste";
 
@@ -109,13 +102,16 @@ function lists() {
 
             for (const index in data) {
                 const objectList = data[index]
-
                 const articleList = document.createElement("article");
                 articleList.id = `profilList-${objectList.id}`;
                 articleList.classList.add("list");
-
                 articleList.classList.add(type[objectList.type]);
-                
+
+                // Si suppression du type de liste, mettre une couleur grise aux listes
+                if(!['WishList', 'TodoList'].includes(objectList.type)) {
+                    articleList.classList.add(type.Common)
+                }
+
                 const sectionList = document.createElement("section");
 
                 const typeH3 = document.createElement("h3");

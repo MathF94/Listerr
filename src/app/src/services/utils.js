@@ -24,7 +24,8 @@ const allowedIds = [
 
 const type = {
     WishList: 'wish',
-    TodoList: 'todo'
+    TodoList: 'todo',
+    Common: 'common'
 };
 
 /**

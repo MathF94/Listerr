@@ -20,6 +20,7 @@
   --wish-bg: rgba(210, 194, 42, 0.6);
   --todo-bg: rgba(145, 10, 0, 0.6);
   --card-bg: rgba(112, 191, 132, 0.6);
+  --common-bg: rgba(150, 150, 150, 0.6);
   --way-btn: rgb(213, 190, 3);
   --way-btn-hover: rgba(213, 190, 3, 0.8);
   --valid-btn: rgba(89, 230, 60, 0.7);
@@ -178,6 +179,10 @@ a {
   margin-top: 10px;
   color: var(--text-dark);
 }
+a.active {
+  background-color: var(--burger-item);
+  color: var(--text-light);
+}
 
 .hidden {
   display: none;
@@ -244,6 +249,10 @@ dialog.errors_fields > h2 {
 .list.todo {
   background: var(--todo-bg);
   box-shadow: 0px 0px 10px 1px var(--todo-bg);
+}
+.list.common {
+  background: var(--common-bg);
+  box-shadow: 0px 0px 10px 1px var(--common-bg);
 }
 
 small {

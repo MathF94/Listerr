@@ -14,18 +14,14 @@ import {
     scroll
 } from "../../services/utils.js";
 import { CSRFToken } from "../../services/CSRFToken.js";
+import cacheNav from "../../../cache-nav.js";
 
 notAllowedRedirection();
 /**
  * Récupère et affiche la liste des utilisateurs (à l'exception de l'utilisateur avec le rôle "Admin") depuis l'API.
  */
+
 function readAdmin() {
-    const item = document.querySelector("#mainNav").firstChild.childNodes
-    const usersProfil = document.querySelector("#usersProfil");
-    if(item[4].textContent === "Utilisateurs") {
-        item[4].style.backgroundColor = "#790202";
-        usersProfil.style.color = "#dddddd";
-    }
     fetchReadAll().then((response) => {
         if (response.status === "ReadAllUsers") {
             const data = response.data;

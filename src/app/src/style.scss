@@ -27,6 +27,7 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     --wish-bg: rgba(210, 194, 42, 0.6);
     --todo-bg: rgba(145, 10, 0, 0.6);
     --card-bg: rgba(112, 191, 132, 0.6);
+    --common-bg: rgba(150, 150, 150, 0.6);
 
     // Boutons
     --way-btn: rgb(213, 190, 3);
@@ -197,6 +198,10 @@ h3, h4 {
 a {
     margin-top: 10px;
     color: var(--text-dark);
+    &.active {
+        background-color: var(--burger-item);
+        color: var(--text-light);
+    }
 }
 .hidden {
     display: none;
@@ -263,7 +268,11 @@ dialog {
     }
     &.todo {
         background: var(--todo-bg);
-        box-shadow: 0px 00px 10px 1px var(--todo-bg);
+        box-shadow: 0px 0px 10px 1px var(--todo-bg);
+    }
+    &.common {
+        background: var(--common-bg);
+        box-shadow: 0px 0px 10px 1px var(--common-bg);
     }
 }
 small {

@@ -12,15 +12,6 @@ import {
  * Affiche les listes depuis une API sur la page d'accueil.
  */
 function readAllLists() {
-    const item = document.querySelector("#mainNav").firstChild.childNodes
-    const home = document.querySelector("#home");
-    console.log(home);
-    console.log(item[0].textContent);
-    if(item[0].textContent === "Accueil") {
-        item[0].style.backgroundColor = "#790202";
-        home.style.color = "#dddddd";
-    }
-
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("user");
     const listBtn = document.querySelector("#newList");
@@ -116,6 +107,7 @@ function readAllLists() {
                         if (allowedIds.includes(`${key}`)) {
                             continue;
                         }
+
                         text.innerText = `${object[key]}`;
                         titleLists.after(allListWrapper);
                         allListWrapper.appendChild(articleList);

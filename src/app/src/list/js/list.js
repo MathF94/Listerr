@@ -22,13 +22,6 @@ import { card } from "../../card/js/card.js";
  * Fonction principale pour gérer la page de détails d'une liste.
  */
 function list() {
-    const item = document.querySelector("#mainNav").firstChild.childNodes
-    const lists = document.querySelector("#lists");
-    if(item[3].textContent === "Vos listes") {
-        item[3].style.backgroundColor = "#790202";
-        lists.style.color = "#dddddd";
-    }
-
     // Obtient l'identifiant de la liste à partir des paramètres de l'URL.
     const urlParams = new URLSearchParams(document.location.search);
     if (urlParams.has("id")) {
@@ -66,9 +59,13 @@ function list() {
                 notAllowedRedirection(data?.type);
                 const oneList = document.querySelector("#oneList");
                 oneList.classList = "list";
-
                 oneList.classList.add(type[data.type]);
-                
+
+                // Si suppression du type de liste, mettre une couleur grise aux listes
+                if(!['WishList', 'TodoList'].includes(data.type)) {
+                    oneList.classList.add(type.Common)
+                }
+
                 const typeList = document.createElement("h3");
                 typeList.innerText = `${data.type}`;
 
