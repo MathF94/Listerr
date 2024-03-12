@@ -8,11 +8,12 @@ use Listerr\Service\Session;
 use Listerr\Service\CSRFToken;
 use Listerr\Service\Encryption;
 use Listerr\Service\Validator;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Classe représentant un objet d'un utilisateur.
  */
-class UserController
+class UserController extends BaseController
 {
     private const KEY = "ec5362dc-0e29-4313-aa0d-529206a4badb";
     private const IV = "855d-4787-a9c8-e";
@@ -44,26 +45,36 @@ class UserController
      * @return string - Réponse JSON : "success" avec le jeton CSRF chiffré, en cas de succès.
      *                                 "fail" avec un message d'erreur, en cas d'échec.
      */
-    public function CSRFToken(): string
+    public function CSRFToken(): ResponseInterface
     {
         try {
             $formId = $_POST["formId"];
             $encryptedCSRFToken = $this->csrfToken->encrypt($formId);
 
-            return json_encode([
-                "status" => "success",
-                "csrfToken" => $encryptedCSRFToken,
-            ]);
+            $this->response->getBody(
+                    json_encode([
+                    "status" => "success",
+                    "csrfToken" => $encryptedCSRFToken,
+                ])
+            );
+            return $this->response->withHeader('Content-Type', 'application/json');
 
-            return json_encode([
-                "status" => "fail",
-                "errors" => "errors"
-            ]);
+            $this->response->getBody(
+                    json_encode([
+                    "status" => "fail",
+                    "errors" => "errors"
+                ])
+            );
+            return $this->response->withHeader('Content-Type', 'application/json');
+
         } catch (\Exception $e) {
-            return json_encode([
-                "status" => "error",
-                "message" => $e->getMessage()
-            ]);
+            $this->response->getBody(
+                    json_encode([
+                    "status" => "error",
+                    "message" => $e->getMessage()
+                ])
+            );
+            return $this->response->withHeader('Content-Type', 'application/json');
         }
     }
 
@@ -76,42 +87,56 @@ class UserController
      *                                 "errors" avec un message d'erreur, en cas d'échec.
      *                                 "errors" avec un message d'erreur, si le login existe déjà.
      */
-    public function register(string $csrfToken): string
+    public function register(): ResponseInterface
     {
         try {
+            $csrfToken = $this->request->getHeaderLine('X-csrfToken');
             $validToken = $this->csrfToken->isValidToken($csrfToken, "registerForm");
 
             if (!$validToken) {
-                return json_encode([
-                    "status" => "fail",
-                    "message" => "no valid csrfToken"
-                ]);
+                $this->response->getBody(
+                    json_encode([
+                        "status" => "fail",
+                        "message" => "no valid csrfToken"
+                    ])
+                );
+                return $this->response->withHeader('Content-Type', 'application/json');
             }
 
-            $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_REGISTER);
+            $errors = $this->validator->isValidParams($this->request->getParsedBody(), Validator::CONTEXT_REGISTER);
             if (empty(count($errors))) {
-                $params = $_POST;
+                $params = $this->request->getParsedBody();
                 $params["password"] = $this->encryption->encrypt($params["password"]);
                 $params["role_id"] = User::ROLE_USER;
                 $model = new Users();
                 $create = $model->createUser($params);
 
                 if ($create) {
-                    return json_encode([
-                        "status" => "createUser",
-                        "message" => "L'utilisateur a bien été créé."
-                    ]);
+                    $this->response->getBody(
+                        json_encode([
+                            "status" => "createUser",
+                            "message" => "L'utilisateur a bien été créé."
+                        ])
+                    );
+                    return $this->response->withHeader('Content-Type', 'application/json');
                 }
                 // si $create est false, il s'agit d'un duplicata d'un champ
-                return json_encode([
-                    "status" => "errors",
-                    "errors" => "Cet utilisateur existe déjà (login ou email), veuillez en trouver un autre svp, merci :)"
-                ]);
+                $this->response->getBody(
+                    json_encode([
+                        "status" => "errors",
+                        "errors" => "Cet utilisateur existe déjà (login ou email), veuillez en trouver un autre svp, merci :)"
+                    ])
+                );
+                return $this->response->withHeader('Content-Type', 'application/json');
             }
-            return json_encode([
-                "status" => "errors",
-                "errors" => $errors
-            ]);
+            $this->response->getBody(
+                json_encode([
+                    "status" => "errors",
+                    "errors" => $errors
+                ])
+            );
+            return $this->response->withHeader('Content-Type', 'application/json');
+
         } catch (\Exception $e) {
             $message = "Une erreur est survenue";
             if (strpos($e->getMessage(), "user.email") !== false) {
@@ -120,11 +145,15 @@ class UserController
             if (strpos($e->getMessage(), "user.login") !== false) {
                 $message = "Ce login existe déjà, veuillez en trouver un autre svp, merci :)";
             }
-            return json_encode([
-                "status" => "errors",
-                "message" => $e->getMessage(),
-                "errors" => $message
-            ]);
+            $this->response->getBody(
+                json_encode([
+                    "status" => "errors",
+                    "message" => $e->getMessage(),
+                    "errors" => $message
+                ])
+            );
+            return $this->response->withHeader('Content-Type', 'application/json')
+                                    ->withStatus(201);
         }
     }
 
@@ -138,16 +167,20 @@ class UserController
      *                                 "fail" avec un message d'erreur, si le jeton est invalide.
      *                                 "errors" avec un message d'erreur, en cas d'échec.
      */
-    public function login(string $csrfToken): string
+    public function login(): ResponseInterface
     {
         try {
+            $csrfToken = $this->request->getHeaderLine('X-csrfToken');
             $validToken = $this->csrfToken->isValidToken($csrfToken, "loginForm");
 
             if (!$validToken) {
-                return json_encode([
-                    "status" => "fail",
-                    "message" => "no valid csrfToken"
-                ]);
+                $this->response->getBody(
+                        json_encode([
+                        "status" => "fail",
+                        "message" => "no valid csrfToken"
+                    ])
+                );
+                return $this->response->withHeader('Content-Type', 'application/json');
             }
 
             $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_LOGIN);
@@ -157,31 +190,42 @@ class UserController
                 $user = $model->auth($_POST["login"], $encrytedPassword);
 
                 if (empty($user)) {
-                    return json_encode([
-                        "status" => "loginUser failed",
-                        "message" => "Votre identifiant n'existe pas ou votre mot de passe est incorrect."
-                    ]);
+                    $this->response->getBody(
+                            json_encode([
+                            "status" => "loginUser failed",
+                            "message" => "Votre identifiant n'existe pas ou votre mot de passe est incorrect."
+                        ])
+                    );
+                    return $this->response->withHeader('Content-Type', 'application/json');
                 }
                 $session = new Session();
                 $encryptToken = $session->encrypt($user->id, $user->login, $encrytedPassword);
-                return json_encode([
-                    "status" => "loginUser",
-                    "connected" => true,
-                    "token" => $encryptToken,
-                    "user_id" => $user->id,
-                    "user_login" => $user->login,
-                    "user_role" => $user->role,
-                ]);
+                $this->response->getBody(
+                        json_encode([
+                        "status" => "loginUser",
+                        "connected" => true,
+                        "token" => $encryptToken,
+                        "user_id" => $user->id,
+                        "user_login" => $user->login,
+                        "user_role" => $user->role,
+                    ])
+                );
+                return $this->response->withHeader('Content-Type', 'application/json');
             };
-            return json_encode([
-                "status" => "errors",
-                "errors" => $errors
-            ]);
+            $this->response->getBody(
+                    json_encode([
+                    "status" => "errors",
+                    "errors" => $errors
+                ])
+            );
         } catch (\Exception $e) {
-            return json_encode([
-                "status" => "error",
-                "message" => $e->getMessage()
-            ]);
+            $this->response->getBody(
+                    json_encode([
+                    "status" => "error",
+                    "message" => $e->getMessage()
+                ])
+            );
+            return $this->response->withHeader('Content-Type', 'application/json');
         };
     }
 
@@ -298,9 +342,10 @@ class UserController
      *                                  ==> suppression jeton utilisateur et redirection automatique vers home.html via logout.js
      *                                 "errors" avec un message d'erreur, en cas d'échec.
      */
-    public function logout(string $tokenUser): string
+    public function logout(): ResponseInterface
     {
         try {
+            $tokenUser = $this->request->getHeaderLine('Authorization');
             $session = new Session();
             // récupère le login, password et expired_at du token
             $decryptToken = $session->decrypt($tokenUser);
@@ -309,36 +354,48 @@ class UserController
             $user = $users->readOne($decryptToken["login"]);
 
             if (empty($user)) {
-                return json_encode([
-                    "status" => "errors",
-                    "message" => "unknown user"
-                ]);
+                $this->response->getBody(
+                        json_encode([
+                        "status" => "errors",
+                        "message" => "unknown user"
+                    ])
+                );
+                return $this->response->withHeader('Content-Type', 'application/json');
             };
             $isExpired = $session->isExpired($decryptToken, $user);
 
             if (!$isExpired) {
-                return json_encode([
-                    "status" => "connected",
-                    "connected" => true,
-                    "message" => "la session est encore active.",
-                    "login" => $decryptToken["login"],
-                ]);
+                $this->response->getBody(
+                        json_encode([
+                        "status" => "connected",
+                        "connected" => true,
+                        "message" => "la session est encore active.",
+                        "login" => $decryptToken["login"],
+                    ])
+                );
+                return $this->response->withHeader('Content-Type', 'application/json');
             };
             if ($isExpired) {
                 $session = new Session();
                 $decryptToken = $session->decrypt($tokenUser);
-                return json_encode([
-                    "status" => "disconnect",
-                    "connected" => false,
-                    "message" => "La session a expirée.",
-                    "login" => $decryptToken["login"],
-                ]);
+                $this->response->getBody(
+                        json_encode([
+                        "status" => "disconnect",
+                        "connected" => false,
+                        "message" => "La session a expirée.",
+                        "login" => $decryptToken["login"],
+                    ])
+                );
+                return $this->response->withHeader('Content-Type', 'application/json');
             };
         } catch (\Exception $e) {
-            return json_encode([
-                "status" => "errors",
-                "message" => $e->getMessage()
-            ]);
+            $this->response->getBody(
+                    json_encode([
+                    "status" => "errors",
+                    "message" => $e->getMessage()
+                ])
+            );
+            return $this->response->withHeader('Content-Type', 'application/json');
         };
     }
 

@@ -55,13 +55,6 @@ class Router
                     }
                     break;
 
-                case 'admin_read_users':
-                    if ($this->isAllowedMethod('GET')) {
-                        $user = new UserController();
-                        echo $user->readAllUsers(); // readAll sur profils.html
-                    }
-                    break;
-
                 case 'user_update':
                     if ($this->isAllowedMethod('POST')) {
                         $user = new UserController();
@@ -76,6 +69,13 @@ class Router
                         echo $user->delete($headers['Authorization']); // delete
                     }
                     break;
+
+                    case 'admin_read_users':
+                        if ($this->isAllowedMethod('GET')) {
+                            $user = new UserController();
+                            echo $user->readAllUsers(); // readAll sur profils.html
+                        }
+                        break;
 
                     /********************************************************
                      * PREVUE POUR LA VERSION 2

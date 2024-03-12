@@ -10,7 +10,7 @@ import { configPath } from "../services/utils.js";
  */
 async function fetchRegister(form) {
     try {
-        const url = `${configPath.apiPath}/?route=user_register`;
+        const url = `${configPath.apiPath}/user/register`;
         return await fetch(url, {
             headers: {
                 "X-CSRFToken": localStorage.getItem("csrfToken")
@@ -33,7 +33,7 @@ async function fetchRegister(form) {
  */
 async function fetchLogin(form) {
     try {
-        const url = `${configPath.apiPath}/?route=user_login`;
+        const url = `${configPath.apiPath}/user/login`;
         return await fetch(url, {
             headers: {
                 "X-CSRFToken": localStorage.getItem("csrfToken")
@@ -55,7 +55,7 @@ async function fetchLogin(form) {
  */
 async function fetchRead(id) {
     try {
-        let url = `${configPath.apiPath}/?route=user_profil`;
+        let url = `${configPath.apiPath}/user/profil`;
         if(id) {
             url += `&id=${id}`;
         }
@@ -77,7 +77,7 @@ async function fetchRead(id) {
  */
 async function fetchLogout() {
     try {
-        const url = `${configPath.apiPath}/?route=user_logout`;
+        const url = `${configPath.apiPath}/user/logout`;
         return await fetch(url, {
             method: "POST",
             headers: {"Authorization": localStorage.getItem("token")},

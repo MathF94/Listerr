@@ -6,8 +6,8 @@
  * @property {string} apiPath - Le chemin de base de l'API.
  */
 const configPath = {
-    basePath: "http://localhost/listerr/src/app/src",
-    apiPath: "http://localhost/listerr/src/api"
+    basePath: "http://api-listerr.local/src/app/src",
+    apiPath: "http://api-listerr.local/src/api"
 };
 
 const allowedIds = [
