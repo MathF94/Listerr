@@ -38,9 +38,9 @@ mandatoryStar.classList.add("mandatory");
 /**
  * Redirige l'utilisateur vers une autre URL.
  * @param {string} url - L'URL vers laquelle rediriger l'utilisateur.
- * @param {number} [duration=3000] - La durée en millisecondes avant la redirection.
+ * @param {number} [duration=2000] - La durée en millisecondes avant la redirection.
  */
-function redirect(url, duration = 3000) {
+function redirect(url, duration = 2000) {
     window.setTimeout(function () {
         window.location.href = url;
     }, duration);
