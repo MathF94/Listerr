@@ -1,0 +1,15 @@
+{
+    "require": {
+        "slim/slim": "4.*",
+        "slim/psr7": "^1.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Listerr\\Controller\\":"controllers/",
+            "Listerr\\Entity\\":"entities/",
+            "Listerr\\Model\\":"models/",
+            "Listerr\\Service\\":"services/"
+        }
+    }
+
+}
