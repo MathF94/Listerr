@@ -122,6 +122,9 @@ function readAdmin() {
                     );
                 });
 
+                /**
+                // En tant qu'Admin, permet la modification d'un utilisateur via la liste d'utilisateur
+                 */
                 editBtn.addEventListener("click", function (e) {
                     e.preventDefault();
                     if(parseInt(e.target.value) !== column.id) {

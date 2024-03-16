@@ -223,6 +223,40 @@ class Users extends Database
         }
     }
 
+    /**
+     * Cette méthode permet de mettre à jour les informations d'un utilisateur dans la base de données par l'Administrateur.
+     *
+     * @param array $params - Les paramètres mis à jour de l'utilisateur.
+     * @param int $id - L'ID de l'utilisateur à mettre à jour.
+     * @return bool - Renvoie true en cas de succès, sinon false.
+     */
+    public function updateUserById(array $params, int $id): bool
+    {
+        try {
+            $req = "UPDATE `user`
+                    SET `login`= :login,
+                        `name`= :name,
+                        `firstname` = :firstname,
+                        `email` = :email,
+                        `role_id` = :role_id
+                WHERE `id` = :id";
+            $query = $this->db->prepare($req);
+            $params['id'] = $id;
+
+            $exect = $query->execute($params);
+
+            // S'il y a un status et qu'il s'agit d'une erreur de duplicata, dans ce cas, retourne false
+            if (isset($exect['status']) && $exect['status'] === "errors") {
+                return false;
+            }
+            return true;
+
+        } catch (\Exception $e) {
+            throw new \Exception ($e->getMessage());
+            return false;
+        }
+    }
+
     /********************************************************
      * PREVUE POUR LA VERSION 2
      ********************************************************/
@@ -261,6 +295,25 @@ class Users extends Database
 
             $query = $this->db->prepare($req);
             return $query->execute(['login' => $login]);
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return [];
+        }
+    }
+    /**
+     * Cette méthode permet de suppri;er un utilisateur de la base de données en fonction de son login.
+     *
+     * @param string $login - Le login de l'utilisateur à supprimer.
+     * @return bool - Renvoie true en cas de succès, sinon false.
+     */
+    public function deleteById(int $id): bool
+    {
+        try {
+            $req = "DELETE FROM `user`
+                    WHERE `id` = :id";
+
+            $query = $this->db->prepare($req);
+            return $query->execute(['id' => $id]);
         } catch (\Exception $e) {
             echo $e->getMessage();
             return [];

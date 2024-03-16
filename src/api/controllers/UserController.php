@@ -354,9 +354,91 @@ class UserController
      *                                 "fail" avec un message d'erreur, si le jeton est invalide.
      *                                 "fail" avec un message d'erreur, si l'utilisateur est introuvable.
      *                                 "errors" avec un message d'erreur, en cas d'échec.     */
+
     public function update(string $tokenUser, string $csrfToken,): string
     {
         try {
+            $validToken = $this->csrfToken->isValidToken($csrfToken, "updateForm");
+
+            if (!$validToken) {
+                return json_encode([
+                    "status" => "fail",
+                    "message" => "no valid csrfToken"
+                ]);
+            }
+            $session = new Session();
+            $decryptToken = $session->decrypt($tokenUser);
+            $users = new Users();
+            $user = $users->readOne($decryptToken["login"]);
+
+            if (empty($user)) {
+                return json_encode([
+                    "status" => "fail",
+                    "message" => "no user found"
+                ]);
+            }
+
+            $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_UPDATE_USER);
+            if (empty(count($errors))) {
+                $id = $_POST["updateId"];
+                $params = [
+                    "name" => $_POST["name"],
+                    "firstname" => $_POST["firstname"],
+                    "login" => $_POST["login"],
+                    "email" => $_POST["email"]
+                ];
+                $modelUser = new Users();
+                $update = $modelUser->update($params, $id);
+
+                if ($update) {
+                    return json_encode([
+                        "status" => "updateUser",
+                        "message" => "Le profil a bien été mis à jour."
+                    ]);
+                }
+                // si $update est false, il s'agit d'un duplicata d'un champ
+                return json_encode([
+                    "status" => "errors",
+                    "errors" => "Ce login existe déjà, veuillez en trouver un autre svp, merci :)"
+                ]);
+            }
+            return json_encode([
+                "status" => "errors",
+                "errors" => $errors
+            ]);
+        } catch (\Exception $e) {
+            $message = "Une erreur est survenue";
+            if (strpos($e->getMessage(), "user.email") !== false) {
+                $message = "Cette adresse mail existe déjà, veuillez en trouver un autre svp, merci :)";
+            }
+            if (strpos($e->getMessage(), "user.login") !== false) {
+                $message = "Ce login existe déjà, veuillez en trouver un autre svp, merci :)";
+            }
+            return json_encode([
+                "status" => "errors",
+                "message" => $e->getMessage(),
+                "errors" => $message
+            ]);
+        }
+    }
+
+    /**
+     * Cette méthode permet la mise à jour des informations d'un utilisateur par l'Administrateur, après :
+     *                  1 - validation du jeton CSRF ;
+     *                  2 - vérification de l'existence du jeton Utilisateur.
+     *
+     * @param string - $tokenUser - Jeton Utilisateur pour valider la requête.
+     * @param string - $csrfToken - Jeton CSRF pour valider l'utilisation du formulaire.
+     * @return string - Réponse JSON : "updateUser" avec un message, en cas de succès.
+     *                                 "updateUser failed" avec un message d'erreur, si l'utilisateur est introuvable.
+     *                                 "fail" avec un message d'erreur, si le jeton est invalide.
+     *                                 "fail" avec un message d'erreur, si l'utilisateur est introuvable.
+     *                                 "errors" avec un message d'erreur, en cas d'échec.     */
+
+    public function updateUserById(string $tokenUser, string $csrfToken,): string
+    {
+        try {
+
             $validToken = $this->csrfToken->isValidToken($csrfToken, "updateForm");
 
             if (!$validToken) {
@@ -439,6 +521,35 @@ class UserController
 
             if (!empty($user)) {
                 $users->delete($user->login);
+
+                return json_encode([
+                    "status" => "unsubscribed",
+                    "message" => "le compte a bien été supprimé."
+                ]);
+            };
+            return json_encode([
+                "status" => "fail",
+                "message" => "no user found"
+            ]);
+        } catch (\Exception $e) {
+            return json_encode([
+                "status" => "errors",
+                "message" => $e->getMessage()
+            ]);
+        };
+    }
+
+    public function deleteById(string $tokenUser, int $user_id): string
+    {
+        try {
+            $session = new Session();
+            $decryptToken = $session->decrypt($tokenUser);
+            $users = new Users();
+            $user = $users->readOne($decryptToken["login"]);
+
+            if (!empty($user)) {
+                $user = $users->readById($user_id);
+                $users->deleteById($user->id);
 
                 return json_encode([
                     "status" => "unsubscribed",

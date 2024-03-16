@@ -25,6 +25,11 @@ class Router
                         echo $user->CSRFToken(); // token
                     }
                     break;
+
+                /**
+                 * Route utilisateur
+                 */
+                
                 case 'user_register':
                     if ($this->isAllowedMethod('POST')) {
                         $user = new UserController();
@@ -55,13 +60,6 @@ class Router
                     }
                     break;
 
-                case 'admin_read_users':
-                    if ($this->isAllowedMethod('GET')) {
-                        $user = new UserController();
-                        echo $user->readAllUsers(); // readAll sur profils.html
-                    }
-                    break;
-
                 case 'user_update':
                     if ($this->isAllowedMethod('POST')) {
                         $user = new UserController();
@@ -77,24 +75,34 @@ class Router
                     }
                     break;
 
-                    /********************************************************
-                     * PREVUE POUR LA VERSION 2
-                     ********************************************************/
-                    // @TODO
-                    // case 'admin_update_user':
-                    //     if ($this->isAllowedMethod('GET')) {
-                    //         $user = new UserController();
-                    //         echo $user->update($headers['Authorization']); // update
-                    //     }
-                    //     break;
+                /**
+                 * Route de gestion utilisateur par Admin
+                 */
 
-                    // case 'admin_delete_user':
-                    //     if ($this->isAllowedMethod('GET')) {
-                    //         $user = new UserController();
-                    //         echo $user->delete($headers['Authorization']); // delete
-                    //     }
-                    //     break;
-                    /********************************************************/
+                case 'admin_read_users':
+                    if ($this->isAllowedMethod('GET')) {
+                        $user = new UserController();
+                        echo $user->readAllUsers(); // readAll sur profils.html
+                    }
+                    break;
+
+                case 'admin_update_user':
+                    if ($this->isAllowedMethod('POST')) {
+                        $user = new UserController();
+                        echo $user->updateUserById($headers['Authorization'], $headers['X-CSRFToken'], $_POST['id']); // updateUserById
+                    }
+                    break;
+
+                case 'admin_delete_user':
+                    if ($this->isAllowedMethod('POST')) {
+                        $user = new UserController();
+                        echo $user->deleteById($headers['Authorization'], $_POST['id']); // delete
+                    }
+                    break;
+
+                /**
+                 * Route des listes
+                 */
 
                 case 'create_list':
                     if ($this->isAllowedMethod('POST')) {
@@ -138,6 +146,10 @@ class Router
                         echo $list->deleteList($_POST['id']); // deleteList
                     }
                     break;
+
+                /**
+                 * Route des cartes
+                 */
 
                 case 'create_card':
                     if ($this->isAllowedMethod('POST')) {
