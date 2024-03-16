@@ -575,13 +575,10 @@ input[type=submit]:hover {
 }
 @media screen and (min-width: 810px) {
   body {
-    background-size: 609px;
+    background-size: 610px;
     background-repeat: repeat-y;
     background-position: center;
-    width: 590px;
-  }
-  .profil_role {
-    display: none;
+    width: 635px;
   }
 }
 @media screen and (min-width: 1025px) {

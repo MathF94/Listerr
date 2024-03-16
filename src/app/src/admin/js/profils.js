@@ -42,9 +42,9 @@ function readAdmin() {
                 const column = data[index];
 
                 // Exclut les colonnes inutiles ou les utilisateurs avec le rôle "Admin"
-                if (["id"].includes(column) || column.role === "Admin") {
-                    continue;
-                }
+                // if (["id"].includes(column) || column.role === "Admin") {
+                //     continue;
+                // }
 
                 const tr = document.createElement("tr");
 
@@ -191,6 +191,7 @@ function readAdmin() {
                         .then(response => {
                             localStorage.removeItem("csrfToken");
                             if(response.status === "[Admin]updateUser") {
+                                console.log(response);
                                 dialog({title: "Modification du profil par l'Admin", content: `Le profil de ${column.firstname} ${column.name} a bien été mise à jour.`});
                                 const dialogMsg = document.querySelector("dialog");
                                 dialogMsg.classList.add("valid");
