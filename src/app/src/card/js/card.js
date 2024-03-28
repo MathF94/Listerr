@@ -228,6 +228,7 @@ function card(canCreateCard) {
                 deleteBtnCard.textContent = "";
                 deleteBtnCard.classList.add("btn");
                 deleteBtnCard.classList.add("delete");
+                deleteBtnCard.classList.add("inList");
                 deleteBtnCard.classList.add("listBtn");
 
                 const priorityValue = objectCard.priority;
