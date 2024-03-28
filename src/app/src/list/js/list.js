@@ -100,6 +100,7 @@ function list() {
                 deleteBtnList.textContent = "";
                 deleteBtnList.classList.add("btn");
                 deleteBtnList.classList.add("delete");
+                deleteBtnList.classList.add("inList");
                 deleteBtnList.classList.add("listBtn");
 
                 for (const index in data) {
@@ -111,7 +112,7 @@ function list() {
                     } else {
                         if (index === "updatedAt") {
                             const small = document.createElement("small");
-                            small.innerText = `Dernière modification le ${data.updatedAt}`;
+                            small.innerText = `Modifié le ${data.updatedAt}`;
                             sectionList.appendChild(small);
                         };
                     };
@@ -152,6 +153,8 @@ function list() {
                             oneList.classList.add("hidden");
                             updateBtnList.disabled = true;
                             deleteBtnList.disabled = true;
+                            sectionList.classList.add("hidden");
+
 
                             // Affichage de la liste + suppression du formulaire d'édition
                             const updateFormList  = document.querySelector("#formList");
@@ -160,6 +163,7 @@ function list() {
                                 updateBtnList.disabled = false;
                                 deleteBtnList.disabled = false;
                                 oneList.classList.remove("hidden");
+                                sectionList.classList.remove("hidden");
                             })
 
                             // Insertion des éléments de la liste dans les inputs

@@ -251,7 +251,13 @@ dialog {
 /* *****************************************************************
     UTILISATEURS / ADMIN, LISTE & CARTE
 ***************************************************************** */
+
+// pour la balise article des listes
+// position: relative;
+// width: 200px;
+
 .list {
+    position: relative;
     max-width: 450px;
     width: 100%;
     text-align: center;
@@ -314,6 +320,7 @@ small {
     BOUTONS
 ***************************************************************** */
 .btn {
+
     border: none;
     border-radius: 10px;
     color: var(--text-dark);
@@ -341,6 +348,9 @@ small {
         }
     }
     &.way {
+        position: absolute;
+        bottom: 5%;
+        left: 86%;
         background-color: var(--way-btn);
         margin-right: 5px;
         &:hover {
@@ -357,10 +367,16 @@ small {
         }
     }
     &.delete {
+        position: absolute;
+        top: 5%;
+        left: 80%;
         background-color: var(--delete-btn);
         color: var(--text-light);
         &::before {
             content: "🗑";
+        }
+        &.inList {
+            left: 90%
         }
         &:hover {
             background-color: var(--delete-btn-hover);
@@ -374,6 +390,9 @@ small {
         }
     }
     &.edit {
+        position: absolute;
+        top: 5%;
+        left: 82%;
         background-color: var(--edit-btn);
         color: var(--text-light);
         &::before {
@@ -405,6 +424,9 @@ small {
         }
     }
     &.disableUpdate {
+        position: absolute;
+        top: 2%;
+        left: 72%;
         background-color: var(--disable-btn);
         &::before {
             content: "🖉";
@@ -418,6 +440,9 @@ small {
         }
     }
     &.disableDelete {
+        position: absolute;
+        top: 2%;
+        left: 80%;
         background-color: var(--disable-btn);
         &::before {
             content: "🗑";
@@ -562,6 +587,7 @@ input[type="submit"] {
     .list {
         width: 579px;
     }
+
 }
 
 @media screen and (max-width: 619px) {
@@ -579,6 +605,7 @@ input[type="submit"] {
     .list {
         width: 95%;
     }
+
 }
 
 @media screen and (min-width: 810px) {
@@ -651,4 +678,10 @@ input[type="submit"] {
         margin: 10px;
         border-radius: 20px;
     }
+    // .delete {
+    //     left: 80%!important;
+    // }
+    // .edit {
+    //     left: 72%!important;
+    // }
 }

@@ -231,6 +231,7 @@ dialog.errors_fields > h2 {
     UTILISATEURS / ADMIN, LISTE & CARTE
 ***************************************************************** */
 .list {
+  position: relative;
   max-width: 450px;
   width: 100%;
   text-align: center;
@@ -327,6 +328,9 @@ small {
   border-radius: 10px 0px 0px 10px;
 }
 .btn.way {
+  position: absolute;
+  bottom: 5%;
+  left: 86%;
   background-color: var(--way-btn);
   margin-right: 5px;
 }
@@ -343,11 +347,17 @@ small {
   color: var(--text-light);
 }
 .btn.delete {
+  position: absolute;
+  top: 5%;
+  left: 80%;
   background-color: var(--delete-btn);
   color: var(--text-light);
 }
 .btn.delete::before {
   content: "🗑";
+}
+.btn.delete.inList {
+  left: 90%;
 }
 .btn.delete:hover {
   background-color: var(--delete-btn-hover);
@@ -360,6 +370,9 @@ small {
   border-radius: 0px 10px 10px 0px;
 }
 .btn.edit {
+  position: absolute;
+  top: 5%;
+  left: 82%;
   background-color: var(--edit-btn);
   color: var(--text-light);
 }
@@ -391,6 +404,9 @@ small {
   color: var(--text-dark);
 }
 .btn.disableUpdate {
+  position: absolute;
+  top: 2%;
+  left: 72%;
   background-color: var(--disable-btn);
 }
 .btn.disableUpdate::before {
@@ -404,6 +420,9 @@ small {
   border-radius: 10px 0px 0px 10px;
 }
 .btn.disableDelete {
+  position: absolute;
+  top: 2%;
+  left: 80%;
   background-color: var(--disable-btn);
 }
 .btn.disableDelete::before {

@@ -146,7 +146,7 @@ function lists() {
                     else {
                         if (key === "updatedAt") {
                             const small = document.createElement("small");
-                            small.innerText = `Dernière modification le ${objectList[key]}`;
+                            small.innerText = `Modifié le ${objectList[key]}`;
                             sectionList.appendChild(small);
                         } else {
                         }
