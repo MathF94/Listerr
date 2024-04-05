@@ -11,6 +11,7 @@ import {
     redirect,
     type,
     dialog,
+    toolTip,
     notAllowedRedirection,
     validate,
     scroll
@@ -67,14 +68,14 @@ function list() {
                 }
 
                 const typeList = document.createElement("h3");
-                typeList.innerText = `${data.type}`;
+                typeList.innerText = `${data.type} - ${data.title}`;
 
                 const sectionList = document.createElement("section");
                 sectionList.classList.add("flex");
 
                 const titleList = document.createElement("h4");
-                titleList.innerText = `${data.title}`;
-                sectionList.appendChild(titleList);
+                // titleList.innerText = `${data.title}`;
+                // sectionList.appendChild(titleList);
 
                 const text = document.createElement("p");
 
@@ -100,20 +101,13 @@ function list() {
                 deleteBtnList.textContent = "";
                 deleteBtnList.classList.add("btn");
                 deleteBtnList.classList.add("delete");
+                deleteBtnList.classList.add("inList");
                 deleteBtnList.classList.add("listBtn");
 
                 for (const index in data) {
                     const object = data[index];
-                    if ( index === "user" && typeof(data[index]) === "object") {
-                        const small = document.createElement("small");
-                        small.innerText = `Par ${data.user.login}`;
-                        sectionList.appendChild(small);
-                    } else {
-                        if (index === "updatedAt") {
-                            const small = document.createElement("small");
-                            small.innerText = `Dernière modification le ${data.updatedAt}`;
-                            sectionList.appendChild(small);
-                        };
+                    if (index === "user" && typeof(data[index]) === "object") {
+                        toolTip(typeList, data.updatedAt, data.user.login)
                     };
 
                     // Exclut certains éléments de la liste (id, userId, type, title, cards, createdAd)

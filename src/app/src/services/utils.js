@@ -17,6 +17,7 @@ const allowedIds = [
     "user",
     "type",
     "title",
+    // "description",
     "cards",
     "createdAt",
     "updatedAt"
@@ -52,7 +53,7 @@ function redirect(url, duration = 2000) {
  * @param {string} [options.title="Notification"] - Le titre de la boîte de dialogue.
  * @param {string|Array|Object} options.content - Le contenu de la boîte de dialogue.
  */
-function dialog({ title, content}) {
+function dialog({title, content}) {
     const header = document.querySelector("#navWrapper");
     title = title || "Notification";
 
@@ -80,12 +81,21 @@ function dialog({ title, content}) {
             const item = document.createElement("li");
             const column = content[index];
             item.innerText = column;
-
             list.appendChild(item);
         }
         dialog.appendChild(list);
         dialogSection.appendChild(dialog);
     }
+}
+
+function toolTip(anchor, updatedAt, login) {
+    const toolTip = document.createElement("div");
+    toolTip.classList.add("tooltip");
+    const spanToolTip = document.createElement("span");
+    spanToolTip.classList.add("tooltiptext");
+    spanToolTip.innerText = `Modifié le ${updatedAt} par ${login}.`;
+    toolTip.appendChild(spanToolTip);
+    anchor.appendChild(toolTip);
 }
 
 function notAllowedRedirection(type) {
@@ -134,6 +144,7 @@ export {
     type,
     redirect,
     dialog,
+    toolTip,
     notAllowedRedirection,
     mandatoryStar,
     scroll,

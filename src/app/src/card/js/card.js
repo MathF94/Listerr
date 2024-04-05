@@ -15,6 +15,7 @@ import {
     type,
     redirect,
     dialog,
+    toolTip,
     scroll,
     validate
 } from "../../services/utils.js";
@@ -44,6 +45,7 @@ function card(canCreateCard) {
     createCardFormBtn.value = `cardFormBtn`;
     createCardFormBtn.classList.add("btn");
     createCardFormBtn.classList.add("way");
+    createCardFormBtn.classList.add("wayInList");
 
     // Affichage du contenu du bouton en fonction du type de liste
     let btnLabel = "Nouveau souhait";
@@ -228,6 +230,7 @@ function card(canCreateCard) {
                 deleteBtnCard.textContent = "";
                 deleteBtnCard.classList.add("btn");
                 deleteBtnCard.classList.add("delete");
+                deleteBtnCard.classList.add("inList");
                 deleteBtnCard.classList.add("listBtn");
 
                 const priorityValue = objectCard.priority;
@@ -259,9 +262,7 @@ function card(canCreateCard) {
                         titleH3.innerText = `${objectCard.title}`;
                         cardSectionContent.appendChild(titleH3);
                     } else if (key === "updatedAt") {
-                        const small = document.createElement("small");
-                        small.innerText = `Dernière modification le ${objectCard.updatedAt}`;
-                        cardSectionContent.appendChild(small);
+                        toolTip(titleH3, objectCard.updatedAt, response.data.user.login)
                     } else if (key === "checked") {
                         check.checked = objectCard.checked === 1;
                         if(check.checked) {

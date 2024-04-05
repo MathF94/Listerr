@@ -12,6 +12,7 @@ import {
     type,
     redirect,
     dialog,
+    toolTip,
     notAllowedRedirection,
     scroll,
     validate
@@ -24,6 +25,11 @@ notAllowedRedirection();
  * Fonction principale pour gérer la page des listes.
  */
 function lists() {
+    const linkLists = document.querySelector("#lists");
+    const linkProfil = document.querySelector("#profil");
+    linkLists.classList.add("active");
+    linkProfil.classList.remove("active");
+
     const createListBtn = document.querySelector("#listCreater");
     createListBtn.title = "Créer une nouvelle liste";
 
@@ -131,32 +137,22 @@ function lists() {
                 for (const key in objectList) {
                     const value = objectList[key];
                     const text = document.createElement("p");
-
+                    
                     if (key === "title") {
-                        titleH4.innerText = `${objectList.title}`;
+                        titleH4.innerText = `${objectList.title} - ${objectList.description}`;
                     } else if (key === "type") {
                         typeH3.innerText = `${objectList.type}`;
                     }
 
+                    // Affichage du tooltip
                     if (key === "user" && typeof(value) === "object") {
-                        const small = document.createElement("small");
-                        small.innerText = `Par ${objectList[key].login}.`;
-                        sectionList.appendChild(small);
-                    }
-                    else {
-                        if (key === "updatedAt") {
-                            const small = document.createElement("small");
-                            small.innerText = `Dernière modification le ${objectList[key]}`;
-                            sectionList.appendChild(small);
-                        } else {
-                        }
+                        toolTip(typeH3, objectList.updatedAt, objectList.user.login)
                     }
 
                     // Exclut certains éléments de la liste (id, userId, type, title, cards, createdAd)
                     if (allowedIds.includes(`${key}`)) {
                         continue;
                     }
-                    text.innerText = `${objectList[key]}`;
                     listWrapper.append(articleList);
                     articleList.appendChild(typeH3);
                     sectionList.appendChild(titleH4);
