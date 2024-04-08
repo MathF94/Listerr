@@ -26,8 +26,10 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     // Listes et cartes
     --wish-bg: rgba(210, 194, 42, 0.6);
     --todo-bg: rgba(145, 10, 0, 0.6);
-    --card-bg: rgba(112, 191, 132, 0.6);
+    --card-bg: rgba(69, 162, 92, 0.6);
     --common-bg: rgba(150, 150, 150, 0.6);
+    --third-party-wish-bg: rgba(59, 137, 255, 0.6);
+    --third-party-todo-card-bg: rgba(255, 210, 77, 0.6);
 
     // Boutons
     --way-btn: rgba(213, 190, 3, 1);
@@ -59,7 +61,8 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     --dialog-bg-errors: rgba(225, 31, 31, 0.7);
 
     // Star
-    --star: rgba(238, 224, 19, 1);
+    --star: rgba(255, 239, 0, 1);
+    --third-party-star: rgba(255, 0, 0, 0.6);
 }
 
 /* *****************************************************************
@@ -277,6 +280,10 @@ dialog {
         background: var(--common-bg);
         box-shadow: 0px 0px 10px 1px var(--common-bg);
     }
+    &.third_party_wish {
+        background: var(--third-party-wish-bg);
+        box-shadow: 0px 0px 10px 1px var(--third-party-wish-bg);
+    }
 }
 .tooltip {
     position: relative;
@@ -331,11 +338,9 @@ small {
     margin: 0 auto;
 }
 .card {
-    background: var(--card-bg);
     max-width: 700px;
     width: 90%;
     text-align: center;
-    box-shadow: 0px 0px 10px 1px var(--card-bg);
     border-radius: 10px;
     margin: 20px auto;
     padding: 5px 0;
@@ -344,10 +349,22 @@ small {
         display: flex;
         flex-direction: column;
     }
+    &.wish {
+        background: var(--card-bg);
+        box-shadow: 0px 0px 10px 1px var(--card-bg);
+    }
+    &.third_party_todo_card {
+        background: var(--third-party-todo-card-bg);
+        box-shadow: 0px 0px 10px 1px var(--third-party-todo-card-bg);
+    }
 }
-.star {
+.stars {
     font-size: 25px;
     color: var(--star);
+}
+.third_party_stars {
+    font-size: 25px;
+    color: var(--third-party-star);
 }
 .adminSection,
 .userFormSection {

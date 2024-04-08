@@ -47,10 +47,9 @@ function list() {
             }
             const data = response.data; // user de la liste
             let userId = null;
-
+            userId = JSON.parse(localStorage.user).id; // user courant
             localStorage.setItem("typeList", data?.type);
             if (localStorage.user) {
-                userId = JSON.parse(localStorage.user).id; // user courant
                 if (JSON.parse(localStorage.user).role === "Admin" && response.data.user.role !== "Admin") {
                     returnLists.href = `${configPath.basePath}/user/pages/profil.html?id=${response.data.userId}`;
                 }
@@ -60,7 +59,12 @@ function list() {
                 notAllowedRedirection(data?.type);
                 const oneList = document.querySelector("#oneList");
                 oneList.classList = "list";
+
+                if(userId !== data.userId) {
+                    oneList.classList.add("third_party_wish");
+                } else {
                 oneList.classList.add(type[data.type]);
+                }
 
                 // Si suppression du type de liste, mettre une couleur grise aux listes
                 if(!['WishList', 'TodoList'].includes(data.type)) {
@@ -72,10 +76,6 @@ function list() {
 
                 const sectionList = document.createElement("section");
                 sectionList.classList.add("flex");
-
-                const titleList = document.createElement("h4");
-                // titleList.innerText = `${data.title}`;
-                // sectionList.appendChild(titleList);
 
                 const text = document.createElement("p");
 

@@ -89,11 +89,20 @@ function dialog({title, content}) {
 }
 
 function toolTip(anchor, updatedAt, login) {
+    let dateFromDatabase = updatedAt ;
+    let date = new Date(dateFromDatabase);
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    let formatedDate = (day < 10 ? '0' : '') + day + '/'
+                        + (month < 10 ? '0' : '') + month + '/'
+                        + year;
+
     const toolTip = document.createElement("div");
     toolTip.classList.add("tooltip");
     const spanToolTip = document.createElement("span");
     spanToolTip.classList.add("tooltiptext");
-    spanToolTip.innerText = `Modifié le ${updatedAt} par ${login}.`;
+    spanToolTip.innerText = `Modifié le ${formatedDate} par ${login}.`;
     toolTip.appendChild(spanToolTip);
     anchor.appendChild(toolTip);
 }

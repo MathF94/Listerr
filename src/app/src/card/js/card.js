@@ -162,6 +162,8 @@ function card(canCreateCard) {
     fetchReadAllCardsByList(id)
     .then(response => {
         if (response.status === "readOneList") {
+            console.log(response.data.userId);
+            console.log(JSON.parse(localStorage.user).id);
             const dataCards = response.data.cards;
             const cardArticleContent = document.createElement("article");
             cardArticleContent.id = "cardArticleContent";
@@ -175,7 +177,11 @@ function card(canCreateCard) {
             }
 
             if (response.data.type === "WishList" || response.data.type === "TodoList"){
-                cardArticleContent.classList.add(type[response.data.type]);
+                if(JSON.parse(localStorage.user).id !== response.data.userId){
+                    cardArticleContent.classList.add("third_party_wish");
+                } else{
+                    cardArticleContent.classList.add(type[response.data.type]);
+                }
             }
 
             const titleCards = document.createElement("h3");
@@ -191,13 +197,16 @@ function card(canCreateCard) {
                 cardSectionContent.classList.add("card");
                 cardSectionContent.classList.add("flex");
 
+                if((JSON.parse(localStorage.user).id !== response.data.userId) || (response.data.type === "TodoList")) {
+                    cardSectionContent.classList.add("third_party_todo_card");
+                } else {
+                    cardSectionContent.classList.add("wish");
+                }
+
                 const divStar = document.createElement("div");
 
-                divStar.classList.add("stars");
                 const titleH3 = document.createElement("h3");
-
                 const text = document.createElement("p");
-
                 const labelCheck = document.createElement("label");
                 labelCheck.for = "checkbox";
                 labelCheck.innerText = checklabel;
@@ -246,15 +255,23 @@ function card(canCreateCard) {
                     labelCheck.innerText = checklabel
                     check.title = checklabel;
                 }
+
                 // Boucle de création des étoiles (pleines ou vides) en fonction de la priorité
                 for (let i = 0 ; i < 5; i++) {
                     const priority = document.createElement("span");
-                    priority.classList.add("star");
+                    // console.log(JSON.parse(localStorage.user).id);
+                    if((JSON.parse(localStorage.user).id !== response.data.userId)) {
+                        priority.classList.add("third_party_stars");
+                    } else {
+                        priority.classList.add("stars");
+                    }
+                    // priority.classList.add("stars");
                     priority.setAttribute("data-star", i+1);
                     priority.textContent = i < priorityValue ? "\u2605" : "\u2606" ;
                     divStar.title = `nombre d'étoiles ${priorityValue}`;
                     divStar.appendChild(priority);
                 }
+
 
                 // Affichage des éléments de la carte
                 for (const key in objectCard) {
