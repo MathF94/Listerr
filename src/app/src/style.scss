@@ -13,15 +13,15 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     COULEURS PRINCIPALES
 ***************************************************************** */
 :root {
-    --text-dark: #333333;
-    --text-light: #dddddd;
-    --border-color: rgb(88, 53, 9);
+    --text-dark: rgba(51, 51, 51, 1);
+    --text-light: rgba(221, 221, 221, 1);
+    --border-color: rgba(88, 53, 9, 1);
 
     // Burger
-    --burger-bg: rgb(255, 241, 198);
-    --burger-item: rgb(121, 2, 2);
+    --burger-bg: rgba(255, 241, 198, 1);
+    --burger-item: rgba(121, 2, 2, 1);
     --burger-item-shadow: rgba(121, 2, 2, 0.4);
-    --burger-btn: rgb(51, 51, 51);
+    --burger-btn: rgba(51, 51, 51, 1);
 
     // Listes et cartes
     --wish-bg: rgba(210, 194, 42, 0.6);
@@ -30,13 +30,13 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     --common-bg: rgba(150, 150, 150, 0.6);
 
     // Boutons
-    --way-btn: rgb(213, 190, 3);
+    --way-btn: rgba(213, 190, 3, 1);
     --way-btn-hover: rgba(213, 190, 3, 0.8);
     --valid-btn: rgba(89, 230, 60, 0.7);
-    --valid-btn-hover: rgb(61, 156, 41);
-    --cancel-btn: rgb(117, 117, 117);
+    --valid-btn-hover: rgba(61, 156, 41, 1);
+    --cancel-btn: rgba(117, 117, 117, 1);
     --cancel-btn-hover: rgba(117, 117, 117, 0.8);
-    --view-btn: rgb(238, 214, 33);
+    --view-btn: rgba(238, 214, 33, 1);
     --view-btn-hover: rgba(213, 188, 3, 0.904);
     --delete-btn: rgba(225, 31, 31, 0.7);
     --delete-btn-hover: rgba(225, 31, 31, 1);
@@ -44,20 +44,22 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     --edit-btn-hover: rgba(31, 93, 213, 1);
     --disable-btn: rgba(141, 125, 125, 0.63);
     --disable-btn-hover: rgba(141, 125, 125, 1);
+    --tooltip-light: rgba(220,220,220,1);
+    --tooltip-grey: rgba(179,181,178,1);
 
     // Formulaire
-    --form-bg: rgb(255, 241, 198);
-    --border: rgb(0, 0, 0);
+    --form-bg: rgba(255, 241, 198, 1);
+    --border: rgba(0, 0, 0, 1);
     --mandatory: rgba(225, 31, 31, 0.7);
-    --select: rgb(255, 255, 255);
+    --select: rgba(255, 255, 255, 1);
 
     // Dialog
-    --dialog-bg: rgb(238, 234, 13);
+    --dialog-bg: rgba(238, 234, 13, 1);
     --dialog-bg-valid: rgba(89, 230, 60, 0.7);
     --dialog-bg-errors: rgba(225, 31, 31, 0.7);
 
     // Star
-    --star: rgb(238, 224, 19);
+    --star: rgba(238, 224, 19, 1);
 }
 
 /* *****************************************************************
@@ -281,6 +283,54 @@ dialog {
         box-shadow: 0px 0px 10px 1px var(--common-bg);
     }
 }
+.tooltip {
+    position: relative;
+    display: inline-block;
+    background: radial-gradient(circle, var(--tooltip-light) 0%, var(--tooltip-grey) 100%);
+	border-radius: 50%;
+    width: 30px;
+	height: 30px;
+	line-height: 30px;
+    margin-left: 5px;
+    font-weight: normal;
+    font-size: 16px;
+    &:before {
+        content:'?';
+        font-weight: bold;
+    }
+    &:hover{
+        & .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+        }
+    }
+    & .tooltiptext {
+        visibility: hidden;
+        width: 120px;
+        background-color: #555;
+        color: var(--text-light);
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        margin-left: -60px;
+        opacity: 0;
+        transition: opacity 0.3s;
+        &::after{
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #555 transparent transparent transparent;
+        }
+    }
+}
 small {
     display: block;
     margin: 0 auto;
@@ -353,6 +403,11 @@ small {
         left: 86%;
         background-color: var(--way-btn);
         margin-right: 5px;
+        &.wayInList {
+            position: absolute;
+            bottom: 5%;
+            left: 86%;
+        }
         &:hover {
             background-color: var(--way-btn-hover);
             color: var(--text-dark);
@@ -368,7 +423,7 @@ small {
     }
     &.delete {
         position: absolute;
-        top: 5%;
+        top: 9%;
         left: 80%;
         background-color: var(--delete-btn);
         color: var(--text-light);
@@ -384,14 +439,18 @@ small {
         }
         &.admin {
             border-radius: 0px 10px 10px 0px;
+            position: static;
         }
         &.listBtn {
             border-radius: 0px 10px 10px 0px;
         }
+        &.static {
+            position: static;
+        }
     }
     &.edit {
         position: absolute;
-        top: 5%;
+        top: 9%;
         left: 82%;
         background-color: var(--edit-btn);
         color: var(--text-light);
@@ -404,9 +463,13 @@ small {
         }
         &.admin {
             border-radius: 0px;
+            position: static;
         }
         &.listBtn {
             border-radius: 10px 0px 0px 10px;
+        }
+        &.static {
+            position: static;
         }
     }
     &.cancel {

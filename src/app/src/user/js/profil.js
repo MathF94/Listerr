@@ -31,7 +31,9 @@ function read() {
     const listBtn = document.querySelector("#listsUser");
     listBtn.title ="Accéder à mes listes";
     updateBtn.title = "Modifier le profil";
+    updateBtn.classList.add("static");
     deleteBtn.title = "Supprimer le profil";
+    deleteBtn.classList.add("static");
 
     function displayUser(response) {
         const profilWrapper = document.querySelector("#profilWrapper");
@@ -299,6 +301,7 @@ function read() {
                 }
                 deleteBtn.classList.remove("hide");
                 updateBtn.classList.remove("hide");
+                updateBtn.classList.add("static");
                 displayUser(response);
 
                 // Redirige l'utilisateur vers la page de listes lorsqu'il clique sur le bouton "Listes d'utilisateurs".
