@@ -253,6 +253,11 @@ dialog {
 /* *****************************************************************
     UTILISATEURS / ADMIN, LISTE & CARTE
 ***************************************************************** */
+
+// pour la balise article des listes
+// position: relative;
+// width: 200px;
+
 .list {
     position: relative;
     max-width: 450px;
@@ -365,6 +370,7 @@ small {
     BOUTONS
 ***************************************************************** */
 .btn {
+
     border: none;
     border-radius: 10px;
     color: var(--text-dark);
@@ -392,6 +398,9 @@ small {
         }
     }
     &.way {
+        position: absolute;
+        bottom: 5%;
+        left: 86%;
         background-color: var(--way-btn);
         margin-right: 5px;
         &.wayInList {
@@ -641,6 +650,7 @@ input[type="submit"] {
     .list {
         width: 579px;
     }
+
 }
 
 @media screen and (max-width: 619px) {
@@ -658,20 +668,22 @@ input[type="submit"] {
     .list {
         width: 95%;
     }
+
 }
 
 @media screen and (min-width: 810px) {
     body{
-        background-size: 609px;
+        background-size: 610px;
         background-repeat: repeat-y;
         background-position: center;
-        width: 590px;
+        width: 635px;
+        // width: 590px;
     }
-    .profil {
-        &_role {
-            display: none;
-        }
-    }
+    // .profil {
+    //     &_role {
+    //         display: none;
+    //     }
+    // }
 }
 
 @media screen and (min-width: 1025px) {
@@ -729,4 +741,10 @@ input[type="submit"] {
         margin: 10px;
         border-radius: 20px;
     }
+    // .delete {
+    //     left: 80%!important;
+    // }
+    // .edit {
+    //     left: 72%!important;
+    // }
 }

@@ -146,6 +146,8 @@ function list() {
                             oneList.classList.add("hidden");
                             updateBtnList.disabled = true;
                             deleteBtnList.disabled = true;
+                            sectionList.classList.add("hidden");
+
 
                             // Affichage de la liste + suppression du formulaire d'édition
                             const updateFormList  = document.querySelector("#formList");
@@ -154,6 +156,7 @@ function list() {
                                 updateBtnList.disabled = false;
                                 deleteBtnList.disabled = false;
                                 oneList.classList.remove("hidden");
+                                sectionList.classList.remove("hidden");
                             })
 
                             // Insertion des éléments de la liste dans les inputs
