@@ -112,7 +112,7 @@ function lists() {
                 articleList.id = `profilList-${objectList.id}`;
                 articleList.classList.add("list");
                 articleList.classList.add(type[objectList.type]);
-
+                
                 // Si suppression du type de liste, mettre une couleur grise aux listes
                 if(!['WishList', 'TodoList'].includes(objectList.type)) {
                     articleList.classList.add(type.Common)
@@ -137,7 +137,7 @@ function lists() {
                 for (const key in objectList) {
                     const value = objectList[key];
                     const text = document.createElement("p");
-                    
+
                     if (key === "title") {
                         titleH4.innerText = `${objectList.title} - ${objectList.description}`;
                     } else if (key === "type") {

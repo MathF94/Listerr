@@ -68,11 +68,16 @@ function readAllLists() {
 
             for (const index in data) {
                 const object = data[index];
-
                 const articleList = document.createElement("article");
                 articleList.id = `homeList-${object.id}`;
                 articleList.classList.add("list");
-                articleList.classList.add("wish");
+
+                if(JSON.parse(localStorage.user).id !== object.userId) {
+                    articleList.classList.add("third_party_wish");
+                }
+                else {
+                    articleList.classList.add("wish");
+                }
 
                 const sectionList = document.createElement("section");
                 const typeH3 = document.createElement("h3");
