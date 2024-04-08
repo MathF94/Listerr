@@ -395,6 +395,9 @@ small {
   border-radius: 10px 0px 0px 10px;
 }
 .btn.way {
+  position: absolute;
+  bottom: 5%;
+  left: 86%;
   background-color: var(--way-btn);
   margin-right: 5px;
 }
@@ -671,13 +674,10 @@ input[type=submit]:hover {
 }
 @media screen and (min-width: 810px) {
   body {
-    background-size: 609px;
+    background-size: 610px;
     background-repeat: repeat-y;
     background-position: center;
-    width: 590px;
-  }
-  .profil_role {
-    display: none;
+    width: 635px;
   }
 }
 @media screen and (min-width: 1025px) {

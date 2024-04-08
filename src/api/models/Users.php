@@ -242,7 +242,6 @@ class Users extends Database
                 WHERE `id` = :id";
             $query = $this->db->prepare($req);
             $params['id'] = $id;
-
             $exect = $query->execute($params);
 
             // S'il y a un status et qu'il s'agit d'une erreur de duplicata, dans ce cas, retourne false

@@ -435,12 +435,10 @@ class UserController
      *                                 "fail" avec un message d'erreur, si l'utilisateur est introuvable.
      *                                 "errors" avec un message d'erreur, en cas d'échec.     */
 
-    public function updateUserById(string $tokenUser, string $csrfToken,): string
+    public function updateUserById(string $tokenUser, string $csrfToken): string
     {
         try {
-
-            $validToken = $this->csrfToken->isValidToken($csrfToken, "updateForm");
-
+            $validToken = $this->csrfToken->isValidToken($csrfToken, "formUpdateUser");
             if (!$validToken) {
                 return json_encode([
                     "status" => "fail",
@@ -466,15 +464,19 @@ class UserController
                     "name" => $_POST["name"],
                     "firstname" => $_POST["firstname"],
                     "login" => $_POST["login"],
-                    "email" => $_POST["email"]
+                    "email" => $_POST["email"],
+                    "role_id" => $_POST["role"]
                 ];
+
+                $params['role_id'] === 'Admin' ? $params['role_id'] = User::ROLE_ADMIN : $params['role_id'] = User::ROLE_USER;
+
                 $modelUser = new Users();
-                $update = $modelUser->update($params, $id);
+                $update = $modelUser->updateUserById($params, $id);
 
                 if ($update) {
                     return json_encode([
-                        "status" => "updateUser",
-                        "message" => "Le profil a bien été mis à jour."
+                        "status" => "[Admin]updateUser",
+                        "message" => "Le profil a bien été mis à jour par l'Admin."
                     ]);
                 }
                 // si $update est false, il s'agit d'un duplicata d'un champ
