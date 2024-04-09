@@ -257,10 +257,6 @@ dialog {
     UTILISATEURS / ADMIN, LISTE & CARTE
 ***************************************************************** */
 
-// pour la balise article des listes
-// position: relative;
-// width: 200px;
-
 .list {
     position: relative;
     max-width: 450px;
@@ -387,7 +383,6 @@ small {
     BOUTONS
 ***************************************************************** */
 .btn {
-
     border: none;
     border-radius: 10px;
     color: var(--text-dark);
@@ -415,9 +410,6 @@ small {
         }
     }
     &.way {
-        position: absolute;
-        bottom: 5%;
-        left: 86%;
         background-color: var(--way-btn);
         margin-right: 5px;
         &.wayInList {

@@ -11,6 +11,7 @@ import {
     allowedIds,
     type,
     dialog,
+    toolTip,
     redirect,
     notAllowedRedirection,
 } from "../../services/utils.js";
@@ -81,8 +82,8 @@ function read() {
 
                     // En tant qu'Admin, modifie le texte du bouton
                     const listsUser = document.querySelector("#listsUser");
-                    listsUser.innerText = "Listes de l'utilisateur";
-                    listsUser.title = "Listes de l'utilisateur";
+                    listsUser.innerText = `Listes de ${response.login.value}`;
+                    listsUser.title = `Listes de ${response.login.value}`;
                     listsUser.after(returnBtn);
 
                     updateBtn.addEventListener("click", function (e) {
@@ -240,21 +241,12 @@ function read() {
 
                                     if (key === "title") {
                                         titleH4.innerText = `${objectList.title}`;
-
                                     } else if (key === "type") {
                                         typeH3.innerText = `${objectList.type}`;
                                     }
 
-                                    if (key === "user" && typeof value === "object") {
-                                        const small = document.createElement("small");
-                                        small.innerText = `Par ${objectList[key].login}.`;
-                                        sectionList.appendChild(small);
-                                    } else {
-                                        if (key === "updatedAt") {
-                                            const small = document.createElement("small");
-                                            small.innerText = `Dernière modification le ${objectList[key]}`;
-                                            sectionList.appendChild(small);
-                                        }
+                                    if (key === "updatedAt") {
+                                        toolTip(typeH3, objectList.updatedAt, objectList.user.login)
                                     }
 
                                     // Exclut certains éléments de la liste
