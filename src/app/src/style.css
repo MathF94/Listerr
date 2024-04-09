@@ -395,9 +395,6 @@ small {
   border-radius: 10px 0px 0px 10px;
 }
 .btn.way {
-  position: absolute;
-  bottom: 5%;
-  left: 86%;
   background-color: var(--way-btn);
   margin-right: 5px;
 }

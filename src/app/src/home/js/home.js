@@ -5,7 +5,8 @@ import {
     configPath,
     allowedIds,
     redirect,
-    dialog
+    dialog,
+    toolTip
 } from "../../services/utils.js";
 
 /**
@@ -97,16 +98,8 @@ function readAllLists() {
                             typeH3.innerText = `${object.type}`;
                         }
 
-                        if (key === "user" && typeof value === "object") {
-                            const small = document.createElement("small");
-                            small.innerText = `Par ${object[key].login}`;
-                            sectionList.appendChild(small);
-                        } else {
-                            if (key === "updatedAt") {
-                                const small = document.createElement("small");
-                                small.innerText = `Dernière modification le ${object[key]}`;
-                                sectionList.appendChild(small);
-                            }
+                        if (key === "updatedAt") {
+                            toolTip(typeH3, object.updatedAt, object.user.login)
                         }
 
                         if (allowedIds.includes(`${key}`)) {
@@ -123,17 +116,10 @@ function readAllLists() {
                 }
 
                 articleList.addEventListener("click", function () {
-                    if (
-                        object.type === "TodoList" &&
-                        object.user.id !==
-                            JSON.parse(localStorage.getItem("user")).id
-                    ) {
+                    if (object.type === "TodoList" && object.user.id !== JSON.parse(localStorage.getItem("user")).id) {
                         return false;
                     }
-                    redirect(
-                        `${configPath.basePath}/list/pages/list.html?id=${object.id}`,
-                        0
-                    )
+                    redirect(`${configPath.basePath}/list/pages/list.html?id=${object.id}`, 0)
                 })
             }
         }
