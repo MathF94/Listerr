@@ -72,6 +72,7 @@ function list() {
                 }
 
                 const typeList = document.createElement("h3");
+                typeList.classList.add('width');
                 typeList.innerText = `${data.type} - ${data.title}`;
 
                 const sectionList = document.createElement("section");
@@ -80,6 +81,7 @@ function list() {
                 const text = document.createElement("p");
 
                 const actionBtn = document.createElement("div");
+                actionBtn.id = "actionBtn";
 
                 const updateBtnList = document.createElement("button");
                 updateBtnList.id = `updateProfilList-${data.id}`;
@@ -107,7 +109,7 @@ function list() {
                 for (const index in data) {
                     const object = data[index];
                     if (index === "user" && typeof(data[index]) === "object") {
-                        toolTip(typeList, data.updatedAt, data.user.login)
+                        toolTip(actionBtn, data.updatedAt, data.user.login)
                     };
 
                     // Exclut certains éléments de la liste (id, userId, type, title, cards, createdAd)

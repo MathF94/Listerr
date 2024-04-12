@@ -2,25 +2,22 @@
 
 import { fetchRegister } from "../../actions/actions_user.js";
 import { CSRFToken } from "../../services/CSRFToken.js";
-import { configPath, redirect, dialog } from "../../services/utils.js";
+import { configPath, redirect, dialog, reveal } from "../../services/utils.js";
 
 /**
  * Gère le processus d'inscription de l'utilisateur, y compris la soumission du formulaire d'inscription,
  * la validation des données et la redirection de l'utilisateur.
  */
 function registration() {
-    const item = document.querySelector("#mainNav").firstChild.childNodes
-    const register = document.querySelector("#register");
-    if(item[1].textContent === "Inscription") {
-        item[1].style.backgroundColor = "#790202";
-        register.style.color = "#dddddd";
-    }
+    // Affiche ou cache le mot de passe
+    reveal();
 
     const registerBtn = document.querySelector("#registerBtn");
     registerBtn.title = "Valider l'inscription";
 
     const alreadyRegistered = document.querySelector("#alreadyRegistered");
     alreadyRegistered.title = "Redirection vers la page de connexion";
+    alreadyRegistered.setAttribute('href', `${configPath.basePath}/user/pages/login.html`);
 
     // Ajoute un gestionnaire d'événements pour soumettre le formulaire d'inscription.
     registerForm.addEventListener("submit", function(e){
@@ -32,6 +29,7 @@ function registration() {
         const inputFirstname = document.querySelector("#firstname");
         const inputPassword = document.querySelector("#password");
         const inputEmail = document.querySelector("#email");
+
         inputLogin.addEventListener("invalid", function(e) {
             validate(e.target)
         });

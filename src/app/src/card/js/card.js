@@ -162,8 +162,6 @@ function card(canCreateCard) {
     fetchReadAllCardsByList(id)
     .then(response => {
         if (response.status === "readOneList") {
-            console.log(response.data.userId);
-            console.log(JSON.parse(localStorage.user).id);
             const dataCards = response.data.cards;
             const cardArticleContent = document.createElement("article");
             cardArticleContent.id = "cardArticleContent";
@@ -184,10 +182,10 @@ function card(canCreateCard) {
                 }
             }
 
-            const titleCards = document.createElement("h3");
-            titleCards.innerText = "Plus en détails";
+            // const titleCards = document.createElement("h3");
+            // titleCards.innerText = "Plus en détails";
 
-            cardArticleContent.appendChild(titleCards);
+            // cardArticleContent.appendChild(titleCards);
 
             for (const indexCard in dataCards) {
                 const objectCard = dataCards[indexCard];
@@ -228,6 +226,7 @@ function card(canCreateCard) {
                 updateBtnCard.textContent = "";
                 updateBtnCard.classList.add("btn");
                 updateBtnCard.classList.add("edit");
+                updateBtnCard.classList.add("inCard");
                 updateBtnCard.classList.add("listBtn");
 
                 const deleteBtnCard = document.createElement("button");
@@ -239,7 +238,7 @@ function card(canCreateCard) {
                 deleteBtnCard.textContent = "";
                 deleteBtnCard.classList.add("btn");
                 deleteBtnCard.classList.add("delete");
-                deleteBtnCard.classList.add("inList");
+                deleteBtnCard.classList.add("inCard");
                 deleteBtnCard.classList.add("listBtn");
 
                 const priorityValue = objectCard.priority;
@@ -259,7 +258,6 @@ function card(canCreateCard) {
                 // Boucle de création des étoiles (pleines ou vides) en fonction de la priorité
                 for (let i = 0 ; i < 5; i++) {
                     const priority = document.createElement("span");
-                    // console.log(JSON.parse(localStorage.user).id);
                     if((JSON.parse(localStorage.user).id !== response.data.userId)) {
                         priority.classList.add("third_party_stars");
                     } else {
@@ -279,7 +277,7 @@ function card(canCreateCard) {
                         titleH3.innerText = `${objectCard.title}`;
                         cardSectionContent.appendChild(titleH3);
                     } else if (key === "updatedAt") {
-                        toolTip(titleH3, objectCard.updatedAt, response.data.user.login)
+                        toolTip(actionBtn, objectCard.updatedAt, response.data.user.login)
                     } else if (key === "checked") {
                         check.checked = objectCard.checked === 1;
                         if(check.checked) {

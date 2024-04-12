@@ -30,11 +30,15 @@ function read() {
     const deleteBtn = document.querySelector("#delete");
     const updateBtn = document.querySelector("#update");
     const listBtn = document.querySelector("#listsUser");
-    listBtn.title ="Accéder à mes listes";
     updateBtn.title = "Modifier le profil";
     updateBtn.classList.add("static");
+    updateBtn.classList.add("listBtn");
+
     deleteBtn.title = "Supprimer le profil";
     deleteBtn.classList.add("static");
+    deleteBtn.classList.add("listBtn");
+
+    listBtn.title ="Accéder à mes listes";
 
     function displayUser(response) {
         const profilWrapper = document.querySelector("#profilWrapper");
@@ -224,6 +228,7 @@ function read() {
                                 const articleList = document.createElement("article");
                                 articleList.id = `profilList-${objectList.id}`;
                                 articleList.classList.add("list");
+
                                 articleList.classList.add(type[objectList.type]);
 
                                 // Si suppression du type de liste, mettre une couleur grise aux listes
@@ -232,6 +237,7 @@ function read() {
                                 }
 
                                 const sectionList = document.createElement("section");
+                                sectionList.classList.add("width");
                                 const typeH3 = document.createElement("h3");
                                 const titleH4 = document.createElement("h4");
 
@@ -289,11 +295,14 @@ function read() {
             if (response.status === "connected" && localStorage.token && localStorage.user) {
                 // Affiche les boutons de suppression et de mise à jour lorsque l'utilisateur est connecté.
                 if (JSON.parse(localStorage.user).role === "Admin") {
+                    console.log(JSON.parse(localStorage.user).role);
+                    updateBtn.classList.remove("listBtn");
                     deleteBtn.remove();
+                } else{
+                    deleteBtn.classList.remove("hide");
+                    updateBtn.classList.remove("hide");
+                    updateBtn.classList.add("static");
                 }
-                deleteBtn.classList.remove("hide");
-                updateBtn.classList.remove("hide");
-                updateBtn.classList.add("static");
                 displayUser(response);
 
                 // Redirige l'utilisateur vers la page de listes lorsqu'il clique sur le bouton "Listes d'utilisateurs".
