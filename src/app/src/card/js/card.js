@@ -174,6 +174,8 @@ function card(canCreateCard) {
                 cardArticleContent.style.marginTop = "0";
             }
 
+
+
             if (response.data.type === "WishList" || response.data.type === "TodoList"){
                 if(JSON.parse(localStorage.user).id !== response.data.userId){
                     cardArticleContent.classList.add("third_party_wish");
@@ -184,7 +186,6 @@ function card(canCreateCard) {
 
             // const titleCards = document.createElement("h3");
             // titleCards.innerText = "Plus en détails";
-
             // cardArticleContent.appendChild(titleCards);
 
             for (const indexCard in dataCards) {
@@ -216,6 +217,7 @@ function card(canCreateCard) {
                 check.value = objectCard.checked;
 
                 const actionBtn = document.createElement("div");
+                actionBtn.id = "actionBtnCard";
 
                 const updateBtnCard = document.createElement("button");
                 updateBtnCard.id = `updateCard-${objectCard.id}`;
@@ -247,6 +249,8 @@ function card(canCreateCard) {
                     updateBtnCard.disabled = true;
                     updateBtnCard.classList.remove("edit");
                     updateBtnCard.classList.add("disableUpdate");
+                    updateBtnCard.classList.remove("inCard");
+                    updateBtnCard.classList.add("inCardChecked");
                     let checklabel = "Réservé";
                     if (localStorage.getItem("typeList") === "TodoList") {
                         checklabel = "Réalisé";
@@ -258,7 +262,7 @@ function card(canCreateCard) {
                 // Boucle de création des étoiles (pleines ou vides) en fonction de la priorité
                 for (let i = 0 ; i < 5; i++) {
                     const priority = document.createElement("span");
-                    if((JSON.parse(localStorage.user).id !== response.data.userId)) {
+                    if((JSON.parse(localStorage.user).id !== response.data.userId) || (response.data.type === "TodoList")) {
                         priority.classList.add("third_party_stars");
                     } else {
                         priority.classList.add("stars");
@@ -300,7 +304,7 @@ function card(canCreateCard) {
 
                 // Rend visible les boutons pour l'utilisateur courant uniquement
                 if (canCreateCard) {
-                    cardSectionContent.appendChild(actionBtn);
+                    cardArticleContent.appendChild(actionBtn);
                     actionBtn.appendChild(updateBtnCard);
                     actionBtn.appendChild(deleteBtnCard);
 
@@ -337,9 +341,12 @@ function card(canCreateCard) {
                         const updateCardSection = document.createElement("section");
                         updateCardSection.id = `updateCardSection-${objectCard.id}`;
                         updateCardSection.classList.add("updateCard");
+
                         deleteBtnCard.after(updateCardSection);
-                        titleForm.innerText = "Formulaire d'édition d'une carte";
                         updateCardSection.appendChild(titleForm)
+
+                        titleForm.innerText = "Formulaire d'édition d'une carte";
+                        titleForm.classList.add("width");
 
                         // Affichage du formulaire d'édition + dissimulation de la carte
                         displayFormCard(updateCardSection);
@@ -349,10 +356,12 @@ function card(canCreateCard) {
                         updateBtnCard.disabled = true;
                         updateBtnCard.classList.remove("edit");
                         updateBtnCard.classList.add("disableUpdate");
+                        updateBtnCard.classList.add("inCard");
 
                         deleteBtnCard.disabled = true;
                         deleteBtnCard.classList.remove("delete");
                         deleteBtnCard.classList.add("disableDelete");
+                        deleteBtnCard.classList.add("inCard");
 
                         // Affichage de la carte + suppression du formulaire d'édition
                         const updateFormCard  = document.querySelector("#formCard");

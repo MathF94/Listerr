@@ -16,6 +16,7 @@ function displayFormList(elementDOM) {
 
     const titleForm = document.createElement("h3");
     titleForm.id = "titleFormList";
+    titleForm.classList.add("width");
 
     const labelType = document.createElement("label");
     labelType.htmlFor  = "typeList";
