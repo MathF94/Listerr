@@ -102,7 +102,7 @@ function toolTip(anchor, updatedAt, login) {
     toolTip.classList.add("tooltip");
     const spanToolTip = document.createElement("span");
     spanToolTip.classList.add("tooltiptext");
-    spanToolTip.innerText = `Modifié le ${formatedDate} par ${login}.`;
+    spanToolTip.innerText = `Modifié le ${formatedDate} par ${login}`;
     toolTip.appendChild(spanToolTip);
     anchor.appendChild(toolTip);
 }
@@ -120,6 +120,23 @@ function scroll() {
         top: 0,
         behavior: "smooth",
     });
+}
+
+function reveal() {
+    const eyeIcon = document.querySelector("#icon");
+    const inputPW = document.querySelector("#password")
+    inputPW.classList.add("pl");
+
+    eyeIcon.addEventListener("mousedown", function(e){
+        eyeIcon.classList.remove("icon");
+        eyeIcon.classList.add("closed_eye");
+        inputPW.type = "text";
+    })
+    eyeIcon.addEventListener("mouseup", function(e){
+        eyeIcon.classList.remove("closed_eye");
+        eyeIcon.classList.add("icon");
+        inputPW.type = "password";
+    })
 }
 
 function validate(input) {
@@ -154,6 +171,7 @@ export {
     redirect,
     dialog,
     toolTip,
+    reveal,
     notAllowedRedirection,
     mandatoryStar,
     scroll,

@@ -17,49 +17,25 @@
             <form id="registerForm">
                 <div>
                     <label for="name">Votre nom</label>
-                    <input
-                        type="text"
-                        name="name"
-                        id="name"
-                        pattern="[A-Za-zÀ-ÿ' \-]+"
-                        required/>
+                    <input type="text" name="name" id="name" pattern="[A-Za-zÀ-ÿ' \-]+" required/>
                 </div>
                 <div>
                     <label for="firstname">Votre prénom</label>
-                    <input
-                        type="text"
-                        name="firstname"
-                        id="firstname"
-                        pattern="[A-Za-zÀ-ÿ' \-]+"
-                        required/>
+                    <input type="text" name="firstname" id="firstname" pattern="[A-Za-zÀ-ÿ' \-]+" required/>
                 </div>
                 <div>
                     <label for="login">Votre login</label>
-                    <input
-                        type="text"
-                        name="login"
-                        id="login"
-                        required/>
+                    <input type="text" name="login" id="login" required/>
                 </div>
                 <div>
                     <label for="email">Votre email</label>
-                    <input
-                        type="email"
-                        name="email"
-                        id="email"
-                        pattern="[^@\s]+@[^@\s]+\.[a-zA-Z]{2,}"
-                        required/>
+                    <input type="email" name="email" id="email" pattern="[^@\s]+@[^@\s]+\.[a-zA-Z]{2,}" required/>
                 </div>
                 <div>
                     <label for="password">Votre mot de passe</label>
                     <div class="fieldIcon">
-                        <input
-                        type="password"
-                        name="password"
-                        id="password"
-                        pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).{12,}$"
-                        required/>
-                        <div class="icon"></div>
+                        <input type="password" name="password" id="password" pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).{12,}$" required/>
+                        <div id="icon" class="icon"></div>
                     </div>
                     <small>Au moins 12 caractères dont une majuscule, un nombre, un caractère spécial</small>
                 </div>
@@ -67,7 +43,7 @@
                     <button id="registerBtn" class="btn valid" type="submit" title="Valider l'inscription">Valider</button>
                 </div>
             </form>
-            <a id="alreadyRegistered" href="http://localhost/listerr/src/app/src/user/pages/login.html" title="Redirection vers la page de connexion">J'ai déjà un compte.</a>
+            <a id="alreadyRegistered" title="Redirection vers la page de connexion">J'ai déjà un compte.</a>
         </section>
     </body>
 </html>

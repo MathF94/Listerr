@@ -193,6 +193,10 @@ a.active {
   display: none;
 }
 
+.width {
+  width: 80%;
+}
+
 /* *****************************************************************
     DIALOG
 ***************************************************************** */
@@ -248,6 +252,12 @@ dialog.errors_fields > h2 {
   align-items: center;
   cursor: pointer;
 }
+.list.little {
+  height: 140px;
+}
+.list.big {
+  height: 140px;
+}
 .list.wish {
   background: var(--wish-bg);
   box-shadow: 0px 0px 10px 1px var(--wish-bg);
@@ -266,7 +276,9 @@ dialog.errors_fields > h2 {
 }
 
 .tooltip {
-  position: relative;
+  position: absolute;
+  z-index: 1;
+  left: 85%;
   display: inline-block;
   background: radial-gradient(circle, var(--tooltip-light) 0%, var(--tooltip-grey) 100%);
   border-radius: 50%;
@@ -275,7 +287,8 @@ dialog.errors_fields > h2 {
   line-height: 30px;
   margin-left: 5px;
   font-weight: normal;
-  font-size: 16px;
+  font-size: 10px;
+  top: 74%;
 }
 .tooltip:before {
   content: "?";
@@ -359,7 +372,6 @@ small {
 }
 
 .sectionList {
-  width: 80%;
   margin: 0 auto;
 }
 
@@ -400,7 +412,7 @@ small {
 }
 .btn.way.wayInList {
   position: absolute;
-  bottom: 5%;
+  top: 45px;
   left: 86%;
 }
 .btn.way:hover {
@@ -427,6 +439,10 @@ small {
 }
 .btn.delete.inList {
   left: 90%;
+}
+.btn.delete.inCard {
+  top: 13%;
+  left: 85%;
 }
 .btn.delete:hover {
   background-color: var(--delete-btn-hover);
@@ -463,6 +479,10 @@ small {
 .btn.edit.listBtn {
   border-radius: 10px 0px 0px 10px;
 }
+.btn.edit.inCard {
+  top: 13%;
+  left: 77%;
+}
 .btn.edit.static {
   position: static;
 }
@@ -482,7 +502,7 @@ small {
 }
 .btn.disableUpdate {
   position: absolute;
-  top: 9%;
+  top: 2%;
   left: 82%;
   background-color: var(--disable-btn);
 }
@@ -496,10 +516,14 @@ small {
 .btn.disableUpdate.listBtn {
   border-radius: 10px 0px 0px 10px;
 }
+.btn.disableUpdate.inCard {
+  top: 13%;
+  left: 77%;
+}
 .btn.disableDelete {
   position: absolute;
   top: 2%;
-  left: 80%;
+  left: 90%;
   background-color: var(--disable-btn);
 }
 .btn.disableDelete::before {
@@ -578,6 +602,11 @@ input[type=submit]:focus-visible {
   outline: none;
 }
 
+input[type=text].pl,
+input[type=password].pl {
+  padding-left: 40px;
+}
+
 .fieldIcon {
   background: white;
   margin: 0;
@@ -592,11 +621,23 @@ input[type=submit]:focus-visible {
   margin: 0;
   border-radius: 5px 0 0 5px;
 }
-.fieldIcon > .icon {
+.fieldIcon > .icon,
+.fieldIcon .closed_eye {
   display: inline-block;
 }
-.fieldIcon > .icon::before {
+.fieldIcon > .icon::before,
+.fieldIcon .closed_eye::before {
   content: "👁";
+  color: var(--burger-item);
+  font-size: 22px;
+  margin: 0 5px;
+  cursor: pointer;
+}
+.fieldIcon > .icon::before {
+  color: var(--burger-item);
+}
+.fieldIcon > .closed_eye::before {
+  color: var(--third-party-wish-bg);
 }
 
 select {

@@ -111,14 +111,16 @@ function lists() {
                 const articleList = document.createElement("article");
                 articleList.id = `profilList-${objectList.id}`;
                 articleList.classList.add("list");
+                articleList.classList.add("little");
                 articleList.classList.add(type[objectList.type]);
-                
+
                 // Si suppression du type de liste, mettre une couleur grise aux listes
                 if(!['WishList', 'TodoList'].includes(objectList.type)) {
                     articleList.classList.add(type.Common)
                 }
 
                 const sectionList = document.createElement("section");
+                sectionList.classList.add("width");
 
                 const typeH3 = document.createElement("h3");
                 const titleH4 = document.createElement("h4");
@@ -146,7 +148,7 @@ function lists() {
 
                     // Affichage du tooltip
                     if (key === "user" && typeof(value) === "object") {
-                        toolTip(typeH3, objectList.updatedAt, objectList.user.login)
+                        toolTip(sectionList, objectList.updatedAt, objectList.user.login)
                     }
 
                     // Exclut certains éléments de la liste (id, userId, type, title, cards, createdAd)

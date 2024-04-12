@@ -8,18 +8,13 @@ import { configPath, redirect, dialog, validate } from "../../services/utils.js"
  * Gère le processus de connexion de l'utilisateur.
  */
 function login() {
-    const item = document.querySelector("#mainNav").firstChild.childNodes
-    const connexion = document.querySelector("#connexion");
-    if(item[2].textContent === "Connexion") {
-        item[2].style.backgroundColor = "#790202";
-        connexion.style.color = "#dddddd";
-    }
-
     const loginBtn = document.querySelector("#loginBtn");
     loginBtn.title = "Valider la connexion";
 
     const noRegisterYet = document.querySelector("#noRegisterYet");
     noRegisterYet.title = "Redirection pour création de compte";
+    noRegisterYet.setAttribute('href', `${configPath.basePath}/user/pages/login.html`);
+
 
     // Validation de pattern du formulaire
     const inputLogin = document.querySelector("#login");
