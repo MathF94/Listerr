@@ -63,7 +63,7 @@ function list() {
                 if(userId !== data.userId) {
                     oneList.classList.add("third_party_wish");
                 } else {
-                oneList.classList.add(type[data.type]);
+                    oneList.classList.add(type[data.type]);
                 }
 
                 // Si suppression du type de liste, mettre une couleur grise aux listes
@@ -81,7 +81,7 @@ function list() {
                 const text = document.createElement("p");
 
                 const actionBtn = document.createElement("div");
-                actionBtn.id = "actionBtn";
+                actionBtn.id = "actionBtnList";
 
                 const updateBtnList = document.createElement("button");
                 updateBtnList.id = `updateProfilList-${data.id}`;

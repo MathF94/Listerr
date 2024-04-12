@@ -24,27 +24,27 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     --burger-btn: rgba(51, 51, 51, 1);
 
     // Listes et cartes
-    --wish-bg: rgba(210, 194, 42, 0.6);
-    --todo-bg: rgba(145, 10, 0, 0.6);
-    --card-bg: rgba(69, 162, 92, 0.6);
-    --common-bg: rgba(150, 150, 150, 0.6);
-    --third-party-wish-bg: rgba(59, 137, 255, 0.6);
-    --third-party-todo-card-bg: rgba(255, 210, 77, 0.6);
+    --wish-bg: rgba(234, 222, 113, 1);
+    --todo-bg: rgba(196, 132, 63, 1);
+    --card-bg: rgba(108, 174, 124, 1);
+    --common-bg: rgba(150, 150, 150, 1);
+    --third-party-wish-bg: rgba(106, 143, 213, 1);
+    --third-party-todo-card-bg: rgba(255, 210, 77, 1);
 
     // Boutons
     --way-btn: rgba(213, 190, 3, 1);
-    --way-btn-hover: rgba(213, 190, 3, 0.8);
-    --valid-btn: rgba(89, 230, 60, 0.7);
+    --way-btn-hover: rgba(213, 190, 3, 1);
+    --valid-btn: rgba(89, 230, 60, 1);
     --valid-btn-hover: rgba(61, 156, 41, 1);
     --cancel-btn: rgba(117, 117, 117, 1);
-    --cancel-btn-hover: rgba(117, 117, 117, 0.8);
+    --cancel-btn-hover: rgba(117, 117, 117, 1);
     --view-btn: rgba(238, 214, 33, 1);
-    --view-btn-hover: rgba(213, 188, 3, 0.904);
-    --delete-btn: rgba(225, 31, 31, 0.7);
-    --delete-btn-hover: rgba(225, 31, 31, 1);
-    --edit-btn: rgba(8, 62, 166, 0.7);
+    --view-btn-hover: rgba(213, 188, 3, 1);
+    --delete-btn: rgba(189, 61, 61, 1);
+    --delete-btn-hover: rgba(145, 20, 20, 1);
+    --edit-btn: rgba(66, 105, 179, 1);
     --edit-btn-hover: rgba(31, 93, 213, 1);
-    --disable-btn: rgba(141, 125, 125, 0.63);
+    --disable-btn: rgba(141, 125, 125, 1);
     --disable-btn-hover: rgba(141, 125, 125, 1);
     --tooltip-light: rgba(220,220,220,1);
     --tooltip-grey: rgba(179,181,178,1);
@@ -199,9 +199,6 @@ body {
 h3, h4 {
     margin: 10px auto;
     padding: 5px;
-    // &.width {
-    //     width: 80%;
-    // }
 }
 a {
     margin-top: 10px;
@@ -215,7 +212,10 @@ a {
     display: none;
 }
 .width {
-    width: 80%;
+    width: 60%;
+}
+.cardWidth {
+    width: 60%;
 }
 
 /* *****************************************************************
@@ -283,19 +283,19 @@ dialog {
     }
     &.wish {
         background: var(--wish-bg);
-        box-shadow: 0px 0px 10px 1px var(--wish-bg);
+        box-shadow: 0px 0px 5px 1px var(--wish-bg);
     }
     &.todo {
         background: var(--todo-bg);
-        box-shadow: 0px 0px 10px 1px var(--todo-bg);
+        box-shadow: 0px 0px 5px 1px var(--todo-bg);
     }
     &.common {
         background: var(--common-bg);
-        box-shadow: 0px 0px 10px 1px var(--common-bg);
+        box-shadow: 0px 0px 5px 1px var(--common-bg);
     }
     &.third_party_wish {
         background: var(--third-party-wish-bg);
-        box-shadow: 0px 0px 10px 1px var(--third-party-wish-bg);
+        box-shadow: 0px 0px 5px 1px var(--third-party-wish-bg);
     }
 }
 .tooltip {
@@ -311,7 +311,7 @@ dialog {
     margin-left: 5px;
     font-weight: normal;
     font-size: 10px;
-    top: 74%;
+    top: 65%;
     &:before {
         content:'?';
         font-weight: bold;
@@ -361,17 +361,13 @@ small {
     margin: 20px auto;
     padding: 5px 0;
     cursor: pointer;
-    &.flex {
-        display: flex;
-        flex-direction: column;
-    }
     &.wish {
         background: var(--card-bg);
-        box-shadow: 0px 0px 10px 1px var(--card-bg);
+        box-shadow: 0px 0px 5px 1px var(--card-bg);
     }
     &.third_party_todo_card {
         background: var(--third-party-todo-card-bg);
-        box-shadow: 0px 0px 10px 1px var(--third-party-todo-card-bg);
+        box-shadow: 0px 0px 5px 1px var(--third-party-todo-card-bg);
     }
 }
 .stars {
@@ -428,7 +424,7 @@ small {
         margin-right: 5px;
         &.wayInList {
             position: absolute;
-            top: 45px;
+            top: 48px;
             left: 86%;
         }
         &:hover {
@@ -457,7 +453,7 @@ small {
             left: 90%
         }
         &.inCard {
-            top: 13%;
+            top: 19%;
             left: 85%
         }
         &:hover {
@@ -496,7 +492,7 @@ small {
             border-radius: 10px 0px 0px 10px;
         }
         &.inCard {
-            top: 13%;
+            top: 19%;
             left: 77%
         }
         &.static {
@@ -533,8 +529,12 @@ small {
             border-radius: 10px 0px 0px 10px;
         }
         &.inCard {
-            top: 13%;
+            top: 7%;
             left: 77%
+        }
+        &.inCardChecked {
+            top: 19%;
+            left: 77%;
         }
     }
     &.disableDelete {
@@ -552,6 +552,10 @@ small {
         &.listBtn {
             border-radius: 0px 10px 10px 0px;
         }
+        &.inCard {
+            top: 7%;
+            left: 85%;
+        }
     }
 }
 
@@ -567,7 +571,7 @@ form {
     padding: 10px 20px;
     margin: 0px auto;
     border-radius: 8px;
-    box-shadow: 0 0 10px var(--border);
+    box-shadow: 0 0 5px var(--border);
     &> div {
         margin: 10px 0;
     }
@@ -701,7 +705,6 @@ input[type="submit"] {
     .list {
         width: 579px;
     }
-
 }
 
 @media screen and (max-width: 619px) {
@@ -719,7 +722,6 @@ input[type="submit"] {
     .list {
         width: 95%;
     }
-
 }
 
 @media screen and (min-width: 810px) {
@@ -728,7 +730,6 @@ input[type="submit"] {
         background-repeat: repeat-y;
         background-position: center;
         width: 635px;
-        // width: 590px;
     }
     // .profil {
     //     &_role {
@@ -790,12 +791,6 @@ input[type="submit"] {
     .list {
         width: 45%;
         margin: 10px;
-        border-radius: 20px;
+        border-radius: 10px;
     }
-    // .delete {
-    //     left: 80%!important;
-    // }
-    // .edit {
-    //     left: 72%!important;
-    // }
 }
