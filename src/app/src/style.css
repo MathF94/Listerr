@@ -62,7 +62,7 @@ header {
 }
 
 #hamburger-menu {
-  z-index: 10;
+  z-index: 12;
 }
 
 #menu__toggle {
@@ -90,7 +90,7 @@ header {
   width: 26px;
   height: 26px;
   cursor: pointer;
-  z-index: 1;
+  z-index: 11;
 }
 .menu__btn > span, .menu__btn > span::before, .menu__btn > span::after {
   display: block;
@@ -110,6 +110,7 @@ header {
   top: 8px;
 }
 .menu__box {
+  z-index: 10;
   display: block;
   position: fixed;
   top: 0;
@@ -170,7 +171,7 @@ body {
   border-color: var(--border-color);
 }
 
-.login, .register, .sectionList {
+.login, .register, #sectionLists {
   display: flex;
   flex-direction: column;
 }
@@ -191,14 +192,6 @@ a.active {
 
 .hidden {
   display: none;
-}
-
-.width {
-  width: 60%;
-}
-
-.cardWidth {
-  width: 60%;
 }
 
 /* *****************************************************************
@@ -243,23 +236,56 @@ dialog.errors_fields > h2 {
 /* *****************************************************************
     UTILISATEURS / ADMIN, LISTE & CARTE
 ***************************************************************** */
+.grid {
+  display: grid;
+  grid-template: repeat(1, 1fr)/repeat(5, 1fr);
+}
+
+.grid_section {
+  grid-column: 1/6;
+  grid-row: 2/2;
+}
+
+.grid_typeH3 {
+  grid-column: 1/4;
+  grid-row: 1/2;
+}
+
+.grid_text {
+  grid-column: 2/5;
+  grid-row: 2/2;
+}
+
+.grid_action_btn_lists {
+  grid-column: 4/5;
+  grid-row: 1/2;
+}
+
+.grid_edit_list {
+  grid-column: 1/6;
+  grid-row: 3/3;
+}
+
+.grid_create_card {
+  grid-column: 5/5;
+  grid-row: 2/2;
+}
+
+.grid_tooltip {
+  grid-column: 5/5;
+}
+
 .list {
-  position: relative;
+  align-items: center;
   max-width: 450px;
   width: 100%;
   text-align: center;
   border-radius: 10px;
   margin: 20px auto;
   padding: 5px 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   cursor: pointer;
 }
 .list.little {
-  height: 140px;
-}
-.list.big {
   height: 140px;
 }
 .list.wish {
@@ -280,19 +306,16 @@ dialog.errors_fields > h2 {
 }
 
 .tooltip {
-  position: absolute;
   z-index: 1;
-  left: 85%;
   display: inline-block;
   background: radial-gradient(circle, var(--tooltip-light) 0%, var(--tooltip-grey) 100%);
   border-radius: 50%;
   width: 30px;
   height: 30px;
   line-height: 30px;
-  margin-left: 5px;
   font-weight: normal;
   font-size: 10px;
-  top: 65%;
+  margin: 0 auto;
 }
 .tooltip:before {
   content: "?";
@@ -371,7 +394,7 @@ small {
   margin-top: 28px;
 }
 
-.sectionList {
+#sectionLists {
   margin: 0 auto;
 }
 
@@ -410,11 +433,6 @@ small {
   background-color: var(--way-btn);
   margin-right: 5px;
 }
-.btn.way.wayInList {
-  position: absolute;
-  top: 48px;
-  left: 86%;
-}
 .btn.way:hover {
   background-color: var(--way-btn-hover);
   color: var(--text-dark);
@@ -428,9 +446,6 @@ small {
   color: var(--text-light);
 }
 .btn.delete {
-  position: absolute;
-  top: 9%;
-  left: 80%;
   background-color: var(--delete-btn);
   color: var(--text-light);
 }
@@ -459,9 +474,6 @@ small {
   position: static;
 }
 .btn.edit {
-  position: absolute;
-  top: 9%;
-  left: 82%;
   background-color: var(--edit-btn);
   color: var(--text-light);
 }
@@ -501,9 +513,6 @@ small {
   color: var(--text-dark);
 }
 .btn.disableUpdate {
-  position: absolute;
-  top: 2%;
-  left: 82%;
   background-color: var(--disable-btn);
 }
 .btn.disableUpdate::before {
@@ -525,9 +534,6 @@ small {
   left: 77%;
 }
 .btn.disableDelete {
-  position: absolute;
-  top: 2%;
-  left: 90%;
   background-color: var(--disable-btn);
 }
 .btn.disableDelete::before {
@@ -767,11 +773,11 @@ input[type=submit]:hover {
     justify-content: center;
     margin: 10px;
   }
-  .sectionList {
+  #sectionLists {
     display: flex;
     align-items: center;
   }
-  .sectionList > article {
+  #sectionLists > article {
     width: 600px;
   }
   .list {

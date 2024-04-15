@@ -72,6 +72,7 @@ function readAllLists() {
                 const articleList = document.createElement("article");
                 articleList.id = `homeList-${object.id}`;
                 articleList.classList.add("list");
+                articleList.classList.add("grid");
 
                 if(JSON.parse(localStorage.user).id !== object.userId) {
                     articleList.classList.add("third_party_wish");
@@ -81,14 +82,15 @@ function readAllLists() {
                 }
 
                 const sectionList = document.createElement("section");
+                sectionList.classList.add("grid_section");
                 const typeH3 = document.createElement("h3");
+                typeH3.classList.add("grid_typeH3");
                 const titleH4 = document.createElement("h4");
 
                 // N'affiche que les WishList
                 if(object.type === "WishList"){
 
                     for (const key in object) {
-                        const value = object[key];
                         const text = document.createElement("p");
 
                         if (key === "title") {
@@ -99,7 +101,7 @@ function readAllLists() {
                         }
 
                         if (key === "updatedAt") {
-                            toolTip(typeH3, object.updatedAt, object.user.login)
+                            toolTip(articleList, object.updatedAt, object.user.login)
                         }
 
                         if (allowedIds.includes(`${key}`)) {

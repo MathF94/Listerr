@@ -228,6 +228,7 @@ function read() {
                                 const articleList = document.createElement("article");
                                 articleList.id = `profilList-${objectList.id}`;
                                 articleList.classList.add("list");
+                                articleList.classList.add("grid");
 
                                 articleList.classList.add(type[objectList.type]);
 
@@ -237,8 +238,9 @@ function read() {
                                 }
 
                                 const sectionList = document.createElement("section");
-                                sectionList.classList.add("width");
+                                sectionList.classList.add("grid_section");
                                 const typeH3 = document.createElement("h3");
+                                typeH3.classList.add("grid_typeH3");
                                 const titleH4 = document.createElement("h4");
 
                                 for (const key in objectList) {
@@ -252,7 +254,7 @@ function read() {
                                     }
 
                                     if (key === "updatedAt") {
-                                        toolTip(typeH3, objectList.updatedAt, objectList.user.login)
+                                        toolTip(articleList, objectList.updatedAt, objectList.user.login)
                                     }
 
                                     // Exclut certains éléments de la liste

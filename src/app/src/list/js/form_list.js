@@ -10,13 +10,12 @@ import { mandatoryStar } from "../../services/utils.js";
 function displayFormList(elementDOM) {
     const sectionForm = document.createElement("section");
     sectionForm.id = "listFormSection";
-
+    
     const formList = document.createElement("form");
     formList.id = "formList";
 
     const titleForm = document.createElement("h3");
     titleForm.id = "titleFormList";
-    titleForm.classList.add("width");
 
     const labelType = document.createElement("label");
     labelType.htmlFor  = "typeList";

@@ -109,7 +109,7 @@ function navigation(template) {
             const item = document.createElement("li");
             const link = document.createElement("a");
             link.classList.add("menu__item");
-
+            
             if (linkData.href !== undefined) {
                 link.setAttribute("href", linkData.href);
                 link.id = linkData.id;

@@ -23,6 +23,15 @@ import { card } from "../../card/js/card.js";
  * Fonction principale pour gérer la page de détails d'une liste.
  */
 function list() {
+    const linkLists = document.querySelector("#lists");
+    const linkHome = document.querySelector("#home");
+    const linkProfil = document.querySelector("#profil");
+    const linkUsersProfil = document.querySelector("#usersProfil");
+    linkLists.classList.add("active");
+    linkProfil.classList.remove("active");
+    linkHome.classList.remove("active");
+    linkUsersProfil.classList.remove("active");
+
     // Obtient l'identifiant de la liste à partir des paramètres de l'URL.
     const urlParams = new URLSearchParams(document.location.search);
     if (urlParams.has("id")) {
@@ -41,14 +50,17 @@ function list() {
             if(response.message === "ID not numeric" || id === "") {
                 redirect(`${configPath.basePath}/home/pages/home.html`, 0)
             }
+
             if(response.errors === "no list found") {
                 // Si aucune liste n'est retrouvée (type === null), redirection vers home.html
                 notAllowedRedirection();
             }
+
             const data = response.data; // user de la liste
             let userId = null;
             userId = JSON.parse(localStorage.user).id; // user courant
             localStorage.setItem("typeList", data?.type);
+
             if (localStorage.user) {
                 if (JSON.parse(localStorage.user).role === "Admin" && response.data.user.role !== "Admin") {
                     returnLists.href = `${configPath.basePath}/user/pages/profil.html?id=${response.data.userId}`;
@@ -59,8 +71,14 @@ function list() {
                 notAllowedRedirection(data?.type);
                 const oneList = document.querySelector("#oneList");
                 oneList.classList = "list";
+                oneList.classList.add("grid");
+
+                const typeList = document.createElement("h3");
+                typeList.classList.add("grid_typeH3")
+                typeList.innerText = `${data.type} - ${data.title}`;
 
                 if(userId !== data.userId) {
+                    oneList.classList.add("grid");
                     oneList.classList.add("third_party_wish");
                 } else {
                     oneList.classList.add(type[data.type]);
@@ -71,17 +89,16 @@ function list() {
                     oneList.classList.add(type.Common)
                 }
 
-                const typeList = document.createElement("h3");
-                typeList.classList.add('width');
-                typeList.innerText = `${data.type} - ${data.title}`;
+                toolTip(oneList, data.updatedAt, data.user.login)
 
                 const sectionList = document.createElement("section");
-                sectionList.classList.add("flex");
+                sectionList.classList.add("grid_text");
+                sectionList.id = "sectionTxt";
 
                 const text = document.createElement("p");
-
-                const actionBtn = document.createElement("div");
-                actionBtn.id = "actionBtnList";
+                const actionBtnlist = document.createElement("div");
+                actionBtnlist.id = "actionBtnList";
+                actionBtnlist.classList.add("grid_action_btn_lists")
 
                 const updateBtnList = document.createElement("button");
                 updateBtnList.id = `updateProfilList-${data.id}`;
@@ -109,7 +126,7 @@ function list() {
                 for (const index in data) {
                     const object = data[index];
                     if (index === "user" && typeof(data[index]) === "object") {
-                        toolTip(actionBtn, data.updatedAt, data.user.login)
+                        // toolTip(actionBtnlist, data.updatedAt, data.user.login)
                     };
 
                     // Exclut certains éléments de la liste (id, userId, type, title, cards, createdAd)
@@ -120,26 +137,35 @@ function list() {
                     sectionList.appendChild(text);
                     oneList.appendChild(typeList);
                     oneList.appendChild(sectionList);
+                    actionBtnlist.appendChild(updateBtnList);
+                    actionBtnlist.appendChild(deleteBtnList);
                 };
                 // Rend visible les boutons "Supprimer" et "Modifier" pour l'utilisateur en cours uniquement
                 localStorage.setItem("canCreateCard", userId === data.user.id)
+
                 if (userId === data.user.id) {
-                    oneList.appendChild(actionBtn);
-                    actionBtn.appendChild(updateBtnList);
-                    actionBtn.appendChild(deleteBtnList);
+                    oneList.appendChild(actionBtnlist);
+                    // actionBtnlist.appendChild(updateBtnList);
+                    // actionBtnlist.appendChild(deleteBtnList);
 
                     // Gestion de la mise à jour de la liste
                     updateBtnList.addEventListener("click", function(e) {
                         e.preventDefault();
                         const updtBtnListId = parseInt(e.target.value);
+
                         if (updtBtnListId !== data.id) {
                             console.warn("pas touche");
                             return;
 
                         } else {
+                            actionBtnlist.classList.remove("grid_action_btn_lists");
+                            actionBtnlist.classList.add("grid_edit_list");
+                            // actionBtnlist.style.gridColumn = "1/6";
+                            // actionBtnlist.style.gridRow = "3/3";
+
                             const updateList = document.createElement("section");
                             updateList.id = "updateList";
-                            updateList.classList.add("updateList");
+
                             deleteBtnList.after(updateList);
 
                             // Affichage du formulaire d'édition + dissimulation de la liste
@@ -150,7 +176,6 @@ function list() {
                             deleteBtnList.disabled = true;
                             sectionList.classList.add("hidden");
 
-
                             // Affichage de la liste + suppression du formulaire d'édition
                             const updateFormList  = document.querySelector("#formList");
                             cancelForm.addEventListener("click", function(){
@@ -159,6 +184,8 @@ function list() {
                                 deleteBtnList.disabled = false;
                                 oneList.classList.remove("hidden");
                                 sectionList.classList.remove("hidden");
+                                actionBtnlist.classList.remove("grid_edit_list");
+                                actionBtnlist.classList.add("grid_action_btn_lists");
                             })
 
                             // Insertion des éléments de la liste dans les inputs

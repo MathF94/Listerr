@@ -2,12 +2,15 @@
 
 import { fetchLogin } from "../../actions/actions_user.js";
 import { CSRFToken } from "../../services/CSRFToken.js";
-import { configPath, redirect, dialog, validate } from "../../services/utils.js";
+import { configPath, redirect, dialog, validate, reveal } from "../../services/utils.js";
 
 /**
  * Gère le processus de connexion de l'utilisateur.
  */
 function login() {
+    // Affiche ou cache le mot de passe
+    reveal();
+    
     const loginBtn = document.querySelector("#loginBtn");
     loginBtn.title = "Valider la connexion";
 

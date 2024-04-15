@@ -1,15 +1,5 @@
 "use strict";
 
-/**
- * Configuration des chemins de base pour l'application et l'API.
- * @property {string} basePath - Le chemin de base de l'application.
- * @property {string} apiPath - Le chemin de base de l'API.
- */
-const configPath = {
-    basePath: "http://localhost/listerr/src/app/src",
-    apiPath: "http://localhost/listerr/src/api"
-};
-
 const allowedIds = [
     "status",
     "id",
@@ -23,10 +13,14 @@ const allowedIds = [
     "updatedAt"
 ];
 
-const type = {
-    WishList: 'wish',
-    TodoList: 'todo',
-    Common: 'common'
+/**
+ * Configuration des chemins de base pour l'application et l'API.
+ * @property {string} basePath - Le chemin de base de l'application.
+ * @property {string} apiPath - Le chemin de base de l'API.
+ */
+const configPath = {
+    basePath: "http://localhost/listerr/src/app/src",
+    apiPath: "http://localhost/listerr/src/api"
 };
 
 /**
@@ -36,16 +30,11 @@ const mandatoryStar = document.createElement("span");
 mandatoryStar.innerText = "*";
 mandatoryStar.classList.add("mandatory");
 
-/**
- * Redirige l'utilisateur vers une autre URL.
- * @param {string} url - L'URL vers laquelle rediriger l'utilisateur.
- * @param {number} [duration=2000] - La durée en millisecondes avant la redirection.
- */
-function redirect(url, duration = 2000) {
-    window.setTimeout(function () {
-        window.location.href = url;
-    }, duration);
-}
+const type = {
+    WishList: 'wish',
+    TodoList: 'todo',
+    Common: 'common'
+};
 
 /**
  * Affiche une boîte de dialogue modale.
@@ -88,6 +77,52 @@ function dialog({title, content}) {
     }
 }
 
+function notAllowedRedirection(type) {
+    if (type !== "WishList" || type === null) {
+        if (!localStorage.token || localStorage.token === undefined) {
+            redirect(`${configPath.basePath}/home/pages/home.html`, 0);
+        }
+    }
+}
+
+/**
+ * Redirige l'utilisateur vers une autre URL.
+ * @param {string} url - L'URL vers laquelle rediriger l'utilisateur.
+ * @param {number} [duration=2000] - La durée en millisecondes avant la redirection.
+ */
+function redirect(url, duration = 2000) {
+    window.setTimeout(function () {
+        window.location.href = url;
+    }, duration);
+}
+
+function reveal() {
+    const eyeIcon = document.querySelector("#icon");
+    const inputPW = document.querySelector("#password")
+    inputPW.classList.add("pl");
+
+    eyeIcon.addEventListener("click", function(e) {
+        e.preventDefault();
+
+        if (inputPW.type === "password") {
+            inputPW.type = "text";
+            eyeIcon.classList.remove("icon");
+            eyeIcon.classList.add("closed_eye");
+        } else {
+            eyeIcon.classList.add("icon");
+            eyeIcon.classList.remove("closed_eye");
+            inputPW.type = "password";
+        }
+    })
+}
+
+function scroll() {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+    });
+}
+
 function toolTip(anchor, updatedAt, login) {
     let dateFromDatabase = updatedAt ;
     let date = new Date(dateFromDatabase);
@@ -99,44 +134,15 @@ function toolTip(anchor, updatedAt, login) {
                         + year;
 
     const toolTip = document.createElement("div");
+    toolTip.id = "tooltip";
     toolTip.classList.add("tooltip");
+    toolTip.classList.add("grid_tooltip");
+    
     const spanToolTip = document.createElement("span");
     spanToolTip.classList.add("tooltiptext");
     spanToolTip.innerText = `Modifié le ${formatedDate} par ${login}`;
     toolTip.appendChild(spanToolTip);
-    anchor.appendChild(toolTip);
-}
-
-function notAllowedRedirection(type) {
-    if (type !== "WishList" || type === null) {
-        if (!localStorage.token || localStorage.token === undefined) {
-            redirect(`${configPath.basePath}/home/pages/home.html`, 0);
-        }
-    }
-}
-
-function scroll() {
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-    });
-}
-
-function reveal() {
-    const eyeIcon = document.querySelector("#icon");
-    const inputPW = document.querySelector("#password")
-    inputPW.classList.add("pl");
-
-    eyeIcon.addEventListener("mousedown", function(e){
-        eyeIcon.classList.remove("icon");
-        eyeIcon.classList.add("closed_eye");
-        inputPW.type = "text";
-    })
-    eyeIcon.addEventListener("mouseup", function(e){
-        eyeIcon.classList.remove("closed_eye");
-        eyeIcon.classList.add("icon");
-        inputPW.type = "password";
-    })
+    anchor.prepend(toolTip);
 }
 
 function validate(input) {
@@ -165,15 +171,15 @@ function validate(input) {
 }
 
 export {
-    configPath,
     allowedIds,
-    type,
-    redirect,
-    dialog,
-    toolTip,
-    reveal,
-    notAllowedRedirection,
+    configPath,
     mandatoryStar,
+    type,
+    dialog,
+    notAllowedRedirection,
+    redirect,
+    reveal,
     scroll,
+    toolTip,
     validate
 };

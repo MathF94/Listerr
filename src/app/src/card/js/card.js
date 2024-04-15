@@ -34,6 +34,7 @@ function card(canCreateCard) {
     const cardDivForm = document.createElement("div");
     cardDivForm.id = "cardSectionForm";
     cardDivForm.classList.add("form");
+    cardDivForm.classList.add("grid_create_card");
 
     const titleForm = document.createElement("h3");
     titleForm.id = "titleFormCard";
@@ -45,7 +46,6 @@ function card(canCreateCard) {
     createCardFormBtn.value = `cardFormBtn`;
     createCardFormBtn.classList.add("btn");
     createCardFormBtn.classList.add("way");
-    createCardFormBtn.classList.add("wayInList");
 
     // Affichage du contenu du bouton en fonction du type de liste
     let btnLabel = "Nouveau souhait";
@@ -64,7 +64,7 @@ function card(canCreateCard) {
         updateProfilList.title = "Modifier une liste";
     }
     if (deleteProfilList) {
-        deleteProfilList.title = "Modifier une liste";
+        deleteProfilList.title = "Supprimer une liste";
     }
 
     // Affichage du formulaire au click du bouton
@@ -76,6 +76,12 @@ function card(canCreateCard) {
         // Bouton rendu inutilisable
         createCardFormBtn.disabled = true;
         createCardFormBtn.classList.add("disable");
+        const sectionTxt = document.querySelector("#sectionTxt");
+        sectionTxt.classList.add("hidden");
+
+        cardDivForm.style.gridColumn = "1/6";
+        cardDivForm.style.gridRow = "2/2";
+
         if (updateProfilList) {
             updateProfilList.disabled = true;
             updateProfilList.classList.remove("edit");
@@ -100,6 +106,7 @@ function card(canCreateCard) {
             updateProfilList.disabled = false;
             deleteProfilList.disabled = false;
             createCardFormBtn.disabled = false;
+            sectionTxt.classList.remove("hidden");
 
             createCardFormBtn.classList.remove("disable");
             createCardFormBtn.classList.add("way");
@@ -107,6 +114,7 @@ function card(canCreateCard) {
             updateProfilList.classList.add("edit");
             deleteProfilList.classList.remove("disableDelete");
             deleteProfilList.classList.add("delete");
+            cardDivForm.style.gridColumn = "5/5";
 
             titleFormCard.remove();
             cardForm.remove();
@@ -173,8 +181,6 @@ function card(canCreateCard) {
                 cardArticleContent.style.borderRadius = "0 0 20px 20px";
                 cardArticleContent.style.marginTop = "0";
             }
-
-
 
             if (response.data.type === "WishList" || response.data.type === "TodoList"){
                 if(JSON.parse(localStorage.user).id !== response.data.userId){
@@ -300,13 +306,14 @@ function card(canCreateCard) {
                     cardArticleContent.appendChild(cardSectionContent);
                     cardSectionContent.appendChild(divStar);
                     cardSectionContent.appendChild(text);
+                    actionBtn.appendChild(updateBtnCard);
+                    actionBtn.appendChild(deleteBtnCard);
                 }
 
                 // Rend visible les boutons pour l'utilisateur courant uniquement
                 if (canCreateCard) {
                     cardArticleContent.appendChild(actionBtn);
-                    actionBtn.appendChild(updateBtnCard);
-                    actionBtn.appendChild(deleteBtnCard);
+
 
                     // Désactive le bouton de création de cartes si update de liste en cours
                     updateProfilList?.addEventListener("click", function(e) {

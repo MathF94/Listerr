@@ -2,7 +2,7 @@
 
 import { fetchRegister } from "../../actions/actions_user.js";
 import { CSRFToken } from "../../services/CSRFToken.js";
-import { configPath, redirect, dialog, reveal } from "../../services/utils.js";
+import { configPath, redirect, dialog, reveal} from "../../services/utils.js";
 
 /**
  * Gère le processus d'inscription de l'utilisateur, y compris la soumission du formulaire d'inscription,

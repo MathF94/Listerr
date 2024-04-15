@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
     <head>
         <meta charset="UTF-8" />
@@ -21,8 +21,10 @@
                 </div>
                 <div>
                     <label for="password">Votre mot de passe</label>
-                    <input type="password" name="password" id="password" pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).{12,}$" required
-                    />
+                    <div class="fieldIcon">
+                        <input type="password" name="password" id="password" pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).{12,}$" required/>
+                        <div id="icon" class="icon"></div>
+                    </div>
                 </div>
                 <div>
                     <button id="loginBtn" class="btn valid" type="submit" title="Valider la connexion">Connexion</button>
