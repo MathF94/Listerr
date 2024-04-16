@@ -30,6 +30,11 @@ function card(canCreateCard) {
     const urlParams = new URLSearchParams(document.location.search);
     const id = urlParams.get("id");
     const oneList = document.querySelector("#oneList");
+    let userId = null;
+
+    if(localStorage.user) {
+        userId = JSON.parse(localStorage.user).id;
+    }
 
     const cardDivForm = document.createElement("div");
     cardDivForm.id = "cardSectionForm";
@@ -183,7 +188,7 @@ function card(canCreateCard) {
             }
 
             if (response.data.type === "WishList" || response.data.type === "TodoList"){
-                if(JSON.parse(localStorage.user).id !== response.data.userId){
+                if(userId !== response.data.userId){
                     cardArticleContent.classList.add("third_party_wish");
                 } else{
                     cardArticleContent.classList.add(type[response.data.type]);
@@ -200,9 +205,9 @@ function card(canCreateCard) {
                 const cardSectionContent = document.createElement("section");
                 cardSectionContent.id = `cardSectionContent-${objectCard.id}`;
                 cardSectionContent.classList.add("card");
-                cardSectionContent.classList.add("flex");
+                cardSectionContent.classList.add("grid");
 
-                if((JSON.parse(localStorage.user).id !== response.data.userId) || (response.data.type === "TodoList")) {
+                if((userId !== response.data.userId) || (response.data.type === "TodoList")) {
                     cardSectionContent.classList.add("third_party_todo_card");
                 } else {
                     cardSectionContent.classList.add("wish");
@@ -211,7 +216,9 @@ function card(canCreateCard) {
                 const divStar = document.createElement("div");
 
                 const titleH3 = document.createElement("h3");
+                titleH3.classList.add("grid_titleH3")
                 const text = document.createElement("p");
+                text.classList.add("grid_text");
                 const labelCheck = document.createElement("label");
                 labelCheck.for = "checkbox";
                 labelCheck.innerText = checklabel;
@@ -220,10 +227,12 @@ function card(canCreateCard) {
                 check.id = `checked-${objectCard.id}`;
                 check.title = checklabel;
                 check.type = "checkbox";
+                check.classList.add("grid_check_box");
                 check.value = objectCard.checked;
 
-                const actionBtn = document.createElement("div");
-                actionBtn.id = "actionBtnCard";
+                const actionBtnCard = document.createElement("div");
+                actionBtnCard.id = "actionBtnCard";
+                actionBtnCard.classList.add("grid_action_btn_lists");
 
                 const updateBtnCard = document.createElement("button");
                 updateBtnCard.id = `updateCard-${objectCard.id}`;
@@ -268,7 +277,8 @@ function card(canCreateCard) {
                 // Boucle de création des étoiles (pleines ou vides) en fonction de la priorité
                 for (let i = 0 ; i < 5; i++) {
                     const priority = document.createElement("span");
-                    if((JSON.parse(localStorage.user).id !== response.data.userId) || (response.data.type === "TodoList")) {
+
+                    if((userId !== response.data.userId) || (response.data.type === "TodoList")) {
                         priority.classList.add("third_party_stars");
                     } else {
                         priority.classList.add("stars");
@@ -287,7 +297,7 @@ function card(canCreateCard) {
                         titleH3.innerText = `${objectCard.title}`;
                         cardSectionContent.appendChild(titleH3);
                     } else if (key === "updatedAt") {
-                        toolTip(actionBtn, objectCard.updatedAt, response.data.user.login)
+                        toolTip(cardSectionContent, objectCard.updatedAt, response.data.user.login)
                     } else if (key === "checked") {
                         check.checked = objectCard.checked === 1;
                         if(check.checked) {
@@ -306,13 +316,13 @@ function card(canCreateCard) {
                     cardArticleContent.appendChild(cardSectionContent);
                     cardSectionContent.appendChild(divStar);
                     cardSectionContent.appendChild(text);
-                    actionBtn.appendChild(updateBtnCard);
-                    actionBtn.appendChild(deleteBtnCard);
+                    actionBtnCard.appendChild(updateBtnCard);
+                    actionBtnCard.appendChild(deleteBtnCard);
                 }
 
                 // Rend visible les boutons pour l'utilisateur courant uniquement
                 if (canCreateCard) {
-                    cardArticleContent.appendChild(actionBtn);
+                    cardSectionContent.appendChild(actionBtnCard);
 
 
                     // Désactive le bouton de création de cartes si update de liste en cours

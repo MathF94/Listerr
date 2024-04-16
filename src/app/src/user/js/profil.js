@@ -31,11 +31,9 @@ function read() {
     const updateBtn = document.querySelector("#update");
     const listBtn = document.querySelector("#listsUser");
     updateBtn.title = "Modifier le profil";
-    updateBtn.classList.add("static");
     updateBtn.classList.add("listBtn");
 
     deleteBtn.title = "Supprimer le profil";
-    deleteBtn.classList.add("static");
     deleteBtn.classList.add("listBtn");
 
     listBtn.title ="Accéder à mes listes";
@@ -297,13 +295,11 @@ function read() {
             if (response.status === "connected" && localStorage.token && localStorage.user) {
                 // Affiche les boutons de suppression et de mise à jour lorsque l'utilisateur est connecté.
                 if (JSON.parse(localStorage.user).role === "Admin") {
-                    console.log(JSON.parse(localStorage.user).role);
                     updateBtn.classList.remove("listBtn");
                     deleteBtn.remove();
                 } else{
                     deleteBtn.classList.remove("hide");
                     updateBtn.classList.remove("hide");
-                    updateBtn.classList.add("static");
                 }
                 displayUser(response);
 

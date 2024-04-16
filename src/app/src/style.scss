@@ -24,30 +24,30 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     --burger-btn: rgba(51, 51, 51, 1);
 
     // Listes et cartes
-    --wish-bg: rgba(234, 222, 113, 1);
-    --todo-bg: rgba(196, 132, 63, 1);
-    --card-bg: rgba(108, 174, 124, 1);
+    --wish-bg: rgba(138, 172, 238, 1);
+    --todo-bg: rgba(95, 137, 219, 1);
+    --card-bg: rgba(223, 225, 142, 1);
     --common-bg: rgba(150, 150, 150, 1);
-    --third-party-wish-bg: rgba(106, 143, 213, 1);
+    --third-party-wish-bg: rgba(167, 182, 210, 1);
     --third-party-todo-card-bg: rgba(255, 210, 77, 1);
 
     // Boutons
     --way-btn: rgba(213, 190, 3, 1);
-    --way-btn-hover: rgba(213, 190, 3, 1);
+    --way-btn-hover: rgba(213, 190, 3, 0.8);
     --valid-btn: rgba(89, 230, 60, 1);
-    --valid-btn-hover: rgba(61, 156, 41, 1);
+    --valid-btn-hover: rgba(61, 156, 41, 0.8);
     --cancel-btn: rgba(117, 117, 117, 1);
-    --cancel-btn-hover: rgba(117, 117, 117, 1);
+    --cancel-btn-hover: rgba(117, 117, 117, 0.8);
     --view-btn: rgba(238, 214, 33, 1);
-    --view-btn-hover: rgba(213, 188, 3, 1);
-    --delete-btn: rgba(189, 61, 61, 1);
-    --delete-btn-hover: rgba(145, 20, 20, 1);
+    --view-btn-hover: rgba(213, 188, 3, 0.8);
+    --delete-btn: rgba(145, 78, 78, 1);
+    --delete-btn-hover: rgba(145, 20, 20, 0.8);
     --edit-btn: rgba(66, 105, 179, 1);
-    --edit-btn-hover: rgba(31, 93, 213, 1);
+    --edit-btn-hover: rgba(66, 105, 179, 0.8);
     --disable-btn: rgba(141, 125, 125, 1);
-    --disable-btn-hover: rgba(141, 125, 125, 1);
+    --disable-btn-hover: rgba(141, 125, 125, 0.8);
     --tooltip-light: rgba(220,220,220,1);
-    --tooltip-grey: rgba(179,181,178,1);
+    --tooltip-grey: rgba(179,181,178,0.8);
 
     // Formulaire
     --form-bg: rgba(255, 241, 198, 1);
@@ -61,7 +61,7 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     --dialog-bg-errors: rgba(225, 31, 31, 0.7);
 
     // Star
-    --star: rgba(255, 239, 0, 1);
+    --star: rgba(255, 0, 0, 0.6);
     --third-party-star: rgba(255, 0, 0, 0.6);
 }
 
@@ -255,6 +255,58 @@ dialog {
 }
 
 /* *****************************************************************
+    TOOLTIP
+***************************************************************** */
+
+.tooltip {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    background: radial-gradient(circle, var(--tooltip-light) 0%, var(--tooltip-grey) 100%);
+	border-radius: 50%;
+    width: 20px;
+	height: 20px;
+	line-height: 20px;
+    font-size: 10px;
+    margin: 0 auto;
+    &:before {
+        content:'?';
+        font-weight: bold;
+    }
+    &:hover{
+        & .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+        }
+    }
+    & .tooltiptext {
+        visibility: hidden;
+        width: 115px;
+        background-color: #555;
+        color: var(--text-light);
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        position: absolute;
+        z-index: 1;
+        bottom: 4%;
+        left: 25px;
+        opacity: 0;
+        transition: opacity 0.3s;
+        &::after{
+            content: "";
+            position: absolute;
+            top: 71%;
+            right: 115px;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent #555 transparent transparent;
+        }
+    }
+}
+
+/* *****************************************************************
     UTILISATEURS / ADMIN, LISTE & CARTE
 ***************************************************************** */
 
@@ -268,6 +320,10 @@ dialog {
 }
 .grid_typeH3 {
     grid-column: 1/4;
+    grid-row: 1/2;
+}
+.grid_titleH3 {
+    grid-column: 2/4;
     grid-row: 1/2;
 }
 .grid_text {
@@ -289,6 +345,10 @@ dialog {
 .grid_tooltip {
     grid-column: 5/5;
 }
+.grid_check_box {
+    grid-column: 1/2;
+    grid-row: 1/1;
+}
 .list {
     align-items: center;
     max-width: 450px;
@@ -303,67 +363,15 @@ dialog {
     }
     &.wish {
         background: var(--wish-bg);
-        box-shadow: 0px 0px 5px 1px var(--wish-bg);
     }
     &.todo {
         background: var(--todo-bg);
-        box-shadow: 0px 0px 5px 1px var(--todo-bg);
     }
     &.common {
         background: var(--common-bg);
-        box-shadow: 0px 0px 5px 1px var(--common-bg);
     }
     &.third_party_wish {
         background: var(--third-party-wish-bg);
-        box-shadow: 0px 0px 5px 1px var(--third-party-wish-bg);
-    }
-}
-.tooltip {
-    z-index: 1;
-    display: inline-block;
-    background: radial-gradient(circle, var(--tooltip-light) 0%, var(--tooltip-grey) 100%);
-	border-radius: 50%;
-    width: 30px;
-	height: 30px;
-	line-height: 30px;
-    font-weight: normal;
-    font-size: 10px;
-    margin: 0 auto;
-    &:before {
-        content:'?';
-        font-weight: bold;
-    }
-    &:hover{
-        & .tooltiptext {
-        visibility: visible;
-        opacity: 1;
-        }
-    }
-    & .tooltiptext {
-        visibility: hidden;
-        width: 120px;
-        background-color: #555;
-        color: var(--text-light);
-        text-align: center;
-        border-radius: 6px;
-        padding: 5px 0;
-        position: absolute;
-        z-index: 1;
-        bottom: 125%;
-        left: 50%;
-        margin-left: -60px;
-        opacity: 0;
-        transition: opacity 0.3s;
-        &::after{
-            content: "";
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: #555 transparent transparent transparent;
-        }
     }
 }
 small {
@@ -380,11 +388,9 @@ small {
     cursor: pointer;
     &.wish {
         background: var(--card-bg);
-        box-shadow: 0px 0px 5px 1px var(--card-bg);
     }
     &.third_party_todo_card {
         background: var(--third-party-todo-card-bg);
-        box-shadow: 0px 0px 5px 1px var(--third-party-todo-card-bg);
     }
 }
 .stars {
@@ -458,26 +464,15 @@ small {
         &::before {
             content: "🗑";
         }
-        &.inList {
-            left: 90%
-        }
-        &.inCard {
-            top: 19%;
-            left: 85%
-        }
         &:hover {
             background-color: var(--delete-btn-hover);
             color: var(--text-light);
         }
         &.admin {
             border-radius: 0px 10px 10px 0px;
-            position: static;
         }
         &.listBtn {
             border-radius: 0px 10px 10px 0px;
-        }
-        &.static {
-            position: static;
         }
     }
     &.edit {
@@ -492,17 +487,9 @@ small {
         }
         &.admin {
             border-radius: 0px;
-            position: static;
         }
         &.listBtn {
             border-radius: 10px 0px 0px 10px;
-        }
-        &.inCard {
-            top: 19%;
-            left: 77%
-        }
-        &.static {
-            position: static;
         }
     }
     &.cancel {
@@ -531,14 +518,6 @@ small {
         &.listBtn {
             border-radius: 10px 0px 0px 10px;
         }
-        &.inCard {
-            top: 7%;
-            left: 77%
-        }
-        &.inCardChecked {
-            top: 19%;
-            left: 77%;
-        }
     }
     &.disableDelete {
         background-color: var(--disable-btn);
@@ -551,10 +530,6 @@ small {
         }
         &.listBtn {
             border-radius: 0px 10px 10px 0px;
-        }
-        &.inCard {
-            top: 7%;
-            left: 85%;
         }
     }
 }

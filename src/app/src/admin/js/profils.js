@@ -191,7 +191,6 @@ function readAdmin() {
                         .then(response => {
                             localStorage.removeItem("csrfToken");
                             if(response.status === "[Admin]updateUser") {
-                                console.log(response);
                                 dialog({title: "Modification du profil par l'Admin", content: `Le profil de ${column.firstname} ${column.name} a bien été mise à jour.`});
                                 const dialogMsg = document.querySelector("dialog");
                                 dialogMsg.classList.add("valid");
