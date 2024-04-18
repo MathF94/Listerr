@@ -81,11 +81,14 @@ function card(canCreateCard) {
         // Bouton rendu inutilisable
         createCardFormBtn.disabled = true;
         createCardFormBtn.classList.add("disable");
+        const actionBtnList = document.querySelector("#actionBtnList");
+        actionBtnList.classList.add("hidden");
         const sectionTxt = document.querySelector("#sectionTxt");
         sectionTxt.classList.add("hidden");
 
         cardDivForm.style.gridColumn = "1/6";
         cardDivForm.style.gridRow = "2/2";
+        cardDivForm.appendChild(titleForm);
 
         if (updateProfilList) {
             updateProfilList.disabled = true;
@@ -98,7 +101,6 @@ function card(canCreateCard) {
             deleteProfilList.classList.add("disableDelete");
         }
 
-        cardDivForm.appendChild(titleForm);
         // Appel du formulaire de création d'une carte
         displayFormCard(cardDivForm);
         titleForm.innerText = "Formulaire de création d'une carte";
@@ -112,6 +114,7 @@ function card(canCreateCard) {
             deleteProfilList.disabled = false;
             createCardFormBtn.disabled = false;
             sectionTxt.classList.remove("hidden");
+            actionBtnList.classList.remove("hidden");
 
             createCardFormBtn.classList.remove("disable");
             createCardFormBtn.classList.add("way");
@@ -119,7 +122,8 @@ function card(canCreateCard) {
             updateProfilList.classList.add("edit");
             deleteProfilList.classList.remove("disableDelete");
             deleteProfilList.classList.add("delete");
-            cardDivForm.style.gridColumn = "5/5";
+            cardDivForm.style.gridColumn = "4/5";
+            cardDivForm.style.gridRow = "1/2";
 
             titleFormCard.remove();
             cardForm.remove();
@@ -195,10 +199,6 @@ function card(canCreateCard) {
                 }
             }
 
-            // const titleCards = document.createElement("h3");
-            // titleCards.innerText = "Plus en détails";
-            // cardArticleContent.appendChild(titleCards);
-
             for (const indexCard in dataCards) {
                 const objectCard = dataCards[indexCard];
 
@@ -214,23 +214,28 @@ function card(canCreateCard) {
                 }
 
                 const divStar = document.createElement("div");
+                divStar.id = "divStar";
+                divStar.classList.add("grid_stars");
 
                 const titleH3 = document.createElement("h3");
                 titleH3.classList.add("grid_titleH3")
                 const text = document.createElement("p");
-                text.classList.add("grid_text");
+                text.classList.add("grid_text_card");
+
+                const divCheck = document.createElement("div");
+                divCheck.id = "divCheck";
+                divCheck.classList.add("grid_check_box");
+
                 const labelCheck = document.createElement("label");
                 labelCheck.for = "checkbox";
                 labelCheck.innerText = checklabel;
-
                 const check = document.createElement("input");
                 check.id = `checked-${objectCard.id}`;
                 check.title = checklabel;
                 check.type = "checkbox";
-                check.classList.add("grid_check_box");
                 check.value = objectCard.checked;
 
-                const actionBtnCard = document.createElement("div");
+                const actionBtnCard = document.createElement("section");
                 actionBtnCard.id = "actionBtnCard";
                 actionBtnCard.classList.add("grid_action_btn_lists");
 
@@ -303,8 +308,9 @@ function card(canCreateCard) {
                         if(check.checked) {
                             check.disabled = true;
                         }
-                        cardSectionContent.appendChild(labelCheck);
-                        cardSectionContent.appendChild(check);
+                        cardSectionContent.appendChild(divCheck);
+                        divCheck.appendChild(check);
+                        divCheck.appendChild(labelCheck);
                     }
 
                     if (["id", "listId", "title", "priority", "checked", "createdAt", "updatedAt"].includes(`${key}`)) {
@@ -324,7 +330,6 @@ function card(canCreateCard) {
                 if (canCreateCard) {
                     cardSectionContent.appendChild(actionBtnCard);
 
-
                     // Désactive le bouton de création de cartes si update de liste en cours
                     updateProfilList?.addEventListener("click", function(e) {
                         e.preventDefault();
@@ -332,7 +337,6 @@ function card(canCreateCard) {
                             createCardFormBtn.disabled = true;
                             createCardFormBtn.classList.remove("way");
                             createCardFormBtn.classList.add("disable");
-
 
                             // Réactive le bouton de création de cartes si annulation update de liste
                             cancelForm.addEventListener("click", function(e) {
@@ -358,6 +362,9 @@ function card(canCreateCard) {
                         const updateCardSection = document.createElement("section");
                         updateCardSection.id = `updateCardSection-${objectCard.id}`;
                         updateCardSection.classList.add("updateCard");
+                        actionBtnCard.classList.remove("grid_action_btn_lists");
+                        actionBtnCard.classList.add("grid_edit_card");
+                        divStar.classList.add("hidden");
 
                         deleteBtnCard.after(updateCardSection);
                         updateCardSection.appendChild(titleForm)
@@ -387,6 +394,9 @@ function card(canCreateCard) {
                             updateBtnCard.disabled = false;
                             updateBtnCard.classList.add("edit");
                             updateBtnCard.classList.remove("disableUpdate");
+                            actionBtnCard.classList.remove("grid_edit_card");
+                            actionBtnCard.classList.add("grid_action_btn_lists");
+                            divStar.classList.remove("hidden");
 
                             deleteBtnCard.disabled = false;
                             deleteBtnCard.classList.add("delete");

@@ -212,6 +212,10 @@ a {
 .hidden {
     display: none;
 }
+small {
+    display: block;
+    margin: 0 auto;
+}
 
 /* *****************************************************************
     DIALOG
@@ -314,8 +318,15 @@ dialog {
     display: grid;
     grid-template: repeat(1, 1fr) / repeat(5, 1fr);
 }
-.grid_section {
+.grid_tooltip {
+    grid-column: 5/5;
+}
+.grid_section_home {
     grid-column: 1/6;
+    grid-row: 2/2;
+}
+.grid_section {
+    grid-column: 1/5;
     grid-row: 2/2;
 }
 .grid_typeH3 {
@@ -323,31 +334,40 @@ dialog {
     grid-row: 1/2;
 }
 .grid_titleH3 {
-    grid-column: 2/4;
+    grid-column: 2/5;
     grid-row: 1/2;
 }
-.grid_text {
+.grid_text_list {
+    grid-column: 1/5;
+    grid-row: 2/2;
+}
+.grid_text_card {
     grid-column: 2/5;
     grid-row: 2/2;
 }
 .grid_action_btn_lists {
-    grid-column: 4/5;
-    grid-row: 1/2;
-}
-.grid_edit_list {
-    grid-column: 1/6;
-    grid-row: 3/3;
-}
-.grid_create_card {
     grid-column: 5/5;
     grid-row: 2/2;
 }
-.grid_tooltip {
-    grid-column: 5/5;
+.grid_edit_list,
+.grid_edit_card {
+    grid-column: 1/6;
+    grid-row: 2/2;
+}
+.grid_create_card {
+    grid-column: 4/5;
+    grid-row: 1/2;
 }
 .grid_check_box {
-    grid-column: 1/2;
+    display: flex;
+    grid-column: 1/1;
     grid-row: 1/1;
+    margin-left: 10px;
+}
+.grid_stars {
+    grid-column: 1/2;
+    grid-row: 2/2;
+    margin-left: 10px;
 }
 .list {
     align-items: center;
@@ -374,20 +394,17 @@ dialog {
         background: var(--third-party-wish-bg);
     }
 }
-small {
-    display: block;
-    margin: 0 auto;
-}
 .card {
     max-width: 700px;
     width: 90%;
     text-align: center;
     border-radius: 10px;
-    margin: 20px auto;
+    margin: 5px auto;
     padding: 5px 0;
     cursor: pointer;
     &.wish {
         background: var(--card-bg);
+        align-items: center;
     }
     &.third_party_todo_card {
         background: var(--third-party-todo-card-bg);
@@ -680,6 +697,15 @@ input[type="submit"] {
     .list {
         width: 579px;
     }
+    .btn {
+        font-size: 15px;
+    }
+}
+
+@media screen and (min-width: 618px) {
+    .btn {
+        font-size: 13px;
+    }
 }
 
 @media screen and (max-width: 619px) {
@@ -705,6 +731,9 @@ input[type="submit"] {
         background-repeat: repeat-y;
         background-position: center;
         width: 635px;
+    }
+    .btn {
+        font-size: 16px;
     }
     // .profil {
     //     &_role {

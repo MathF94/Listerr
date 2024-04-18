@@ -84,11 +84,11 @@ function list() {
                 toolTip(oneList, data.updatedAt, data.user.login)
 
                 const sectionList = document.createElement("section");
-                sectionList.classList.add("grid_text");
+                sectionList.classList.add("grid_text_list");
                 sectionList.id = "sectionTxt";
 
                 const text = document.createElement("p");
-                const actionBtnlist = document.createElement("div");
+                const actionBtnlist = document.createElement("section");
                 actionBtnlist.id = "actionBtnList";
                 actionBtnlist.classList.add("grid_action_btn_lists");
 
