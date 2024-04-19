@@ -10,7 +10,7 @@ import { configPath, redirect, dialog, validate, reveal } from "../../services/u
 function login() {
     // Affiche ou cache le mot de passe
     reveal();
-    
+
     const loginBtn = document.querySelector("#loginBtn");
     loginBtn.title = "Valider la connexion";
 
@@ -47,9 +47,8 @@ function login() {
                 }));
 
                 const login = JSON.parse(localStorage.user).login;
-                dialog({title: `<p>Bonjour ${login} !</p>`, content: `<p>Vous êtes bien connecté(e).</p>`});
+                dialog({title: `Bonjour ${login} !`, content: `Vous êtes bien connecté(e).`});
                 const dialogMsg = document.querySelector("dialog");
-                dialogMsg.classList.add("login");
                 dialogMsg.classList.add("valid");
                 loginForm.classList.add("hidden");
                 redirect(`${configPath.basePath}/home/pages/home.html`);

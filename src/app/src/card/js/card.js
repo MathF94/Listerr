@@ -155,7 +155,11 @@ function card(canCreateCard) {
                 localStorage.removeItem("csrfToken");
 
                 if (response.status === "createCard") {
-                    dialog({title: "Et voilà la carte !", content:"à la suivante !"});
+                    if (localStorage.getItem("typeList") === "WishList"){
+                        dialog({title: "Création du souhait", content: "Votre souhait a bien été créé."});
+                    } else {
+                        dialog({title: "Création de la tâche", content: "Votre tâche a bien été créée."});
+                    }
                     const dialogMsg = document.querySelector("dialog");
                     dialogMsg.classList.add("valid");
                     redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
@@ -191,11 +195,11 @@ function card(canCreateCard) {
                 cardArticleContent.style.marginTop = "0";
             }
 
-            if (response.data.type === "WishList" || response.data.type === "TodoList"){
+            if (localStorage.getItem("typeList") === "WishList" || localStorage.getItem("typeList") === "TodoList"){
                 if(userId !== response.data.userId){
                     cardArticleContent.classList.add("third_party_wish");
                 } else{
-                    cardArticleContent.classList.add(type[response.data.type]);
+                    cardArticleContent.classList.add(type[localStorage.getItem("typeList")]);
                 }
             }
 
@@ -207,7 +211,7 @@ function card(canCreateCard) {
                 cardSectionContent.classList.add("card");
                 cardSectionContent.classList.add("grid");
 
-                if((userId !== response.data.userId) || (response.data.type === "TodoList")) {
+                if((userId !== response.data.userId) || (localStorage.getItem("typeList") === "TodoList")) {
                     cardSectionContent.classList.add("third_party_todo_card");
                 } else {
                     cardSectionContent.classList.add("wish");
@@ -221,6 +225,7 @@ function card(canCreateCard) {
                 titleH3.classList.add("grid_titleH3")
                 const text = document.createElement("p");
                 text.classList.add("grid_text_card");
+                text.classList.add("dot");
 
                 const divCheck = document.createElement("div");
                 divCheck.id = "divCheck";
@@ -317,11 +322,25 @@ function card(canCreateCard) {
                         continue;
                     }
 
-                    text.innerText = objectCard[key];
+                    // Si objectCard[key] est une URL, modification de la balise "p" pour une balise "a".
+                    //                        une chaîne de caractère normale, la balise de base est "p".
+                    if (objectCard[key].search(/^http[s]?:\/\//) === 0) {
+                        text.remove();
+                        const link = document.createElement("a");
+                        link.classList.add("grid_text_card");
+                        link.classList.add("cardLink");
+                        link.innerText = "lien vers la description";
+                        link.setAttribute("href", `${objectCard[key]}`);
+                        link.title = objectCard[key];
+                        cardSectionContent.appendChild(link);
+                    } else {
+                        text.innerText = objectCard[key];
+                        cardSectionContent.appendChild(text);
+                    }
+
                     oneList.after(cardArticleContent);
                     cardArticleContent.appendChild(cardSectionContent);
                     cardSectionContent.appendChild(divStar);
-                    cardSectionContent.appendChild(text);
                     actionBtnCard.appendChild(updateBtnCard);
                     actionBtnCard.appendChild(deleteBtnCard);
                 }
@@ -425,7 +444,12 @@ function card(canCreateCard) {
                                 localStorage.removeItem("csrfToken");
 
                                 if (response.status === "updateCard") {
-                                    dialog({title: "Modification de la carte", content: "Votre carte a bien été mise à jour."});
+                                    if (localStorage.getItem("typeList") === "WishList"){
+                                        dialog({title: "Modification du souhait", content: "Votre souhait a bien été mis à jour."});
+                                    } else {
+                                        dialog({title: "Modification de la tâche", content: "Votre tâche a bien été mise à jour."});
+                                    }
+
                                     const dialogMsg = document.querySelector("dialog");
                                     dialogMsg.classList.add("valid");
                                     redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
@@ -479,7 +503,12 @@ function card(canCreateCard) {
                         fetchDeleteCard(objectCard.id)
                         .then((response) => {
                             if (response.status === "deleteCard") {
-                                dialog({title: "Suppression de la carte", content: `<p>Votre carte a bien été supprimée.</p>`});
+                                if (localStorage.getItem("typeList") === "WishList"){
+                                    dialog({title: "Suppression du souhait", content: "Votre souhait a bien été supprimé."});
+                                } else {
+                                    dialog({title: "Suppression de la tâche", content: "Votre tâche a bien été supprimée."});
+                                }
+
                                 const dialogMsg = document.querySelector("dialog");
                                 dialogMsg.classList.add("valid");
                                 redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);

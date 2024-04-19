@@ -37,7 +37,7 @@ function lists() {
     createListBtn.addEventListener("click", function(){
         if (createListBtn.value === "newList") {
             const divList = document.querySelector("#divList");
-            
+
             // Appelle le formulaire pour la création de la liste
             displayFormList(divList)
             titleFormList.innerText = "Formulaire de création de la liste";
@@ -83,10 +83,11 @@ function lists() {
                     localStorage.removeItem("csrfToken");
 
                     if (response.status === "createList") {
-                        dialog({title: "Et une liste de créée, une !", content:"Remplissez votre liste maintenant !"});
+                        dialog({title: "Création de liste", content: "Jetez à oeil dedans :)"});
+
                         const dialogMsg = document.querySelector("dialog");
                         dialogMsg.classList.add("valid");
-                        redirect(`${configPath.basePath}/list/pages/lists.html`);
+                        redirect(`${configPath.basePath}/list/pages/lists.html`, 3000);
                     }
                     if (response.status === "errors") {
                         dialog({title: "Erreurs", content: response.errors});
@@ -182,7 +183,7 @@ function lists() {
                         scroll();
                         fetchDeleteList(objectList.id)
                         .then(() => {
-                            dialog({title: "Suppression de la liste", content: `<p>Votre liste a bien été supprimée.</p>`});
+                            dialog({title: "Suppression de la liste", content: `Votre liste a bien été supprimée.`});
                             const dialogMsg = document.querySelector("dialog");
                             dialogMsg.classList.add("valid");
                             redirect(`${configPath.basePath}/list/pages/lists.html`);

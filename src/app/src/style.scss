@@ -168,7 +168,7 @@ h1 {
     text-align: right;
     text-transform: uppercase;
     font-style: italic;
-    margin-top: 40px;
+    margin-top: 35px;
 }
 ul {
     padding: 0;
@@ -193,9 +193,10 @@ body {
     border-style: solid;
     border-color: var(--border-color);
 }
-.login, .register, #sectionLists {
+.login, .register {
     display: flex;
     flex-direction: column;
+    margin-top: 50px;
 }
 h3, h4 {
     margin: 10px auto;
@@ -207,6 +208,9 @@ a {
     &.active {
         background-color: var(--burger-item);
         color: var(--text-light);
+    }
+    &.cardLink {
+        color: var(--burger-item);
     }
 }
 .hidden {
@@ -221,11 +225,17 @@ small {
     DIALOG
 ***************************************************************** */
 dialog {
-    position: sticky;
-    width: 50%;
+    position: absolute;
+    z-index: 30;
+    width: 250px;
     height: auto;
     border-radius: 10px;
+    top: 55px;
+    font-size: 10px;
     background: var(--dialog-bg);
+    > h2 {
+        margin: 0 auto;
+    }
     &.valid {
         background: var(--dialog-bg-valid);
     }
@@ -344,6 +354,10 @@ dialog {
 .grid_text_card {
     grid-column: 2/5;
     grid-row: 2/2;
+    &.dot {
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
 }
 .grid_action_btn_lists {
     grid-column: 5/5;
@@ -396,7 +410,7 @@ dialog {
 }
 .card {
     max-width: 700px;
-    width: 90%;
+    width: 95%;
     text-align: center;
     border-radius: 10px;
     margin: 5px auto;
@@ -409,6 +423,7 @@ dialog {
     &.third_party_todo_card {
         background: var(--third-party-todo-card-bg);
     }
+
 }
 .stars {
     font-size: 25px;
@@ -420,12 +435,13 @@ dialog {
 }
 .adminSection,
 .userFormSection {
-    margin-top: 35px;
+    margin-top: 41px;
 }
 #createUser {
     margin-top: 28px;
 }
-#sectionLists {
+#sectionLists,
+#contentSection {
     margin: 0 auto;
 }
 
@@ -697,18 +713,12 @@ input[type="submit"] {
     .list {
         width: 579px;
     }
-    .btn {
-        font-size: 15px;
-    }
-}
-
-@media screen and (min-width: 618px) {
-    .btn {
-        font-size: 13px;
-    }
 }
 
 @media screen and (max-width: 619px) {
+    body {
+        min-height: 120vh;
+    }
     .profil {
         &_name{
             display: none;
@@ -726,7 +736,8 @@ input[type="submit"] {
 }
 
 @media screen and (min-width: 810px) {
-    body{
+    body {
+        min-height: 120vh;
         background-size: 610px;
         background-repeat: repeat-y;
         background-position: center;
@@ -785,9 +796,14 @@ input[type="submit"] {
         justify-content: center;
         margin: 10px;
     }
-    #sectionLists {
+
+    #homeDisplayLists,
+    #listsSection,
+    #listSection,
+    #profilSection {
         display: flex;
         align-items: center;
+        flex-direction: column;
         & > article {
             width: 600px;
         }

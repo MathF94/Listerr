@@ -240,7 +240,12 @@ function list() {
                             scroll();
                             fetchDeleteList(data.id)
                             .then(() => {
-                                dialog({title: "Suppression de la liste", content: `<p>Votre liste a bien été supprimée.</p>`});
+                                if (localStorage.getItem("typeList") === "WishList"){
+                                    dialog({title: "Suppression de la liste souhait", content: "Votre liste a bien été supprimée."});
+                                } else {
+                                    dialog({title: "Suppression de la liste de tâche", content: "Votre liste a bien été supprimée."});
+                                }
+                                
                                 const dialogMsg = document.querySelector("dialog");
                                 dialogMsg.classList.add("valid");
                                 document.body.scrollTop = 0;

@@ -90,7 +90,7 @@ function notAllowedRedirection(type) {
  * @param {string} url - L'URL vers laquelle rediriger l'utilisateur.
  * @param {number} [duration=2000] - La durée en millisecondes avant la redirection.
  */
-function redirect(url, duration = 2000) {
+function redirect(url, duration = 1000) {
     window.setTimeout(function () {
         window.location.href = url;
     }, duration);
@@ -137,7 +137,7 @@ function toolTip(anchor, updatedAt, login) {
     toolTip.id = "tooltip";
     toolTip.classList.add("tooltip");
     toolTip.classList.add("grid_tooltip");
-    
+
     const spanToolTip = document.createElement("span");
     spanToolTip.classList.add("tooltiptext");
     spanToolTip.innerText = `Modifié le ${formatedDate} par ${login}`;

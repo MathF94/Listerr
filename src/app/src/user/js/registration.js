@@ -70,16 +70,15 @@ function registration() {
 
                     redirect(`${configPath.basePath}/admin/pages/profils.html`);
                 } else {
-                    dialog({title: `<p>Bienvenue !</p>`,
-                        content: `<p>Bonjour ${firstname} ${name}.</p>
-                            <p>Votre compte lié à l'adresse ${email} est maintenant créé sous le login ${login}.</p>
-                            <p>Vous allez être redirigé(e) dans quelques secondes vers la page de connexion...</p>
+                    dialog({title: `Bienvenue !`,
+                        content: `Bonjour ${firstname} ${name}.
+                            Votre compte lié à l'adresse ${email} est maintenant créé sous le login ${login}.
+                            Vous allez être redirigé(e) dans quelques secondes vers la page de connexion...
                             `});
                             const dialogMsg = document.querySelector("dialog");
                     dialogMsg.classList.add("valid");
-                    dialogMsg.classList.add("register");
                     registerForm.classList.add("hidden");
-                    redirect(`${configPath.basePath}/user/pages/login.html`)
+                    redirect(`${configPath.basePath}/user/pages/login.html`, 3000)
                 }
             }
 

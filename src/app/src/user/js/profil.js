@@ -66,7 +66,7 @@ function read() {
     if (urlParams.has("id")) {
         // Obtient l'identifiant de la liste à partir des paramètres de l'URL.
         const id = urlParams.get("id");
-        const divLists = document.querySelector("#listsWrapper");
+        const listWrapper = document.querySelector("#listsWrapper");
 
         fetchRead(id).then((response) => {
             if (response.status === "[Admin]user" && localStorage.token && localStorage.user) {
@@ -83,11 +83,11 @@ function read() {
                     returnBtn.title = "Revenir à la liste d'utilisateurs";
 
                     // En tant qu'Admin, modifie le texte du bouton
-                    const listsUser = document.querySelector("#listsUser");
-                    listsUser.innerText = `Listes de ${response.login.value}`;
-                    listsUser.title = `Listes de ${response.login.value}`;
-                    listsUser.after(returnBtn);
+                    listBtn.innerText = `Listes de ${response.login.value}`;
+                    listBtn.title = `Listes de ${response.login.value}`;
+                    listBtn.after(returnBtn);
 
+                    // Permet la modification de l'utilisateur par l'Admin
                     updateBtn.addEventListener("click", function (e) {
                         e.preventDefault();
                         const editBtnUser = document.querySelector("#update");
@@ -100,8 +100,8 @@ function read() {
                         const divUser = document.querySelector("#profilWrapper");
 
                         divUser.classList.add("hidden");
-                        divLists.classList.remove("listsWrapper");
-                        divLists.classList.add("hidden");
+                        listWrapper.classList.remove("listsWrapper");
+                        listWrapper.classList.add("hidden");
 
                         displayFormUpdateUser(sectionUser);
                         titleFormUser.innerText = "Modification de l'utilisateur";
@@ -110,8 +110,7 @@ function read() {
                         cancelForm.addEventListener("click", function(){
                             userFormSection.remove();
                             divUser.removeAttribute("class");
-                            divLists.classList.add("listsWrapper");
-                            divLists.classList.remove("hidden");
+                            listWrapper.classList.remove("hidden");
                         })
 
                         // Insertion des éléments de la liste dans les inputs
@@ -204,23 +203,11 @@ function read() {
                 // Affiche les listes de l'utilisateur vu par l'Admin
                 listBtn.addEventListener("click", function (e) {
                     e.preventDefault();
-
+                    listBtn.disabled = true;
                     fetchReadAllLists(id).then((response) => {
-                        // Toggle pour afficher ou masquer les listes
-                        if (divLists.hidden === false) {
-                            divLists.classList.add("listsWrapper");
-                            divLists.classList.remove("hidden")
-                            divLists.hidden = true;
-                        } else {
-                            divLists.classList.remove("listsWrapper");
-                            divLists.classList.add("hidden");
-                            divLists.hidden = false;
-                        }
-
                         const data = response.data;
+                        // console.log(data);
                         if (response.status === "readAllListsByUser") {
-                            const listWrapper = document.querySelector("#listsWrapper");
-
                             for (const index in data) {
                                 const objectList = data[index];
                                 const articleList = document.createElement("article");
@@ -260,6 +247,7 @@ function read() {
                                         continue;
                                     }
                                     item.innerText = `${objectList[key]}`;
+                                    
                                     listWrapper.appendChild(articleList);
                                     articleList.appendChild(typeH3);
                                     articleList.appendChild(sectionList);
