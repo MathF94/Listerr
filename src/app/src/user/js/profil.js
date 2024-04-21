@@ -31,11 +31,9 @@ function read() {
     const updateBtn = document.querySelector("#update");
     const listBtn = document.querySelector("#listsUser");
     updateBtn.title = "Modifier le profil";
-    updateBtn.classList.add("static");
     updateBtn.classList.add("listBtn");
 
     deleteBtn.title = "Supprimer le profil";
-    deleteBtn.classList.add("static");
     deleteBtn.classList.add("listBtn");
 
     listBtn.title ="Accéder à mes listes";
@@ -68,7 +66,7 @@ function read() {
     if (urlParams.has("id")) {
         // Obtient l'identifiant de la liste à partir des paramètres de l'URL.
         const id = urlParams.get("id");
-        const divLists = document.querySelector("#listsWrapper");
+        const listWrapper = document.querySelector("#listsWrapper");
 
         fetchRead(id).then((response) => {
             if (response.status === "[Admin]user" && localStorage.token && localStorage.user) {
@@ -85,11 +83,11 @@ function read() {
                     returnBtn.title = "Revenir à la liste d'utilisateurs";
 
                     // En tant qu'Admin, modifie le texte du bouton
-                    const listsUser = document.querySelector("#listsUser");
-                    listsUser.innerText = `Listes de ${response.login.value}`;
-                    listsUser.title = `Listes de ${response.login.value}`;
-                    listsUser.after(returnBtn);
+                    listBtn.innerText = `Listes de ${response.login.value}`;
+                    listBtn.title = `Listes de ${response.login.value}`;
+                    listBtn.after(returnBtn);
 
+                    // Permet la modification de l'utilisateur par l'Admin
                     updateBtn.addEventListener("click", function (e) {
                         e.preventDefault();
                         const editBtnUser = document.querySelector("#update");
@@ -102,8 +100,8 @@ function read() {
                         const divUser = document.querySelector("#profilWrapper");
 
                         divUser.classList.add("hidden");
-                        divLists.classList.remove("listsWrapper");
-                        divLists.classList.add("hidden");
+                        listWrapper.classList.remove("listsWrapper");
+                        listWrapper.classList.add("hidden");
 
                         displayFormUpdateUser(sectionUser);
                         titleFormUser.innerText = "Modification de l'utilisateur";
@@ -112,8 +110,7 @@ function read() {
                         cancelForm.addEventListener("click", function(){
                             userFormSection.remove();
                             divUser.removeAttribute("class");
-                            divLists.classList.add("listsWrapper");
-                            divLists.classList.remove("hidden");
+                            listWrapper.classList.remove("hidden");
                         })
 
                         // Insertion des éléments de la liste dans les inputs
@@ -206,28 +203,17 @@ function read() {
                 // Affiche les listes de l'utilisateur vu par l'Admin
                 listBtn.addEventListener("click", function (e) {
                     e.preventDefault();
-
+                    listBtn.disabled = true;
                     fetchReadAllLists(id).then((response) => {
-                        // Toggle pour afficher ou masquer les listes
-                        if (divLists.hidden === false) {
-                            divLists.classList.add("listsWrapper");
-                            divLists.classList.remove("hidden")
-                            divLists.hidden = true;
-                        } else {
-                            divLists.classList.remove("listsWrapper");
-                            divLists.classList.add("hidden");
-                            divLists.hidden = false;
-                        }
-
                         const data = response.data;
+                        // console.log(data);
                         if (response.status === "readAllListsByUser") {
-                            const listWrapper = document.querySelector("#listsWrapper");
-
                             for (const index in data) {
                                 const objectList = data[index];
                                 const articleList = document.createElement("article");
                                 articleList.id = `profilList-${objectList.id}`;
                                 articleList.classList.add("list");
+                                articleList.classList.add("grid");
 
                                 articleList.classList.add(type[objectList.type]);
 
@@ -237,8 +223,9 @@ function read() {
                                 }
 
                                 const sectionList = document.createElement("section");
-                                sectionList.classList.add("width");
+                                sectionList.classList.add("grid_section");
                                 const typeH3 = document.createElement("h3");
+                                typeH3.classList.add("grid_typeH3");
                                 const titleH4 = document.createElement("h4");
 
                                 for (const key in objectList) {
@@ -252,7 +239,7 @@ function read() {
                                     }
 
                                     if (key === "updatedAt") {
-                                        toolTip(typeH3, objectList.updatedAt, objectList.user.login)
+                                        toolTip(articleList, objectList.updatedAt, objectList.user.login)
                                     }
 
                                     // Exclut certains éléments de la liste
@@ -260,6 +247,7 @@ function read() {
                                         continue;
                                     }
                                     item.innerText = `${objectList[key]}`;
+                                    
                                     listWrapper.appendChild(articleList);
                                     articleList.appendChild(typeH3);
                                     articleList.appendChild(sectionList);
@@ -295,13 +283,11 @@ function read() {
             if (response.status === "connected" && localStorage.token && localStorage.user) {
                 // Affiche les boutons de suppression et de mise à jour lorsque l'utilisateur est connecté.
                 if (JSON.parse(localStorage.user).role === "Admin") {
-                    console.log(JSON.parse(localStorage.user).role);
                     updateBtn.classList.remove("listBtn");
                     deleteBtn.remove();
                 } else{
                     deleteBtn.classList.remove("hide");
                     updateBtn.classList.remove("hide");
-                    updateBtn.classList.add("static");
                 }
                 displayUser(response);
 

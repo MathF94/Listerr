@@ -30,10 +30,16 @@ function card(canCreateCard) {
     const urlParams = new URLSearchParams(document.location.search);
     const id = urlParams.get("id");
     const oneList = document.querySelector("#oneList");
+    let userId = null;
+
+    if(localStorage.user) {
+        userId = JSON.parse(localStorage.user).id;
+    }
 
     const cardDivForm = document.createElement("div");
     cardDivForm.id = "cardSectionForm";
     cardDivForm.classList.add("form");
+    cardDivForm.classList.add("grid_create_card");
 
     const titleForm = document.createElement("h3");
     titleForm.id = "titleFormCard";
@@ -45,7 +51,6 @@ function card(canCreateCard) {
     createCardFormBtn.value = `cardFormBtn`;
     createCardFormBtn.classList.add("btn");
     createCardFormBtn.classList.add("way");
-    createCardFormBtn.classList.add("wayInList");
 
     // Affichage du contenu du bouton en fonction du type de liste
     let btnLabel = "Nouveau souhait";
@@ -64,7 +69,7 @@ function card(canCreateCard) {
         updateProfilList.title = "Modifier une liste";
     }
     if (deleteProfilList) {
-        deleteProfilList.title = "Modifier une liste";
+        deleteProfilList.title = "Supprimer une liste";
     }
 
     // Affichage du formulaire au click du bouton
@@ -76,6 +81,15 @@ function card(canCreateCard) {
         // Bouton rendu inutilisable
         createCardFormBtn.disabled = true;
         createCardFormBtn.classList.add("disable");
+        const actionBtnList = document.querySelector("#actionBtnList");
+        actionBtnList.classList.add("hidden");
+        const sectionTxt = document.querySelector("#sectionTxt");
+        sectionTxt.classList.add("hidden");
+
+        cardDivForm.style.gridColumn = "1/6";
+        cardDivForm.style.gridRow = "2/2";
+        cardDivForm.appendChild(titleForm);
+
         if (updateProfilList) {
             updateProfilList.disabled = true;
             updateProfilList.classList.remove("edit");
@@ -87,7 +101,6 @@ function card(canCreateCard) {
             deleteProfilList.classList.add("disableDelete");
         }
 
-        cardDivForm.appendChild(titleForm);
         // Appel du formulaire de création d'une carte
         displayFormCard(cardDivForm);
         titleForm.innerText = "Formulaire de création d'une carte";
@@ -100,6 +113,8 @@ function card(canCreateCard) {
             updateProfilList.disabled = false;
             deleteProfilList.disabled = false;
             createCardFormBtn.disabled = false;
+            sectionTxt.classList.remove("hidden");
+            actionBtnList.classList.remove("hidden");
 
             createCardFormBtn.classList.remove("disable");
             createCardFormBtn.classList.add("way");
@@ -107,6 +122,8 @@ function card(canCreateCard) {
             updateProfilList.classList.add("edit");
             deleteProfilList.classList.remove("disableDelete");
             deleteProfilList.classList.add("delete");
+            cardDivForm.style.gridColumn = "4/5";
+            cardDivForm.style.gridRow = "1/2";
 
             titleFormCard.remove();
             cardForm.remove();
@@ -138,7 +155,11 @@ function card(canCreateCard) {
                 localStorage.removeItem("csrfToken");
 
                 if (response.status === "createCard") {
-                    dialog({title: "Et voilà la carte !", content:"à la suivante !"});
+                    if (localStorage.getItem("typeList") === "WishList"){
+                        dialog({title: "Création du souhait", content: "Votre souhait a bien été créé."});
+                    } else {
+                        dialog({title: "Création de la tâche", content: "Votre tâche a bien été créée."});
+                    }
                     const dialogMsg = document.querySelector("dialog");
                     dialogMsg.classList.add("valid");
                     redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
@@ -174,19 +195,13 @@ function card(canCreateCard) {
                 cardArticleContent.style.marginTop = "0";
             }
 
-
-
-            if (response.data.type === "WishList" || response.data.type === "TodoList"){
-                if(JSON.parse(localStorage.user).id !== response.data.userId){
+            if (localStorage.getItem("typeList") === "WishList" || localStorage.getItem("typeList") === "TodoList"){
+                if(userId !== response.data.userId){
                     cardArticleContent.classList.add("third_party_wish");
                 } else{
-                    cardArticleContent.classList.add(type[response.data.type]);
+                    cardArticleContent.classList.add(type[localStorage.getItem("typeList")]);
                 }
             }
-
-            // const titleCards = document.createElement("h3");
-            // titleCards.innerText = "Plus en détails";
-            // cardArticleContent.appendChild(titleCards);
 
             for (const indexCard in dataCards) {
                 const objectCard = dataCards[indexCard];
@@ -194,30 +209,40 @@ function card(canCreateCard) {
                 const cardSectionContent = document.createElement("section");
                 cardSectionContent.id = `cardSectionContent-${objectCard.id}`;
                 cardSectionContent.classList.add("card");
-                cardSectionContent.classList.add("flex");
+                cardSectionContent.classList.add("grid");
 
-                if((JSON.parse(localStorage.user).id !== response.data.userId) || (response.data.type === "TodoList")) {
+                if((userId !== response.data.userId) || (localStorage.getItem("typeList") === "TodoList")) {
                     cardSectionContent.classList.add("third_party_todo_card");
                 } else {
                     cardSectionContent.classList.add("wish");
                 }
 
                 const divStar = document.createElement("div");
+                divStar.id = "divStar";
+                divStar.classList.add("grid_stars");
 
                 const titleH3 = document.createElement("h3");
+                titleH3.classList.add("grid_titleH3")
                 const text = document.createElement("p");
+                text.classList.add("grid_text_card");
+                text.classList.add("dot");
+
+                const divCheck = document.createElement("div");
+                divCheck.id = "divCheck";
+                divCheck.classList.add("grid_check_box");
+
                 const labelCheck = document.createElement("label");
                 labelCheck.for = "checkbox";
                 labelCheck.innerText = checklabel;
-
                 const check = document.createElement("input");
                 check.id = `checked-${objectCard.id}`;
                 check.title = checklabel;
                 check.type = "checkbox";
                 check.value = objectCard.checked;
 
-                const actionBtn = document.createElement("div");
-                actionBtn.id = "actionBtnCard";
+                const actionBtnCard = document.createElement("section");
+                actionBtnCard.id = "actionBtnCard";
+                actionBtnCard.classList.add("grid_action_btn_lists");
 
                 const updateBtnCard = document.createElement("button");
                 updateBtnCard.id = `updateCard-${objectCard.id}`;
@@ -262,7 +287,8 @@ function card(canCreateCard) {
                 // Boucle de création des étoiles (pleines ou vides) en fonction de la priorité
                 for (let i = 0 ; i < 5; i++) {
                     const priority = document.createElement("span");
-                    if((JSON.parse(localStorage.user).id !== response.data.userId) || (response.data.type === "TodoList")) {
+
+                    if((userId !== response.data.userId) || (response.data.type === "TodoList")) {
                         priority.classList.add("third_party_stars");
                     } else {
                         priority.classList.add("stars");
@@ -281,32 +307,47 @@ function card(canCreateCard) {
                         titleH3.innerText = `${objectCard.title}`;
                         cardSectionContent.appendChild(titleH3);
                     } else if (key === "updatedAt") {
-                        toolTip(actionBtn, objectCard.updatedAt, response.data.user.login)
+                        toolTip(cardSectionContent, objectCard.updatedAt, response.data.user.login)
                     } else if (key === "checked") {
                         check.checked = objectCard.checked === 1;
                         if(check.checked) {
                             check.disabled = true;
                         }
-                        cardSectionContent.appendChild(labelCheck);
-                        cardSectionContent.appendChild(check);
+                        cardSectionContent.appendChild(divCheck);
+                        divCheck.appendChild(check);
+                        divCheck.appendChild(labelCheck);
                     }
 
                     if (["id", "listId", "title", "priority", "checked", "createdAt", "updatedAt"].includes(`${key}`)) {
                         continue;
                     }
 
-                    text.innerText = objectCard[key];
+                    // Si objectCard[key] est une URL, modification de la balise "p" pour une balise "a".
+                    //                        une chaîne de caractère normale, la balise de base est "p".
+                    if (objectCard[key].search(/^http[s]?:\/\//) === 0) {
+                        text.remove();
+                        const link = document.createElement("a");
+                        link.classList.add("grid_text_card");
+                        link.classList.add("cardLink");
+                        link.innerText = "lien vers la description";
+                        link.setAttribute("href", `${objectCard[key]}`);
+                        link.title = objectCard[key];
+                        cardSectionContent.appendChild(link);
+                    } else {
+                        text.innerText = objectCard[key];
+                        cardSectionContent.appendChild(text);
+                    }
+
                     oneList.after(cardArticleContent);
                     cardArticleContent.appendChild(cardSectionContent);
                     cardSectionContent.appendChild(divStar);
-                    cardSectionContent.appendChild(text);
+                    actionBtnCard.appendChild(updateBtnCard);
+                    actionBtnCard.appendChild(deleteBtnCard);
                 }
 
                 // Rend visible les boutons pour l'utilisateur courant uniquement
                 if (canCreateCard) {
-                    cardArticleContent.appendChild(actionBtn);
-                    actionBtn.appendChild(updateBtnCard);
-                    actionBtn.appendChild(deleteBtnCard);
+                    cardSectionContent.appendChild(actionBtnCard);
 
                     // Désactive le bouton de création de cartes si update de liste en cours
                     updateProfilList?.addEventListener("click", function(e) {
@@ -315,7 +356,6 @@ function card(canCreateCard) {
                             createCardFormBtn.disabled = true;
                             createCardFormBtn.classList.remove("way");
                             createCardFormBtn.classList.add("disable");
-
 
                             // Réactive le bouton de création de cartes si annulation update de liste
                             cancelForm.addEventListener("click", function(e) {
@@ -341,6 +381,9 @@ function card(canCreateCard) {
                         const updateCardSection = document.createElement("section");
                         updateCardSection.id = `updateCardSection-${objectCard.id}`;
                         updateCardSection.classList.add("updateCard");
+                        actionBtnCard.classList.remove("grid_action_btn_lists");
+                        actionBtnCard.classList.add("grid_edit_card");
+                        divStar.classList.add("hidden");
 
                         deleteBtnCard.after(updateCardSection);
                         updateCardSection.appendChild(titleForm)
@@ -370,6 +413,9 @@ function card(canCreateCard) {
                             updateBtnCard.disabled = false;
                             updateBtnCard.classList.add("edit");
                             updateBtnCard.classList.remove("disableUpdate");
+                            actionBtnCard.classList.remove("grid_edit_card");
+                            actionBtnCard.classList.add("grid_action_btn_lists");
+                            divStar.classList.remove("hidden");
 
                             deleteBtnCard.disabled = false;
                             deleteBtnCard.classList.add("delete");
@@ -398,7 +444,12 @@ function card(canCreateCard) {
                                 localStorage.removeItem("csrfToken");
 
                                 if (response.status === "updateCard") {
-                                    dialog({title: "Modification de la carte", content: "Votre carte a bien été mise à jour."});
+                                    if (localStorage.getItem("typeList") === "WishList"){
+                                        dialog({title: "Modification du souhait", content: "Votre souhait a bien été mis à jour."});
+                                    } else {
+                                        dialog({title: "Modification de la tâche", content: "Votre tâche a bien été mise à jour."});
+                                    }
+
                                     const dialogMsg = document.querySelector("dialog");
                                     dialogMsg.classList.add("valid");
                                     redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
@@ -452,7 +503,12 @@ function card(canCreateCard) {
                         fetchDeleteCard(objectCard.id)
                         .then((response) => {
                             if (response.status === "deleteCard") {
-                                dialog({title: "Suppression de la carte", content: `<p>Votre carte a bien été supprimée.</p>`});
+                                if (localStorage.getItem("typeList") === "WishList"){
+                                    dialog({title: "Suppression du souhait", content: "Votre souhait a bien été supprimé."});
+                                } else {
+                                    dialog({title: "Suppression de la tâche", content: "Votre tâche a bien été supprimée."});
+                                }
+
                                 const dialogMsg = document.querySelector("dialog");
                                 dialogMsg.classList.add("valid");
                                 redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);

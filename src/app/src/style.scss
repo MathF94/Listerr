@@ -24,30 +24,30 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     --burger-btn: rgba(51, 51, 51, 1);
 
     // Listes et cartes
-    --wish-bg: rgba(234, 222, 113, 1);
-    --todo-bg: rgba(196, 132, 63, 1);
-    --card-bg: rgba(108, 174, 124, 1);
+    --wish-bg: rgba(138, 172, 238, 1);
+    --todo-bg: rgba(95, 137, 219, 1);
+    --card-bg: rgba(223, 225, 142, 1);
     --common-bg: rgba(150, 150, 150, 1);
-    --third-party-wish-bg: rgba(106, 143, 213, 1);
+    --third-party-wish-bg: rgba(167, 182, 210, 1);
     --third-party-todo-card-bg: rgba(255, 210, 77, 1);
 
     // Boutons
     --way-btn: rgba(213, 190, 3, 1);
-    --way-btn-hover: rgba(213, 190, 3, 1);
+    --way-btn-hover: rgba(213, 190, 3, 0.8);
     --valid-btn: rgba(89, 230, 60, 1);
-    --valid-btn-hover: rgba(61, 156, 41, 1);
+    --valid-btn-hover: rgba(61, 156, 41, 0.8);
     --cancel-btn: rgba(117, 117, 117, 1);
-    --cancel-btn-hover: rgba(117, 117, 117, 1);
+    --cancel-btn-hover: rgba(117, 117, 117, 0.8);
     --view-btn: rgba(238, 214, 33, 1);
-    --view-btn-hover: rgba(213, 188, 3, 1);
-    --delete-btn: rgba(189, 61, 61, 1);
-    --delete-btn-hover: rgba(145, 20, 20, 1);
+    --view-btn-hover: rgba(213, 188, 3, 0.8);
+    --delete-btn: rgba(145, 78, 78, 1);
+    --delete-btn-hover: rgba(145, 20, 20, 0.8);
     --edit-btn: rgba(66, 105, 179, 1);
-    --edit-btn-hover: rgba(31, 93, 213, 1);
+    --edit-btn-hover: rgba(66, 105, 179, 0.8);
     --disable-btn: rgba(141, 125, 125, 1);
-    --disable-btn-hover: rgba(141, 125, 125, 1);
+    --disable-btn-hover: rgba(141, 125, 125, 0.8);
     --tooltip-light: rgba(220,220,220,1);
-    --tooltip-grey: rgba(179,181,178,1);
+    --tooltip-grey: rgba(179,181,178,0.8);
 
     // Formulaire
     --form-bg: rgba(255, 241, 198, 1);
@@ -61,7 +61,7 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     --dialog-bg-errors: rgba(225, 31, 31, 0.7);
 
     // Star
-    --star: rgba(255, 239, 0, 1);
+    --star: rgba(255, 0, 0, 0.6);
     --third-party-star: rgba(255, 0, 0, 0.6);
 }
 
@@ -76,7 +76,7 @@ header {
     background-position: center;
 }
 #hamburger-menu {
-    z-index: 10;
+    z-index: 12;
 }
 #menu {
     &__toggle {
@@ -113,7 +113,7 @@ header {
         width: 26px;
         height: 26px;
         cursor: pointer;
-        z-index: 1;
+        z-index: 11;
         & > span,
         & > span::before,
         & > span::after {
@@ -135,6 +135,7 @@ header {
         }
     }
     &__box {
+        z-index: 10;
         display: block;
         position: fixed;
         top: 0;
@@ -167,7 +168,7 @@ h1 {
     text-align: right;
     text-transform: uppercase;
     font-style: italic;
-    margin-top: 40px;
+    margin-top: 35px;
 }
 ul {
     padding: 0;
@@ -192,9 +193,10 @@ body {
     border-style: solid;
     border-color: var(--border-color);
 }
-.login, .register, .sectionList {
+.login, .register {
     display: flex;
     flex-direction: column;
+    margin-top: 50px;
 }
 h3, h4 {
     margin: 10px auto;
@@ -207,26 +209,33 @@ a {
         background-color: var(--burger-item);
         color: var(--text-light);
     }
+    &.cardLink {
+        color: var(--burger-item);
+    }
 }
 .hidden {
     display: none;
 }
-.width {
-    width: 60%;
-}
-.cardWidth {
-    width: 60%;
+small {
+    display: block;
+    margin: 0 auto;
 }
 
 /* *****************************************************************
     DIALOG
 ***************************************************************** */
 dialog {
-    position: sticky;
-    width: 50%;
+    position: absolute;
+    z-index: 30;
+    width: 250px;
     height: auto;
     border-radius: 10px;
+    top: 55px;
+    font-size: 10px;
     background: var(--dialog-bg);
+    > h2 {
+        margin: 0 auto;
+    }
     &.valid {
         background: var(--dialog-bg-valid);
     }
@@ -260,58 +269,20 @@ dialog {
 }
 
 /* *****************************************************************
-    UTILISATEURS / ADMIN, LISTE & CARTE
+    TOOLTIP
 ***************************************************************** */
 
-.list {
-    position: relative;
-    max-width: 450px;
-    width: 100%;
-    text-align: center;
-    border-radius: 10px;
-    margin: 20px auto;
-    padding: 5px 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    &.little {
-        height: 140px;
-    }
-    &.big {
-        height: 140px;
-    }
-    &.wish {
-        background: var(--wish-bg);
-        box-shadow: 0px 0px 5px 1px var(--wish-bg);
-    }
-    &.todo {
-        background: var(--todo-bg);
-        box-shadow: 0px 0px 5px 1px var(--todo-bg);
-    }
-    &.common {
-        background: var(--common-bg);
-        box-shadow: 0px 0px 5px 1px var(--common-bg);
-    }
-    &.third_party_wish {
-        background: var(--third-party-wish-bg);
-        box-shadow: 0px 0px 5px 1px var(--third-party-wish-bg);
-    }
-}
 .tooltip {
-    position: absolute;
+    position: relative;
     z-index: 1;
-    left: 85%;
     display: inline-block;
     background: radial-gradient(circle, var(--tooltip-light) 0%, var(--tooltip-grey) 100%);
 	border-radius: 50%;
-    width: 30px;
-	height: 30px;
-	line-height: 30px;
-    margin-left: 5px;
-    font-weight: normal;
+    width: 20px;
+	height: 20px;
+	line-height: 20px;
     font-size: 10px;
-    top: 65%;
+    margin: 0 auto;
     &:before {
         content:'?';
         font-weight: bold;
@@ -324,7 +295,7 @@ dialog {
     }
     & .tooltiptext {
         visibility: hidden;
-        width: 120px;
+        width: 115px;
         background-color: #555;
         color: var(--text-light);
         text-align: center;
@@ -332,43 +303,127 @@ dialog {
         padding: 5px 0;
         position: absolute;
         z-index: 1;
-        bottom: 125%;
-        left: 50%;
-        margin-left: -60px;
+        bottom: 4%;
+        left: 25px;
         opacity: 0;
         transition: opacity 0.3s;
         &::after{
             content: "";
             position: absolute;
-            top: 100%;
-            left: 50%;
+            top: 71%;
+            right: 115px;
             margin-left: -5px;
             border-width: 5px;
             border-style: solid;
-            border-color: #555 transparent transparent transparent;
+            border-color: transparent #555 transparent transparent;
         }
     }
 }
-small {
-    display: block;
-    margin: 0 auto;
+
+/* *****************************************************************
+    UTILISATEURS / ADMIN, LISTE & CARTE
+***************************************************************** */
+
+.grid {
+    display: grid;
+    grid-template: repeat(1, 1fr) / repeat(5, 1fr);
 }
-.card {
-    max-width: 700px;
-    width: 90%;
+.grid_tooltip {
+    grid-column: 5/5;
+}
+.grid_section_home {
+    grid-column: 1/6;
+    grid-row: 2/2;
+}
+.grid_section {
+    grid-column: 1/5;
+    grid-row: 2/2;
+}
+.grid_typeH3 {
+    grid-column: 1/4;
+    grid-row: 1/2;
+}
+.grid_titleH3 {
+    grid-column: 2/5;
+    grid-row: 1/2;
+}
+.grid_text_list {
+    grid-column: 1/5;
+    grid-row: 2/2;
+}
+.grid_text_card {
+    grid-column: 2/5;
+    grid-row: 2/2;
+    &.dot {
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+}
+.grid_action_btn_lists {
+    grid-column: 5/5;
+    grid-row: 2/2;
+}
+.grid_edit_list,
+.grid_edit_card {
+    grid-column: 1/6;
+    grid-row: 2/2;
+}
+.grid_create_card {
+    grid-column: 4/5;
+    grid-row: 1/2;
+}
+.grid_check_box {
+    display: flex;
+    grid-column: 1/1;
+    grid-row: 1/1;
+    margin-left: 10px;
+}
+.grid_stars {
+    grid-column: 1/2;
+    grid-row: 2/2;
+    margin-left: 10px;
+}
+.list {
+    align-items: center;
+    max-width: 450px;
+    width: 100%;
     text-align: center;
     border-radius: 10px;
     margin: 20px auto;
     padding: 5px 0;
     cursor: pointer;
+    &.little {
+        height: 140px;
+    }
+    &.wish {
+        background: var(--wish-bg);
+    }
+    &.todo {
+        background: var(--todo-bg);
+    }
+    &.common {
+        background: var(--common-bg);
+    }
+    &.third_party_wish {
+        background: var(--third-party-wish-bg);
+    }
+}
+.card {
+    max-width: 700px;
+    width: 95%;
+    text-align: center;
+    border-radius: 10px;
+    margin: 5px auto;
+    padding: 5px 0;
+    cursor: pointer;
     &.wish {
         background: var(--card-bg);
-        box-shadow: 0px 0px 5px 1px var(--card-bg);
+        align-items: center;
     }
     &.third_party_todo_card {
         background: var(--third-party-todo-card-bg);
-        box-shadow: 0px 0px 5px 1px var(--third-party-todo-card-bg);
     }
+
 }
 .stars {
     font-size: 25px;
@@ -380,12 +435,13 @@ small {
 }
 .adminSection,
 .userFormSection {
-    margin-top: 35px;
+    margin-top: 41px;
 }
 #createUser {
     margin-top: 28px;
 }
-.sectionList {
+#sectionLists,
+#contentSection {
     margin: 0 auto;
 }
 
@@ -422,11 +478,6 @@ small {
     &.way {
         background-color: var(--way-btn);
         margin-right: 5px;
-        &.wayInList {
-            position: absolute;
-            top: 48px;
-            left: 86%;
-        }
         &:hover {
             background-color: var(--way-btn-hover);
             color: var(--text-dark);
@@ -441,20 +492,10 @@ small {
         }
     }
     &.delete {
-        position: absolute;
-        top: 9%;
-        left: 80%;
         background-color: var(--delete-btn);
         color: var(--text-light);
         &::before {
             content: "🗑";
-        }
-        &.inList {
-            left: 90%
-        }
-        &.inCard {
-            top: 19%;
-            left: 85%
         }
         &:hover {
             background-color: var(--delete-btn-hover);
@@ -462,19 +503,12 @@ small {
         }
         &.admin {
             border-radius: 0px 10px 10px 0px;
-            position: static;
         }
         &.listBtn {
             border-radius: 0px 10px 10px 0px;
         }
-        &.static {
-            position: static;
-        }
     }
     &.edit {
-        position: absolute;
-        top: 9%;
-        left: 82%;
         background-color: var(--edit-btn);
         color: var(--text-light);
         &::before {
@@ -486,17 +520,9 @@ small {
         }
         &.admin {
             border-radius: 0px;
-            position: static;
         }
         &.listBtn {
             border-radius: 10px 0px 0px 10px;
-        }
-        &.inCard {
-            top: 19%;
-            left: 77%
-        }
-        &.static {
-            position: static;
         }
     }
     &.cancel {
@@ -514,9 +540,6 @@ small {
         }
     }
     &.disableUpdate {
-        position: absolute;
-        top: 2%;
-        left: 82%;
         background-color: var(--disable-btn);
         &::before {
             content: "🖉";
@@ -528,19 +551,8 @@ small {
         &.listBtn {
             border-radius: 10px 0px 0px 10px;
         }
-        &.inCard {
-            top: 7%;
-            left: 77%
-        }
-        &.inCardChecked {
-            top: 19%;
-            left: 77%;
-        }
     }
     &.disableDelete {
-        position: absolute;
-        top: 2%;
-        left: 90%;
         background-color: var(--disable-btn);
         &::before {
             content: "🗑";
@@ -551,10 +563,6 @@ small {
         }
         &.listBtn {
             border-radius: 0px 10px 10px 0px;
-        }
-        &.inCard {
-            top: 7%;
-            left: 85%;
         }
     }
 }
@@ -708,6 +716,9 @@ input[type="submit"] {
 }
 
 @media screen and (max-width: 619px) {
+    body {
+        min-height: 120vh;
+    }
     .profil {
         &_name{
             display: none;
@@ -725,11 +736,15 @@ input[type="submit"] {
 }
 
 @media screen and (min-width: 810px) {
-    body{
+    body {
+        min-height: 120vh;
         background-size: 610px;
         background-repeat: repeat-y;
         background-position: center;
         width: 635px;
+    }
+    .btn {
+        font-size: 16px;
     }
     // .profil {
     //     &_role {
@@ -781,9 +796,14 @@ input[type="submit"] {
         justify-content: center;
         margin: 10px;
     }
-    .sectionList {
+
+    #homeDisplayLists,
+    #listsSection,
+    #listSection,
+    #profilSection {
         display: flex;
         align-items: center;
+        flex-direction: column;
         & > article {
             width: 600px;
         }

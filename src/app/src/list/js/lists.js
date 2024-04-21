@@ -83,10 +83,11 @@ function lists() {
                     localStorage.removeItem("csrfToken");
 
                     if (response.status === "createList") {
-                        dialog({title: "Et une liste de créée, une !", content:"Remplissez votre liste maintenant !"});
+                        dialog({title: "Création de liste", content: "Jetez à oeil dedans :)"});
+
                         const dialogMsg = document.querySelector("dialog");
                         dialogMsg.classList.add("valid");
-                        redirect(`${configPath.basePath}/list/pages/lists.html`);
+                        redirect(`${configPath.basePath}/list/pages/lists.html`, 3000);
                     }
                     if (response.status === "errors") {
                         dialog({title: "Erreurs", content: response.errors});
@@ -110,6 +111,8 @@ function lists() {
                 const objectList = data[index]
                 const articleList = document.createElement("article");
                 articleList.id = `profilList-${objectList.id}`;
+                articleList.classList.add("grid");
+                articleList.classList.add("grid_lists");
                 articleList.classList.add("list");
                 articleList.classList.add("little");
                 articleList.classList.add(type[objectList.type]);
@@ -120,10 +123,15 @@ function lists() {
                 }
 
                 const sectionList = document.createElement("section");
-                sectionList.classList.add("width");
+                sectionList.classList.add("grid_section");
+                sectionList.id ="sectionList";
 
                 const typeH3 = document.createElement("h3");
+                typeH3.classList.add("grid_typeH3");
                 const titleH4 = document.createElement("h4");
+                const actionBtnLists = document.createElement("div");
+                actionBtnLists.id = "actionBtnLists";
+                actionBtnLists.classList.add("grid_action_btn_lists");
 
                 const deleteBtnLists = document.createElement("button");
                 deleteBtnLists.id = `deleteProfilList-${objectList.id}`;
@@ -138,7 +146,6 @@ function lists() {
 
                 for (const key in objectList) {
                     const value = objectList[key];
-                    const text = document.createElement("p");
 
                     if (key === "title") {
                         titleH4.innerText = `${objectList.title} - ${objectList.description}`;
@@ -148,19 +155,20 @@ function lists() {
 
                     // Affichage du tooltip
                     if (key === "user" && typeof(value) === "object") {
-                        toolTip(sectionList, objectList.updatedAt, objectList.user.login)
+                        toolTip(articleList, objectList.updatedAt, objectList.user.login)
                     }
 
                     // Exclut certains éléments de la liste (id, userId, type, title, cards, createdAd)
                     if (allowedIds.includes(`${key}`)) {
                         continue;
                     }
-                    listWrapper.append(articleList);
+
+                    listWrapper.appendChild(articleList);
+                    articleList.appendChild(actionBtnLists);
                     articleList.appendChild(typeH3);
                     sectionList.appendChild(titleH4);
                     articleList.appendChild(sectionList);
-                    sectionList.appendChild(text);
-                    articleList.appendChild(deleteBtnLists);
+                    actionBtnLists.appendChild(deleteBtnLists);
                 }
 
                 // Gestion de la suppression de liste
@@ -175,7 +183,7 @@ function lists() {
                         scroll();
                         fetchDeleteList(objectList.id)
                         .then(() => {
-                            dialog({title: "Suppression de la liste", content: `<p>Votre liste a bien été supprimée.</p>`});
+                            dialog({title: "Suppression de la liste", content: `Votre liste a bien été supprimée.`});
                             const dialogMsg = document.querySelector("dialog");
                             dialogMsg.classList.add("valid");
                             redirect(`${configPath.basePath}/list/pages/lists.html`);
