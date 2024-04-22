@@ -77,6 +77,10 @@ function dialog({title, content}) {
     }
 }
 
+/**
+ * Redirige l'utilisateur invité vers la page d'accueil, si la liste n'est pas une wishlist.
+ * @param {string} type - Le type de liste
+ */
 function notAllowedRedirection(type) {
     if (type !== "WishList" || type === null) {
         if (!localStorage.token || localStorage.token === undefined) {
@@ -96,6 +100,9 @@ function redirect(url, duration = 1000) {
     }, duration);
 }
 
+/**
+ * Affiche ou cache le mot de passe en cliquant sur l'oeil.
+ */
 function reveal() {
     const eyeIcon = document.querySelector("#icon");
     const inputPW = document.querySelector("#password")
@@ -123,7 +130,13 @@ function scroll() {
     });
 }
 
-function toolTip(anchor, updatedAt, login) {
+/**
+ * Création du tooltip pour informer de la dernière mis à jour d'une liste et par qui.
+ * @param {HTMLFormElement, number, string} anchor - Element du DOM à quoi se rattache le tooltip.
+ * @param {*} updatedAt - date de dernière mise à jour.
+ * @param {*} login - login de l'utilisateur
+ */
+function toolTip(anchor, id, updatedAt, login) {
     let dateFromDatabase = updatedAt ;
     let date = new Date(dateFromDatabase);
     let day = date.getDate();
@@ -134,7 +147,7 @@ function toolTip(anchor, updatedAt, login) {
                         + year;
 
     const toolTip = document.createElement("div");
-    toolTip.id = "tooltip";
+    toolTip.id = `tooltip-${id}`;
     toolTip.classList.add("tooltip");
     toolTip.classList.add("grid_tooltip");
 
@@ -144,6 +157,11 @@ function toolTip(anchor, updatedAt, login) {
     toolTip.appendChild(spanToolTip);
     anchor.prepend(toolTip);
 }
+
+/**
+ * Permet de renvoyer les messages d'erreur en cas de non validation des champs
+ * @param {string} input
+ */
 
 function validate(input) {
     const errors = {

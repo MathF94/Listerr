@@ -81,7 +81,7 @@ function list() {
                     oneList.classList.add(type.Common)
                 }
 
-                toolTip(oneList, data.updatedAt, data.user.login)
+                toolTip(oneList, data.id, data.updatedAt, data.user.login)
 
                 const sectionList = document.createElement("section");
                 sectionList.classList.add("grid_text_list");
@@ -245,7 +245,7 @@ function list() {
                                 } else {
                                     dialog({title: "Suppression de la liste de tâche", content: "Votre liste a bien été supprimée."});
                                 }
-                                
+
                                 const dialogMsg = document.querySelector("dialog");
                                 dialogMsg.classList.add("valid");
                                 document.body.scrollTop = 0;

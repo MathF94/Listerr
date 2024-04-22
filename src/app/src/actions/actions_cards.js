@@ -46,7 +46,7 @@ async function fetchReadAllCardsByList(id) {
 /**
  * Effectue une requête pour mettre à jour une carte en utilisant un formulaire.
  *
- * @param {HTMLFormElement} form - Le formulaire contenant les données mises à jour de la liste.
+ * @param {HTMLFormElement} form - Le formulaire contenant les données mises à jour de la carte.
  * @param {number} id - L'identifiant de la carte à mettre à jour.
  * @returns {Promise<Object|null>} Une promesse résolue avec les données de la carte mise à jour ou null en cas d'erreur.
  */
@@ -71,6 +71,13 @@ async function fetchUpdateCard(form, id) {
     }
 };
 
+/**
+ * Effectue une requête pour mettre à jour la réservation d'une carte.
+ *
+ * @param {HTMLFormElement} checked - La valeur de la checkbox mise à jour de la carte.
+ * @param {number} id - L'identifiant de la carte à mettre à jour.
+ * @returns {Promise<Object|null>} Une promesse résolue avec les données de la carte mise à jour ou null en cas d'erreur.
+ */
 async function fetchUpdateReservation(checked, id) {
     try {
         const formData = new FormData();
@@ -79,6 +86,10 @@ async function fetchUpdateReservation(checked, id) {
 
         const url = `${configPath.apiPath}/?route=update_checked`;
         return await fetch(url, {
+            headers: {
+                "Authorization": localStorage.getItem("token"),
+                "X-CSRFToken": localStorage.getItem("csrfToken")
+            },
             method: "POST",
             body: formData,
             }).then(response => response.json());
@@ -88,6 +99,28 @@ async function fetchUpdateReservation(checked, id) {
         return null;
     }
 }
+
+async function fetchUpdatePriority(priority, id) {
+    try {
+        const formData = new FormData();
+        formData.append('id', id);
+        formData.append('priority', priority);
+
+        const url = `${configPath.apiPath}/?route=update_priority`;
+        return await fetch(url, {
+            headers: {
+                "Authorization": localStorage.getItem("token")
+            },
+            method: "POST",
+            body: formData,
+            }).then(response => response.json());
+
+    } catch (error) {
+        console.error("Erreur lors de la requête fetch :", error);
+        return null;
+    }
+}
+
 /**
  * Effectue une requête pour supprimer une carte par son ID.
  *
@@ -115,6 +148,7 @@ export {
     fetchCreateCard,
     fetchReadAllCardsByList,
     fetchUpdateCard,
+    fetchUpdatePriority,
     fetchUpdateReservation,
     fetchDeleteCard
 };

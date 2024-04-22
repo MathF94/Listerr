@@ -7,8 +7,8 @@ import {
 } from "../../actions/actions_admin.js";
 import { fetchReadAllLists } from "../../actions/actions_lists.js";
 import {
-    configPath,
     allowedIds,
+    configPath,
     type,
     dialog,
     toolTip,
@@ -76,15 +76,16 @@ function read() {
                 if (JSON.parse(localStorage.user).role === "Admin") {
                     const returnBtn = document.createElement("button");
                     returnBtn.id = "returnBtn";
-                    returnBtn.classList.add("btn");
-                    returnBtn.classList.add("cancel");
-                    returnBtn.innerText = "Retour";
                     returnBtn.type = "button";
                     returnBtn.title = "Revenir à la liste d'utilisateurs";
+                    returnBtn.innerText = "Retour";
+                    returnBtn.classList.add("btn");
+                    returnBtn.classList.add("cancel");
 
                     // En tant qu'Admin, modifie le texte du bouton
                     listBtn.innerText = `Listes de ${response.login.value}`;
                     listBtn.title = `Listes de ${response.login.value}`;
+
                     listBtn.after(returnBtn);
 
                     // Permet la modification de l'utilisateur par l'Admin
@@ -247,7 +248,7 @@ function read() {
                                         continue;
                                     }
                                     item.innerText = `${objectList[key]}`;
-                                    
+
                                     listWrapper.appendChild(articleList);
                                     articleList.appendChild(typeH3);
                                     articleList.appendChild(sectionList);

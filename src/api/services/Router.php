@@ -29,7 +29,7 @@ class Router
                 /**
                  * Route utilisateur
                  */
-                
+
                 case 'user_register':
                     if ($this->isAllowedMethod('POST')) {
                         $user = new UserController();
@@ -167,8 +167,15 @@ class Router
 
                 case 'update_checked':
                     if ($this->isAllowedMethod('POST')) {
-                        $card = new CardController();
-                        echo $card->updateChecked($_POST['id'], $_POST['checked']); // update
+                        $card = new CardController($headers['Authorization']);
+                        echo $card->updateChecked($_POST['id'], $_POST['checked'], $headers['X-CSRFToken']); // update checkbox
+                    }
+                    break;
+
+                case 'update_priority':
+                    if ($this->isAllowedMethod('POST')) {
+                        $card = new CardController($headers['Authorization']);
+                        echo $card->updatePriority($_POST['id'], $_POST['priority']); // update priority stars
                     }
                     break;
 
