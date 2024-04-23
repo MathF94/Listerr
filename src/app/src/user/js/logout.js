@@ -1,7 +1,7 @@
 "use strict";
 
 import { fetchLogout } from "../../actions/actions_user.js";
-import { configPath, redirect, dialog, redirect } from "../../services/utils.js";
+import { configPath, redirect, dialog} from "../../services/utils.js";
 /**
  * Gère le processus de déconnexion de l'utilisateur.
  */

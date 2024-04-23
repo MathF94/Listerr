@@ -5,6 +5,7 @@ import {
     fetchReadAllCardsByList,
     fetchUpdateCard,
     fetchUpdateReservation,
+    fetchUpdatePriority,
     fetchDeleteCard,
 } from "../../actions/actions_cards.js";
 
@@ -218,7 +219,7 @@ function card(canCreateCard) {
                 }
 
                 const divStar = document.createElement("div");
-                divStar.id = "divStar";
+                divStar.id = `divStar-${objectCard.id}`;
                 divStar.classList.add("grid_stars");
 
                 const titleH3 = document.createElement("h3");
@@ -228,7 +229,7 @@ function card(canCreateCard) {
                 text.classList.add("dot");
 
                 const divCheck = document.createElement("div");
-                divCheck.id = "divCheck";
+                divCheck.id = `divCheck-${objectCard.id}`;
                 divCheck.classList.add("grid_check_box");
 
                 const labelCheck = document.createElement("label");
@@ -241,7 +242,7 @@ function card(canCreateCard) {
                 check.value = objectCard.checked;
 
                 const actionBtnCard = document.createElement("section");
-                actionBtnCard.id = "actionBtnCard";
+                actionBtnCard.id = `actionBtnCard-${objectCard.id}`;
                 actionBtnCard.classList.add("grid_action_btn_lists");
 
                 const updateBtnCard = document.createElement("button");
@@ -287,13 +288,13 @@ function card(canCreateCard) {
                 // Boucle de création des étoiles (pleines ou vides) en fonction de la priorité
                 for (let i = 0 ; i < 5; i++) {
                     const priority = document.createElement("span");
-
+                    priority.id = `${i+1}-${objectCard.id}`;
+                    // priority.id = `${i+1}`;
                     if((userId !== response.data.userId) || (response.data.type === "TodoList")) {
                         priority.classList.add("third_party_stars");
                     } else {
                         priority.classList.add("stars");
                     }
-                    // priority.classList.add("stars");
                     priority.setAttribute("data-star", i+1);
                     priority.textContent = i < priorityValue ? "\u2605" : "\u2606" ;
                     divStar.title = `nombre d'étoiles ${priorityValue}`;
@@ -303,13 +304,15 @@ function card(canCreateCard) {
 
                 // Affichage des éléments de la carte
                 for (const key in objectCard) {
+                    console.log(objectCard.id);
                     if (key === "title") {
                         titleH3.innerText = `${objectCard.title}`;
                         cardSectionContent.appendChild(titleH3);
                     } else if (key === "updatedAt") {
-                        toolTip(cardSectionContent, objectCard.updatedAt, response.data.user.login)
+                        toolTip(cardSectionContent, objectCard.id, objectCard.updatedAt, response.data.user.login)
                     } else if (key === "checked") {
                         check.checked = objectCard.checked === 1;
+
                         if(check.checked) {
                             check.disabled = true;
                         }
@@ -464,6 +467,21 @@ function card(canCreateCard) {
                         })
                     }
                 })
+
+                // Gestion de la modification de la priorité
+                const starSpan = document.querySelectorAll("span[data-star]");
+                console.log(starSpan);
+                starSpan.forEach(span => {
+                    span.addEventListener("click", e => {
+                        e.preventDefault();
+                        console.log(e.target.id);
+                        // console.log(objectCard.id);
+                        fetchUpdatePriority(e.target.id, objectCard.id)
+                        .then(response => {
+                            console.log("modification stars");
+                        })
+                    });
+                });
 
                 // Gestion de la réservation d'une carte
                 CSRFToken("checkForm");

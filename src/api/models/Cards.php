@@ -159,6 +159,23 @@ class Cards extends Database
         }
     }
 
+    public function updatePriority(array $params, int $id): bool
+    {
+        try {
+            $req = "UPDATE `card`
+                    SET `priority` = :priority
+                    WHERE `id` = :id";
+
+            $query = $this->db->prepare($req);
+            $params['id'] = $id;
+
+            return $query->execute($params);
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return [];
+        }
+    }
+
     /**
      * Cette méthode permet de supprimer une carte de la base de données.
      *

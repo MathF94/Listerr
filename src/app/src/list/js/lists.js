@@ -148,14 +148,14 @@ function lists() {
                     const value = objectList[key];
 
                     if (key === "title") {
-                        titleH4.innerText = `${objectList.title} - ${objectList.description}`;
+                        titleH4.innerText = `${objectList.title} ${objectList.description}`;
                     } else if (key === "type") {
                         typeH3.innerText = `${objectList.type}`;
                     }
 
                     // Affichage du tooltip
                     if (key === "user" && typeof(value) === "object") {
-                        toolTip(articleList, objectList.updatedAt, objectList.user.login)
+                        toolTip(articleList, objectList.id, objectList.updatedAt, objectList.user.login)
                     }
 
                     // Exclut certains éléments de la liste (id, userId, type, title, cards, createdAd)

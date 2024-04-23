@@ -101,7 +101,7 @@ function readAllLists() {
                         }
 
                         if (key === "updatedAt") {
-                            toolTip(articleList, object.updatedAt, object.user.login)
+                            toolTip(articleList, object.id, object.updatedAt, object.user.login)
                         }
 
                         if (allowedIds.includes(`${key}`)) {

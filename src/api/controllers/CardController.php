@@ -180,6 +180,7 @@ class CardController
                         "message" => "la carte a bien été mise à jour."
                     ]);
                 }
+
                 return json_encode([
                     "status" => "errors",
                     "errors" => $errors
@@ -207,25 +208,65 @@ class CardController
      *                                 "fail" avec un message d'erreur, si la carte est introuvable.
      *                                 "errors" avec un message d'erreur, en cas d'échec.
      */
-    public function updateChecked(int $id, int $checked): string
+    public function updateChecked(int $id, int $checked, string $csrfToken): string
     {
         try {
-            $model = new Cards();
-            $card = $model->getOneCardById($id);
+            $validToken = $this->csrfToken->isValidToken($csrfToken, "checkForm");
 
-            if (empty($card)) {
+            if (!$validToken) {
                 return json_encode([
                     "status" => "fail",
-                    "errors" => "no card found"
+                    "message" => "no valid csrfToken"
                 ]);
             }
 
-            $params = ["checked" => $checked];
-            $model->updateChecked($params, $card->id);
+            if (!empty($this->user->id)) {
+                $model = new Cards();
+                $card = $model->getOneCardById($id);
+
+                if (empty($card)) {
+                    return json_encode([
+                        "status" => "fail",
+                        "errors" => "no card found"
+                    ]);
+                }
+
+                $params = ["checked" => $checked];
+                $model->updateChecked($params, $card->id);
+
+                return json_encode([
+                    "status" => "updateChecked",
+                    "message" => "la reservation a bien été mise à jour."
+                ]);
+            }
+        } catch (\Exception $e) {
             return json_encode([
-                "status" => "updateChecked",
-                "message" => "la reservation a bien été mise à jour."
+                "status" => "errors",
+                "message" => $e->getMessage()
             ]);
+        }
+    }
+
+    public function updatePriority(int $id, string $priority): string
+    {
+        try {
+            if (!empty($this->user->id)) {
+                $model = new Cards();
+                $card = $model->getOneCardById($id);
+                if (empty($card)) {
+                    return json_encode([
+                        "status" => "fail",
+                        "errors" => "no card found"
+                    ]);
+                }
+                $params = ["priority" => $priority];
+                $model->updatePriority($params, $card->id);
+
+                return json_encode([
+                    "status" => "updatePriority",
+                    "message" => "la priorité a bien été mise à jour."
+                ]);
+            }
 
         } catch (\Exception $e) {
             return json_encode([
