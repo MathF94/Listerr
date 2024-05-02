@@ -289,22 +289,52 @@ function card(canCreateCard) {
                 for (let i = 0 ; i < 5; i++) {
                     const priority = document.createElement("span");
                     priority.id = `${i+1}-${objectCard.id}`;
-                    // priority.id = `${i+1}`;
+
+                    // Définit la couleur des étoiles si l'utilisateur courant n'est pas le proprio de la carte
+                    //                                si la liste est une TodoList
                     if((userId !== response.data.userId) || (response.data.type === "TodoList")) {
                         priority.classList.add("third_party_stars");
                     } else {
                         priority.classList.add("stars");
                     }
+
                     priority.setAttribute("data-star", i+1);
                     priority.textContent = i < priorityValue ? "\u2605" : "\u2606" ;
                     divStar.title = `nombre d'étoiles ${priorityValue}`;
                     divStar.appendChild(priority);
+
+                    // Gestion de la modification de la priorité
+                    priority.addEventListener("click", function (e) {
+                        e.preventDefault();
+                        console.log(e);
+                        fetchUpdatePriority(e.target.id, objectCard.id)
+                        .then(response => {
+                            console.log("modification stars");
+
+                            if (response.status === "updatePriority") {
+                                if (localStorage.getItem("typeList") === "WishList"){
+                                    dialog({title: "Modification du souhait", content: "Votre priorité a bien été mis à jour."});
+                                } else {
+                                    dialog({title: "Modification de la tâche", content: "Votre importance a bien été mise à jour."});
+                                }
+                                const dialogMsg = document.querySelector("dialog");
+                                dialogMsg.classList.add("valid");
+                                redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                            }
+
+                            if (response.status === "errors") {
+                                dialog({title: "Erreurs", content: response.errors});
+                                const dialogMsg = document.querySelector("dialog");
+                                dialogMsg.classList.add("errors");
+                                redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                            }
+                        })
+                    })
                 }
 
 
                 // Affichage des éléments de la carte
                 for (const key in objectCard) {
-                    console.log(objectCard.id);
                     if (key === "title") {
                         titleH3.innerText = `${objectCard.title}`;
                         cardSectionContent.appendChild(titleH3);
@@ -467,21 +497,6 @@ function card(canCreateCard) {
                         })
                     }
                 })
-
-                // Gestion de la modification de la priorité
-                const starSpan = document.querySelectorAll("span[data-star]");
-                console.log(starSpan);
-                starSpan.forEach(span => {
-                    span.addEventListener("click", e => {
-                        e.preventDefault();
-                        console.log(e.target.id);
-                        // console.log(objectCard.id);
-                        fetchUpdatePriority(e.target.id, objectCard.id)
-                        .then(response => {
-                            console.log("modification stars");
-                        })
-                    });
-                });
 
                 // Gestion de la réservation d'une carte
                 CSRFToken("checkForm");
