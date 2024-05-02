@@ -235,6 +235,7 @@ function card(canCreateCard) {
                 const labelCheck = document.createElement("label");
                 labelCheck.for = "checkbox";
                 labelCheck.innerText = checklabel;
+
                 const check = document.createElement("input");
                 check.id = `checked-${objectCard.id}`;
                 check.title = checklabel;
@@ -277,6 +278,8 @@ function card(canCreateCard) {
                     updateBtnCard.classList.add("disableUpdate");
                     updateBtnCard.classList.remove("inCard");
                     updateBtnCard.classList.add("inCardChecked");
+                    check.style.cursor = "not-allowed";
+
                     let checklabel = "Réservé";
                     if (localStorage.getItem("typeList") === "TodoList") {
                         checklabel = "Réalisé";
@@ -303,33 +306,36 @@ function card(canCreateCard) {
                     divStar.title = `nombre d'étoiles ${priorityValue}`;
                     divStar.appendChild(priority);
 
-                    // Gestion de la modification de la priorité
-                    priority.addEventListener("click", function (e) {
-                        e.preventDefault();
-                        console.log(e);
-                        fetchUpdatePriority(e.target.id, objectCard.id)
-                        .then(response => {
-                            console.log("modification stars");
+                    if (check.value === "1") {
+                        priority.classList.remove("stars");
+                        priority.classList.add("disable_stars");
 
-                            if (response.status === "updatePriority") {
-                                if (localStorage.getItem("typeList") === "WishList"){
-                                    dialog({title: "Modification du souhait", content: "Votre priorité a bien été mis à jour."});
-                                } else {
-                                    dialog({title: "Modification de la tâche", content: "Votre importance a bien été mise à jour."});
+                    } else {
+                        // Gestion de la modification de la priorité
+                        priority.addEventListener("click", function (e) {
+                            e.preventDefault();
+                            fetchUpdatePriority(e.target.id, objectCard.id)
+                            .then(response => {
+                                if (response.status === "updatePriority") {
+                                    if (localStorage.getItem("typeList") === "WishList"){
+                                        dialog({title: "Modification du souhait", content: "Votre priorité a bien été mis à jour."});
+                                    } else {
+                                        dialog({title: "Modification de la tâche", content: "Votre importance a bien été mise à jour."});
+                                    }
+                                    const dialogMsg = document.querySelector("dialog");
+                                    dialogMsg.classList.add("valid");
+                                    redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
                                 }
-                                const dialogMsg = document.querySelector("dialog");
-                                dialogMsg.classList.add("valid");
-                                redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
-                            }
 
-                            if (response.status === "errors") {
-                                dialog({title: "Erreurs", content: response.errors});
-                                const dialogMsg = document.querySelector("dialog");
-                                dialogMsg.classList.add("errors");
-                                redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
-                            }
+                                if (response.status === "errors") {
+                                    dialog({title: "Erreurs", content: response.errors});
+                                    const dialogMsg = document.querySelector("dialog");
+                                    dialogMsg.classList.add("errors");
+                                    redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                                }
+                            })
                         })
-                    })
+                    }
                 }
 
 
@@ -410,6 +416,7 @@ function card(canCreateCard) {
                     if (updtBtnCardId !== objectCard.id) {
                         console.warn("pas touche");
                         return;
+
                     } else {
                         const updateCardSection = document.createElement("section");
                         updateCardSection.id = `updateCardSection-${objectCard.id}`;

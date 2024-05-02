@@ -32,7 +32,7 @@
   --view-btn: rgba(238, 214, 33, 1);
   --view-btn-hover: rgba(213, 188, 3, 0.8);
   --delete-btn: rgba(145, 78, 78, 1);
-  --delete-btn-hover: rgba(145, 20, 20, 0.8);
+  --delete-btn-hover: rgba(108, 6, 6, 0.8);
   --edit-btn: rgba(66, 105, 179, 1);
   --edit-btn-hover: rgba(66, 105, 179, 0.8);
   --disable-btn: rgba(141, 125, 125, 1);
@@ -48,6 +48,7 @@
   --dialog-bg-errors: rgba(225, 31, 31, 0.7);
   --star: rgba(255, 0, 0, 0.6);
   --third-party-star: rgba(255, 0, 0, 0.6);
+  --disable-star: rgba(141, 125, 125, 1);
 }
 
 /* *****************************************************************
@@ -423,6 +424,12 @@ dialog.errors_fields > h2 {
 .third_party_stars {
   font-size: 25px;
   color: var(--third-party-star);
+}
+
+.disable_stars {
+  font-size: 25px;
+  color: var(--disable-star);
+  cursor: not-allowed;
 }
 
 .adminSection,

@@ -41,7 +41,7 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     --view-btn: rgba(238, 214, 33, 1);
     --view-btn-hover: rgba(213, 188, 3, 0.8);
     --delete-btn: rgba(145, 78, 78, 1);
-    --delete-btn-hover: rgba(145, 20, 20, 0.8);
+    --delete-btn-hover: rgba(108, 6, 6, 0.8);
     --edit-btn: rgba(66, 105, 179, 1);
     --edit-btn-hover: rgba(66, 105, 179, 0.8);
     --disable-btn: rgba(141, 125, 125, 1);
@@ -63,6 +63,7 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     // Star
     --star: rgba(255, 0, 0, 0.6);
     --third-party-star: rgba(255, 0, 0, 0.6);
+    --disable-star: rgba(141, 125, 125, 1);
 }
 
 /* *****************************************************************
@@ -423,7 +424,6 @@ dialog {
     &.third_party_todo_card {
         background: var(--third-party-todo-card-bg);
     }
-
 }
 .stars {
     font-size: 25px;
@@ -432,6 +432,11 @@ dialog {
 .third_party_stars {
     font-size: 25px;
     color: var(--third-party-star);
+}
+.disable_stars {
+    font-size: 25px;
+    color: var(--disable-star);
+    cursor: not-allowed;
 }
 .adminSection,
 .userFormSection {
