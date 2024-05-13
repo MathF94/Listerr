@@ -31,12 +31,32 @@ function card(canCreateCard) {
     const urlParams = new URLSearchParams(document.location.search);
     const id = urlParams.get("id");
     const oneList = document.querySelector("#oneList");
-    let userId = null;
 
+    // ID de l'utilisateur en cours
+    let userId = null;
     if(localStorage.user) {
         userId = JSON.parse(localStorage.user).id;
     }
 
+    // Affichage du contenu du bouton en fonction du type de liste
+    let btnLabel = "Nouveau souhait";
+    let checklabel = "Réserver";
+    if (localStorage.getItem("typeList") === "TodoList") {
+        btnLabel = "Nouvelle tâche";
+        checklabel = "A Réaliser";
+    }
+
+    // Afficher le title des boutons édition et suppression
+    const updateProfilList = document.querySelector(`#updateProfilList-${id}`);
+    const deleteProfilList = document.querySelector(`#deleteProfilList-${id}`);
+    if (updateProfilList) {
+        updateProfilList.title = "Modifier une liste";
+    }
+    if (deleteProfilList) {
+        deleteProfilList.title = "Supprimer une liste";
+    }
+
+    // Création des éléments DOM pour le formulaire de création d'une carte
     const cardDivForm = document.createElement("div");
     cardDivForm.id = "cardSectionForm";
     cardDivForm.classList.add("form");
@@ -52,28 +72,17 @@ function card(canCreateCard) {
     createCardFormBtn.value = `cardFormBtn`;
     createCardFormBtn.classList.add("btn");
     createCardFormBtn.classList.add("way");
-
-    // Affichage du contenu du bouton en fonction du type de liste
-    let btnLabel = "Nouveau souhait";
-    let checklabel = "Réserver";
-    if (localStorage.getItem("typeList") === "TodoList") {
-        btnLabel = "Nouvelle tâche";
-        checklabel = "Réaliser";
-    }
-
     createCardFormBtn.textContent = "+";
     createCardFormBtn.title = btnLabel;
 
-    const updateProfilList = document.querySelector(`#updateProfilList-${id}`);
-    const deleteProfilList = document.querySelector(`#deleteProfilList-${id}`);
-    if (updateProfilList) {
-        updateProfilList.title = "Modifier une liste";
-    }
-    if (deleteProfilList) {
-        deleteProfilList.title = "Supprimer une liste";
+    // Rappel : "canCreateCard" retourne vrai si utilisateur courant = propriétaire de la liste/carte
+    if (canCreateCard) {
+        // Si canCreateCard = true, alors possibilité de création de nouvelle carte
+        oneList.appendChild(cardDivForm);
+        cardDivForm.appendChild(createCardFormBtn);
     }
 
-    // Affichage du formulaire au click du bouton
+    // Affichage du formulaire de création d'une carte au click du bouton
     createCardFormBtn.addEventListener("click", function(e) {
         if (createCardFormBtn.value !== "cardFormBtn") {
             return false;
@@ -82,14 +91,12 @@ function card(canCreateCard) {
         // Bouton rendu inutilisable
         createCardFormBtn.disabled = true;
         createCardFormBtn.classList.add("disable");
+
         const actionBtnList = document.querySelector("#actionBtnList");
         actionBtnList.classList.add("hidden");
+
         const sectionTxt = document.querySelector("#sectionTxt");
         sectionTxt.classList.add("hidden");
-
-        cardDivForm.style.gridColumn = "1/6";
-        cardDivForm.style.gridRow = "2/2";
-        cardDivForm.appendChild(titleForm);
 
         if (updateProfilList) {
             updateProfilList.disabled = true;
@@ -103,13 +110,17 @@ function card(canCreateCard) {
         }
 
         // Appel du formulaire de création d'une carte
+        cardDivForm.style.gridColumn = "1/6";
+        cardDivForm.style.gridRow = "2/2";
+        cardDivForm.appendChild(titleForm);
+
         displayFormCard(cardDivForm);
         titleForm.innerText = "Formulaire de création d'une carte";
         const cardCancelBtn = document.querySelector("#cardCancelBtn");
         cardCancelBtn.title = "Revenir aux listes";
         const cardForm = document.querySelector("#formCard");
 
-        // Suppression du formulaire d'édition au click du bouton
+        // Suppression des éléments du formulaire d'édition au click du bouton "Annuler"
         cardCancelBtn.addEventListener("click", function() {
             updateProfilList.disabled = false;
             deleteProfilList.disabled = false;
@@ -126,10 +137,11 @@ function card(canCreateCard) {
             cardDivForm.style.gridColumn = "4/5";
             cardDivForm.style.gridRow = "1/2";
 
-            titleFormCard.remove();
+            titleForm.remove();
             cardForm.remove();
         })
 
+        // Création d'une nouvelle carte
         CSRFToken(cardForm.id);
         cardForm.addEventListener("submit", function(e) {
             e.preventDefault();
@@ -149,8 +161,9 @@ function card(canCreateCard) {
                 validate(e.target)
             });
 
+            // Retour en haut de page
             scroll();
-            // Création d'une carte
+
             fetchCreateCard(cardForm, id)
             .then(response => {
                 localStorage.removeItem("csrfToken");
@@ -176,11 +189,7 @@ function card(canCreateCard) {
         })
     })
 
-    if (canCreateCard) {
-        oneList.appendChild(cardDivForm);
-        cardDivForm.appendChild(createCardFormBtn);
-    }
-
+    // Affichage des cartes de la liste
     fetchReadAllCardsByList(id)
     .then(response => {
         if (response.status === "readOneList") {
@@ -189,6 +198,7 @@ function card(canCreateCard) {
             cardArticleContent.id = "cardArticleContent";
             cardArticleContent.classList.add("list");
 
+            // CSS pour lier la partie supérieure de la liste avec les nouvelles cartes
             if (dataCards.length !== 0) {
                 oneList.style.borderRadius = "20px 20px 0 0";
                 oneList.style.marginBottom = "0";
@@ -196,6 +206,7 @@ function card(canCreateCard) {
                 cardArticleContent.style.marginTop = "0";
             }
 
+            // CSS pour différencier la couleur de fond des WL ou TL si l'utilisateur est différent du propriétaire
             if (localStorage.getItem("typeList") === "WishList" || localStorage.getItem("typeList") === "TodoList"){
                 if(userId !== response.data.userId){
                     cardArticleContent.classList.add("third_party_wish");
@@ -204,6 +215,7 @@ function card(canCreateCard) {
                 }
             }
 
+            // Boucle pour afficher les éléments DOM d'une carte
             for (const indexCard in dataCards) {
                 const objectCard = dataCards[indexCard];
 
@@ -212,22 +224,26 @@ function card(canCreateCard) {
                 cardSectionContent.classList.add("card");
                 cardSectionContent.classList.add("grid");
 
+                // CSS pour différencier la couleur des cartes si l'utilisateur est différent du propriétaire ou si c'est une TL
                 if((userId !== response.data.userId) || (localStorage.getItem("typeList") === "TodoList")) {
                     cardSectionContent.classList.add("third_party_todo_card");
                 } else {
                     cardSectionContent.classList.add("wish");
                 }
 
-                const divStar = document.createElement("div");
-                divStar.id = `divStar-${objectCard.id}`;
-                divStar.classList.add("grid_stars");
-
                 const titleH3 = document.createElement("h3");
                 titleH3.classList.add("grid_titleH3")
+
                 const text = document.createElement("p");
                 text.classList.add("grid_text_card");
                 text.classList.add("dot");
 
+                // Elements DOM pour les étoiles
+                const divStar = document.createElement("div");
+                divStar.id = `divStar-${objectCard.id}`;
+                divStar.classList.add("grid_stars");
+
+                // Elements DOM pour la checkbox
                 const divCheck = document.createElement("div");
                 divCheck.id = `divCheck-${objectCard.id}`;
                 divCheck.classList.add("grid_check_box");
@@ -241,7 +257,9 @@ function card(canCreateCard) {
                 check.title = checklabel;
                 check.type = "checkbox";
                 check.value = objectCard.checked;
+                check.classList.add("pointer");
 
+                // Elements DOM pour les boutons d'actions de la carte (Edit/Delete)
                 const actionBtnCard = document.createElement("section");
                 actionBtnCard.id = `actionBtnCard-${objectCard.id}`;
                 actionBtnCard.classList.add("grid_action_btn_lists");
@@ -270,25 +288,8 @@ function card(canCreateCard) {
                 deleteBtnCard.classList.add("inCard");
                 deleteBtnCard.classList.add("listBtn");
 
-                const priorityValue = objectCard.priority;
-
-                if (check.value === "1") {
-                    updateBtnCard.disabled = true;
-                    updateBtnCard.classList.remove("edit");
-                    updateBtnCard.classList.add("disableUpdate");
-                    updateBtnCard.classList.remove("inCard");
-                    updateBtnCard.classList.add("inCardChecked");
-                    check.style.cursor = "not-allowed";
-
-                    let checklabel = "Réservé";
-                    if (localStorage.getItem("typeList") === "TodoList") {
-                        checklabel = "Réalisé";
-                    }
-                    labelCheck.innerText = checklabel
-                    check.title = checklabel;
-                }
-
                 // Boucle de création des étoiles (pleines ou vides) en fonction de la priorité
+                const priorityValue = objectCard.priority;
                 for (let i = 0 ; i < 5; i++) {
                     const priority = document.createElement("span");
                     priority.id = `${i+1}-${objectCard.id}`;
@@ -338,8 +339,22 @@ function card(canCreateCard) {
                     }
                 }
 
+                // CSS pour modifier le bouton d'édition et label
+                if (check.value === "1") {
+                    updateBtnCard.disabled = true;
+                    updateBtnCard.classList.remove("edit");
+                    updateBtnCard.classList.remove("inCard");
+                    updateBtnCard.classList.add("disableUpdate");
 
-                // Affichage des éléments de la carte
+                    let checklabel = "Réservé";
+                    if (localStorage.getItem("typeList") === "TodoList") {
+                        checklabel = "Réalisé";
+                    }
+                    labelCheck.innerText = checklabel
+                    check.title = checklabel;
+                }
+
+                // Affichage des données de la carte
                 for (const key in objectCard) {
                     if (key === "title") {
                         titleH3.innerText = `${objectCard.title}`;
@@ -349,9 +364,6 @@ function card(canCreateCard) {
                     } else if (key === "checked") {
                         check.checked = objectCard.checked === 1;
 
-                        if(check.checked) {
-                            check.disabled = true;
-                        }
                         cardSectionContent.appendChild(divCheck);
                         divCheck.appendChild(check);
                         divCheck.appendChild(labelCheck);
@@ -384,7 +396,7 @@ function card(canCreateCard) {
                     actionBtnCard.appendChild(deleteBtnCard);
                 }
 
-                // Rend visible les boutons pour l'utilisateur courant uniquement
+                // Rend les boutons d'actions visibles pour l'utilisateur courant uniquement
                 if (canCreateCard) {
                     cardSectionContent.appendChild(actionBtnCard);
 
@@ -412,7 +424,10 @@ function card(canCreateCard) {
                 // Gestion de la modification d'une carte
                 updateBtnCard.addEventListener("click", function(e) {
                     e.preventDefault();
+
+                    // Sécurité pour permettre la modification => Value bouton = ID de la carte
                     const updtBtnCardId = parseInt(e.target.value);
+
                     if (updtBtnCardId !== objectCard.id) {
                         console.warn("pas touche");
                         return;
@@ -465,7 +480,7 @@ function card(canCreateCard) {
                             cardSectionContent.classList.remove("hidden");
                         })
 
-                        // Insertion des éléments de la liste dans les inputs
+                        // Insertion des éléments de la carte dans les inputs
                         const inputTitle = document.querySelector("#titleCard");
                         inputTitle.value = objectCard.title;
 

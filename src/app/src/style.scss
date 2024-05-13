@@ -176,7 +176,6 @@ ul {
 }
 li {
     list-style-type: none;
-    padding: 0 auto;
 }
 
 /* *****************************************************************
@@ -424,6 +423,9 @@ dialog {
     &.third_party_todo_card {
         background: var(--third-party-todo-card-bg);
     }
+}
+.pointer {
+    cursor: pointer;
 }
 .stars {
     font-size: 25px;
