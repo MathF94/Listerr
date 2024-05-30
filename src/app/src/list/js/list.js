@@ -133,7 +133,7 @@ function list() {
                 // Rend visible les boutons "Supprimer" et "Modifier" pour l'utilisateur en cours uniquement
                 localStorage.setItem("canCreateCard", userId === data.user.id)
 
-                if (userId === data.user.id) {
+                if (localStorage.canCreateCard) {
                     oneList.appendChild(actionBtnlist);
 
                     // Gestion de la mise à jour de la liste

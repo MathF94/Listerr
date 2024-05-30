@@ -19,12 +19,7 @@ function readAllLists() {
     listBtn.title = "Créer une nouvelle liste";
 
     // Vérifie si l'utilisateur est connecté
-    if (
-        token === undefined ||
-        token === null ||
-        user === null ||
-        user === undefined
-    ) {
+    if (token === undefined || token === null || user === null || user === undefined) {
         listBtn.addEventListener("click", function (e) {
             dialog({
                 title: "Vous n'êtes pas encore connecté ?",
@@ -36,6 +31,8 @@ function readAllLists() {
 
             const dialogMsg = document.querySelector("dialog");
             dialogMsg.classList.add("home");
+
+
             redirect(`${configPath.basePath}/user/pages/login.html`);
         });
         return;

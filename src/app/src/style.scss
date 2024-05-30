@@ -714,6 +714,7 @@ input[type="submit"] {
     header {
         background-size: 433px;
     }
+
 }
 
 @media screen and (min-width: 594px) {
@@ -739,6 +740,14 @@ input[type="submit"] {
     }
     .list {
         width: 95%;
+    }
+    .grid_action_btn_lists {
+        grid-column: 4/6;
+        grid-row: 2/2;
+    }
+    .grid_text_card {
+        grid-column: 2/4;
+        grid-row: 2/2;
     }
 }
 

@@ -26,6 +26,7 @@ import { displayFormCard } from "./form_card.js";
 /**
  * Fonction principale pour gérer les cartes d'une liste.
  */
+
 function card(canCreateCard) {
     // Obtient l'identifiant de la liste à partir des paramètres de l'URL.
     const urlParams = new URLSearchParams(document.location.search);
@@ -40,7 +41,7 @@ function card(canCreateCard) {
 
     // Affichage du contenu du bouton en fonction du type de liste
     let btnLabel = "Nouveau souhait";
-    let checklabel = "Réserver";
+    let checklabel = "A Réserver";
     if (localStorage.getItem("typeList") === "TodoList") {
         btnLabel = "Nouvelle tâche";
         checklabel = "A Réaliser";
@@ -521,29 +522,46 @@ function card(canCreateCard) {
                 })
 
                 // Gestion de la réservation d'une carte
-                CSRFToken("checkForm");
-                check.addEventListener("change", function(e) {
-                    objectCard.checked = check.checked === true ? 1 : 0
-                    check.value = objectCard.checked
-                    scroll();
-                    fetchUpdateReservation(objectCard.checked, objectCard.id)
-                    .then(response => {
-                        localStorage.removeItem("csrfToken");
+                if (localStorage.token === undefined || localStorage.token === null || localStorage.user === null || localStorage.user === undefined) {
+                    // console.log(document.location);
+                    // console.log(id);
+                    check.addEventListener("click", function (e) {
+                        dialog({
+                            title: "Vous n'êtes pas encore connecté ?",
+                            content: "Vous allez être redirigé(e) vers la page de connexion"
+                        });
+                        const dialogMsg = document.querySelector("dialog");
+                        dialogMsg.classList.add("home");
 
-                        if (response.status === "updateChecked") {
-                            dialog({title: "Modification de la réservation", content: "Votre réservation a bien été prise en compte."});
-                            const dialogMsg = document.querySelector("dialog");
-                            dialogMsg.classList.add("valid");
-                            redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
-                        }
-                        if (response.status === "errors") {
-                            dialog({title: "Erreurs", content: response.errors});
-                            const dialogMsg = document.querySelector("dialog");
-                            dialogMsg.classList.add("errors");
-                            redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
-                        }
+                        redirect(`${configPath.basePath}/user/pages/login.html?redirection=list&id=${id}`);
                     })
-                })
+
+                } else {
+                    CSRFToken("checkForm");
+                    check.addEventListener("change", function(e) {
+                        objectCard.checked = check.checked === true ? 1 : 0
+                        check.value = objectCard.checked
+                        scroll();
+                        fetchUpdateReservation(objectCard.checked, objectCard.id)
+                        .then(response => {
+                            localStorage.removeItem("csrfToken");
+
+                            if (response.status === "updateChecked") {
+                                dialog({title: "Modification de la réservation", content: "Votre réservation a bien été prise en compte."});
+                                const dialogMsg = document.querySelector("dialog");
+                                dialogMsg.classList.add("valid");
+                                redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                            }
+                            if (response.status === "errors") {
+                                dialog({title: "Erreurs", content: response.errors});
+                                const dialogMsg = document.querySelector("dialog");
+                                dialogMsg.classList.add("errors");
+                                redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                            }
+                        })
+                    })
+                }
+
 
                 // Gestion de la suppression de carte
                 deleteBtnCard.addEventListener("click", function(e) {

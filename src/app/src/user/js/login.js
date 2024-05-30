@@ -11,13 +11,18 @@ function login() {
     // Affiche ou cache le mot de passe
     reveal();
 
+     // Obtient l'identifiant de la liste à partir des paramètres de l'URL.
+    const urlParams = new URLSearchParams(document.location.search);
+    console.log(urlParams);
+    const id = urlParams.get("id");
+    const redirection = urlParams.get("redirection");
+
     const loginBtn = document.querySelector("#loginBtn");
     loginBtn.title = "Valider la connexion";
 
     const noRegisterYet = document.querySelector("#noRegisterYet");
     noRegisterYet.title = "Redirection pour création de compte";
     noRegisterYet.setAttribute('href', `${configPath.basePath}/user/pages/login.html`);
-
 
     // Validation de pattern du formulaire
     const inputLogin = document.querySelector("#login");
@@ -51,7 +56,12 @@ function login() {
                 const dialogMsg = document.querySelector("dialog");
                 dialogMsg.classList.add("valid");
                 loginForm.classList.add("hidden");
-                redirect(`${configPath.basePath}/home/pages/home.html`);
+
+                if(redirection) {
+                    redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`)
+                } else {
+                    redirect(`${configPath.basePath}/home/pages/home.html`);
+                }
             };
 
             if (response.status === "loginUser failed") {
