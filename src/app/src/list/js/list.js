@@ -49,7 +49,6 @@ function list() {
 
             const data = response.data; // user de la liste
             let userId = null;
-
             localStorage.setItem("typeList", data?.type);
 
             if (localStorage.user) {
@@ -131,14 +130,13 @@ function list() {
                 };
 
                 // Rend visible les boutons "Supprimer" et "Modifier" pour l'utilisateur en cours uniquement
-                localStorage.setItem("canCreateCard", userId === data.user.id)
-
-                if (localStorage.canCreateCard) {
+                if (userId === data.user.id) {
                     oneList.appendChild(actionBtnlist);
 
                     // Gestion de la mise à jour de la liste
                     updateBtnList.addEventListener("click", function(e) {
                         e.preventDefault();
+
                         const updtBtnListId = parseInt(e.target.value);
 
                         if (updtBtnListId !== data.id) {
@@ -254,6 +252,7 @@ function list() {
                         };
                     });
                 };
+
                 card(userId === data?.user.id);
             };
         })

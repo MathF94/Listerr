@@ -20,6 +20,14 @@ function readAllLists() {
 
     // Vérifie si l'utilisateur est connecté
     if (token === undefined || token === null || user === null || user === undefined) {
+        const sectionText = document.querySelector("#createList");
+        const textUnsubscribed_1 = document.createElement("p");
+        const textUnsubscribed_2 = document.createElement("p");
+        textUnsubscribed_1.innerHTML = `Seules les personnes inscrites peuvent utiliser cette web-app.`;
+        textUnsubscribed_2.innerHTML = `Pour en profiter, créez-vous un compte.`;
+        sectionText.appendChild(textUnsubscribed_1);
+        sectionText.appendChild(textUnsubscribed_2);
+
         listBtn.addEventListener("click", function (e) {
             dialog({
                 title: "Vous n'êtes pas encore connecté ?",
@@ -31,7 +39,6 @@ function readAllLists() {
 
             const dialogMsg = document.querySelector("dialog");
             dialogMsg.classList.add("home");
-
 
             redirect(`${configPath.basePath}/user/pages/login.html`);
         });

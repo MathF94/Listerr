@@ -85,7 +85,6 @@ function read() {
                     // En tant qu'Admin, modifie le texte du bouton
                     listBtn.innerText = `Listes de ${response.login.value}`;
                     listBtn.title = `Listes de ${response.login.value}`;
-
                     listBtn.after(returnBtn);
 
                     // Permet la modification de l'utilisateur par l'Admin
@@ -97,20 +96,23 @@ function read() {
                             return;
                         }
 
-                        const sectionUser = document.querySelector("#contentSection")
-                        const divUser = document.querySelector("#profilWrapper");
+                        const sectionUser = document.querySelector("#profilSection")
+                        displayFormUpdateUser(sectionUser);
 
+                        const secondTitle = document.querySelector("#secondTitle");
+                        secondTitle.classList.add("hidden");
+                        const divUser = document.querySelector("#profilWrapper");
                         divUser.classList.add("hidden");
                         listWrapper.classList.remove("listsWrapper");
                         listWrapper.classList.add("hidden");
 
-                        displayFormUpdateUser(sectionUser);
                         titleFormUser.innerText = "Modification de l'utilisateur";
 
                         // Affichage de la liste d'utilisateur + suppression du formulaire d'édition
                         cancelForm.addEventListener("click", function(){
                             userFormSection.remove();
                             divUser.removeAttribute("class");
+                            secondTitle.classList.remove("hidden");
                             listWrapper.classList.remove("hidden");
                         })
 

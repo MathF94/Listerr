@@ -23,6 +23,9 @@ import {
 
 import { displayFormCard } from "./form_card.js";
 
+import { displayFormReservation } from "./form_reservation.js";
+
+
 /**
  * Fonction principale pour gérer les cartes d'une liste.
  */
@@ -41,10 +44,10 @@ function card(canCreateCard) {
 
     // Affichage du contenu du bouton en fonction du type de liste
     let btnLabel = "Nouveau souhait";
-    let checklabel = "A Réserver";
+    let checkLabel = "A Réserver";
     if (localStorage.getItem("typeList") === "TodoList") {
         btnLabel = "Nouvelle tâche";
-        checklabel = "A Réaliser";
+        checkLabel = "A Réaliser";
     }
 
     // Afficher le title des boutons édition et suppression
@@ -219,6 +222,7 @@ function card(canCreateCard) {
             // Boucle pour afficher les éléments DOM d'une carte
             for (const indexCard in dataCards) {
                 const objectCard = dataCards[indexCard];
+                console.log(objectCard);
 
                 const cardSectionContent = document.createElement("section");
                 cardSectionContent.id = `cardSectionContent-${objectCard.id}`;
@@ -251,11 +255,11 @@ function card(canCreateCard) {
 
                 const labelCheck = document.createElement("label");
                 labelCheck.for = "checkbox";
-                labelCheck.innerText = checklabel;
+                labelCheck.innerText = checkLabel;
 
                 const check = document.createElement("input");
                 check.id = `checked-${objectCard.id}`;
-                check.title = checklabel;
+                check.title = checkLabel;
                 check.type = "checkbox";
                 check.value = objectCard.checked;
                 check.classList.add("pointer");
@@ -347,12 +351,12 @@ function card(canCreateCard) {
                     updateBtnCard.classList.remove("inCard");
                     updateBtnCard.classList.add("disableUpdate");
 
-                    let checklabel = "Réservé";
+                    let checkLabel = "Réservé par XXX";
                     if (localStorage.getItem("typeList") === "TodoList") {
-                        checklabel = "Réalisé";
+                        checkLabel = "Réalisé par XXX";
                     }
-                    labelCheck.innerText = checklabel
-                    check.title = checklabel;
+                    labelCheck.innerText = checkLabel
+                    check.title = checkLabel;
                 }
 
                 // Affichage des données de la carte
@@ -523,8 +527,6 @@ function card(canCreateCard) {
 
                 // Gestion de la réservation d'une carte
                 if (localStorage.token === undefined || localStorage.token === null || localStorage.user === null || localStorage.user === undefined) {
-                    // console.log(document.location);
-                    // console.log(id);
                     check.addEventListener("click", function (e) {
                         dialog({
                             title: "Vous n'êtes pas encore connecté ?",
@@ -541,24 +543,28 @@ function card(canCreateCard) {
                     check.addEventListener("change", function(e) {
                         objectCard.checked = check.checked === true ? 1 : 0
                         check.value = objectCard.checked
-                        scroll();
-                        fetchUpdateReservation(objectCard.checked, objectCard.id)
-                        .then(response => {
-                            localStorage.removeItem("csrfToken");
 
-                            if (response.status === "updateChecked") {
-                                dialog({title: "Modification de la réservation", content: "Votre réservation a bien été prise en compte."});
-                                const dialogMsg = document.querySelector("dialog");
-                                dialogMsg.classList.add("valid");
-                                redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
-                            }
-                            if (response.status === "errors") {
-                                dialog({title: "Erreurs", content: response.errors});
-                                const dialogMsg = document.querySelector("dialog");
-                                dialogMsg.classList.add("errors");
-                                redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
-                            }
-                        })
+                        // au clic ça fait apparaître le formulaire
+                        displayFormReservation(divCheck)
+
+                        scroll();
+                        // fetchUpdateReservation(objectCard.checked, objectCard.id)
+                        // .then(response => {
+                        //     localStorage.removeItem("csrfToken");
+
+                        //     if (response.status === "updateChecked") {
+                        //         dialog({title: "Modification de la réservation", content: "Votre réservation a bien été prise en compte."});
+                        //         const dialogMsg = document.querySelector("dialog");
+                        //         dialogMsg.classList.add("valid");
+                        //         redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                        //     }
+                        //     if (response.status === "errors") {
+                        //         dialog({title: "Erreurs", content: response.errors});
+                        //         const dialogMsg = document.querySelector("dialog");
+                        //         dialogMsg.classList.add("errors");
+                        //         redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                        //     }
+                        // })
                     })
                 }
 

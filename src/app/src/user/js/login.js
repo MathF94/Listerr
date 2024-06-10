@@ -13,7 +13,7 @@ function login() {
 
      // Obtient l'identifiant de la liste à partir des paramètres de l'URL.
     const urlParams = new URLSearchParams(document.location.search);
-    console.log(urlParams);
+    
     const id = urlParams.get("id");
     const redirection = urlParams.get("redirection");
 
