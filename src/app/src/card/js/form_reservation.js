@@ -8,10 +8,11 @@
 function displayFormReservation(elementDOM) {
     const createFormGuest = document.createElement("form");
     createFormGuest.id = "formGuest";
+    createFormGuest.classList.add("grid_form_guest");
 
     const labelGuestName = document.createElement("label");
     labelGuestName.htmlFor  = "GuestName";
-    labelGuestName.innerText = "par";
+    // labelGuestName.innerText = "par";
 
     const inputGuestName = document.createElement("input");
     inputGuestName.type = "text";
@@ -20,11 +21,16 @@ function displayFormReservation(elementDOM) {
     inputGuestName.placeholder = "Votre login";
     inputGuestName.setAttribute("max", 20);
     inputGuestName.value = "";
-    inputGuestName.required = true;
+    // inputGuestName.required = true;
 
-    const guestValidFormBtn = document.createElement("btn");
+    const guestValidFormBtn = document.createElement("button");
+    guestValidFormBtn.id = "guestValidBtn";
+    guestValidFormBtn.type = "submit";
+    guestValidFormBtn.value = "guestValidBtn";
+    guestValidFormBtn.title = "Valider la réservation d'une carte";
     guestValidFormBtn.textContent = "Valider";
     guestValidFormBtn.classList.add("btn");
+    guestValidFormBtn.classList.add("form_guest");
     guestValidFormBtn.classList.add("valid");
 
     const guestCancelFormBtn = document.createElement("button");
@@ -34,6 +40,7 @@ function displayFormReservation(elementDOM) {
     guestCancelFormBtn.title = "Annuler la réservation d'une carte";
     guestCancelFormBtn.innerText = "Annuler";
     guestCancelFormBtn.classList.add("btn");
+    guestCancelFormBtn.classList.add("form_guest");
     guestCancelFormBtn.classList.add("cancel");
 
     createFormGuest.appendChild(labelGuestName);

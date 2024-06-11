@@ -65,7 +65,7 @@ function list() {
                 oneList.classList.add("grid");
 
                 const typeList = document.createElement("h3");
-                typeList.classList.add("grid_typeH3")
+                typeList.classList.add("grid_typeH3_list")
                 typeList.innerText = `${data.type} - ${data.title}`;
 
                 if(userId !== data.userId) {

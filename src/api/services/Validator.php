@@ -14,6 +14,7 @@ class Validator
     public const CONTEXT_UPDATE_LIST = 'update_list';
     public const CONTEXT_CREATE_CARD = 'create_card';
     public const CONTEXT_UPDATE_CARD = 'update_card';
+    public const CONTEXT_UPDATE_CHECKED = 'update_checked';
 
     /**
      * Valide les paramètres en fonction du contexte donné.
@@ -57,6 +58,11 @@ class Validator
 
             case self::CONTEXT_UPDATE_CARD:
                 $errors = $this->isValidCardParams($params);
+                return $errors;
+                break;
+
+            case self::CONTEXT_UPDATE_CHECKED:
+                $errors = $this->isValidCheckedParams($params);
                 return $errors;
                 break;
         }
@@ -260,6 +266,26 @@ class Validator
             $errors[] = 'La priorité ne doit pas être supérieure à 5.';
         } elseif (strlen($params['priority']) < 1) {
             $errors[] = 'La priorité ne doit pas être inférieure à 1.';
+        }
+        return $errors;
+    }
+
+    private function isValidCheckedParams(array $params): array
+    {
+        $errors = [];
+        $expectedKeys = ['GuestName'];
+        $paramKeys = array_keys($params);
+
+        if (!empty(array_diff($expectedKeys, $paramKeys))) {
+            $changedKey = array_diff($expectedKeys, $paramKeys);
+            $errors[] = "Le/les champs suivante(s) a/ont été modifiée(s) : " . implode(', ', $changedKey) . ". Merci de ne pas y toucher, merci !";
+            return $errors;
+        }
+
+        if (empty(trim($params['GuestName']))) {
+            $errors[] = 'Le champ "Login" est requis.';
+        } elseif (strlen($params['GuestName']) > 20) {
+            $errors[] = 'Le champ "Login" ne doit pas dépasser 20 caractères.';
         }
         return $errors;
     }

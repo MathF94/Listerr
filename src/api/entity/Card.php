@@ -12,6 +12,7 @@ class Card
     public string $description;
     public int $priority;
     public int $checked;
+    public string $login;
     public string $createdAt;
     public string $updatedAt;
     public int $listId;
@@ -30,6 +31,7 @@ class Card
         $this->description = $params['description'];
         $this->priority = $params['priority'];
         $this->checked = !empty($params['checked']) ? (int)$params['checked'] : 0;
+        $this->login = $params['login'];
         $this->createdAt = $params['created_at'];
         $this->updatedAt = $params['updated_at'];
         $this->listId = $params['list_id'];

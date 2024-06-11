@@ -222,7 +222,6 @@ function card(canCreateCard) {
             // Boucle pour afficher les éléments DOM d'une carte
             for (const indexCard in dataCards) {
                 const objectCard = dataCards[indexCard];
-                console.log(objectCard);
 
                 const cardSectionContent = document.createElement("section");
                 cardSectionContent.id = `cardSectionContent-${objectCard.id}`;
@@ -237,7 +236,7 @@ function card(canCreateCard) {
                 }
 
                 const titleH3 = document.createElement("h3");
-                titleH3.classList.add("grid_titleH3")
+                titleH3.classList.add("grid_titleH3_card")
 
                 const text = document.createElement("p");
                 text.classList.add("grid_text_card");
@@ -256,12 +255,15 @@ function card(canCreateCard) {
                 const labelCheck = document.createElement("label");
                 labelCheck.for = "checkbox";
                 labelCheck.innerText = checkLabel;
+                labelCheck.classList.add("grid_label_check_box");
 
                 const check = document.createElement("input");
                 check.id = `checked-${objectCard.id}`;
                 check.title = checkLabel;
                 check.type = "checkbox";
                 check.value = objectCard.checked;
+
+                check.classList.add("grid_check_box");
                 check.classList.add("pointer");
 
                 // Elements DOM pour les boutons d'actions de la carte (Edit/Delete)
@@ -351,9 +353,9 @@ function card(canCreateCard) {
                     updateBtnCard.classList.remove("inCard");
                     updateBtnCard.classList.add("disableUpdate");
 
-                    let checkLabel = "Réservé par XXX";
+                    let checkLabel = `Réservé par ${objectCard.login}`;
                     if (localStorage.getItem("typeList") === "TodoList") {
-                        checkLabel = "Réalisé par XXX";
+                        checkLabel = `Réalisé par ${object.login}`;
                     }
                     labelCheck.innerText = checkLabel
                     check.title = checkLabel;
@@ -369,12 +371,14 @@ function card(canCreateCard) {
                     } else if (key === "checked") {
                         check.checked = objectCard.checked === 1;
 
-                        cardSectionContent.appendChild(divCheck);
-                        divCheck.appendChild(check);
-                        divCheck.appendChild(labelCheck);
+                        // cardSectionContent.appendChild(divCheck);
+                        // divCheck.appendChild(check);
+                        // divCheck.appendChild(labelCheck);
+                        cardSectionContent.appendChild(check);
+                        cardSectionContent.appendChild(labelCheck);
                     }
 
-                    if (["id", "listId", "title", "priority", "checked", "createdAt", "updatedAt"].includes(`${key}`)) {
+                    if (["id", "listId", "title", "priority", "checked", "login", "createdAt", "updatedAt"].includes(`${key}`)) {
                         continue;
                     }
 
@@ -539,32 +543,47 @@ function card(canCreateCard) {
                     })
 
                 } else {
-                    CSRFToken("checkForm");
                     check.addEventListener("change", function(e) {
                         objectCard.checked = check.checked === true ? 1 : 0
                         check.value = objectCard.checked
 
-                        // au clic ça fait apparaître le formulaire
-                        displayFormReservation(divCheck)
+                        // au clic ça fait apparaître le formulaire de réservation
+                        displayFormReservation(cardSectionContent)
 
-                        scroll();
-                        // fetchUpdateReservation(objectCard.checked, objectCard.id)
-                        // .then(response => {
-                        //     localStorage.removeItem("csrfToken");
+                        const formGuest = document.querySelector("#formGuest");
+                        const guestCancelBtn = document.querySelector("#guestCancelBtn");
 
-                        //     if (response.status === "updateChecked") {
-                        //         dialog({title: "Modification de la réservation", content: "Votre réservation a bien été prise en compte."});
-                        //         const dialogMsg = document.querySelector("dialog");
-                        //         dialogMsg.classList.add("valid");
-                        //         redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
-                        //     }
-                        //     if (response.status === "errors") {
-                        //         dialog({title: "Erreurs", content: response.errors});
-                        //         const dialogMsg = document.querySelector("dialog");
-                        //         dialogMsg.classList.add("errors");
-                        //         redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
-                        //     }
-                        // })
+                        guestCancelBtn.addEventListener("click", function() {
+                            check.checked = true ? false : true
+                            formGuest.remove();
+                        })
+
+                        CSRFToken(formGuest.id);
+                        formGuest.addEventListener("submit", function(e) {
+                            e.preventDefault();
+
+                            scroll();
+                            fetchUpdateReservation(
+                                formGuest, objectCard.id,
+                                // objectCard.checked
+                            )
+                            .then(response => {
+                                localStorage.removeItem("csrfToken");
+
+                                if (response.status === "updateChecked") {
+                                    dialog({title: "Modification de la réservation", content: "Votre réservation a bien été prise en compte."});
+                                    const dialogMsg = document.querySelector("dialog");
+                                    dialogMsg.classList.add("valid");
+                                    redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                                }
+                                if (response.status === "errors") {
+                                    dialog({title: "Erreurs", content: response.errors});
+                                    const dialogMsg = document.querySelector("dialog");
+                                    dialogMsg.classList.add("errors");
+                                    redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                                }
+                            })
+                        })
                     })
                 }
 

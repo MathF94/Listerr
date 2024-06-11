@@ -78,11 +78,11 @@ async function fetchUpdateCard(form, id) {
  * @param {number} id - L'identifiant de la carte à mettre à jour.
  * @returns {Promise<Object|null>} Une promesse résolue avec les données de la carte mise à jour ou null en cas d'erreur.
  */
-async function fetchUpdateReservation(checked, id) {
+async function fetchUpdateReservation(form, id) {
     try {
-        const formData = new FormData();
+        const formData = new FormData(form);
         formData.append('id', id);
-        formData.append('checked', checked);
+        // formData.append('checked', checked);
 
         const url = `${configPath.apiPath}/?route=update_checked`;
         return await fetch(url, {

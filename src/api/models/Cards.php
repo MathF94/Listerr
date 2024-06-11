@@ -51,6 +51,7 @@ class Cards extends Database
                             `description`,
                             `priority`,
                             `checked`,
+                            `login`,
                             `list_id`,
                             `created_at`,
                             `updated_at`
@@ -82,6 +83,7 @@ class Cards extends Database
                             `c`.`description`,
                             `c`.`priority`,
                             `c`.`checked`,
+                            `c`.`login`,
                             `c`.`list_id`,
                             `c`.`created_at`,
                             `c`.`updated_at`
@@ -146,7 +148,8 @@ class Cards extends Database
     {
         try {
             $req = "UPDATE `card`
-                    SET `checked` = :checked
+                    SET `checked` = :checked,
+                        `login` = :login
                     WHERE `id` = :id";
 
             $query = $this->db->prepare($req);
