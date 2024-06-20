@@ -123,12 +123,15 @@ function lists() {
                 }
 
                 const sectionList = document.createElement("section");
-                sectionList.classList.add("grid_section");
+                sectionList.classList.add("grid_section_lists");
                 sectionList.id ="sectionList";
 
                 const typeH3 = document.createElement("h3");
                 typeH3.classList.add("grid_typeH3");
+
                 const titleH4 = document.createElement("h4");
+                titleH4.classList.add("grid_titleH4_lists");
+
                 const actionBtnLists = document.createElement("div");
                 actionBtnLists.id = "actionBtnLists";
                 actionBtnLists.classList.add("grid_action_btn_lists");

@@ -209,7 +209,6 @@ function read() {
                     listBtn.disabled = true;
                     fetchReadAllLists(id).then((response) => {
                         const data = response.data;
-                        // console.log(data);
                         if (response.status === "readAllListsByUser") {
                             for (const index in data) {
                                 const objectList = data[index];
@@ -233,7 +232,8 @@ function read() {
 
                                 for (const key in objectList) {
                                     const value = objectList[key];
-                                    const item = document.createElement("p");
+                                    const text = document.createElement("p");
+                                    text.classList.add("grid_text_list");
 
                                     if (key === "title") {
                                         titleH4.innerText = `${objectList.title}`;
@@ -249,13 +249,13 @@ function read() {
                                     if (allowedIds.includes(`${key}`)) {
                                         continue;
                                     }
-                                    item.innerText = `${objectList[key]}`;
+                                    text.innerText = `${objectList[key]}`;
 
                                     listWrapper.appendChild(articleList);
                                     articleList.appendChild(typeH3);
                                     articleList.appendChild(sectionList);
                                     sectionList.appendChild(titleH4);
-                                    sectionList.appendChild(item);
+                                    sectionList.appendChild(text);
                                 }
 
                                 // Redirige vers la page de détails de la liste en cliquant sur la liste.

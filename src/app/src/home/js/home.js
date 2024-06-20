@@ -86,7 +86,7 @@ function readAllLists() {
                 }
 
                 const sectionList = document.createElement("section");
-                sectionList.classList.add("grid_section_home");
+                sectionList.classList.add("grid_section");
                 const typeH3 = document.createElement("h3");
                 typeH3.classList.add("grid_typeH3");
                 const titleH4 = document.createElement("h4");
