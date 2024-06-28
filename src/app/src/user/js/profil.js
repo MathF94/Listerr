@@ -98,9 +98,12 @@ function read() {
 
                         const sectionUser = document.querySelector("#profilSection")
                         displayFormUpdateUser(sectionUser);
+                        sectionUser.classList.remove("profilSection");
+                        sectionUser.classList.add("grid");
 
                         const secondTitle = document.querySelector("#secondTitle");
                         secondTitle.classList.add("hidden");
+
                         const divUser = document.querySelector("#profilWrapper");
                         divUser.classList.add("hidden");
                         listWrapper.classList.remove("listsWrapper");
@@ -109,11 +112,15 @@ function read() {
                         titleFormUser.innerText = "Modification de l'utilisateur";
 
                         // Affichage de la liste d'utilisateur + suppression du formulaire d'édition
-                        cancelForm.addEventListener("click", function(){
+                        cancelForm.addEventListener("click", function() {
                             userFormSection.remove();
                             divUser.removeAttribute("class");
                             secondTitle.classList.remove("hidden");
                             listWrapper.classList.remove("hidden");
+                            listWrapper.classList.add("listsWrapper");
+                            sectionUser.classList.remove("grid");
+                            sectionUser.classList.add("profilSection");
+
                         })
 
                         // Insertion des éléments de la liste dans les inputs
@@ -216,12 +223,15 @@ function read() {
                                 articleList.id = `profilList-${objectList.id}`;
                                 articleList.classList.add("list");
                                 articleList.classList.add("grid");
-
                                 articleList.classList.add(type[objectList.type]);
 
                                 // Si suppression du type de liste, mettre une couleur grise aux listes
                                 if(!['WishList', 'TodoList'].includes(objectList.type)) {
                                     articleList.classList.add(type.Common)
+                                }
+
+                                if(objectList.type === "TodoList") {
+                                    articleList.classList.add("disabled");
                                 }
 
                                 const sectionList = document.createElement("section");
@@ -260,12 +270,11 @@ function read() {
 
                                 // Redirige vers la page de détails de la liste en cliquant sur la liste.
                                 sectionList.addEventListener("click",  function () {
-                                        if (objectList.type === "TodoList" && objectList.user.id !== JSON.parse(localStorage.getItem("user")).id) {
-                                            return false;
-                                        }
-                                        redirect(`${configPath.basePath}/list/pages/list.html?id=${objectList.id}`,0)
+                                    if (objectList.type === "TodoList" && objectList.user.id !== JSON.parse(localStorage.getItem("user")).id) {
+                                        return false;
                                     }
-                                )
+                                    redirect(`${configPath.basePath}/list/pages/list.html?id=${objectList.id}`,0)
+                                })
                             }
                         }
                     })

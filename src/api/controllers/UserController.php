@@ -142,7 +142,7 @@ class UserController
     {
         try {
             $validToken = $this->csrfToken->isValidToken($csrfToken, "loginForm");
-            
+
             if (!$validToken) {
                 return json_encode([
                     "status" => "fail",

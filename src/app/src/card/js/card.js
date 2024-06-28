@@ -5,6 +5,7 @@ import {
     fetchReadAllCardsByList,
     fetchUpdateCard,
     fetchUpdateReservation,
+    fetchDeleteReservation,
     fetchUpdatePriority,
     fetchDeleteCard,
 } from "../../actions/actions_cards.js";
@@ -266,15 +267,19 @@ function card(canCreateCard) {
                 check.classList.add("grid_check_box");
                 check.classList.add("pointer");
 
+                const reservationTxt = document.createElement("p");
+                reservationTxt.classList.add("grid_text_reserved");
+
                 const reservationBtn = document.createElement("button");
                 reservationBtn.id = `reservationBtn-${objectCard.id}`
                 reservationBtn.name = "reservationBtn"
-                reservationBtn.title = "A réserver"
-                reservationBtn.textContent = "A réserver"
+                reservationBtn.title = "Je réserve"
+                reservationBtn.textContent = "Je réserve"
                 reservationBtn.type = "button"
                 reservationBtn.value = objectCard.id;
                 reservationBtn.classList.add("btn");
                 reservationBtn.classList.add("listBtn");
+                reservationBtn.classList.add("reservation");
                 reservationBtn.classList.add("grid_reservation_btn");
 
                 const dltReservationBtn = document.createElement("button");
@@ -372,11 +377,8 @@ function card(canCreateCard) {
                 // CSS pour modifier le bouton d'édition et label
                 if (objectCard.login) {
                     reservationBtn.remove();
-                    text.classList.remove("grid_text_card")
-                    text.classList.remove("dot")
-                    text.classList.add("grid_text_reserved")
-                    text.innerText = `Réservé par ${objectCard.login}`;
-                    text.appendChild(dltReservationBtn);
+                    reservationTxt.innerText = `Réservé par ${objectCard.login}`;
+                    reservationTxt.appendChild(dltReservationBtn);
                 }
 
                 if (check.value === "1") {
@@ -401,15 +403,17 @@ function card(canCreateCard) {
                         cardSectionContent.appendChild(titleH3);
                     } else if (key === "updatedAt") {
                         toolTip(cardSectionContent, objectCard.id, objectCard.updatedAt, response.data.user.login)
-                    } else if (key === "checked") {
-                        check.checked = objectCard.checked === 1;
+                    }
+
+                    // else if (key === "checked") {
+                    //     check.checked = objectCard.checked === 1;
 
                         // cardSectionContent.appendChild(divCheck);
                         // divCheck.appendChild(check);
                         // divCheck.appendChild(labelCheck);
                         // cardSectionContent.appendChild(check);
                         // cardSectionContent.appendChild(labelCheck);
-                    }
+                    // }
 
                     if (["id", "listId", "title", "priority", "checked", "login", "createdAt", "updatedAt"].includes(`${key}`)) {
                         continue;
@@ -433,7 +437,7 @@ function card(canCreateCard) {
 
                     oneList.after(cardArticleContent);
                     cardArticleContent.appendChild(cardSectionContent);
-                    cardSectionContent.appendChild(text);
+                    cardSectionContent.appendChild(reservationTxt);
 
                     cardSectionContent.appendChild(divStar);
                     actionBtnCard.appendChild(updateBtnCard);
@@ -566,7 +570,7 @@ function card(canCreateCard) {
 
                 // Gestion de la réservation d'une carte
                 if (localStorage.token === undefined || localStorage.token === null || localStorage.user === null || localStorage.user === undefined) {
-                    check.addEventListener("click", function (e) {
+                    reservationBtn.addEventListener("click", function (e) {
                         dialog({
                             title: "Vous n'êtes pas encore connecté ?",
                             content: "Vous allez être redirigé(e) vers la page de connexion"
@@ -576,17 +580,6 @@ function card(canCreateCard) {
 
                         redirect(`${configPath.basePath}/user/pages/login.html?redirection=list&id=${id}`);
                     })
-
-                    // reservationBtn.addEventListener("click", function (e) {
-                    //     dialog({
-                    //         title: "Vous n'êtes pas encore connecté ?",
-                    //         content: "Vous allez être redirigé(e) vers la page de connexion"
-                    //     });
-                    //     const dialogMsg = document.querySelector("dialog");
-                    //     dialogMsg.classList.add("home");
-
-                    //     redirect(`${configPath.basePath}/user/pages/login.html?redirection=list&id=${id}`);
-                    // })
 
                 } else {
                     // check.addEventListener("change", function(e) {
@@ -632,6 +625,7 @@ function card(canCreateCard) {
                     //     })
                     // })
 
+
                     reservationBtn.addEventListener("click", function(e) {
                         e.preventDefault();
                         // console.log(e);
@@ -640,6 +634,27 @@ function card(canCreateCard) {
                         guestCancelBtn.addEventListener("click", function() {
                             formGuest.remove();
                             })
+                    })
+
+                    // Gestion de l'annulation de la réservation
+                    dltReservationBtn.addEventListener("click", function(e) {
+                        e.preventDefault();
+
+                        const dltBtnResa = parseInt(e.target.value);
+                        console.log(dltBtnResa);
+                        console.log(objectCard.id);
+
+                        if (dltBtnResa !== objectCard.id) {
+                            dialog({title: "Erreur", content: "Ne touchez pas à la valeur du bouton."});
+                            return;
+
+                        } else if (confirm('Voulez-vous vraiment vous annuler votre réservation ?') === true) {
+                            scroll();
+                            fetchDeleteReservation(objectCard.id)
+                            .then(() => {
+                                dialog({title: "Annulation de votre réservation", content: "Votre réservation a bien été annulée."});
+                            })
+                        }
                     })
                 }
 

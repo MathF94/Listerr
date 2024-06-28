@@ -31,10 +31,11 @@ function cors()
     }
 
     $allowedDomains = [
-        'http://listerr.lan',
-        'http://listerr.local',
         'http://localhost',
         'http://127.0.0.1',
+        'https://listerr.lan',
+        'https://listerr.local',
+        'https://listerr.tea-tux.fr',
         'https://mathieufagot.ide.3wa.io',
         'https://mathieufagot.sites.3wa.io'
     ];
@@ -57,8 +58,8 @@ function cors()
         header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
         header('Access-Control-Allow-Headers: X-PINGARUNER');
         header('Access-Control-Max-Age: 1728000');
-        header("Content-Length: 0");
         header("Content-Type: text/plain");
+        header("Content-Length: 0");
     }
 }
 

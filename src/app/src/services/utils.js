@@ -13,6 +13,21 @@ const allowedIds = [
     "updatedAt"
 ];
 
+// function configPathFct () {
+//     const urlParams = new URLSearchParams(document.location);
+//     const host = urlParams.get("host");
+
+//     if (host === "localhost") {
+//         const configPath = {
+//             basePath: "http://localhost/listerr/src/app/src",
+//             apiPath: "http://localhost/listerr/src/api"
+//         };
+//     }
+//     else {
+//         const configPath = `https://listerr.tea-tux.fr`;
+//     }
+// }
+
 /**
  * Configuration des chemins de base pour l'application et l'API.
  * @property {string} basePath - Le chemin de base de l'application.
@@ -190,6 +205,7 @@ function validate(input) {
 
 export {
     allowedIds,
+    // configPathFct,
     configPath,
     mandatoryStar,
     type,

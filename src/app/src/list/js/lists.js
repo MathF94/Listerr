@@ -195,7 +195,7 @@ function lists() {
                 })
 
                 // Redirige vers la page de détails de la liste en cliquant sur la liste.
-                sectionList.addEventListener("click", function(){
+                articleList.addEventListener("click", function(){
                     if (objectList.type === "TodoList" && objectList.user.id !== JSON.parse(localStorage.getItem("user")).id) {
                         return false;
                     }
