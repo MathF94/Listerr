@@ -59,7 +59,7 @@ class ListController
                 "status" => "success",
                 "csrfToken" => $encryptedCSRFToken,
             ]);
-            
+
         } catch (\Exception $e) {
             return json_encode([
                 "status" => "errors",

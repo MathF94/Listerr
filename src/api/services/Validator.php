@@ -14,7 +14,7 @@ class Validator
     public const CONTEXT_UPDATE_LIST = 'update_list';
     public const CONTEXT_CREATE_CARD = 'create_card';
     public const CONTEXT_UPDATE_CARD = 'update_card';
-    public const CONTEXT_UPDATE_CHECKED = 'update_checked';
+    public const CONTEXT_CREATE_RESERVATION = 'create_reservation';
 
     /**
      * Valide les paramètres en fonction du contexte donné.
@@ -61,8 +61,8 @@ class Validator
                 return $errors;
                 break;
 
-            case self::CONTEXT_UPDATE_CHECKED:
-                $errors = $this->isValidCheckedParams($params);
+            case self::CONTEXT_CREATE_RESERVATION:
+                $errors = $this->isValidReservationParams($params);
                 return $errors;
                 break;
         }
@@ -270,10 +270,10 @@ class Validator
         return $errors;
     }
 
-    private function isValidCheckedParams(array $params): array
+    private function isValidReservationParams(array $params): array
     {
         $errors = [];
-        $expectedKeys = ['GuestName'];
+        $expectedKeys = ['guestName'];
         $paramKeys = array_keys($params);
 
         if (!empty(array_diff($expectedKeys, $paramKeys))) {
@@ -282,9 +282,9 @@ class Validator
             return $errors;
         }
 
-        if (empty(trim($params['GuestName']))) {
+        if (empty(trim($params['guestName']))) {
             $errors[] = 'Le champ "Login" est requis.';
-        } elseif (strlen($params['GuestName']) > 20) {
+        } elseif (strlen($params['guestName']) > 20) {
             $errors[] = 'Le champ "Login" ne doit pas dépasser 20 caractères.';
         }
         return $errors;
