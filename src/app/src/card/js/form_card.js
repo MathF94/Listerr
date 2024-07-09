@@ -49,23 +49,23 @@ function displayFormCard(elementDOM) {
     inputPriority.max = 5;
     inputPriority.required = true;
 
-    const CardValidFormBtn = document.createElement("button");
-    CardValidFormBtn.id = "cardValidBtn";
-    CardValidFormBtn.type = "submit";
-    CardValidFormBtn.value = "cardValidBtn";
-    CardValidFormBtn.title = "Valider la création d'une carte";
-    CardValidFormBtn.innerText = "Valider";
-    CardValidFormBtn.classList.add("btn");
-    CardValidFormBtn.classList.add("valid");
+    const cardValidFormBtn = document.createElement("button");
+    cardValidFormBtn.id = "cardValidBtn";
+    cardValidFormBtn.type = "submit";
+    cardValidFormBtn.value = "cardValidBtn";
+    cardValidFormBtn.title = "Valider la création d'une carte";
+    cardValidFormBtn.innerText = "Valider";
+    cardValidFormBtn.classList.add("btn");
+    cardValidFormBtn.classList.add("valid");
 
-    const CardCancelFormBtn = document.createElement("button");
-    CardCancelFormBtn.id = "cardCancelBtn";
-    CardCancelFormBtn.type = "button";
-    CardCancelFormBtn.value = "cardCancelBtn";
-    CardCancelFormBtn.title = "Annuler la création d'une carte";
-    CardCancelFormBtn.innerText = "Annuler";
-    CardCancelFormBtn.classList.add("btn");
-    CardCancelFormBtn.classList.add("cancel");
+    const cardCancelFormBtn = document.createElement("button");
+    cardCancelFormBtn.id = "cardCancelBtn";
+    cardCancelFormBtn.type = "button";
+    cardCancelFormBtn.value = "cardCancelBtn";
+    cardCancelFormBtn.title = "Annuler la création d'une carte";
+    cardCancelFormBtn.innerText = "Annuler";
+    cardCancelFormBtn.classList.add("btn");
+    cardCancelFormBtn.classList.add("cancel");
 
     createFormCard.appendChild(labelTitle);
     labelTitle.appendChild(mandatoryStar.cloneNode(true));
@@ -75,8 +75,8 @@ function displayFormCard(elementDOM) {
     createFormCard.appendChild(labelPriority);
     labelPriority.appendChild(mandatoryStar.cloneNode(true));
     createFormCard.appendChild(inputPriority);
-    createFormCard.appendChild(CardValidFormBtn);
-    createFormCard.appendChild(CardCancelFormBtn);
+    createFormCard.appendChild(cardValidFormBtn);
+    createFormCard.appendChild(cardCancelFormBtn);
 
     elementDOM.appendChild(createFormCard);
 }

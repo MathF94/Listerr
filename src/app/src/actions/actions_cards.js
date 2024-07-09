@@ -78,13 +78,13 @@ async function fetchUpdateCard(form, id) {
  * @param {number} id - L'identifiant de la carte à mettre à jour.
  * @returns {Promise<Object|null>} Une promesse résolue avec les données de la carte mise à jour ou null en cas d'erreur.
  */
-async function fetchUpdateReservation(checked, id) {
+async function fetchCreateReservation(form, id) {
     try {
-        const formData = new FormData();
+        const formData = new FormData(form);
         formData.append('id', id);
-        formData.append('checked', checked);
+        // formData.append('checked', checked);
 
-        const url = `${configPath.apiPath}/?route=update_checked`;
+        const url = `${configPath.apiPath}/?route=create_reservation`;
         return await fetch(url, {
             headers: {
                 "Authorization": localStorage.getItem("token"),
@@ -92,6 +92,24 @@ async function fetchUpdateReservation(checked, id) {
             },
             method: "POST",
             body: formData,
+            }).then(response => response.json());
+
+    } catch (error) {
+        console.error("Erreur lors de la requête fetch :", error);
+        return null;
+    }
+}
+
+async function fetchDeleteReservation(id) {
+    try {
+        const formData = new FormData();
+        formData.append('id', id);
+
+        const url = `${configPath.apiPath}/?route=delete_resa`;
+        return await fetch(url, {
+            headers: {"Authorization": localStorage.getItem("token")},
+            method: "POST",
+            body: formData
             }).then(response => response.json());
 
     } catch (error) {
@@ -149,6 +167,7 @@ export {
     fetchReadAllCardsByList,
     fetchUpdateCard,
     fetchUpdatePriority,
-    fetchUpdateReservation,
+    fetchCreateReservation,
+    fetchDeleteReservation,
     fetchDeleteCard
 };

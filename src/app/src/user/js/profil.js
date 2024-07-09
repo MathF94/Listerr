@@ -85,7 +85,6 @@ function read() {
                     // En tant qu'Admin, modifie le texte du bouton
                     listBtn.innerText = `Listes de ${response.login.value}`;
                     listBtn.title = `Listes de ${response.login.value}`;
-
                     listBtn.after(returnBtn);
 
                     // Permet la modification de l'utilisateur par l'Admin
@@ -97,21 +96,31 @@ function read() {
                             return;
                         }
 
-                        const sectionUser = document.querySelector("#contentSection")
-                        const divUser = document.querySelector("#profilWrapper");
+                        const sectionUser = document.querySelector("#profilSection")
+                        displayFormUpdateUser(sectionUser);
+                        sectionUser.classList.remove("profilSection");
+                        sectionUser.classList.add("grid");
 
+                        const secondTitle = document.querySelector("#secondTitle");
+                        secondTitle.classList.add("hidden");
+
+                        const divUser = document.querySelector("#profilWrapper");
                         divUser.classList.add("hidden");
                         listWrapper.classList.remove("listsWrapper");
                         listWrapper.classList.add("hidden");
 
-                        displayFormUpdateUser(sectionUser);
                         titleFormUser.innerText = "Modification de l'utilisateur";
 
                         // Affichage de la liste d'utilisateur + suppression du formulaire d'édition
-                        cancelForm.addEventListener("click", function(){
+                        cancelForm.addEventListener("click", function() {
                             userFormSection.remove();
                             divUser.removeAttribute("class");
+                            secondTitle.classList.remove("hidden");
                             listWrapper.classList.remove("hidden");
+                            listWrapper.classList.add("listsWrapper");
+                            sectionUser.classList.remove("grid");
+                            sectionUser.classList.add("profilSection");
+
                         })
 
                         // Insertion des éléments de la liste dans les inputs
@@ -207,7 +216,6 @@ function read() {
                     listBtn.disabled = true;
                     fetchReadAllLists(id).then((response) => {
                         const data = response.data;
-                        // console.log(data);
                         if (response.status === "readAllListsByUser") {
                             for (const index in data) {
                                 const objectList = data[index];
@@ -215,12 +223,15 @@ function read() {
                                 articleList.id = `profilList-${objectList.id}`;
                                 articleList.classList.add("list");
                                 articleList.classList.add("grid");
-
                                 articleList.classList.add(type[objectList.type]);
 
                                 // Si suppression du type de liste, mettre une couleur grise aux listes
                                 if(!['WishList', 'TodoList'].includes(objectList.type)) {
                                     articleList.classList.add(type.Common)
+                                }
+
+                                if(objectList.type === "TodoList") {
+                                    articleList.classList.add("disabled");
                                 }
 
                                 const sectionList = document.createElement("section");
@@ -231,7 +242,8 @@ function read() {
 
                                 for (const key in objectList) {
                                     const value = objectList[key];
-                                    const item = document.createElement("p");
+                                    const text = document.createElement("p");
+                                    text.classList.add("grid_text_list");
 
                                     if (key === "title") {
                                         titleH4.innerText = `${objectList.title}`;
@@ -247,23 +259,22 @@ function read() {
                                     if (allowedIds.includes(`${key}`)) {
                                         continue;
                                     }
-                                    item.innerText = `${objectList[key]}`;
+                                    text.innerText = `${objectList[key]}`;
 
                                     listWrapper.appendChild(articleList);
                                     articleList.appendChild(typeH3);
                                     articleList.appendChild(sectionList);
                                     sectionList.appendChild(titleH4);
-                                    sectionList.appendChild(item);
+                                    sectionList.appendChild(text);
                                 }
 
                                 // Redirige vers la page de détails de la liste en cliquant sur la liste.
                                 sectionList.addEventListener("click",  function () {
-                                        if (objectList.type === "TodoList" && objectList.user.id !== JSON.parse(localStorage.getItem("user")).id) {
-                                            return false;
-                                        }
-                                        redirect(`${configPath.basePath}/list/pages/list.html?id=${objectList.id}`,0)
+                                    if (objectList.type === "TodoList" && objectList.user.id !== JSON.parse(localStorage.getItem("user")).id) {
+                                        return false;
                                     }
-                                )
+                                    redirect(`${configPath.basePath}/list/pages/list.html?id=${objectList.id}`,0)
+                                })
                             }
                         }
                     })

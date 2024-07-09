@@ -18,6 +18,7 @@ class Router
     {
         if (array_key_exists('route', $_GET)) : // on vérifie que la route existe dans l'URL
             $headers = getallheaders();
+
             switch ($_GET['route']) {
                 case 'csrf':
                     if ($this->isAllowedMethod('POST')) {
@@ -165,10 +166,17 @@ class Router
                     }
                     break;
 
-                case 'update_checked':
+                case 'create_reservation':
                     if ($this->isAllowedMethod('POST')) {
                         $card = new CardController($headers['Authorization']);
-                        echo $card->updateChecked($_POST['id'], $_POST['checked'], $headers['X-CSRFToken']); // update checkbox
+                        echo $card->updateChecked($_POST['id'], $headers['X-CSRFToken']); // Create reservation
+                    }
+                    break;
+
+                case 'cancel_reservation':
+                    if ($this->isAllowedMethod('POST')) {
+                        $card = new CardController($headers['Authorization']);
+                        echo $card->updateChecked($_POST['id'], $headers['X-CSRFToken']); // cancel reservation
                     }
                     break;
 
