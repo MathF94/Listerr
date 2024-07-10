@@ -32,7 +32,7 @@ async function fetchCreateReservation(form, id) {
     }
 }
 
-async function fetchReadAllCardsByList(id) {
+async function fetchReadAllReservationsByCard(id) {
     try {
         const url = `${configPath.apiPath}/?route=read_one_reservation_by_id`;
         return await fetch(`${url}&id=${id}`, {
@@ -65,5 +65,6 @@ async function fetchCancelReservation(id) {
 
 export {
     fetchCreateReservation,
+    fetchReadAllReservationsByCard,
     fetchCancelReservation,
 }

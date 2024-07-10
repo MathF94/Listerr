@@ -143,9 +143,9 @@ class ReservationController
     {
         try {
             if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
-                $id = $_GET['id'];
+                $id = (int)$_GET['id'];
                 $model = new Reservations();
-                $reservation = $model->getOneReservationById((int)$id);
+                $reservation = $model->getOneReservationById($id);
 
                 if (empty($reservation)) {
                     return json_encode([
@@ -163,6 +163,7 @@ class ReservationController
                 "status" => "readOneReservation failed",
                 "message" => "ID not numeric"
             ]);
+
         } catch (\Exception $e) {
             return json_encode([
                 "status" => "errors",

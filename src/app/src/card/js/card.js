@@ -10,6 +10,7 @@ import {
 
 import {
     fetchCreateReservation,
+    fetchReadAllReservationsByCard,
     fetchCancelReservation,
 } from '../../actions/actions_reservation.js'
 
@@ -47,11 +48,13 @@ function card(canCreateCard) {
     }
 
     // Affichage du contenu du bouton en fonction du type de liste
-    let btnLabel = "Nouveau souhait";
-    let checkLabel = "A Réserver";
+    let cardFormTitle = "Nouveau souhait";
+    let reservationBtnTitle = "Je réserve ce souhait";
+    let reservationBtnTxtContent = "Je réserve ce souhait";
     if (localStorage.getItem("typeList") === "TodoList") {
-        btnLabel = "Nouvelle tâche";
-        checkLabel = "A Réaliser";
+        cardFormTitle = "Nouvelle tâche";
+        reservationBtnTitle = "Je réalise la tâche";
+        reservationBtnTxtContent = "Je réalise la tâche";
     }
 
     // Afficher le title des boutons édition et suppression
@@ -78,10 +81,11 @@ function card(canCreateCard) {
     createCardFormBtn.name = "cardFormBtn";
     createCardFormBtn.type = "button";
     createCardFormBtn.value = `cardFormBtn`;
+    createCardFormBtn.title = cardFormTitle;
     createCardFormBtn.classList.add("btn");
     createCardFormBtn.classList.add("way");
     createCardFormBtn.textContent = "+";
-    createCardFormBtn.title = btnLabel;
+    // createCardFormBtn.title = btnLabel;
 
     // Rappel : "canCreateCard" retourne vrai si utilisateur courant = propriétaire de la liste/carte
     if (canCreateCard) {
@@ -149,7 +153,7 @@ function card(canCreateCard) {
             cardForm.remove();
         })
 
-        // Création d'une nouvelle carte
+        // Création d'une nouvelle carte (souhait ou tâche)
         CSRFToken(cardForm.id);
         cardForm.addEventListener("submit", function(e) {
             e.preventDefault();
@@ -185,8 +189,8 @@ function card(canCreateCard) {
                     const dialogMsg = document.querySelector("dialog");
                     dialogMsg.classList.add("valid");
                     redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
-
                 }
+
                 if (response.status === "errors") {
                     dialog({title: "Erreurs", content: response.errors});
                     const dialogMsg = document.querySelector("dialog");
@@ -201,7 +205,9 @@ function card(canCreateCard) {
     fetchReadAllCardsByList(id)
     .then(response => {
         if (response.status === "readOneList") {
+            const dataUserId = response.data.userId;
             const dataCards = response.data.cards;
+            const dataType = response.data.type;
             const cardArticleContent = document.createElement("article");
             cardArticleContent.id = "cardArticleContent";
             cardArticleContent.classList.add("list");
@@ -216,7 +222,7 @@ function card(canCreateCard) {
 
             // CSS pour différencier la couleur de fond des WL ou TL si l'utilisateur est différent du propriétaire
             if (localStorage.getItem("typeList") === "WishList" || localStorage.getItem("typeList") === "TodoList"){
-                if(userId !== response.data.userId){
+                if(userId !== dataUserId){
                     cardArticleContent.classList.add("third_party_wish");
                 } else{
                     cardArticleContent.classList.add(type[localStorage.getItem("typeList")]);
@@ -234,7 +240,7 @@ function card(canCreateCard) {
                 cardSectionContent.classList.add("grid");
 
                 // CSS pour différencier la couleur des cartes si l'utilisateur est différent du propriétaire ou si c'est une TL
-                if((userId !== response.data.userId) || (localStorage.getItem("typeList") === "TodoList")) {
+                if((userId !== dataUserId) || (localStorage.getItem("typeList") === "TodoList")) {
                     cardSectionContent.classList.add("third_party_todo_card");
                 } else {
                     cardSectionContent.classList.add("wish");
@@ -252,25 +258,7 @@ function card(canCreateCard) {
                 divStar.id = `divStar-${objectCard.id}`;
                 divStar.classList.add("grid_stars");
 
-                // Elements DOM pour la checkbox
-                const divCheck = document.createElement("div");
-                divCheck.id = `divCheck-${objectCard.id}`;
-                divCheck.classList.add("grid_check_box");
-
-                const labelCheck = document.createElement("label");
-                labelCheck.for = "checkbox";
-                labelCheck.innerText = checkLabel;
-                labelCheck.classList.add("grid_label_check_box");
-
-                const check = document.createElement("input");
-                check.id = `checked-${objectCard.id}`;
-                check.title = checkLabel;
-                check.type = "checkbox";
-                check.value = objectCard.checked;
-
-                check.classList.add("grid_check_box");
-                check.classList.add("pointer");
-
+                // Elements DOM pour la réservation
                 const reservationTxt = document.createElement("p");
                 reservationTxt.classList.add("grid_text_reserved");
 
@@ -279,6 +267,8 @@ function card(canCreateCard) {
                 reservationBtn.name = "reservationBtn"
                 reservationBtn.title = "Je réserve"
                 reservationBtn.textContent = "Je réserve"
+                reservationBtn.title = reservationBtnTitle
+                reservationBtn.textContent = reservationBtnTxtContent
                 reservationBtn.type = "button"
                 reservationBtn.value = objectCard.id;
                 reservationBtn.classList.add("btn");
@@ -333,7 +323,7 @@ function card(canCreateCard) {
 
                     // Définit la couleur des étoiles si l'utilisateur courant n'est pas le proprio de la carte
                     //                                si la liste est une TodoList
-                    if((userId !== response.data.userId) || (response.data.type === "TodoList")) {
+                    if((userId !== dataUserId) || (dataType === "TodoList")) {
                         priority.classList.add("third_party_stars");
                     } else {
                         priority.classList.add("stars");
@@ -344,61 +334,39 @@ function card(canCreateCard) {
                     divStar.title = `nombre d'étoiles ${priorityValue}`;
                     divStar.appendChild(priority);
 
-                    if (check.value === "1") {
-                        priority.classList.remove("stars");
-                        priority.classList.add("disable_stars");
+                    // if (dataReservation) {
+                    //     priority.classList.remove("stars");
+                    //     priority.classList.add("disable_stars");
 
-                    } else {
-                        // Gestion de la modification de la priorité
-                        priority.addEventListener("click", function (e) {
-                            e.preventDefault();
-                            fetchUpdatePriority(e.target.id, objectCard.id)
-                            .then(response => {
-                                if (response.status === "updatePriority") {
-                                    if (localStorage.getItem("typeList") === "WishList"){
-                                        dialog({title: "Modification du souhait", content: "Votre priorité a bien été mis à jour."});
-                                    } else {
-                                        dialog({title: "Modification de la tâche", content: "Votre importance a bien été mise à jour."});
-                                    }
-                                    const dialogMsg = document.querySelector("dialog");
-                                    dialogMsg.classList.add("valid");
-                                    redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
-                                }
+                    // } else {
+                    //     // Gestion de la modification de la priorité
+                    //     priority.addEventListener("click", function (e) {
+                    //         e.preventDefault();
+                    //         fetchUpdatePriority(e.target.id, objectCard.id)
+                    //         .then(response => {
+                    //             if (response.status === "updatePriority") {
+                    //                 if (localStorage.getItem("typeList") === "WishList"){
+                    //                     dialog({title: "Modification du souhait", content: "Votre priorité a bien été mis à jour."});
+                    //                 } else {
+                    //                     dialog({title: "Modification de la tâche", content: "Votre importance a bien été mise à jour."});
+                    //                 }
+                    //                 const dialogMsg = document.querySelector("dialog");
+                    //                 dialogMsg.classList.add("valid");
+                    //                 redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                    //             }
 
-                                if (response.status === "errors") {
-                                    dialog({title: "Erreurs", content: response.errors});
-                                    const dialogMsg = document.querySelector("dialog");
-                                    dialogMsg.classList.add("errors");
-                                    redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
-                                }
-                            })
-                        })
-                    }
+                    //             if (response.status === "errors") {
+                    //                 dialog({title: "Erreurs", content: response.errors});
+                    //                 const dialogMsg = document.querySelector("dialog");
+                    //                 dialogMsg.classList.add("errors");
+                    //                 redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                    //             }
+                    //         })
+                    //     })
+                    // }
                 }
 
                 cardSectionContent.appendChild(reservationBtn);
-
-                // CSS pour modifier le bouton d'édition et label
-                if (objectCard.login) {
-                    reservationBtn.remove();
-                    reservationTxt.innerText = `Réservé par ${objectCard.login}`;
-                    reservationTxt.appendChild(dltReservationBtn);
-                }
-
-                if (check.value === "1") {
-                    updateBtnCard.disabled = true;
-                    updateBtnCard.classList.remove("edit");
-                    updateBtnCard.classList.remove("inCard");
-                    updateBtnCard.classList.add("disableUpdate");
-
-                    let checkLabel = `Réservé par ${objectCard.login}`;
-
-                    if (localStorage.getItem("typeList") === "TodoList") {
-                        checkLabel = `Réalisé par ${objectCard.login}`;
-                    }
-                    labelCheck.innerText = checkLabel
-                    check.title = checkLabel;
-                }
 
                 // Affichage des données de la carte
                 for (const key in objectCard) {
@@ -563,7 +531,8 @@ function card(canCreateCard) {
                     }
                 })
 
-                // Gestion de la réservation d'une carte
+                // Gestion de la réservation d'un souhait / tâche
+                // Renvoi à la connexion si invité non connecté souhaite réserver
                 if (localStorage.token === undefined || localStorage.token === null || localStorage.user === null || localStorage.user === undefined) {
                     reservationBtn.addEventListener("click", function (e) {
                         dialog({
@@ -572,15 +541,15 @@ function card(canCreateCard) {
                         });
                         const dialogMsg = document.querySelector("dialog");
                         dialogMsg.classList.add("home");
-
                         redirect(`${configPath.basePath}/user/pages/login.html?redirection=list&id=${id}`);
                     })
-
                 } else {
+                    // Affichage du formulaire pour réserver
                     reservationBtn.addEventListener("click", function(e) {
                         e.preventDefault();
                         displayFormReservation(cardSectionContent)
 
+                        // Clique pour fermer le formulaire de réservation
                         guestCancelBtn.addEventListener("click", function() {
                             formGuest.remove();
                         })
@@ -589,7 +558,6 @@ function card(canCreateCard) {
                         formGuest.addEventListener("submit", function(e) {
                             e.preventDefault();
                             reservationBtn.disabled = false;
-
                             // Validation de pattern du formulaire
                             const inputLogin = document.querySelector("#guestName");
                             inputLogin.addEventListener("invalid", function(e) {
@@ -597,7 +565,6 @@ function card(canCreateCard) {
                             });
 
                             scroll();
-                            
                             fetchCreateReservation(formGuest, objectCard.id)
                             .then(response => {
                                 localStorage.removeItem("csrfToken");
@@ -618,33 +585,46 @@ function card(canCreateCard) {
                             })
                         })
                     })
-
-                    // Gestion d'affichage d'une réservation faite
-                    // fetchReadAllReservationsByCard(id)
-                    // .then(response => {
-
-                    // })
-
-                    // Gestion de l'annulation de la réservation
-                    dltReservationBtn.addEventListener("click", function(e) {
-                        e.preventDefault();
-                        const dltBtnResa = parseInt(e.target.value);
-
-                        if (dltBtnResa !== objectCard.id) {
-                            console.warn("pas touche");
-                            dialog({title: "Erreur", content: "Ne touchez pas à la valeur du bouton."});
-                            return;
-
-                        } else if (confirm('Voulez-vous vraiment vous annuler votre réservation ?') === true) {
-                            scroll();
-                            fetchCancelReservation(objectCard.id)
-                            .then(() => {
-                                dialog({title: "Annulation de votre réservation", content: "Votre réservation a bien été annulée."});
-                            })
-                        }
-                    })
                 }
 
+                // Gestion d'affichage d'une réservation faite
+                fetchReadAllReservationsByCard(objectCard.id)
+                .then(response => {
+                    console.log(response);
+                    if (response.status === "readOneReservation") {
+                        const dataReservation = response.dataReservation;
+                        console.log(dataReservation);
+
+                        // CSS pour modifier le bouton de réservation et texte
+                        reservationBtn.remove();
+                        reservationTxt.innerText = `Réservé par ${dataReservation.login}`;
+                        reservationTxt.appendChild(dltReservationBtn);
+
+                        if (localStorage.getItem("typeList") === "TodoList") {
+                            reservationTxt.innerText = `Réalisé par ${dataReservation.login}`;
+                        }
+                    }
+                })
+
+                // Gestion de l'annulation de la réservation
+                dltReservationBtn.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    const dltBtnResa = parseInt(e.target.value);
+
+                    if (dltBtnResa !== objectCard.id) {
+                        console.warn("pas touche");
+                        dialog({title: "Erreur", content: "Ne touchez pas à la valeur du bouton."});
+                        return;
+
+                    } else if (confirm('Voulez-vous vraiment vous annuler votre réservation ?') === true) {
+                        scroll();
+                        fetchCancelReservation(objectCard.id)
+                        .then(() => {
+                            dialog({title: "Annulation de votre réservation", content: "Votre réservation a bien été annulée."});
+                            redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                        })
+                    }
+                })
 
                 // Gestion de la suppression de carte
                 deleteBtnCard.addEventListener("click", function(e) {

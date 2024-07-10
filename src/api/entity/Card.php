@@ -11,7 +11,6 @@ class Card
     public string $title;
     public string $description;
     public int $priority;
-    public string $login;
     public string $createdAt;
     public string $updatedAt;
     public int $listId;
@@ -29,7 +28,6 @@ class Card
         $this->title = $params['title'];
         $this->description = $params['description'];
         $this->priority = $params['priority'];
-        $this->login = $params['login'];
         $this->createdAt = $params['created_at'];
         $this->updatedAt = $params['updated_at'];
         $this->listId = $params['list_id'];

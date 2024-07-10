@@ -8,8 +8,8 @@ namespace Entity;
 class Reservation
 {
     public int $id;
-    public int $cardId;
     public string $login;
+    public int $cardId;
     public string $createdAt;
 
     /**
@@ -22,7 +22,7 @@ class Reservation
     public function populate(array $params): void
     {
         $this->id = $params['id'];
-        $this->login = $params['login'];
+        $this->login = $params['guestName'];
         $this->cardId = $params['card_id'];
         $this->createdAt = $params['created_at'];
     }

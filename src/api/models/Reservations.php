@@ -46,9 +46,10 @@ class Reservations extends Database
         try {
             $req = "SELECT `id`,
                             `guestName`,
+                            `card_id`,
                             `created_at`
                     FROM `reservation`
-                    WHERE `id` = :id
+                    WHERE `card_id` = :id
                     ORDER BY created_at DESC";
 
             $result = $this->findOne($req, ['id' => $id]);

@@ -50,7 +50,6 @@ class Cards extends Database
                             `title`,
                             `description`,
                             `priority`,
-                            `login`,
                             `list_id`,
                             `created_at`,
                             `updated_at`
@@ -81,7 +80,6 @@ class Cards extends Database
                             `c`.`title`,
                             `c`.`description`,
                             `c`.`priority`,
-                            `c`.`login`,
                             `c`.`list_id`,
                             `c`.`created_at`,
                             `c`.`updated_at`
