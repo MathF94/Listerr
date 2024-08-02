@@ -157,7 +157,12 @@ function list() {
                             titleFormList.innerText = "Formulaire d'édition de la liste";
                             oneList.classList.add("hidden");
                             updateBtnList.disabled = true;
+                            updateBtnList.classList.remove("edit");
+                            updateBtnList.classList.add("disableUpdate");
+
                             deleteBtnList.disabled = true;
+                            deleteBtnList.classList.remove("delete");
+                            deleteBtnList.classList.add("disableDelete");
                             sectionList.classList.add("hidden");
 
                             // Affichage de la liste + suppression du formulaire d'édition
@@ -165,7 +170,13 @@ function list() {
                             cancelForm.addEventListener("click", function(){
                                 updateList.remove();
                                 updateBtnList.disabled = false;
+                                updateBtnList.classList.remove("disableUpdate");
+                                updateBtnList.classList.add("edit");
+
                                 deleteBtnList.disabled = false;
+                                deleteBtnList.classList.remove("disableDelete");
+                                deleteBtnList.classList.add("delete");
+
                                 oneList.classList.remove("hidden");
                                 sectionList.classList.remove("hidden");
                                 actionBtnlist.classList.remove("grid_edit_list");

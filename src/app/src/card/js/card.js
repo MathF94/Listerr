@@ -85,7 +85,6 @@ function card(canCreateCard) {
     createCardFormBtn.classList.add("btn");
     createCardFormBtn.classList.add("way");
     createCardFormBtn.textContent = "+";
-    // createCardFormBtn.title = btnLabel;
 
     // Rappel : "canCreateCard" retourne vrai si utilisateur courant = propriétaire de la liste/carte
     if (canCreateCard) {
@@ -146,7 +145,7 @@ function card(canCreateCard) {
             updateProfilList.classList.add("edit");
             deleteProfilList.classList.remove("disableDelete");
             deleteProfilList.classList.add("delete");
-            cardDivForm.style.gridColumn = "4/5";
+            cardDivForm.style.gridColumn = "5/5";
             cardDivForm.style.gridRow = "1/2";
 
             titleForm.remove();
@@ -642,6 +641,13 @@ function card(canCreateCard) {
                             const dataReservation = response.dataReservation;
                             priority.classList.remove("stars");
                             priority.classList.add("disable_stars");
+
+                            console.log(updateBtnCard);
+                            updateBtnCard.disabled = true;
+                            updateBtnCard.classList.remove("edit");
+                            updateBtnCard.classList.add("disableUpdate");
+                            updateBtnCard.classList.add("inCard");
+
 
                             // CSS pour modifier le bouton de réservation et texte
                             reservationBtn.remove();
