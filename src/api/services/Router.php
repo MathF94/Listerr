@@ -19,6 +19,7 @@ class Router
     {
         if (array_key_exists('route', $_GET)) : // on vérifie que la route existe dans l'URL
             $headers = getallheaders();
+            $csrfToken = $this->getCsrfToken($headers);
 
             switch ($_GET['route']) {
                 case 'csrf':
@@ -42,7 +43,7 @@ class Router
                 case 'user_login':
                     if ($this->isAllowedMethod('POST')) {
                         $user = new UserController();
-                        echo $user->login($headers['X-CSRFToken']);
+                        echo $user->login($csrfToken);
                     }
                     break;
 
@@ -237,5 +238,23 @@ class Router
             return false;
         }
         return true;
+    }
+
+    /**
+     * Retourne le CSRFToken depuis les headers de requête
+     * @param array $header les entêtes de requête
+     * @return string le token
+     */
+    private function getCsrfToken(array $headers): string
+    {
+        if(array_key_exists('X-CSRFToken', $headers)) {
+            return $headers['X-CSRFToken'];
+        }
+
+        if(array_key_exists('X-Csrftoken', $headers)) {
+            return $headers['X-Csrftoken'];
+        }
+
+        return '';
     }
 }

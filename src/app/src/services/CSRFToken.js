@@ -13,7 +13,7 @@ async function fetchCSRF(formId) {
         const formData = new FormData();
         formData.append("formId", formId);
         const url = `${configPath.apiPath}/?route=csrf`;
-        
+
         return await fetch(url, {
             method: "POST",
             body: formData

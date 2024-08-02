@@ -144,11 +144,9 @@ class ReservationController
         try {
             if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
                 $id = (int)$_GET['id'];
-                // var_dump($id);
 
                 $model = new Reservations();
                 $reservation = $model->getOneReservationById($id);
-                // var_dump($reservation);
 
                 if (empty($reservation)) {
                     return json_encode([

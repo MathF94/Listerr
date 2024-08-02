@@ -22,7 +22,7 @@ function login() {
 
     const noRegisterYet = document.querySelector("#noRegisterYet");
     noRegisterYet.title = "Redirection pour création de compte";
-    noRegisterYet.setAttribute('href', `${configPath.basePath}/user/pages/login.html`);
+    noRegisterYet.setAttribute('href', `${configPath.basePath}/user/pages/registration.html`);
 
     // Validation de pattern du formulaire
     const inputLogin = document.querySelector("#login");

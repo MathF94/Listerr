@@ -52,6 +52,7 @@ class CSRFToken
     {
         // var_dump($csrfToken);
         $decryptedToken = $this->decrypt($csrfToken);
+        // var_dump($decryptedToken);
         // var_dump($decryptedToken["formToken"]);
         // var_dump($decryptedToken["formId"]);
         if (empty($csrfToken)) {
