@@ -16,8 +16,8 @@ function displayFormReservation(elementDOM) {
 
     const inputGuestName = document.createElement("input");
     inputGuestName.type = "text";
-    inputGuestName.name = "GuestName";
-    inputGuestName.id = "GuestName";
+    inputGuestName.name = "guestName";
+    inputGuestName.id = "guestName";
     inputGuestName.placeholder = "Votre login";
     inputGuestName.setAttribute("max", 20);
     inputGuestName.value = "";

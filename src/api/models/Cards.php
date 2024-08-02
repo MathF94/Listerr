@@ -41,7 +41,7 @@ class Cards extends Database
      * Cette méthode permet de récupérer les détails d'une carte en fonction de son ID.
      *
      * @param int $id - ID de la carte à récupérer.
-     * @return Card|null - L'objet Cqrd correspondant à lq cqrte ou null si non trouvé.
+     * @return Card|null - L'objet Card correspondant à la carte ou null si non trouvé.
      */
     public function getOneCardById(int $id): ?Card
     {
@@ -50,8 +50,6 @@ class Cards extends Database
                             `title`,
                             `description`,
                             `priority`,
-                            `checked`,
-                            `login`,
                             `list_id`,
                             `created_at`,
                             `updated_at`
@@ -82,8 +80,6 @@ class Cards extends Database
                             `c`.`title`,
                             `c`.`description`,
                             `c`.`priority`,
-                            `c`.`checked`,
-                            `c`.`login`,
                             `c`.`list_id`,
                             `c`.`created_at`,
                             `c`.`updated_at`
@@ -125,31 +121,6 @@ class Cards extends Database
                         `description` = :description,
                         `priority` = :priority,
                         `updated_at` = NOW()
-                    WHERE `id` = :id";
-
-            $query = $this->db->prepare($req);
-            $params['id'] = $id;
-
-            return $query->execute($params);
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-            return [];
-        }
-    }
-
-    /**
-     * Cette méthode permet de mettre à jour l'input check (réservation) d'une carte dans la base de données.
-     *
-     * @param array $params - Les paramètres mis à jour de la carte.
-     * @param int $id - L'ID de la carte à mettre à jour.
-     * @return bool - Renvoie true en cas de succès, sinon false.
-     */
-    public function updateChecked(array $params, int $id): bool
-    {
-        try {
-            $req = "UPDATE `card`
-                    SET `checked` = :checked,
-                        `login` = :login
                     WHERE `id` = :id";
 
             $query = $this->db->prepare($req);

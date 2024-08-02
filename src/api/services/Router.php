@@ -5,6 +5,7 @@ namespace Services;
 use Controllers\UserController;
 use Controllers\ListController;
 use Controllers\CardController;
+use Controllers\ReservationController;
 
 /**
  * Classe pour le routage des demandes HTTP vers les contrôleurs appropriés.
@@ -18,6 +19,7 @@ class Router
     {
         if (array_key_exists('route', $_GET)) : // on vérifie que la route existe dans l'URL
             $headers = getallheaders();
+            $csrfToken = $this->getCsrfToken($headers);
 
             switch ($_GET['route']) {
                 case 'csrf':
@@ -41,7 +43,7 @@ class Router
                 case 'user_login':
                     if ($this->isAllowedMethod('POST')) {
                         $user = new UserController();
-                        echo $user->login($headers['X-CSRFToken']);
+                        echo $user->login($csrfToken);
                     }
                     break;
 
@@ -166,31 +168,46 @@ class Router
                     }
                     break;
 
-                case 'create_reservation':
+                case 'delete_card':
                     if ($this->isAllowedMethod('POST')) {
                         $card = new CardController($headers['Authorization']);
-                        echo $card->updateChecked($_POST['id'], $headers['X-CSRFToken']); // Create reservation
+                        echo $card->deleteCard($_POST['id']); // deleteCard
+                    }
+                    break;
+
+                /**
+                 * Route des réservations
+                 */
+
+                case 'create_reservation':
+                    if ($this->isAllowedMethod('POST')) {
+                        $reservation = new ReservationController($headers['Authorization']);
+                        echo $reservation->createReservation($headers['X-CSRFToken']); // Create reservation
+                    }
+                    break;
+
+                case 'read_one_reservation_by_id': // Toutes les listes d'un utilisateur sur list.html
+                    if ($this->isAllowedMethod('GET')) {
+                        $reservation = new ReservationController($headers['Authorization']);
+                        echo $reservation->readOneReservationById(); // readOneById
                     }
                     break;
 
                 case 'cancel_reservation':
                     if ($this->isAllowedMethod('POST')) {
-                        $card = new CardController($headers['Authorization']);
-                        echo $card->updateChecked($_POST['id'], $headers['X-CSRFToken']); // cancel reservation
+                        $reservation = new ReservationController($headers['Authorization']);
+                        echo $reservation->cancelReservation($_POST['id']); // cancel reservation
                     }
                     break;
+
+                /**
+                 * Route des priorités
+                 */
 
                 case 'update_priority':
                     if ($this->isAllowedMethod('POST')) {
                         $card = new CardController($headers['Authorization']);
                         echo $card->updatePriority($_POST['id'], $_POST['priority']); // update priority stars
-                    }
-                    break;
-
-                case 'delete_card':
-                    if ($this->isAllowedMethod('POST')) {
-                        $card = new CardController($headers['Authorization']);
-                        echo $card->deleteCard($_POST['id']); // deleteCard
                     }
                     break;
 
@@ -212,10 +229,32 @@ class Router
      */
     private function isAllowedMethod($method): bool
     {
+        // var_dump($method);
+        // var_dump($_SERVER);
+        // var_dump($_SERVER['REQUEST_METHOD']);
+
         if ($method !== $_SERVER['REQUEST_METHOD']) {
             echo json_encode(['statusCode' => 403, 'message' => 'Method not allowed']);
             return false;
         }
         return true;
+    }
+
+    /**
+     * Retourne le CSRFToken depuis les headers de requête
+     * @param array $header les entêtes de requête
+     * @return string le token
+     */
+    private function getCsrfToken(array $headers): string
+    {
+        if(array_key_exists('X-CSRFToken', $headers)) {
+            return $headers['X-CSRFToken'];
+        }
+
+        if(array_key_exists('X-Csrftoken', $headers)) {
+            return $headers['X-Csrftoken'];
+        }
+
+        return '';
     }
 }

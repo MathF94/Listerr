@@ -2,7 +2,7 @@
 
 namespace Controllers;
 
-use Models\Cards;
+use Models\Reservations;
 use Models\Users;
 use Services\CSRFToken;
 use Services\Session;
@@ -11,7 +11,7 @@ use Services\Validator;
 /**
  * Classe représentant un objet d'une carte.
  */
-class CardController
+class ReservationController
 {
     private $csrfToken;
     private $validator;
@@ -76,20 +76,19 @@ class CardController
     }
 
     /**
-     * Cette méthode permet la création d'une nouvelle carte, après validation du jeton CSRF.
+     * Cette méthode permet la création d'une nouvelle réservation, après validation du jeton CSRF.
      *
      * @param string $csrfToken - Jeton CSRF pour valider la requête.
      *
-     * @return string - Réponse JSON : "createCard" avec un message, en cas de succès.
-     *                                 "createCard failed" avec un message d'erreur, si l'utilisateur est introuvable.
+     * @return string - Réponse JSON : "createReservation" avec un message, en cas de succès.
+     *                                 "createReservation failed" avec un message d'erreur, si l'utilisateur est introuvable.
      *                                 "fail" avec un message d'erreur, si le jeton est invalide.
      *                                 "errors" avec un message d'erreur, en cas d'échec.
      */
-    public function createCard(string $csrfToken): string
+    public function createReservation(string $csrfToken): string
     {
         try {
-            $validToken = $this->csrfToken->isValidToken($csrfToken, "formCard");
-
+            $validToken = $this->csrfToken->isValidToken($csrfToken, "formGuest");
             if (!$validToken) {
                 return json_encode([
                     "status" => "fail",
@@ -98,16 +97,16 @@ class CardController
             }
 
             if (!empty($this->user)) {
-                $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_CREATE_CARD);
+                $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_CREATE_RESERVATION);
 
                 if (empty(count($errors))) {
                     $params = $_POST;
-                    $model = new Cards();
-                    $model->create($params);
+                    $model = new Reservations();
+                    $model->createReservation($params);
 
                     return json_encode([
-                        "status" => "createCard",
-                        "message" => "la carte a bien été créée."
+                        "status" => "createReservation",
+                        "message" => "la réservation a bien été créée."
                     ]);
                 }
                 return json_encode([
@@ -116,9 +115,10 @@ class CardController
                 ]);
             }
             return json_encode([
-                "status" => "createCard failed",
+                "status" => "createReservation failed",
                 "message" => "no user found"
             ]);
+
         } catch (\Exception $e) {
             return json_encode([
                 "status" => "errors",
@@ -128,99 +128,42 @@ class CardController
     }
 
     /**
-     * La méthode getAllCardsByList() (équivalent du ReadAll) est appelée dans l'entity Lister afin qu'elle récupère les informations des listes.
-     */
-
-    /**
-     * Cette méthode permet la mise à jour des informations d'une carte, après validation du jeton CSRF.
-     * @param int $id - L'ID de la carte à mettre à jour.
-     * @param string $csrfToken - Jeton CSRF pour valider la requête.
+     * Cette méthode récupère en fonction de l'ID de la réservation, sur la page list.html :
+     *       ==> les détails d'une seul liste,
+     *                       de l'utilisateur,
+     *                       des cartes associés à la liste,
+     *                       des réservations associées à la carte.
      *
-     * @return string - Réponse JSON : "updateCard" avec un message, en cas de succès.
-     *                                 "updateCard failed" avec un message d'erreur, si l'utilisateur est introuvable.
-     *                                 "fail" avec un message d'erreur, si le jeton est invalide.
-     *                                 "fail" avec un message d'erreur, si la carte est introuvable.
+     * @return string - Réponse JSON : "readOneReservation" avec les data d'une réservation, en cas de succès.
+     *                                 "readOneReservation failed" avec un message d'erreur, si l'ID est vide.
+     *                                 "fail" avec un message d'erreur, si la réservation est introuvable.
      *                                 "errors" avec un message d'erreur, en cas d'échec.
      */
-    public function updateCard(int $id, string $csrfToken): string
+    public function readOneReservationById(): string
     {
         try {
-            $validToken = $this->csrfToken->isValidToken($csrfToken, "formCard");
+            if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
+                $id = (int)$_GET['id'];
 
-            if (!$validToken) {
-                return json_encode([
-                    "status" => "fail",
-                    "message" => "no valid csrfToken"
-                ]);
-            }
+                $model = new Reservations();
+                $reservation = $model->getOneReservationById($id);
 
-            if (!empty($this->user->id)) {
-                $model = new Cards();
-                $card = $model->getOneCardById($id);
-
-
-                if (empty($card)) {
+                if (empty($reservation)) {
                     return json_encode([
-                        "status" => "fail",
-                        "errors" => "no card found"
+                        "status" => "in pending reservation",
+                        "message" => "no reservation found"
+                    ]);
+                } else {
+                    return json_encode([
+                        "status" => "readOneReservation",
+                        "dataReservation" => $reservation
                     ]);
                 }
-
-                $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_UPDATE_CARD);
-                if (empty(count($errors))) {
-                    $params = [
-                        "title" => $_POST["titleCard"],
-                        "description" => $_POST["descriptionCard"],
-                        "priority" => (int)$_POST["priority"]
-                    ];
-
-                    $model->updateCard($params, $card->id);
-
-                    return json_encode([
-                        "status" => "updateCard",
-                        "message" => "la carte a bien été mise à jour."
-                    ]);
-                }
-
-                return json_encode([
-                    "status" => "errors",
-                    "errors" => $errors
-                ]);
             }
             return json_encode([
-                "status" => "updateCard failed",
-                "message" => "no user found"
+                "status" => "readOneReservation failed",
+                "message" => "ID not numeric"
             ]);
-        } catch (\Exception $e) {
-            return json_encode([
-                "status" => "errors",
-                "message" => $e->getMessage()
-            ]);
-        }
-    }
-
-    public function updatePriority(int $id, string $priority): string
-    {
-        try {
-            if (!empty($this->user->id)) {
-                $model = new Cards();
-                $card = $model->getOneCardById($id);
-
-                if (empty($card)) {
-                    return json_encode([
-                        "status" => "fail",
-                        "errors" => "no card found"
-                    ]);
-                }
-
-                $params = ["priority" => $priority];
-                $model->updatePriority($params, $card->id);
-
-                return json_encode([
-                    "status" => "updatePriority",
-                    "message" => "la priorité a bien été mise à jour."
-                ]);
-            }
 
         } catch (\Exception $e) {
             return json_encode([
@@ -231,36 +174,36 @@ class CardController
     }
 
     /**
-     * Cette méthode permet la suppression d'une carte d'une carte.
-     * @param int $id - L'ID de la carte à supprimer.
+     * Cette méthode permet la suppression d'une réservation d'une liste.
+     * @param int $id - L'ID de la réservation à annuler.
      *
-     * @return string - Réponse JSON : "deletedCard" avec un message, en cas de succès.
-     *                                 "deletedCard failed" avec un message d'erreur, si l'utilisateur est introuvable.
-     *                                 "fail" avec un message d'erreur, si la carte est introuvable.
+     * @return string - Réponse JSON : "CancelledReservation" avec un message, en cas de succès.
+     *                                 "CancelledReservation failed" avec un message d'erreur, si l'utilisateur est introuvable.
+     *                                 "fail" avec un message d'erreur, si la réservation est introuvable.
      *                                 "errors" avec un message d'erreur, en cas d'échec.
      */
-    public function deleteCard(int $id): string
+    public function cancelReservation(int $id): string
     {
         try {
             if (!empty($this->user->id)) {
-                $model = new Cards();
-                $card = $model->getOneCardById($id);
+                $model = new Reservations();
+                $reservation = $model->getOneReservationById($id);
 
-                if (!empty($card)) {
-                    $model->deleteCard($card->id);
+                if (!empty($reservation)) {
+                    $model->cancelReservation($reservation->id);
 
                     return json_encode([
-                        "status" => "deleteCard",
-                        "message" => "la carte a bien été supprimée."
+                        "status" => "CancelledReservation",
+                        "message" => "la réservation a bien été annulée."
                     ]);
                 }
                 return json_encode([
                     "status" => "fail",
-                    "message" => "no card found"
+                    "message" => "no reservation found"
                 ]);
             }
             return json_encode([
-                "status" => "deleteCard failed",
+                "status" => "CancelledReservation failed",
                 "message" => "no user found"
             ]);
         } catch (\Exception $e) {

@@ -26,11 +26,11 @@ async function fetchUpdateUser(form, id) {
 
         const url = `${configPath.apiPath}/?route=admin_update_user`;
         return await fetch(url, {
+            method: "POST",
             headers: {
                 "Authorization": localStorage.getItem("token"),
                 "X-CSRFToken": localStorage.getItem("csrfToken")
             },
-            method: "POST",
             body: formData,
             }).then(response => response.json());
 
@@ -45,7 +45,6 @@ async function fetchDeleteUser(id) {
         const formData = new FormData();
         formData.append("id", id);
         const url = `${configPath.apiPath}/?route=admin_delete_user`;
-
         return await fetch(url, {
             method: "POST",
             headers: { Authorization: localStorage.getItem("token") },
