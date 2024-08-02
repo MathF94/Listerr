@@ -35,8 +35,6 @@ class CSRFToken
             'formId' => $formId,
             'expired_at' => (new DateTime())->modify('+5 min')->format('Y-m-d H:i:s'),
         ];
-        // var_dump($csrfToken["formToken"]);
-        // var_dump($csrfToken["formId"]);
 
         return $this->encryption->encrypt(json_encode($csrfToken));
     }
@@ -50,11 +48,7 @@ class CSRFToken
      */
     public function isValidToken(string $csrfToken, string $formId): bool
     {
-        // var_dump($csrfToken);
         $decryptedToken = $this->decrypt($csrfToken);
-        // var_dump($decryptedToken);
-        // var_dump($decryptedToken["formToken"]);
-        // var_dump($decryptedToken["formId"]);
         if (empty($csrfToken)) {
             return false;
         }

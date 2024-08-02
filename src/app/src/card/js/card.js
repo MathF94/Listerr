@@ -315,56 +315,56 @@ function card(canCreateCard) {
                 deleteBtnCard.classList.add("inCard");
                 deleteBtnCard.classList.add("listBtn");
 
-                // Boucle de création des étoiles (pleines ou vides) en fonction de la priorité
-                const priorityValue = objectCard.priority;
-                for (let i = 0 ; i < 5; i++) {
-                    const priority = document.createElement("span");
-                    priority.id = `${i+1}-${objectCard.id}`;
+                // // Boucle de création des étoiles (pleines ou vides) en fonction de la priorité
+                // const priorityValue = objectCard.priority;
+                // for (let i = 0 ; i < 5; i++) {
+                //     const priority = document.createElement("span");
+                //     priority.id = `${i+1}-${objectCard.id}`;
 
-                    // Définit la couleur des étoiles si l'utilisateur courant n'est pas le proprio de la carte
-                    //                                si la liste est une TodoList
-                    if((userId !== dataUserId) || (dataType === "TodoList")) {
-                        priority.classList.add("third_party_stars");
-                    } else {
-                        priority.classList.add("stars");
-                    }
+                //     // Définit la couleur des étoiles si l'utilisateur courant n'est pas le proprio de la carte
+                //     //                                si la liste est une TodoList
+                //     if((userId !== dataUserId) || (dataType === "TodoList")) {
+                //         priority.classList.add("third_party_stars");
+                //     } else {
+                //         priority.classList.add("stars");
+                //     }
 
-                    priority.setAttribute("data-star", i+1);
-                    priority.textContent = i < priorityValue ? "\u2605" : "\u2606" ;
-                    divStar.title = `nombre d'étoiles ${priorityValue}`;
-                    divStar.appendChild(priority);
+                //     priority.setAttribute("data-star", i+1);
+                //     priority.textContent = i < priorityValue ? "\u2605" : "\u2606" ;
+                //     divStar.title = `nombre d'étoiles ${priorityValue}`;
+                //     divStar.appendChild(priority);
 
-                    // if (dataReservation) {
-                    //     priority.classList.remove("stars");
-                    //     priority.classList.add("disable_stars");
+                //     if (dataReservation) {
+                //         priority.classList.remove("stars");
+                //         priority.classList.add("disable_stars");
 
-                    // } else {
-                    //     // Gestion de la modification de la priorité
-                    //     priority.addEventListener("click", function (e) {
-                    //         e.preventDefault();
-                    //         fetchUpdatePriority(e.target.id, objectCard.id)
-                    //         .then(response => {
-                    //             if (response.status === "updatePriority") {
-                    //                 if (localStorage.getItem("typeList") === "WishList"){
-                    //                     dialog({title: "Modification du souhait", content: "Votre priorité a bien été mis à jour."});
-                    //                 } else {
-                    //                     dialog({title: "Modification de la tâche", content: "Votre importance a bien été mise à jour."});
-                    //                 }
-                    //                 const dialogMsg = document.querySelector("dialog");
-                    //                 dialogMsg.classList.add("valid");
-                    //                 redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
-                    //             }
+                //     } else {
+                //         // Gestion de la modification de la priorité
+                //         priority.addEventListener("click", function (e) {
+                //             e.preventDefault();
+                //             fetchUpdatePriority(e.target.id, objectCard.id)
+                //             .then(response => {
+                //                 if (response.status === "updatePriority") {
+                //                     if (localStorage.getItem("typeList") === "WishList"){
+                //                         dialog({title: "Modification du souhait", content: "Votre priorité a bien été mis à jour."});
+                //                     } else {
+                //                         dialog({title: "Modification de la tâche", content: "Votre importance a bien été mise à jour."});
+                //                     }
+                //                     const dialogMsg = document.querySelector("dialog");
+                //                     dialogMsg.classList.add("valid");
+                //                     redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                //                 }
 
-                    //             if (response.status === "errors") {
-                    //                 dialog({title: "Erreurs", content: response.errors});
-                    //                 const dialogMsg = document.querySelector("dialog");
-                    //                 dialogMsg.classList.add("errors");
-                    //                 redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
-                    //             }
-                    //         })
-                    //     })
-                    // }
-                }
+                //                 if (response.status === "errors") {
+                //                     dialog({title: "Erreurs", content: response.errors});
+                //                     const dialogMsg = document.querySelector("dialog");
+                //                     dialogMsg.classList.add("errors");
+                //                     redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                //                 }
+                //             })
+                //         })
+                //     }
+                // }
 
                 cardSectionContent.appendChild(reservationBtn);
 
@@ -590,18 +590,67 @@ function card(canCreateCard) {
                 // Gestion d'affichage d'une réservation faite
                 fetchReadAllReservationsByCard(objectCard.id)
                 .then(response => {
-                    // console.log(response);
-                    if (response.status === "readOneReservation") {
-                        const dataReservation = response.dataReservation;
-                        // console.log(dataReservation);
 
-                        // CSS pour modifier le bouton de réservation et texte
-                        reservationBtn.remove();
-                        reservationTxt.innerText = `Réservé par ${dataReservation.login}`;
-                        reservationTxt.appendChild(dltReservationBtn);
+                    // Boucle de création des étoiles (pleines ou vides) en fonction de la priorité
+                    const priorityValue = objectCard.priority;
+                    for (let i = 0 ; i < 5; i++) {
+                        const priority = document.createElement("span");
+                        priority.id = `${i+1}-${objectCard.id}`;
 
-                        if (localStorage.getItem("typeList") === "TodoList") {
-                            reservationTxt.innerText = `Réalisé par ${dataReservation.login}`;
+                        // Définit la couleur des étoiles si l'utilisateur courant n'est pas le proprio de la carte
+                        //                                si la liste est une TodoList
+                        if((userId !== dataUserId) || (dataType === "TodoList")) {
+                            priority.classList.add("third_party_stars");
+                        } else {
+                            priority.classList.add("stars");
+                        }
+
+                        priority.setAttribute("data-star", i+1);
+                        priority.textContent = i < priorityValue ? "\u2605" : "\u2606" ;
+                        divStar.title = `nombre d'étoiles ${priorityValue}`;
+                        divStar.appendChild(priority);
+
+                        if (response.status === 'in pending reservation') {
+                            // Gestion de la modification de la priorité
+                            priority.addEventListener("click", function (e) {
+                                e.preventDefault();
+
+                                fetchUpdatePriority(e.target.id, objectCard.id)
+                                .then(response => {
+                                    if (response.status === "updatePriority") {
+                                        if (localStorage.getItem("typeList") === "WishList"){
+                                            dialog({title: "Modification du souhait", content: "Votre priorité a bien été mis à jour."});
+                                        } else {
+                                            dialog({title: "Modification de la tâche", content: "Votre importance a bien été mise à jour."});
+                                        }
+                                        const dialogMsg = document.querySelector("dialog");
+                                        dialogMsg.classList.add("valid");
+                                        redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                                    }
+
+                                    if (response.status === "errors") {
+                                        dialog({title: "Erreurs", content: response.errors});
+                                        const dialogMsg = document.querySelector("dialog");
+                                        dialogMsg.classList.add("errors");
+                                        redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                                    }
+                                })
+                            })
+                        }
+
+                        if (response.status === "readOneReservation") {
+                            const dataReservation = response.dataReservation;
+                            priority.classList.remove("stars");
+                            priority.classList.add("disable_stars");
+
+                            // CSS pour modifier le bouton de réservation et texte
+                            reservationBtn.remove();
+                            reservationTxt.innerText = `Réservé par ${dataReservation.login}`;
+                            reservationTxt.appendChild(dltReservationBtn);
+
+                            if (localStorage.getItem("typeList") === "TodoList") {
+                                reservationTxt.innerText = `Réalisé par ${dataReservation.login}`;
+                            }
                         }
                     }
                 })
