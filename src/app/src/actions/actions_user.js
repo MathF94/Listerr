@@ -12,10 +12,10 @@ async function fetchRegister(form) {
     try {
         const url = `${configPath.apiPath}/?route=user_register`;
         return await fetch(url, {
+            method: "POST",
             headers: {
                 "X-CSRFToken": localStorage.getItem("csrfToken")
             },
-            method: "POST",
             body: new FormData(form)
         }).then(response => response.json());
 
@@ -35,10 +35,10 @@ async function fetchLogin(form) {
     try {
         const url = `${configPath.apiPath}/?route=user_login`;
         return await fetch(url, {
+            method: "POST",
             headers: {
                 "X-CSRFToken": localStorage.getItem("csrfToken")
             },
-            method: "POST",
             body: new FormData(form)
         }).then(response => response.json());
 

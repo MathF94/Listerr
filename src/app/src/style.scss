@@ -40,10 +40,10 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     --cancel-btn-hover: rgba(117, 117, 117, 0.8);
     --view-btn: rgba(238, 214, 33, 1);
     --view-btn-hover: rgba(213, 188, 3, 0.8);
-    --delete-btn: rgba(145, 78, 78, 1);
-    --delete-btn-hover: rgba(108, 6, 6, 0.8);
-    --edit-btn: rgba(66, 105, 179, 1);
-    --edit-btn-hover: rgba(66, 105, 179, 0.8);
+    --delete-btn: rgba(123, 41, 41, 1);
+    --delete-btn-hover: rgba(123, 41, 41, 0.8);
+    --edit-btn: rgba(37, 67, 225, 1);
+    --edit-btn-hover: rgba(37, 67, 225, 0.8);
     --resa-btn: rgb(66, 179, 104);
     --resa-btn-hover: rgba(66, 179, 104, 0.8);
 
@@ -564,7 +564,7 @@ dialog {
         background-color: var(--edit-btn);
         color: var(--text-light);
         &::before {
-            content: "🖉";
+            content: "🖊";
         }
         &:hover {
             background-color: var(--edit-btn-hover);

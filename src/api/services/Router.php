@@ -228,6 +228,10 @@ class Router
      */
     private function isAllowedMethod($method): bool
     {
+        // var_dump($method);
+        // var_dump($_SERVER);
+        // var_dump($_SERVER['REQUEST_METHOD']);
+
         if ($method !== $_SERVER['REQUEST_METHOD']) {
             echo json_encode(['statusCode' => 403, 'message' => 'Method not allowed']);
             return false;

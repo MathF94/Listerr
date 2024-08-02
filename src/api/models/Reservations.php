@@ -53,6 +53,11 @@ class Reservations extends Database
                     ORDER BY created_at DESC";
 
             $result = $this->findOne($req, ['id' => $id]);
+            
+            if (empty($result)) {
+                return null;
+            }
+
             $reservation = new Reservation();
             $reservation->populate($result);
 

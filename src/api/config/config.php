@@ -31,11 +31,11 @@ function cors()
     }
 
     $allowedDomains = [
-        'http://localhost',
-        'http://127.0.0.1',
+        'https://listerr.tea-tux.fr',
         'https://listerr.lan',
         'https://listerr.local',
-        'https://listerr.tea-tux.fr',
+        'http://localhost',
+        'http://127.0.0.1',
         'https://mathieufagot.ide.3wa.io',
         'https://mathieufagot.sites.3wa.io'
     ];

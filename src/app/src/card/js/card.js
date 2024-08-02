@@ -590,10 +590,10 @@ function card(canCreateCard) {
                 // Gestion d'affichage d'une réservation faite
                 fetchReadAllReservationsByCard(objectCard.id)
                 .then(response => {
-                    console.log(response);
+                    // console.log(response);
                     if (response.status === "readOneReservation") {
                         const dataReservation = response.dataReservation;
-                        console.log(dataReservation);
+                        // console.log(dataReservation);
 
                         // CSS pour modifier le bouton de réservation et texte
                         reservationBtn.remove();
