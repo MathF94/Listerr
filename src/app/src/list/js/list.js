@@ -48,8 +48,7 @@ function list() {
             }
 
             const data = response.data; // user de la liste
-            console.log(data);
-            
+
             localStorage.setItem("userList", data.userId);
 
             let userId = null;
