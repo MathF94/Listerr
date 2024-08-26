@@ -19,11 +19,12 @@ class Reservations extends Database
     public function createReservation(array $params): bool
     {
         try {
-            $req = "INSERT INTO `reservation` (`guestName`, `card_id`)
-            VALUES (:guestName, :card_id)";
+            $req = "INSERT INTO `reservation` (`guestName`, `user_id`, `card_id`)
+            VALUES (:guestName, :user_id, :card_id)";
 
             $params = [
                 'guestName' => $params['guestName'],
+                'user_id' => $params['userId'],
                 'card_id' => $params['id']
             ];
 
@@ -46,6 +47,7 @@ class Reservations extends Database
         try {
             $req = "SELECT `id`,
                             `guestName`,
+                            `user_id`,
                             `card_id`,
                             `created_at`
                     FROM `reservation`
@@ -53,7 +55,8 @@ class Reservations extends Database
                     ORDER BY created_at DESC";
 
             $result = $this->findOne($req, ['id' => $id]);
-            
+            // var_dump($result);die();
+
             if (empty($result)) {
                 return null;
             }

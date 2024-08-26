@@ -9,6 +9,7 @@ class Reservation
 {
     public int $id;
     public string $login;
+    public int $userId;
     public int $cardId;
     public string $createdAt;
 
@@ -23,6 +24,7 @@ class Reservation
     {
         $this->id = $params['id'];
         $this->login = $params['guestName'];
+        $this->userId = $params['user_id'];
         $this->cardId = $params['card_id'];
         $this->createdAt = $params['created_at'];
     }

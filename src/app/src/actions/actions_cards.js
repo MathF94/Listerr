@@ -43,6 +43,10 @@ async function fetchReadAllCardsByList(id) {
     }
 }
 
+
+
+
+
 /**
  * Effectue une requête pour mettre à jour une carte en utilisant un formulaire.
  *
