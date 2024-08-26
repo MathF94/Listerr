@@ -48,12 +48,19 @@ function list() {
             }
 
             const data = response.data; // user de la liste
+            console.log(data);
+            
+            localStorage.setItem("userList", data.userId);
+
             let userId = null;
+            let userRole = null;
+
             localStorage.setItem("typeList", data?.type);
 
             if (localStorage.user) {
-                userId = JSON.parse(localStorage.user).id; // user courant
-                if (JSON.parse(localStorage.user).role === "Admin" && response.data.user.role !== "Admin") {
+                userId = JSON.parse(localStorage.user).id; // ID user courant
+                userRole = JSON.parse(localStorage.user).role; // Role user courant
+                if (userRole === "Admin" && response.data.user.role !== "Admin") {
                     returnLists.href = `${configPath.basePath}/user/pages/profil.html?id=${response.data.userId}`;
                 }
             }
@@ -116,6 +123,7 @@ function list() {
 
                 for (const index in data) {
                     const object = data[index];
+
                     // Exclut certains éléments de la liste (id, userId, type, title, cards, createdAd)
                     if (["id", "userId", "user", "type", "title", "cards", "createdAt", "updatedAt"].includes(`${index}`)) {
                         continue;
@@ -131,12 +139,12 @@ function list() {
 
                 // Rend visible les boutons "Supprimer" et "Modifier" pour l'utilisateur en cours uniquement
                 if (userId === data.user.id) {
+
                     oneList.appendChild(actionBtnlist);
 
                     // Gestion de la mise à jour de la liste
                     updateBtnList.addEventListener("click", function(e) {
                         e.preventDefault();
-
                         const updtBtnListId = parseInt(e.target.value);
 
                         if (updtBtnListId !== data.id) {
@@ -157,7 +165,12 @@ function list() {
                             titleFormList.innerText = "Formulaire d'édition de la liste";
                             oneList.classList.add("hidden");
                             updateBtnList.disabled = true;
+                            updateBtnList.classList.remove("edit");
+                            updateBtnList.classList.add("disableUpdate");
+
                             deleteBtnList.disabled = true;
+                            deleteBtnList.classList.remove("delete");
+                            deleteBtnList.classList.add("disableDelete");
                             sectionList.classList.add("hidden");
 
                             // Affichage de la liste + suppression du formulaire d'édition
@@ -165,7 +178,13 @@ function list() {
                             cancelForm.addEventListener("click", function(){
                                 updateList.remove();
                                 updateBtnList.disabled = false;
+                                updateBtnList.classList.remove("disableUpdate");
+                                updateBtnList.classList.add("edit");
+
                                 deleteBtnList.disabled = false;
+                                deleteBtnList.classList.remove("disableDelete");
+                                deleteBtnList.classList.add("delete");
+
                                 oneList.classList.remove("hidden");
                                 sectionList.classList.remove("hidden");
                                 actionBtnlist.classList.remove("grid_edit_list");

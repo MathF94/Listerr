@@ -13,30 +13,30 @@ const allowedIds = [
     "updatedAt"
 ];
 
-// function configPathFct () {
-//     const urlParams = new URLSearchParams(document.location);
-//     const host = urlParams.get("host");
+function getConfigPath() {
+    const urlParams = new URLSearchParams(document.location);
+    const host = urlParams.get("host");
 
-//     if (host === "localhost") {
-//         const configPath = {
-//             basePath: "http://localhost/listerr/src/app/src",
-//             apiPath: "http://localhost/listerr/src/api"
-//         };
-//     }
-//     else {
-//         const configPath = `https://listerr.tea-tux.fr`;
-//     }
-// }
+    if (host === "localhost") {
+        return {
+            basePath: "http://localhost/listerr/src/app/src",
+            apiPath: "http://localhost/listerr/src/api"
+        };
+    }
+    else {
+        return {
+            basePath: "https://listerr.tea-tux.fr",
+            apiPath: "https://listerr.tea-tux.fr/api"
+        };
+    }
+}
 
 /**
  * Configuration des chemins de base pour l'application et l'API.
  * @property {string} basePath - Le chemin de base de l'application.
  * @property {string} apiPath - Le chemin de base de l'API.
  */
-const configPath = {
-    basePath: "http://localhost/listerr/src/app/src",
-    apiPath: "http://localhost/listerr/src/api"
-};
+const configPath = getConfigPath()
 
 /**
  * Ajout d'astérisque pour les champs obligatoires des formulaires

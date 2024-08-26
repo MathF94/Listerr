@@ -36,7 +36,7 @@ class Router
                 case 'user_register':
                     if ($this->isAllowedMethod('POST')) {
                         $user = new UserController();
-                        echo $user->register($headers['X-CSRFToken']); // create
+                        echo $user->register($csrfToken); // create
                     }
                     break;
 
@@ -66,7 +66,7 @@ class Router
                 case 'user_update':
                     if ($this->isAllowedMethod('POST')) {
                         $user = new UserController();
-                        echo $user->update($headers['Authorization'], $headers['X-CSRFToken']); // update
+                        echo $user->update($headers['Authorization'], $csrfToken); // update
                     }
                     break;
 
@@ -92,7 +92,7 @@ class Router
                 case 'admin_update_user':
                     if ($this->isAllowedMethod('POST')) {
                         $user = new UserController();
-                        echo $user->updateUserById($headers['Authorization'], $headers['X-CSRFToken'], $_POST['id']); // updateUserById
+                        echo $user->updateUserById($headers['Authorization'], $csrfToken, $_POST['id']); // updateUserById
                     }
                     break;
 
@@ -110,7 +110,7 @@ class Router
                 case 'create_list':
                     if ($this->isAllowedMethod('POST')) {
                         $list = new ListController($headers['Authorization']);
-                        echo $list->createList($headers['X-CSRFToken']); // createList
+                        echo $list->createList($csrfToken); // createList
                     }
                     break;
 
@@ -139,7 +139,7 @@ class Router
                 case 'update_list':
                     if ($this->isAllowedMethod('POST')) {
                         $list = new ListController($headers['Authorization']);
-                        echo $list->updateList($_POST['id'], $headers['X-CSRFToken']); // updateList
+                        echo $list->updateList($_POST['id'], $csrfToken); // updateList
                     }
                     break;
 
@@ -157,14 +157,14 @@ class Router
                 case 'create_card':
                     if ($this->isAllowedMethod('POST')) {
                         $card = new CardController($headers['Authorization']);
-                        echo $card->createCard($headers['X-CSRFToken']); // createCard
+                        echo $card->createCard($csrfToken); // createCard
                     }
                     break;
 
                 case 'update_card':
                     if ($this->isAllowedMethod('POST')) {
                         $card = new CardController($headers['Authorization']);
-                        echo $card->updateCard($_POST['id'], $headers['X-CSRFToken']); // updateCard
+                        echo $card->updateCard($_POST['id'], $csrfToken); // updateCard
                     }
                     break;
 
@@ -182,7 +182,7 @@ class Router
                 case 'create_reservation':
                     if ($this->isAllowedMethod('POST')) {
                         $reservation = new ReservationController($headers['Authorization']);
-                        echo $reservation->createReservation($headers['X-CSRFToken']); // Create reservation
+                        echo $reservation->createReservation($csrfToken); // Create reservation
                     }
                     break;
 
@@ -229,10 +229,6 @@ class Router
      */
     private function isAllowedMethod($method): bool
     {
-        // var_dump($method);
-        // var_dump($_SERVER);
-        // var_dump($_SERVER['REQUEST_METHOD']);
-
         if ($method !== $_SERVER['REQUEST_METHOD']) {
             echo json_encode(['statusCode' => 403, 'message' => 'Method not allowed']);
             return false;

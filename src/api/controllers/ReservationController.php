@@ -100,7 +100,12 @@ class ReservationController
                 $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_CREATE_RESERVATION);
 
                 if (empty(count($errors))) {
-                    $params = $_POST;
+                    $params = [
+                        'id' => $_POST['id'],
+                        'guestName' => $_POST['guestName'],
+                        'userId' => $this->user->id
+                    ];
+
                     $model = new Reservations();
                     $model->createReservation($params);
 
