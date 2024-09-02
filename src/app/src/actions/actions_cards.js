@@ -16,7 +16,7 @@ async function fetchCreateCard(form, listId) {
         const url = `${configPath.apiPath}/?route=create_card`;
         return await fetch(url, {
             headers: {
-                "Authorization": localStorage.getItem("token"),
+                "X-Authorization": localStorage.getItem("token"),
                 "X-CSRFToken": localStorage.getItem("csrfToken")
             },
             method: "POST",
@@ -33,7 +33,7 @@ async function fetchReadAllCardsByList(id) {
     try {
         const url = `${configPath.apiPath}/?route=read_one_list_by_id`;
         return await fetch(`${url}&id=${id}`, {
-            headers: {"Authorization": localStorage.getItem("token") || ""},
+            headers: {"X-Authorization": localStorage.getItem("token") || ""},
             method: "GET",
             }).then(response => response.json());
 
@@ -62,7 +62,7 @@ async function fetchUpdateCard(form, id) {
         const url = `${configPath.apiPath}/?route=update_card`;
         return await fetch(url, {
             headers: {
-                "Authorization": localStorage.getItem("token"),
+                "X-Authorization": localStorage.getItem("token"),
                 "X-CSRFToken": localStorage.getItem("csrfToken")
             },
             method: "POST",
@@ -84,7 +84,7 @@ async function fetchUpdatePriority(priority, id) {
         const url = `${configPath.apiPath}/?route=update_priority`;
         return await fetch(url, {
             headers: {
-                "Authorization": localStorage.getItem("token")
+                "X-Authorization": localStorage.getItem("token")
             },
             method: "POST",
             body: formData,
@@ -109,7 +109,7 @@ async function fetchDeleteCard(id){
 
         const url = `${configPath.apiPath}/?route=delete_card`;
         return await fetch(url, {
-            headers: {"Authorization": localStorage.getItem("token")},
+            headers: {"X-Authorization": localStorage.getItem("token")},
             method: "POST",
             body: formData
             }).then(response => response.json());

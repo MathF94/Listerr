@@ -52,7 +52,7 @@ class Router
                     if ($this->isAllowedMethod('POST')) {
                         $user = new UserController();
                         $headers = getallheaders();
-                        echo $user->logout($headers['Authorization']);
+                        echo $user->logout($headers['X-Authorization']);
                     }
                     break;
 
@@ -60,14 +60,14 @@ class Router
                     if ($this->isAllowedMethod('GET')) {
                         $user = new UserController();
                         $id = $_GET['id'] ?? null;
-                        echo $user->readOneUser($headers['Authorization'], $id); // readOne sur profil.html
+                        echo $user->readOneUser($headers['X-Authorization'], $id); // readOne sur profil.html
                     }
                     break;
 
                 case 'user_update':
                     if ($this->isAllowedMethod('POST')) {
                         $user = new UserController();
-                        echo $user->update($headers['Authorization'], $csrfToken); // update
+                        echo $user->update($headers['X-Authorization'], $csrfToken); // update
                     }
                     break;
 
@@ -75,7 +75,7 @@ class Router
                     if ($this->isAllowedMethod('POST')) {
                         $user = new UserController();
                         $headers = getallheaders();
-                        echo $user->delete($headers['Authorization']); // delete
+                        echo $user->delete($headers['X-Authorization']); // delete
                     }
                     break;
 
@@ -93,14 +93,14 @@ class Router
                 case 'admin_update_user':
                     if ($this->isAllowedMethod('POST')) {
                         $user = new UserController();
-                        echo $user->updateUserById($headers['Authorization'], $csrfToken, $_POST['id']); // updateUserById
+                        echo $user->updateUserById($headers['X-Authorization'], $csrfToken, $_POST['id']); // updateUserById
                     }
                     break;
 
                 case 'admin_delete_user':
                     if ($this->isAllowedMethod('POST')) {
                         $user = new UserController();
-                        echo $user->deleteById($headers['Authorization'], $_POST['id']); // delete
+                        echo $user->deleteById($headers['X-Authorization'], $_POST['id']); // delete
                     }
                     break;
 
@@ -110,14 +110,14 @@ class Router
 
                 case 'create_list':
                     if ($this->isAllowedMethod('POST')) {
-                        $list = new ListController($headers['Authorization']);
+                        $list = new ListController($headers['X-Authorization']);
                         echo $list->createList($csrfToken); // createList
                     }
                     break;
 
                 case 'read_one_list_by_id': // Toutes les listes d'un utilisateur sur list.html
                     if ($this->isAllowedMethod('GET')) {
-                        $list = new ListController($headers['Authorization']);
+                        $list = new ListController($headers['X-Authorization']);
                         echo $list->readOneListById(); // readOneById
                     }
                     break;
@@ -125,28 +125,28 @@ class Router
                 case 'read_all_lists_by_user': // Toutes les listes d'un utilisateur sur lists.html
                     if ($this->isAllowedMethod('GET')) {
                         $id = $_GET['id'] ?? null;
-                        $list = new ListController($headers['Authorization']);
+                        $list = new ListController($headers['X-Authorization']);
                         echo $list->readAllListsByUser($id); // readOneByUser
                     }
                     break;
 
                 case 'read_all_lists_all_users': // Toutes les listes de tous les utilisateurs sur home.html
                     if ($this->isAllowedMethod('GET')) {
-                        $list = new ListController($headers['Authorization']);
+                        $list = new ListController($headers['X-Authorization']);
                         echo $list->readAllListsAllUsers(); // readAllAllUser
                     }
                     break;
 
                 case 'update_list':
                     if ($this->isAllowedMethod('POST')) {
-                        $list = new ListController($headers['Authorization']);
+                        $list = new ListController($headers['X-Authorization']);
                         echo $list->updateList($_POST['id'], $csrfToken); // updateList
                     }
                     break;
 
                 case 'delete_list':
                     if ($this->isAllowedMethod('POST')) {
-                        $list = new ListController($headers['Authorization']);
+                        $list = new ListController($headers['X-Authorization']);
                         echo $list->deleteList($_POST['id']); // deleteList
                     }
                     break;
@@ -157,21 +157,21 @@ class Router
 
                 case 'create_card':
                     if ($this->isAllowedMethod('POST')) {
-                        $card = new CardController($headers['Authorization']);
+                        $card = new CardController($headers['X-Authorization']);
                         echo $card->createCard($csrfToken); // createCard
                     }
                     break;
 
                 case 'update_card':
                     if ($this->isAllowedMethod('POST')) {
-                        $card = new CardController($headers['Authorization']);
+                        $card = new CardController($headers['X-Authorization']);
                         echo $card->updateCard($_POST['id'], $csrfToken); // updateCard
                     }
                     break;
 
                 case 'delete_card':
                     if ($this->isAllowedMethod('POST')) {
-                        $card = new CardController($headers['Authorization']);
+                        $card = new CardController($headers['X-Authorization']);
                         echo $card->deleteCard($_POST['id']); // deleteCard
                     }
                     break;
@@ -182,21 +182,21 @@ class Router
 
                 case 'create_reservation':
                     if ($this->isAllowedMethod('POST')) {
-                        $reservation = new ReservationController($headers['Authorization']);
+                        $reservation = new ReservationController($headers['X-Authorization']);
                         echo $reservation->createReservation($csrfToken); // Create reservation
                     }
                     break;
 
                 case 'read_one_reservation_by_id': // Toutes les listes d'un utilisateur sur list.html
                     if ($this->isAllowedMethod('GET')) {
-                        $reservation = new ReservationController($headers['Authorization']);
+                        $reservation = new ReservationController($headers['X-Authorization']);
                         echo $reservation->readOneReservationById(); // readOneById
                     }
                     break;
 
                 case 'cancel_reservation':
                     if ($this->isAllowedMethod('POST')) {
-                        $reservation = new ReservationController($headers['Authorization']);
+                        $reservation = new ReservationController($headers['X-Authorization']);
                         echo $reservation->cancelReservation($_POST['id']); // cancel reservation
                     }
                     break;
@@ -207,7 +207,7 @@ class Router
 
                 case 'update_priority':
                     if ($this->isAllowedMethod('POST')) {
-                        $card = new CardController($headers['Authorization']);
+                        $card = new CardController($headers['X-Authorization']);
                         echo $card->updatePriority($_POST['id'], $_POST['priority']); // update priority stars
                     }
                     break;

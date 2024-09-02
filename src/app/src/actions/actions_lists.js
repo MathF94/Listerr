@@ -13,7 +13,7 @@ async function fetchCreateList(form) {
         const url = `${configPath.apiPath}/?route=create_list`;
         return await fetch(url, {
             headers: {
-                "Authorization": localStorage.getItem("token"),
+                "X-Authorization": localStorage.getItem("token"),
                 "X-CSRFToken": localStorage.getItem("csrfToken")
             },
             method: "POST",
@@ -36,7 +36,7 @@ async function fetchReadOneListById(id) {
     try {
         const url = `${configPath.apiPath}/?route=read_one_list_by_id`;
         return await fetch(`${url}&id=${id}`, {
-            headers: {"Authorization": localStorage.getItem("token") || ""},
+            headers: {"X-Authorization": localStorage.getItem("token") || ""},
             method: "GET",
             }).then(response => response.json());
 
@@ -58,7 +58,7 @@ async function fetchReadAllLists(id) {
             url += `&id=${id}`;
         }
         return await fetch(url, {
-            headers: {"Authorization": localStorage.getItem("token")},
+            headers: {"X-Authorization": localStorage.getItem("token")},
             method: "GET",
             }).then(response => response.json());
 
@@ -83,7 +83,7 @@ async function fetchUpdateList(form, id) {
         const url = `${configPath.apiPath}/?route=update_list`;
         return await fetch(url, {
             headers: {
-                "Authorization": localStorage.getItem("token"),
+                "X-Authorization": localStorage.getItem("token"),
                 "X-CSRFToken": localStorage.getItem("csrfToken")
             },
             method: "POST",
@@ -109,7 +109,7 @@ async function fetchDeleteList(id) {
 
         const url = `${configPath.apiPath}/?route=delete_list`;
         return await fetch(url, {
-            headers: {"Authorization": localStorage.getItem("token")},
+            headers: {"X-Authorization": localStorage.getItem("token")},
             method: "POST",
             body: formData
             }).then(response => response.json());
