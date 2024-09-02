@@ -363,7 +363,7 @@ dialog.errors_fields > h2 {
 }
 
 .grid_action_btn_lists {
-  grid-column: 5/7;
+  grid-column: 6/7;
   grid-row: 2/2;
 }
 
@@ -374,7 +374,7 @@ dialog.errors_fields > h2 {
 }
 
 .grid_create_card {
-  grid-column: 4/6;
+  grid-column: 5/5;
   grid-row: 2/2;
 }
 

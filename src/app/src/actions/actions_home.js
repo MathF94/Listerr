@@ -19,7 +19,7 @@ async function fetchAllListsByUsers() {
 
         return await fetch(url, {
             method: "GET",
-            headers: {"Authorization": localStorage.getItem("token") || ""},
+            headers: {"X-Authorization": localStorage.getItem("token") || ""},
             })
             .then(response => response.json())
 

@@ -19,7 +19,7 @@ async function fetchCreateReservation(form, id) {
         const url = `${configPath.apiPath}/?route=create_reservation`;
         return await fetch(url, {
             headers: {
-                "Authorization": localStorage.getItem("token"),
+                "X-Authorization": localStorage.getItem("token"),
                 "X-CSRFToken": localStorage.getItem("csrfToken")
             },
             method: "POST",
@@ -36,7 +36,7 @@ async function fetchReadAllReservationsByCard(id) {
     try {
         const url = `${configPath.apiPath}/?route=read_one_reservation_by_id`;
         return await fetch(`${url}&id=${id}`, {
-            headers: {"Authorization": localStorage.getItem("token") || ""},
+            headers: {"X-Authorization": localStorage.getItem("token") || ""},
             method: "GET",
             }).then(response => response.json());
 
@@ -52,7 +52,7 @@ async function fetchCancelReservation(id) {
 
         const url = `${configPath.apiPath}/?route=cancel_reservation`;
         return await fetch(url, {
-            headers: {"Authorization": localStorage.getItem("token")},
+            headers: {"X-Authorization": localStorage.getItem("token")},
             method: "POST",
             body: formData
             }).then(response => response.json());

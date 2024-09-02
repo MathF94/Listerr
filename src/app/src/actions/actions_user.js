@@ -61,7 +61,7 @@ async function fetchRead(id) {
         }
         return await fetch(url, {
             method: "GET",
-            headers: {"Authorization": localStorage.getItem("token")},
+            headers: {"X-Authorization": localStorage.getItem("token")},
             }).then(response => response.json());
 
     } catch (error) {
@@ -80,7 +80,7 @@ async function fetchLogout() {
         const url = `${configPath.apiPath}/?route=user_logout`;
         return await fetch(url, {
             method: "POST",
-            headers: {"Authorization": localStorage.getItem("token")},
+            headers: {"X-Authorization": localStorage.getItem("token")},
         }).then(response => response.json());
 
     } catch (error) {
@@ -100,7 +100,7 @@ async function fetchUpdate(form) {
         const url = `${configPath.apiPath}/?route=user_update`;
         return await fetch(url, {
             headers: {
-                "Authorization": localStorage.getItem("token"),
+                "X-Authorization": localStorage.getItem("token"),
                 "X-CSRFToken": localStorage.getItem("csrfToken")
                 },
             method: "POST",
@@ -126,7 +126,7 @@ async function fetchDelete(id) {
         }
         return await fetch(url, {
             method: "POST",
-            headers: {"Authorization": localStorage.getItem("token")},
+            headers: {"X-Authorization": localStorage.getItem("token")},
             }).then(response => response.json());
 
     } catch (error) {
