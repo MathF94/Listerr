@@ -1,6 +1,6 @@
 "use strict";
 
-import { configPath } from "../services/utils.dist.js";
+import { configPath } from "../services/utils.js";
 
 /**
  * Effectue une requête pour créer une nouvelle liste en utilisant un formulaire.

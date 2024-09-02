@@ -1,6 +1,6 @@
 "use strict";
 
-import { configPath } from "./utils.dist.js";
+import { configPath } from "./utils.js";
 
 /**
  * Effectue une requête pour obtenir un jeton CSRF depuis le serveur.
