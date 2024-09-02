@@ -396,7 +396,7 @@ function card(canCreateCard) {
                         const updateCardSection = document.createElement("section");
                         updateCardSection.id = `updateCardSection-${objectCard.id}`;
                         updateCardSection.classList.add("updateCard");
-                        // actionBtnCard.classList.remove("grid_action_btn_lists");
+                        actionBtnCard.classList.remove("grid_action_btn_lists");
                         actionBtnCard.classList.add("grid_edit_card");
                         divStar.classList.add("hidden");
 
