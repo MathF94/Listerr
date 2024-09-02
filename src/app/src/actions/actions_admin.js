@@ -47,7 +47,7 @@ async function fetchDeleteUser(id) {
         const url = `${configPath.apiPath}/?route=admin_delete_user`;
         return await fetch(url, {
             method: "POST",
-            headers: { X-Authorization: localStorage.getItem("token") },
+            headers: { "X-Authorization": localStorage.getItem("token") },
             body: formData,
         }).then((response) => response.json());
     } catch (error) {
