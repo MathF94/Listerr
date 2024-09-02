@@ -375,7 +375,6 @@ dialog {
     grid-column: 1/2;
     grid-row: 1/2;
     cursor: context-menu;
-
 }
 .grid_action_btn_lists {
     grid-column: 5/7;
@@ -548,6 +547,15 @@ dialog {
         }
         &.listBtn {
             border-radius: 0px 10px 10px 0px;
+        }
+        &.reservation {
+            background-color: var(--delete-btn);
+            color: var(--text-light);
+            margin-left: 5px;
+            &:hover {
+                background-color: var(--delete-btn-hover);
+                color: var(--text-light);
+            }
         }
     }
     &.edit {
