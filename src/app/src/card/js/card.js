@@ -284,6 +284,7 @@ function card(canCreateCard) {
                 dltReservationBtn.textContent = ""
                 dltReservationBtn.classList.add("btn");
                 dltReservationBtn.classList.add("delete");
+                dltReservationBtn.classList.add("reservation");
 
                 // Elements DOM pour les boutons d'actions de la carte (Edit/Delete)
                 const actionBtnCard = document.createElement("section");

@@ -552,6 +552,15 @@ dialog.errors_fields > h2 {
 .btn.delete.listBtn {
   border-radius: 0px 10px 10px 0px;
 }
+.btn.delete.reservation {
+  background-color: var(--delete-btn);
+  color: var(--text-light);
+  margin-left: 5px;
+}
+.btn.delete.reservation:hover {
+  background-color: var(--delete-btn-hover);
+  color: var(--text-light);
+}
 .btn.edit {
   background-color: var(--edit-btn);
   color: var(--text-light);
