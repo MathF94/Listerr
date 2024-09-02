@@ -1,6 +1,6 @@
 "use strict";
 
-import { mandatoryStar } from "../../services/utils.dist.js";
+import { mandatoryStar } from "../../services/utils.js";
 
 /**
  * Génère un formulaire de mise à jour pour une liste.

@@ -16,7 +16,7 @@ import {
     notAllowedRedirection,
     scroll,
     validate
-} from "../../services/utils.dist.js";
+} from "../../services/utils.js";
 import { displayFormList } from "./form_list.js";
 
 notAllowedRedirection();
