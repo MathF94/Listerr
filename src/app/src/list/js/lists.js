@@ -16,7 +16,7 @@ import {
     notAllowedRedirection,
     scroll,
     validate
-} from "../../services/utils.js";
+} from "../../services/utils.dist.js";
 import { displayFormList } from "./form_list.js";
 
 notAllowedRedirection();
@@ -174,6 +174,15 @@ function lists() {
                     actionBtnLists.appendChild(deleteBtnLists);
                 }
 
+                // Redirige vers la page de détails de la liste en cliquant sur la liste.
+                sectionList.addEventListener("click", function(){
+                    if (objectList.type === "TodoList" && objectList.user.id !== JSON.parse(localStorage.getItem("user")).id) {
+                        return false;
+                    } else {
+                        redirect(`${configPath.basePath}/list/pages/list.html?id=${objectList.id}`, 0);
+                    }
+                })
+
                 // Gestion de la suppression de liste
                 deleteBtnLists.addEventListener("click", function(e){
                     e.preventDefault();
@@ -194,13 +203,6 @@ function lists() {
                     }
                 })
 
-                // Redirige vers la page de détails de la liste en cliquant sur la liste.
-                articleList.addEventListener("click", function(){
-                    if (objectList.type === "TodoList" && objectList.user.id !== JSON.parse(localStorage.getItem("user")).id) {
-                        return false;
-                    }
-                    redirect(`${configPath.basePath}/list/pages/list.html?id=${objectList.id}`, 0);
-                })
             }
         }
     })

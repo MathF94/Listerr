@@ -1,6 +1,6 @@
 "use strict";
 
-import { mandatoryStar } from "../../services/utils.js";
+import { mandatoryStar } from "../../services/utils.dist.js";
 
 /**
  * Génère un formulaire de mise à jour pour une liste.
@@ -10,7 +10,7 @@ import { mandatoryStar } from "../../services/utils.js";
 function displayFormList(elementDOM) {
     const sectionForm = document.createElement("section");
     sectionForm.id = "listFormSection";
-    
+
     const formList = document.createElement("form");
     formList.id = "formList";
 

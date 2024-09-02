@@ -331,7 +331,7 @@ dialog.errors_fields > h2 {
 }
 
 .grid_typeH3_list {
-  grid-column: 1/5;
+  grid-column: 1/6;
   grid-row: 1/2;
 }
 
@@ -343,7 +343,8 @@ dialog.errors_fields > h2 {
 .grid_text_list {
   grid-column: 1/6;
   grid-row: 2/2;
-  width: 90%;
+  width: 70%;
+  margin-left: 10px;
 }
 
 .grid_text_card {
@@ -373,8 +374,8 @@ dialog.errors_fields > h2 {
 }
 
 .grid_create_card {
-  grid-column: 5/5;
-  grid-row: 1/2;
+  grid-column: 4/6;
+  grid-row: 2/2;
 }
 
 .grid_reservation_btn {
@@ -434,7 +435,7 @@ dialog.errors_fields > h2 {
   text-align: center;
   border-radius: 10px;
   margin: 5px auto;
-  padding: 5px 0;
+  padding: 5px 0 0 10px;
   cursor: pointer;
 }
 .card.wish {
@@ -772,7 +773,7 @@ input[type=submit]:hover {
 }
 @media screen and (min-width: 594px) {
   .list {
-    width: 579px;
+    width: 400px;
   }
 }
 @media screen and (max-width: 619px) {
@@ -789,11 +790,16 @@ input[type=submit]:hover {
     display: none;
   }
   .list {
-    width: 95%;
+    width: 350px;
   }
   .grid_action_btn_lists {
     grid-column: 5/7;
     grid-row: 2/2;
+  }
+}
+@media screen and (min-width: 619px) {
+  .profil_btn {
+    width: 18%;
   }
 }
 @media screen and (min-width: 810px) {

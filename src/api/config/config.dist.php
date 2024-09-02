@@ -2,10 +2,10 @@
 
 // Définition des constantes de la base de données
 if (!defined('DB_HOST')) {
-    define("DB_HOST", 'localhost');
-    define("DB_NAME", 'listerr');
-    define("DB_USER", 'root');
-    define("DB_PASS", '');
+    define("DB_HOST", '{{DB_HOST}}');
+    define("DB_NAME", '{{DB_NAME}}');
+    define("DB_USER", '{{DB_USER}}');
+    define("DB_PASS", '{{DB_PASS}}');
 }
 
 /**

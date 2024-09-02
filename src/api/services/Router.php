@@ -21,6 +21,7 @@ class Router
             $headers = getallheaders();
             $csrfToken = $this->getCsrfToken($headers);
 
+
             switch ($_GET['route']) {
                 case 'csrf':
                     if ($this->isAllowedMethod('POST')) {
@@ -222,8 +223,7 @@ class Router
     }
 
     /**
-     * Vérifie si une méthode HTTP est autorisée pour la demande en cours.
-     *
+     * Vérifie si une méthode HTTP est autorisée pour la demande en cours.     *
      * @param string $method La méthode HTTP à vérifier (GET, POST, etc.).
      * @return bool Vrai si la méthode est autorisée, sinon faux.
      */
