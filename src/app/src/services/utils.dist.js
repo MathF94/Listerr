@@ -13,22 +13,10 @@ const allowedIds = [
     "updatedAt"
 ];
 
-function getConfigPath() {
-    return {
+const configPath = {
         basePath: "{{BASE_PATH}}",
         apiPath: "{{API_PATH}}"
     };
-};
-
-/**
- * Configuration des chemins de base pour l'application et l'API.
- * @property {string} basePath - Le chemin de base de l'application.
- * @property {string} apiPath - Le chemin de base de l'API.
- */
-const configPath = {
-    basePath: "http://localhost/listerr/src/app/src",
-    apiPath: "http://localhost/listerr/src/api"
-};
 
 /**
  * Ajout d'astérisque pour les champs obligatoires des formulaires
