@@ -28,12 +28,11 @@ function displayFormCard(elementDOM) {
     labelDescription.htmlFor  = "descriptionCard";
     labelDescription.innerText = "Description";
 
-    const inputDescription = document.createElement("input");
-    inputDescription.type = "text";
-    inputDescription.name = "descriptionCard";
-    inputDescription.id = "descriptionCard";
-    inputDescription.placeholder = "Votre description";
-    inputDescription.value = "";
+    const textAreaDescription = document.createElement("textarea");
+    textAreaDescription.name = "descriptionCard";
+    textAreaDescription.id = "descriptionCard";
+    textAreaDescription.placeholder = "Votre description";
+    textAreaDescription.value = "";
 
     const labelPriority = document.createElement("label");
     labelPriority.htmlFor  = "priority";
@@ -71,7 +70,7 @@ function displayFormCard(elementDOM) {
     labelTitle.appendChild(mandatoryStar.cloneNode(true));
     createFormCard.appendChild(inputTitle);
     createFormCard.appendChild(labelDescription);
-    createFormCard.appendChild(inputDescription);
+    createFormCard.appendChild(textAreaDescription);
     createFormCard.appendChild(labelPriority);
     labelPriority.appendChild(mandatoryStar.cloneNode(true));
     createFormCard.appendChild(inputPriority);

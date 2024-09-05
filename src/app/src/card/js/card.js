@@ -18,11 +18,12 @@ import { CSRFToken } from "../../services/CSRFToken.js";
 
 import {
     configPath,
-    type,
-    redirect,
     dialog,
-    toolTip,
+    manageBtns,
     scroll,
+    redirect,
+    type,
+    toolTip,
     validate
 } from "../../services/utils.js";
 
@@ -30,12 +31,11 @@ import { displayFormCard } from "./form_card.js";
 
 import { displayFormReservation } from "./form_reservation.js";
 
-
 /**
  * Fonction principale pour gérer les cartes d'une liste.
  */
 
-function card(canCreateCard) {
+function card(canCreateCard, updateBtnList, deleteBtnList) {
     // Obtient l'identifiant de la liste à partir des paramètres de l'URL.
     const urlParams = new URLSearchParams(document.location.search);
     const id = urlParams.get("id");
@@ -99,26 +99,15 @@ function card(canCreateCard) {
             return false;
         }
 
-        // Bouton rendu inutilisable
-        createCardFormBtn.disabled = true;
-        createCardFormBtn.classList.add("disable");
+        // Boutons création de carte, édition et suppression de liste cachés
+        createCardFormBtn.hidden = true;
 
         const actionBtnList = document.querySelector("#actionBtnList");
         actionBtnList.classList.add("hidden");
 
+        // Description de liste cachée
         const sectionTxt = document.querySelector("#sectionTxt");
         sectionTxt.classList.add("hidden");
-
-        if (updateProfilList) {
-            updateProfilList.disabled = true;
-            updateProfilList.classList.remove("edit");
-            updateProfilList.classList.add("disableUpdate");
-        }
-        if (deleteProfilList) {
-            deleteProfilList.disabled = true;
-            deleteProfilList.classList.remove("delete");
-            deleteProfilList.classList.add("disableDelete");
-        }
 
         // Appel du formulaire de création d'une carte
         cardDivForm.style.gridColumn = "1/7";
@@ -133,20 +122,15 @@ function card(canCreateCard) {
 
         // Suppression des éléments du formulaire d'édition au click du bouton "Annuler"
         cardCancelBtn.addEventListener("click", function() {
-            updateProfilList.disabled = false;
-            deleteProfilList.disabled = false;
-            createCardFormBtn.disabled = false;
-            sectionTxt.classList.remove("hidden");
+            // Boutons création de carte, édition et suppression de liste visibles
+            createCardFormBtn.hidden = false;
             actionBtnList.classList.remove("hidden");
 
-            createCardFormBtn.classList.remove("disable");
-            createCardFormBtn.classList.add("way");
-            updateProfilList.classList.remove("disableUpdate");
-            updateProfilList.classList.add("edit");
-            deleteProfilList.classList.remove("disableDelete");
-            deleteProfilList.classList.add("delete");
+            // Description de liste visible
+            sectionTxt.classList.remove("hidden");
+
             cardDivForm.style.gridColumn = "5/5";
-            cardDivForm.style.gridRow = "1/2";
+            cardDivForm.style.gridRow = "2/2";
 
             titleForm.remove();
             cardForm.remove();
@@ -300,7 +284,6 @@ function card(canCreateCard) {
                 updateBtnCard.textContent = "";
                 updateBtnCard.classList.add("btn");
                 updateBtnCard.classList.add("edit");
-                updateBtnCard.classList.add("inCard");
                 updateBtnCard.classList.add("listBtn");
 
                 const deleteBtnCard = document.createElement("button");
@@ -312,10 +295,19 @@ function card(canCreateCard) {
                 deleteBtnCard.textContent = "";
                 deleteBtnCard.classList.add("btn");
                 deleteBtnCard.classList.add("delete");
-                deleteBtnCard.classList.add("inCard");
                 deleteBtnCard.classList.add("listBtn");
 
                 cardSectionContent.appendChild(reservationBtn);
+
+                // Boutons réservation, priorités, édition et suppression des cartes cachés
+                createCardFormBtn.addEventListener("click", function (e) {
+                    e.preventDefault();
+
+                    manageBtns(createCardFormBtn, cardCancelBtn,'.edit', 'disableUpdate', 'edit');
+                    manageBtns(createCardFormBtn, cardCancelBtn,'.delete', 'disableDelete', 'delete');
+                    manageBtns(createCardFormBtn, cardCancelBtn,'.stars', 'disable_stars', 'stars');
+                    manageBtns(createCardFormBtn, cardCancelBtn,'.reservation', 'cancel', 'reservation');
+                })
 
                 // Affichage des données de la carte
                 for (const key in objectCard) {
@@ -330,50 +322,54 @@ function card(canCreateCard) {
                         continue;
                     }
 
-                    // Si objectCard[key] est une URL, modification de la balise "p" pour une balise "a".
+                    // Si objectCard[key] contient une URL, la partie du texte où une URL est repérée .
                     //                        une chaîne de caractère normale, la balise de base est "p".
-                    if (objectCard[key].search(/^http[s]?:\/\//) === 0) {
-                        text.remove();
-                        const link = document.createElement("a");
-                        link.classList.add("grid_text_card");
-                        link.classList.add("cardLink");
-                        link.innerText = "lien vers la description";
-                        link.setAttribute("href", `${objectCard[key]}`);
-                        link.title = objectCard[key];
-                        cardSectionContent.appendChild(link);
-                    } else {
-                        text.innerText = objectCard[key];
-                        cardSectionContent.appendChild(text);
+                    let textUrl = objectCard[key]
+
+                    function urlify1(textUrl) {
+                        const urlRegex = /(https?:\/\/[^\s]+)/g;
+                        return textUrl.replace(urlRegex, function(url) {
+                            return'<a href="' + url +'">' + url + '</a>'
+                        })
                     }
+
+                    let html = urlify1(textUrl)
+                    text.innerHTML = html;
 
                     oneList.after(cardArticleContent);
                     cardArticleContent.appendChild(cardSectionContent);
+                    cardSectionContent.appendChild(text);
                     cardSectionContent.appendChild(reservationTxt);
-
                     cardSectionContent.appendChild(divStar);
                     actionBtnCard.appendChild(updateBtnCard);
                     actionBtnCard.appendChild(deleteBtnCard);
                 }
 
-                // Rend les boutons d'actions visibles pour l'utilisateur courant uniquement
+                // Rend les boutons d'actions des cartes inutilisables pour l'utilisateur courant uniquement
                 if (canCreateCard) {
                     cardSectionContent.appendChild(actionBtnCard);
 
-                    // Désactive le bouton de création de cartes si update de liste en cours
+                    // Désactive le bouton de création, édition et suppression de cartes si update de liste en cours
                     updateProfilList?.addEventListener("click", function(e) {
                         e.preventDefault();
-                        if (updateProfilList.disabled === true) {
-                            createCardFormBtn.disabled = true;
-                            createCardFormBtn.classList.remove("way");
-                            createCardFormBtn.classList.add("disable");
+                        if (updateProfilList.hidden === true) {
+                            updateBtnCard.classList.add("disableUpdate");
+                            updateBtnCard.classList.remove("edit")
+                            updateBtnCard.disabled = true;
+                            deleteBtnCard.classList.add("disableDelete");
+                            deleteBtnCard.classList.remove("delete")
+                            deleteBtnCard.disabled = true;
 
                             // Réactive le bouton de création de cartes si annulation update de liste
                             cancelForm.addEventListener("click", function(e) {
                                 e.preventDefault();
-                                if (createCardFormBtn.disabled === true) {
-                                    createCardFormBtn.disabled = false
-                                    createCardFormBtn.classList.remove("disable");
-                                    createCardFormBtn.classList.add("way");
+                                if (createCardFormBtn.hidden === false) {
+                                    updateBtnCard.classList.remove("disableUpdate");
+                                    updateBtnCard.classList.add("edit");
+                                    updateBtnCard.disabled = false;
+                                    deleteBtnCard.classList.remove("disableDelete");
+                                    deleteBtnCard.classList.add("delete");
+                                    deleteBtnCard.disabled = false;
                                 }
                             })
                         }
@@ -394,49 +390,89 @@ function card(canCreateCard) {
 
                     } else {
                         const updateCardSection = document.createElement("section");
+                        const cardFormBtn = document.querySelector("#cardFormBtn");
+                        titleForm.innerText = "Formulaire d'édition d'une carte";
+                        titleForm.classList.add("width");
+                        reservationBtn.style.width = "105px";
+
+                        // Gestion des boutons de la carte courante à modifier
+                        // Bouton de création de cartes inutilisable
+                        cardFormBtn.classList.add("disable");
+                        cardFormBtn.disabled = true;
+
+                        // Boutons édition et suppression des listes inutilisables
+                        updateBtnList.classList.add("disableUpdate");
+                        updateBtnList.classList.remove("edit");
+                        updateBtnList.disabled = true;
+                        deleteBtnList.classList.add("disableDelete");
+                        deleteBtnList.classList.remove("delete");
+                        deleteBtnList.disabled = true;
+
+                        // Boutons édition et suppression des cartes cachés
+                        updateBtnCard.hidden = true;
+                        deleteBtnCard.hidden = true;
+
+                        // Réservation cachée
+                        reservationBtn.hidden = true;
+
+                        // Etoiles de priorité cachées
+                        divStar.classList.add("hidden");
+
                         updateCardSection.id = `updateCardSection-${objectCard.id}`;
                         updateCardSection.classList.add("updateCard");
                         actionBtnCard.classList.remove("grid_action_btn_lists");
                         actionBtnCard.classList.add("grid_edit_card");
-                        divStar.classList.add("hidden");
-
                         deleteBtnCard.after(updateCardSection);
                         updateCardSection.appendChild(titleForm)
-
-                        titleForm.innerText = "Formulaire d'édition d'une carte";
-                        titleForm.classList.add("width");
 
                         // Affichage du formulaire d'édition + dissimulation de la carte
                         displayFormCard(updateCardSection);
 
                         cardSectionContent.classList.add("hidden");
 
-                        updateBtnCard.disabled = true;
-                        updateBtnCard.classList.remove("edit");
-                        updateBtnCard.classList.add("disableUpdate");
-                        updateBtnCard.classList.add("inCard");
-
-                        deleteBtnCard.disabled = true;
-                        deleteBtnCard.classList.remove("delete");
-                        deleteBtnCard.classList.add("disableDelete");
-                        deleteBtnCard.classList.add("inCard");
-
                         // Affichage de la carte + suppression du formulaire d'édition
                         const updateFormCard  = document.querySelector("#formCard");
                         const cardCancelBtn = document.querySelector("#cardCancelBtn");
+
+                        // Boutons réservation, priorités, édition et suppression des autres cartes cachés
+                        manageBtns(updateBtnCard, cardCancelBtn,'.edit', 'disableUpdate', 'edit');
+                        manageBtns(updateBtnCard, cardCancelBtn,'.delete', 'disableDelete', 'delete');
+                        manageBtns(updateBtnCard, cardCancelBtn,'.stars', 'disable_stars', 'stars');
+                        manageBtns(updateBtnCard, cardCancelBtn,'.reservation', 'cancel', 'reservation');
+
                         cardCancelBtn.addEventListener("click", function() {
-                            updateBtnCard.disabled = false;
-                            updateBtnCard.classList.add("edit");
-                            updateBtnCard.classList.remove("disableUpdate");
-                            actionBtnCard.classList.remove("grid_edit_card");
-                            actionBtnCard.classList.add("grid_action_btn_lists");
+                            reservationBtn.removeAttribute("style");
+
+                            // Gestion des boutons de la carte courante à modifier
+                            // Bouton de création de cartes utilisable
+                            cardFormBtn.classList.remove("disable");
+                            cardFormBtn.disabled = false;
+
+                            // Boutons édition et suppression des listes utilisables
+                            updateBtnList.classList.remove("disableUpdate");
+                            updateBtnList.classList.add("edit");
+                            updateBtnList.disabled = false;
+
+                            deleteBtnList.classList.remove("disableDelete");
+                            deleteBtnList.classList.add("delete");
+                            deleteBtnList.disabled = false;
+
+                            // Boutons édition et suppression des cartes réapparus
+                            updateBtnCard.hidden = false;
+                            deleteBtnCard.hidden = false;
+
+                            // Réservation cachée
+                            reservationBtn.hidden = false;
+
+                            // Etoiles de priorité visibles
                             divStar.classList.remove("hidden");
 
-                            deleteBtnCard.disabled = false;
-                            deleteBtnCard.classList.add("delete");
-                            deleteBtnCard.classList.remove("disableDelete");
-                            updateFormCard.remove();
+                            actionBtnCard.classList.remove("grid_edit_card");
+                            actionBtnCard.classList.add("grid_action_btn_lists");
+
+                            // Retrait titre et formulaire édition de cartes
                             titleForm.remove();
+                            updateFormCard.remove();
                             cardSectionContent.classList.remove("hidden");
                         })
 
@@ -560,15 +596,15 @@ function card(canCreateCard) {
                         divStar.appendChild(priority);
 
                         if (response.status === 'in pending reservation') {
+                            reservationTxt.remove();
                             // Si l'utilisateur courant n'est pas le proprio de la carte, alors il ne peut pas modifier la priorité
                             if(!canCreateCard) {
-                                reservationTxt.remove();
                                 priority.classList.remove("stars");
                                 priority.classList.add("disable_stars");
                             }
 
                             // Gestion de la modification de la priorité
-                            priority.addEventListener("click", function (e) {
+                            priority.addEventListener("click touchstart", function (e) {
                                 e.preventDefault();
 
                                 fetchUpdatePriority(e.target.id, objectCard.id)
@@ -596,14 +632,12 @@ function card(canCreateCard) {
 
                         if (response.status === "readOneReservation") {
                             const dataReservation = response.dataReservation;
-
                             priority.classList.remove("stars");
                             priority.classList.add("disable_stars");
 
                             updateBtnCard.disabled = true;
                             updateBtnCard.classList.remove("edit");
                             updateBtnCard.classList.add("disableUpdate");
-                            updateBtnCard.classList.add("inCard");
 
                             // CSS pour modifier le bouton de réservation et texte
                             // Si une réservation est faite, le bouton disparaît
@@ -620,7 +654,7 @@ function card(canCreateCard) {
                             }
 
                             if (localStorage.getItem("typeList") === "TodoList") {
-                                reservationLabel = `Réalisé par ${dataReservation.login}`;
+                                reservationLabel = `En cours par ${dataReservation.login}`;
                             }
 
                             reservationTxt.innerText = reservationLabel;

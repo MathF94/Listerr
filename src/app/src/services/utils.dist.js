@@ -73,6 +73,32 @@ function dialog({title, content}) {
 }
 
 /**
+ * Permet de rendre inutilisable les boutons lors de la création d'une carte
+ * @param {string} anchor - bouton pour la création de carte
+ * @param {string} cancelAnchor - bouton pour l'annulation de carte
+ * @param {string} selector - La classe pour sélectionner les boutons
+ * @param {string} disableClass - la classe à ajouter pour rendre inutilisable le bouton visé
+ * @param {string} firstClass - la classe initiale du bouton
+ */
+function manageBtns (anchor, cancelAnchor, selector, disableClass, firstClass) {
+    const buttons = document.querySelectorAll(selector);
+
+    buttons.forEach(button => {
+        if (anchor.hidden === true) {
+            button.classList.add(disableClass);
+            button.classList.remove(firstClass)
+            button.disabled = true;
+        }
+
+        cancelAnchor.addEventListener("click", function() {
+            button.classList.remove(disableClass);
+            button.classList.add(firstClass)
+            button.disabled = false;
+        })
+    });
+}
+
+/**
  * Redirige l'utilisateur invité vers la page d'accueil, si la liste n'est pas une wishlist.
  * @param {string} type - Le type de liste
  */
@@ -189,6 +215,7 @@ export {
     mandatoryStar,
     type,
     dialog,
+    manageBtns,
     notAllowedRedirection,
     redirect,
     reveal,

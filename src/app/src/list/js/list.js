@@ -71,7 +71,7 @@ function list() {
                 oneList.classList.add("grid");
 
                 const typeList = document.createElement("h3");
-                typeList.classList.add("grid_typeH3_list")
+                typeList.classList.add("grid_typeH3")
                 typeList.innerText = `${data.type} - ${data.title}`;
 
                 if(userId !== data.userId) {
@@ -138,7 +138,6 @@ function list() {
 
                 // Rend visible les boutons "Supprimer" et "Modifier" pour l'utilisateur en cours uniquement
                 if (userId === data.user.id) {
-
                     oneList.appendChild(actionBtnlist);
 
                     // Gestion de la mise à jour de la liste
@@ -156,38 +155,36 @@ function list() {
 
                             const updateList = document.createElement("section");
                             updateList.id = "updateList";
-
                             deleteBtnList.after(updateList);
 
                             // Affichage du formulaire d'édition + dissimulation de la liste
                             displayFormList(updateList);
-                            titleFormList.innerText = "Formulaire d'édition de la liste";
-                            oneList.classList.add("hidden");
-                            updateBtnList.disabled = true;
-                            updateBtnList.classList.remove("edit");
-                            updateBtnList.classList.add("disableUpdate");
 
-                            deleteBtnList.disabled = true;
-                            deleteBtnList.classList.remove("delete");
-                            deleteBtnList.classList.add("disableDelete");
+                            titleFormList.innerText = "Formulaire d'édition de la liste";
+
+                            // Boutons création de carte, édition et suppression de liste cachés
+                            cardSectionForm.classList.add("hidden");
+                            updateBtnList.hidden = true;
+                            deleteBtnList.hidden = true;
+
+                            // Description de liste cachée
                             sectionList.classList.add("hidden");
 
                             // Affichage de la liste + suppression du formulaire d'édition
                             const updateFormList  = document.querySelector("#formList");
-                            cancelForm.addEventListener("click", function(){
-                                updateList.remove();
-                                updateBtnList.disabled = false;
-                                updateBtnList.classList.remove("disableUpdate");
-                                updateBtnList.classList.add("edit");
-
-                                deleteBtnList.disabled = false;
-                                deleteBtnList.classList.remove("disableDelete");
-                                deleteBtnList.classList.add("delete");
-
-                                oneList.classList.remove("hidden");
-                                sectionList.classList.remove("hidden");
+                            cancelForm.addEventListener("click", function() {
+                                // Fermeture du formulaire d'édition + affichage de la liste
                                 actionBtnlist.classList.remove("grid_edit_list");
                                 actionBtnlist.classList.add("grid_action_btn_lists");
+                                updateList.remove();
+
+                                // Boutons création de carte, édition et suppression de liste visibles
+                                cardSectionForm.classList.remove("hidden");
+                                updateBtnList.hidden = false;
+                                deleteBtnList.hidden = false;
+
+                                // Description de liste visible
+                                sectionList.classList.remove("hidden");
                             })
 
                             // Insertion des éléments de la liste dans les inputs
@@ -271,7 +268,7 @@ function list() {
                     });
                 };
 
-                card(userId === data?.user.id);
+                card(userId === data?.user.id, updateBtnList, deleteBtnList);
             };
         })
         // Permet de récupérer les erreurs du .then
