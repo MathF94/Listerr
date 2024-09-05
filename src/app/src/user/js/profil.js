@@ -220,6 +220,7 @@ function read() {
                             for (const index in data) {
                                 const objectList = data[index];
                                 const articleList = document.createElement("article");
+                                console.log(articleList);
                                 articleList.id = `profilList-${objectList.id}`;
                                 articleList.classList.add("list");
                                 articleList.classList.add("grid");
