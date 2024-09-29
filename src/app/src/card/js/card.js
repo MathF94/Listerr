@@ -610,13 +610,13 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
                             })
 
                             // Gestion de la modification de la priorité sur smartphone
-                            // priority.addEventListener("touchstart", function (e) {
-                            //     e.preventDefault();
-                            //     updatePriority(e)
-                            // })
+                            priority.addEventListener("touchstart", function (e) {
+                                e.preventDefault();
+                                updatePriority(e)
+                            })
 
                             function updatePriority(e) {
-                                fetchUpdatePriority(e.target.id, objectCard.id)
+                                fetchUpdatePriority(e.target.dataset.star, objectCard.id)
                                 .then(response => {
                                     if (response.status === "updatePriority") {
                                         if (localStorage.getItem("typeList") === "WishList"){
