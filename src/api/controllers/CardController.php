@@ -205,7 +205,7 @@ class CardController
             if (!empty($this->user->id)) {
                 $model = new Cards();
                 $card = $model->getOneCardById($id);
-
+                
                 if (empty($card)) {
                     return json_encode([
                         "status" => "fail",
