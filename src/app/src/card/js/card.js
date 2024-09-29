@@ -603,11 +603,20 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
                                 priority.classList.add("disable_stars");
                             }
 
-                            // Gestion de la modification de la priorité
-                            priority.addEventListener("click touchstart", function (e) {
+                            // Gestion de la modification de la priorité sur ordinateur
+                            priority.addEventListener("click", function (e) {
                                 e.preventDefault();
+                                updatePriority(e)
+                            })
 
-                                fetchUpdatePriority(e.target.id, objectCard.id)
+                            // Gestion de la modification de la priorité sur smartphone
+                            priority.addEventListener("touchstart", function (e) {
+                                e.preventDefault();
+                                updatePriority(e)
+                            })
+
+                            function updatePriority(element) {
+                                fetchUpdatePriority(element.target.id, objectCard.id)
                                 .then(response => {
                                     if (response.status === "updatePriority") {
                                         if (localStorage.getItem("typeList") === "WishList"){
@@ -627,7 +636,7 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
                                         redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
                                     }
                                 })
-                            })
+                            }
                         }
 
                         if (response.status === "readOneReservation") {
