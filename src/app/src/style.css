@@ -787,16 +787,6 @@ input[type=submit]:hover {
 /* *****************************************************************
     MEDIA
 ***************************************************************** */
-@media screen and (min-width: 500px) {
-  header {
-    background-size: 433px;
-  }
-}
-@media screen and (min-width: 594px) {
-  .list {
-    width: 400px;
-  }
-}
 @media screen and (max-width: 619px) {
   body {
     min-height: 120vh;
