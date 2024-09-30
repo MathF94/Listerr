@@ -314,19 +314,19 @@ dialog {
         padding: 5px 0;
         position: absolute;
         z-index: 1;
-        bottom: 4%;
-        left: 25px;
+        bottom: 120%;
+        left: -67px;
         opacity: 0;
         transition: opacity 0.3s;
         &::after{
             content: "";
             position: absolute;
-            top: 71%;
-            right: 115px;
+            top: 99%;
+            right: 33px;
             margin-left: -5px;
             border-width: 5px;
             border-style: solid;
-            border-color: transparent #555 transparent transparent;
+            border-color: #555 transparent transparent transparent;
         }
     }
 }
@@ -539,6 +539,7 @@ dialog {
         color: var(--text-light);
         &::before {
             content: "🗑";
+            margin: 0px 2px;
         }
         &:hover {
             background-color: var(--delete-btn-hover);
@@ -615,6 +616,7 @@ dialog {
         background-color: var(--disable-btn);
         &::before {
             content: "🗑";
+            margin: 0px 2px;
         }
         &:hover {
             background-color: var(--disable-btn-hover);
