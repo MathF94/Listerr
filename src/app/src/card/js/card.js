@@ -49,12 +49,12 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
 
     // Affichage du contenu du bouton en fonction du type de liste
     let cardFormTitle = "Nouveau souhait";
-    let reservationBtnTitle = "Je réserve ce souhait";
-    let reservationBtnTxtContent = "Je réserve ce souhait";
+    let reservationBtnTitle = "Je réserve";
+    let reservationBtnTxtContent = "Je réserve";
     if (localStorage.getItem("typeList") === "TodoList") {
         cardFormTitle = "Nouvelle tâche";
-        reservationBtnTitle = "Je réalise la tâche";
-        reservationBtnTxtContent = "Je réalise la tâche";
+        reservationBtnTitle = "Je gère";
+        reservationBtnTxtContent = "Je gère";
     }
 
     // Afficher le title des boutons édition et suppression

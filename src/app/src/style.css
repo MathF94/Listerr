@@ -292,20 +292,20 @@ dialog.errors_fields > h2 {
   padding: 5px 0;
   position: absolute;
   z-index: 1;
-  bottom: 4%;
-  left: 25px;
+  bottom: 120%;
+  left: -67px;
   opacity: 0;
   transition: opacity 0.3s;
 }
 .tooltip .tooltiptext::after {
   content: "";
   position: absolute;
-  top: 71%;
-  right: 115px;
+  top: 99%;
+  right: 33px;
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: transparent #555 transparent transparent;
+  border-color: #555 transparent transparent transparent;
 }
 
 /* *****************************************************************
@@ -542,6 +542,7 @@ dialog.errors_fields > h2 {
 }
 .btn.delete::before {
   content: "🗑";
+  margin: 0px 2px;
 }
 .btn.delete:hover {
   background-color: var(--delete-btn-hover);
@@ -618,6 +619,7 @@ dialog.errors_fields > h2 {
 }
 .btn.disableDelete::before {
   content: "🗑";
+  margin: 0px 2px;
 }
 .btn.disableDelete:hover {
   background-color: var(--disable-btn-hover);
