@@ -814,6 +814,7 @@ input[type=submit]:hover {
   .grid_action_btn_lists {
     grid-column: 6/7;
     grid-row: 2/2;
+    width: 90px;
   }
 }
 @media screen and (min-width: 619px) {

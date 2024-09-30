@@ -770,18 +770,6 @@ input[type="submit"] {
 /* *****************************************************************
     MEDIA
 ***************************************************************** */
-@media screen and (min-width: 500px) {
-    // header {
-    //     background-size: 433px;
-    // }
-}
-
-@media screen and (min-width: 594px) {
-    // .list {
-    //     width: 400px;
-    // }
-}
-
 @media screen and (max-width: 619px) {
     body {
         min-height: 120vh;
@@ -809,6 +797,7 @@ input[type="submit"] {
     .grid_action_btn_lists {
         grid-column: 6/7;
         grid-row: 2/2;
+        width: 90px;
     }
 }
 
@@ -829,11 +818,6 @@ input[type="submit"] {
     .btn {
         font-size: 16px;
     }
-    // .profil {
-    //     &_role {
-    //         display: none;
-    //     }
-    // }
 }
 
 @media screen and (min-width: 1025px) {
