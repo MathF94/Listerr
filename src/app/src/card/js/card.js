@@ -322,18 +322,16 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
                         continue;
                     }
 
-                    // Si objectCard[key] contient une URL, la partie du texte où une URL est repérée .
-                    //                        une chaîne de caractère normale, la balise de base est "p".
                     let textUrl = objectCard[key]
 
                     function urlify1(textUrl) {
                         const urlRegex = /(https?:\/\/[^\s]+)/g;
                         return textUrl.replace(urlRegex, function(url) {
-                            return'<a href="' + url +'">' + url + '</a>'
+                            return '<a title= ' + url + ' href="' + url +'">' + "lien vers la description" + '</a>'
                         })
                     }
-
                     let html = urlify1(textUrl)
+
                     text.innerHTML = html;
 
                     oneList.after(cardArticleContent);
