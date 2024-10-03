@@ -162,6 +162,9 @@ function list() {
 
                             titleFormList.innerText = "Formulaire d'édition de la liste";
 
+                            // Titre caché
+                            typeList.classList.add("hidden");
+
                             // Boutons création de carte, édition et suppression de liste cachés
                             cardSectionForm.classList.add("hidden");
                             updateBtnList.hidden = true;
@@ -177,6 +180,9 @@ function list() {
                                 actionBtnlist.classList.remove("grid_edit_list");
                                 actionBtnlist.classList.add("grid_action_btn_lists");
                                 updateList.remove();
+
+                                // Titre visible
+                                typeList.classList.remove("hidden");
 
                                 // Boutons création de carte, édition et suppression de liste visibles
                                 cardSectionForm.classList.remove("hidden");
