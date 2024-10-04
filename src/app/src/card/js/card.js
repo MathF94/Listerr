@@ -98,6 +98,8 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
         if (createCardFormBtn.value !== "cardFormBtn") {
             return false;
         }
+        // Titre caché
+        typeList.classList.add("hidden");
 
         // Boutons création de carte, édition et suppression de liste cachés
         createCardFormBtn.hidden = true;
@@ -111,7 +113,8 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
 
         // Appel du formulaire de création d'une carte
         cardDivForm.style.gridColumn = "1/7";
-        cardDivForm.style.gridRow = "2/2";
+        cardDivForm.style.gridRow = "1/3";
+
         cardDivForm.appendChild(titleForm);
 
         displayFormCard(cardDivForm);
@@ -122,6 +125,9 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
 
         // Suppression des éléments du formulaire d'édition au click du bouton "Annuler"
         cardCancelBtn.addEventListener("click", function() {
+            // Titre visible
+            typeList.classList.remove("hidden");
+
             // Boutons création de carte, édition et suppression de liste visibles
             createCardFormBtn.hidden = false;
             actionBtnList.classList.remove("hidden");
@@ -230,6 +236,7 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
                 }
 
                 const titleH3 = document.createElement("h3");
+                titleH3.id = "titleH3";
                 titleH3.classList.add("grid_titleH3_card")
 
                 const text = document.createElement("p");

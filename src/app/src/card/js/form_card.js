@@ -42,7 +42,7 @@ function displayFormCard(elementDOM) {
     inputPriority.type = "number";
     inputPriority.name = "priority";
     inputPriority.id = "priority";
-    inputPriority.value = "1";
+    inputPriority.value = "3";
     inputPriority.placeholder = "Niveau de priorité de 1 à 5";
     inputPriority.min = 1;
     inputPriority.max = 5;

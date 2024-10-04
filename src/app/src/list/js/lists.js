@@ -127,6 +127,7 @@ function lists() {
                 sectionList.id ="sectionList";
 
                 const typeH3 = document.createElement("h3");
+                typeH3.id = "typeList";
                 typeH3.classList.add("grid_typeH3");
 
                 const titleH4 = document.createElement("h4");
