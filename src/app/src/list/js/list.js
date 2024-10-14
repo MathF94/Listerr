@@ -30,9 +30,9 @@ function list() {
 
         fetchReadOneListById(id)
         .then(response => {
-            const returnHome = document.querySelector("#returnBtn");
-            returnHome.title = "Revenir à la page d'accueil";
-            returnHome.href = `${configPath.basePath}/home/pages/home.html`;
+            // const returnHome = document.querySelector("#returnBtn");
+            // returnHome.title = "Revenir à la page d'accueil";
+            // returnHome.href = `${configPath.basePath}/home/pages/home.html`;
 
             const returnLists = document.querySelector("#cancelBtn");
             returnLists.title = "Revenir aux listes";
