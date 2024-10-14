@@ -73,6 +73,7 @@ function readAllLists() {
 
             for (const index in data) {
                 const object = data[index];
+
                 const articleList = document.createElement("article");
                 articleList.id = `homeList-${object.id}`;
                 articleList.classList.add("list");
@@ -101,7 +102,7 @@ function readAllLists() {
                             titleH4.innerText = `${object.title}`;
                             sectionList.appendChild(titleH4);
                         } else if (key === "type") {
-                            typeH3.innerText = `${object.type}`;
+                            typeH3.innerText = `${object.type}  de ${object.user.login}`;
                         }
 
                         if (key === "updatedAt") {

@@ -57,7 +57,7 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
         reservationBtnTxtContent = "Je gère";
     }
 
-    // Afficher le title des boutons édition et suppression
+    // Afficher le title des boutons édition e suppression
     const updateProfilList = document.querySelector(`#updateProfilList-${id}`);
     const deleteProfilList = document.querySelector(`#deleteProfilList-${id}`);
     if (updateProfilList) {
@@ -560,6 +560,8 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
                             .then(response => {
                                 localStorage.removeItem("csrfToken");
 
+                                // rendre tous les boutons actions inutilisables et/ou invisible
+
                                 if (response.status === "createReservation") {
                                     dialog({title: "Création de la réservation", content: "Votre réservation a bien été prise en compte."});
                                     const dialogMsg = document.querySelector("dialog");
@@ -658,12 +660,12 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
                             reservationBtn.remove();
 
                             // Si réservation est faite par qqun d'autre que l'utilisateur courant sur la carte de l'utilisateur courant
-                            // on dissimule le/la réservant(e) par le message "Déjà réservé"
+                            // on dissimule le/la réservant(e) par le message "Réservé"
 
                             let reservationLabel = `Réservé par ${dataReservation.login}`;
 
                             if (userId !== dataReservation.userId && userId === parseInt(localStorage.userList)) {
-                                reservationLabel = "Déjà réservé !"
+                                reservationLabel = "Réservé"
                                 dltReservationBtn.classList.add("hidden");
                             }
 
