@@ -50,6 +50,29 @@ class Session
     }
 
     /**
+     * Chiffre les données de session utilisateur.
+     *
+     * @param int    $listId       L'ID de la liste contenant la carte réservée.
+     * @param int    $cardId       L'ID de la carte réservée.
+     * @param string $login    Le nom d'utilisateur.
+     * @param string $mail     Le mail de l'utilisateur.
+     * @return string Les données de session chiffrées.
+     */
+    public function encryptGuestToken(string $name, string $mail, int $listId, int $cardId): string
+    {
+        date_default_timezone_set('Europe/Paris');
+        $tokenGuest = [
+            'name' => $name,
+            'email' => $mail,
+            'list_id' => $listId,
+            'card_id' => $cardId,
+            'created_at' => (new DateTime())->format('Y-m-d H:i:s'),
+        ];
+
+        return $this->encryption->encrypt(json_encode($tokenGuest));
+    }
+
+    /**
      * Déchiffre les données de session utilisateur.
      *
      * @param string $encryptedData Les données de session chiffrées.

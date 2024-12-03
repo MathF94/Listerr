@@ -35,7 +35,7 @@ function list() {
             // returnHome.href = `${configPath.basePath}/home/pages/home.html`;
 
             const returnLists = document.querySelector("#cancelBtn");
-            returnLists.title = "Revenir aux listes";
+            returnLists.title = "Revenir à mes listes";
             returnLists.href = `${configPath.basePath}/list/pages/lists.html`;
 
             if(response.message === "ID not numeric" || id === "") {

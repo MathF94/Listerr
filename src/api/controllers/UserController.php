@@ -80,7 +80,6 @@ class UserController
     {
         try {
             $validToken = $this->csrfToken->isValidToken($csrfToken, "registerForm");
-
             if (!$validToken) {
                 return json_encode([
                     "status" => "fail",
@@ -203,8 +202,9 @@ class UserController
                 $session = new Session();
                 $decrypt = $session->decrypt($tokenUser);
                 $login = $decrypt["login"];
-                $modelUser = new Users();
 
+                $modelUser = new Users();
+                
                 // $userId correspond à l'ID d'un autre utilisateur que l'admin, récupéré via l'URL
                 if (empty($userId)) {
                     // fonction readOne pour la lecture du profil de l'utilisateur courant

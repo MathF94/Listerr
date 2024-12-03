@@ -152,9 +152,9 @@ function lists() {
                     const value = objectList[key];
 
                     if (key === "title") {
-                        titleH4.innerText = `${objectList.title} ${objectList.description}`;
+                        titleH4.innerText = `${objectList.description}`;
                     } else if (key === "type") {
-                        typeH3.innerText = `${objectList.type}`;
+                        typeH3.innerText = `${objectList.type} - ${objectList.title} `;
                     }
 
                     // Affichage du tooltip

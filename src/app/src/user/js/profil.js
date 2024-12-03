@@ -203,11 +203,11 @@ function read() {
                         }
                     });
 
-                    // Permet de revenir aux listes d'utilisateurs
-                    returnBtn.addEventListener("click", function (e) {
-                        e.preventDefault();
-                        redirect(`${configPath.basePath}/admin/pages/profils.html`, 0);
-                    });
+                    // // Permet de revenir aux listes d'utilisateurs
+                    // returnBtn.addEventListener("click", function (e) {
+                    //     e.preventDefault();
+                    //     redirect(`${configPath.basePath}/admin/pages/profils.html`, 0);
+                    // });
                 }
 
                 // Affiche les listes de l'utilisateur vu par l'Admin
@@ -220,7 +220,6 @@ function read() {
                             for (const index in data) {
                                 const objectList = data[index];
                                 const articleList = document.createElement("article");
-                                console.log(articleList);
                                 articleList.id = `profilList-${objectList.id}`;
                                 articleList.classList.add("list");
                                 articleList.classList.add("grid");

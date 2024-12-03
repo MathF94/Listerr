@@ -84,7 +84,7 @@ class Cards extends Database
                             `c`.`created_at`,
                             `c`.`updated_at`
                     FROM `card` `c`
-                    INNER JOIN `list` `l`  ON `c`.`list_id` = `l`.`id`
+                    INNER JOIN `list` `l` ON `c`.`list_id` = `l`.`id`
                     WHERE `l`.`id` = :id
                     ORDER BY `c`.`priority` DESC";
 

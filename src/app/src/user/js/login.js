@@ -41,12 +41,14 @@ function login() {
         .then(response => {
             localStorage.removeItem("csrfToken");
             if (response.status === "loginUser") {
+
                 // Ces deux informations permettront de vérifier si la session utilisateur est active
                 //                                   de vérifier si la déconnexion est réalisable (Cf. logout.js).
                 localStorage.setItem("token", response.token);
                 localStorage.setItem("user", JSON.stringify({
                     id: response.user_id,
                     login: response.user_login,
+                    email: response.user_email,
                     role: response.user_role,
                     is_admin: response.user_isAdmin
                 }));

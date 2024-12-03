@@ -1,11 +1,37 @@
 <?php
 
+$allowedDomains = [
+    'https://listerr.tea-tux.fr',
+    'https://listerr.lan',
+    'https://listerr.local',
+    'http://localhost',
+    'http://127.0.0.1'
+];
+
 // Définition des constantes de la base de données
 if (!defined('DB_HOST')) {
     define("DB_HOST", '{{DB_HOST}}');
     define("DB_NAME", '{{DB_NAME}}');
     define("DB_USER", '{{DB_USER}}');
     define("DB_PASS", '{{DB_PASS}}');
+}
+
+if (!empty($_SERVER['REQUEST_SCHEME']) && !empty($_SERVER['HTTP_REFERER'])) {
+    if(!defined('APP_HOST')) {
+        define('APP_HOST', $_SERVER['HTTP_REFERER']);
+    }
+}
+
+if (!empty($_SERVER['REQUEST_SCHEME']) && !empty($_SERVER['HTTP_ORIGIN'])) {
+    if(!defined('APP_HOST')) {
+        define('APP_HOST', $_SERVER['HTTP_ORIGIN']);
+    }
+}
+
+if (!empty($_SERVER['REQUEST_SCHEME']) && !empty($_SERVER['HTTP_HOST'])) {
+    if(!defined('APP_HOST')) {
+        define('APP_HOST', $_SERVER['HTTP_HOST']);
+    }
 }
 
 /**
@@ -18,7 +44,7 @@ if (!defined('DB_HOST')) {
  * pour autoriser les requêtes en provenance de ces domaines.
  *
  */
-function cors()
+function cors($allowedDomains)
 {
     // Vérification de la présence des informations HTTP nécessaires
     if (
@@ -29,16 +55,6 @@ function cors()
     ) {
         return; // Sortie de la fonction CORS si les informations nécessaires ne sont pas disponibles
     }
-
-    $allowedDomains = [
-        'https://listerr.tea-tux.fr',
-        'https://listerr.lan',
-        'https://listerr.local',
-        'http://localhost',
-        'http://127.0.0.1',
-        'https://mathieufagot.ide.3wa.io',
-        'https://mathieufagot.sites.3wa.io'
-    ];
 
     if (!empty($_SERVER['REQUEST_SCHEME']) && !empty($_SERVER['HTTP_REFERER'])) {
         $domain = $_SERVER['REQUEST_SCHEME'] . '://' . parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
@@ -63,4 +79,4 @@ function cors()
     }
 }
 
-cors();
+cors($allowedDomains);

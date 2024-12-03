@@ -19,13 +19,14 @@ class Reservations extends Database
     public function createReservation(array $params): bool
     {
         try {
-            $req = "INSERT INTO `reservation` (`guestName`, `user_id`, `card_id`)
-            VALUES (:guestName, :user_id, :card_id)";
+            $req = "INSERT INTO `reservation` (`name`, `email`, `list_id`, `card_id`)
+            VALUES (:name, :email, :list_id, :card_id)";
 
             $params = [
-                'guestName' => $params['guestName'],
-                'user_id' => $params['userId'],
-                'card_id' => $params['id']
+                'name' => $params['name'],
+                'email' => $params['email'],
+                'list_id' => $params['list_id'],
+                'card_id' => $params['card_id'],
             ];
 
             $this->executeReq($req, $params);
@@ -39,6 +40,48 @@ class Reservations extends Database
     /**
      * Cette méthode permet de récupérer les détails d'une réservation en fonction de son ID.
      *
+     * @param int $id - ID de l'invité qui a réservé pour récupérer son login.
+     * @return Reservation|null - L'objet Reservation correspondant à la réservation ou null si non trouvé.
+     */
+    public function getAllReservationByListId(int $listId): ?array
+    {
+        try {
+            $req = "SELECT `r`.`id`,
+                            `r`.`name`,
+                            `r`.`email`,
+                            `r`.`list_id`,
+                            `r`.`card_id`,
+                            `r`.`created_at`
+                    FROM `reservation` `r`
+                    INNER JOIN `list` `l` ON `r`.`list_id` = `l`.`id`
+                    WHERE `l`.`id` = :id
+                    ORDER BY created_at DESC";
+
+            $results = $this->findAll(
+                $req,
+                ['id' => $listId]
+            );
+
+            if (empty($results)) {
+                return null;
+            }
+
+            $reservationArray = [];
+
+            foreach($results as $result) {
+                $reservation = new Reservation();
+                $reservation->populate($result);
+                $reservationArray[] = $reservation;
+            }
+            return $reservationArray;
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return null;
+        }
+    }
+    /**
+     * Cette méthode permet de récupérer les détails d'une réservation en fonction de son ID.
+     *
      * @param int $id - ID de la réservation à récupérer.
      * @return Reservation|null - L'objet Reservation correspondant à la réservation ou null si non trouvé.
      */
@@ -46,8 +89,9 @@ class Reservations extends Database
     {
         try {
             $req = "SELECT `id`,
-                            `guestName`,
-                            `user_id`,
+                            `name`,
+                            `email`,
+                            `list_id`,
                             `card_id`,
                             `created_at`
                     FROM `reservation`
@@ -55,7 +99,6 @@ class Reservations extends Database
                     ORDER BY created_at DESC";
 
             $result = $this->findOne($req, ['id' => $id]);
-            // var_dump($result);die();
 
             if (empty($result)) {
                 return null;
@@ -71,12 +114,42 @@ class Reservations extends Database
         }
     }
     /**
+     * Cette méthode permet de relier les données de la table reservation avec
+     * celles de la table user, en utilisant les colonnes mail
+     * comme critère de correspondance.
+     */
+
+    public function getReservationsLinkedUsers(): ?array
+    {
+        try {
+            $req = "SELECT `r`.`id`,
+                            `r`.`name`,
+                            `r`.`email`,
+                            `u`.`id`,
+                            `u`.`name`,
+                            `u`.`email`
+                    FROM `reservation` `r`
+                    LEFT JOIN `user` `u` ON `u`.`email` = `r`.`email`";
+
+            $results = $this->findAll($req);
+
+            if (empty($results)) {
+                return null;
+            }
+            return $results;
+
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return null;
+        }
+    }
+    /**
      * Cette méthode permet d'annuler une réservation de la base de données.
      *
      * @param int $id - L'ID de la réservation à annuler.
      * @return bool - Renvoie true en cas de succès, sinon false.
      */
-    public function cancelReservation(int $id): bool
+    public function cancelReservation(int $id)
     {
         try {
             $req = "DELETE FROM `reservation`
