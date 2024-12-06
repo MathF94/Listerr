@@ -33,15 +33,17 @@ class Session
      *
      * @param int    $id       L'ID de l'utilisateur.
      * @param string $login    Le nom d'utilisateur.
+     * @param string $email    L'email d'utilisateur.
      * @param string $password Le mot de passe de l'utilisateur.
      * @return string Les données de session chiffrées.
      */
-    public function encrypt(int $id, string $login, string $password): string
+    public function encrypt(int $id, string $login, string $email, string $password): string
     {
         date_default_timezone_set('Europe/Paris');
         $tokenUser = [
             'id' => $id,
             'login' => $login,
+            'email' => $email,
             'password' => $password,
             'expired_at' => (new DateTime())->modify('+1 hour')->format('Y-m-d H:i:s'),
         ];

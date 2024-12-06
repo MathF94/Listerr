@@ -41,7 +41,6 @@ function login() {
         .then(response => {
             localStorage.removeItem("csrfToken");
             if (response.status === "loginUser") {
-
                 // Ces deux informations permettront de vérifier si la session utilisateur est active
                 //                                   de vérifier si la déconnexion est réalisable (Cf. logout.js).
                 localStorage.setItem("token", response.token);
@@ -52,6 +51,7 @@ function login() {
                     role: response.user_role,
                     is_admin: response.user_isAdmin
                 }));
+
 
                 const login = JSON.parse(localStorage.user).login;
                 dialog({title: `Bonjour ${login} !`, content: `Vous êtes bien connecté(e).`});

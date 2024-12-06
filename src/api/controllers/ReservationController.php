@@ -39,8 +39,9 @@ class ReservationController
             $session = new Session();
             $id = 0;
             $login = "Guest";
+            $email = "guest@gmail.com";
             $password = bin2hex(random_bytes(24));
-            $tokenUser = $session->encrypt($id, $login, $password);
+            $tokenUser = $session->encrypt($id, $login, $email, $password);
         }
 
         if ($tokenUser !== null) {
@@ -166,6 +167,8 @@ class ReservationController
                         "message" => "no reservation found"
                     ]);
                 }
+
+
 
                 $url = $_SERVER['HTTP_REFERER'];
                 $query = parse_url($url, PHP_URL_QUERY);
