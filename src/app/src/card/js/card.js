@@ -1,5 +1,9 @@
 "use strict";
 
+import { displayFormCard } from "./form_card.js";
+
+import { displayFormReservation } from "./form_reservation.js";
+
 import {
     fetchCreateCard,
     fetchReadAllCardsByList,
@@ -14,22 +18,19 @@ import {
     fetchCancelReservation
 } from '../../actions/actions_reservation.js'
 
+import { dropDownMenu } from "../../layout/dropdown.js";
+
 import { CSRFToken } from "../../services/CSRFToken.js";
 
 import {
     configPath,
     dialog,
     manageBtns,
-    scroll,
     redirect,
+    scroll,
     type,
-    toolTip,
     validate
 } from "../../services/utils.js";
-
-import { displayFormCard } from "./form_card.js";
-
-import { displayFormReservation } from "./form_reservation.js";
 
 /**
  * Fonction principale pour gérer les cartes d'une liste.
@@ -56,7 +57,8 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
     let cardFormTitle = "Nouveau souhait";
     let reservationBtnTitle = "Je réserve";
     let reservationBtnTxtContent = "Je réserve";
-    if (localStorage.getItem("typeList") === "TodoList") {
+
+    if (localStorage.getItem("userTypeList") === "TodoList") {
         cardFormTitle = "Nouvelle tâche";
         reservationBtnTitle = "Je gère";
         reservationBtnTxtContent = "Je gère";
@@ -175,7 +177,7 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
                 localStorage.removeItem("csrfToken");
 
                 if (response.status === "createCard") {
-                    if (localStorage.getItem("typeList") === "WishList") {
+                    if (localStorage.getItem("userTypeList") === "WishList") {
                         dialog({title: "Création du souhait", content: "Votre souhait a bien été créé."});
                     } else {
                         dialog({title: "Création de la tâche", content: "Votre tâche a bien été créée."});
@@ -207,6 +209,7 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
 
             cardArticleContent.id = "cardArticleContent";
             cardArticleContent.classList.add("list");
+            cardArticleContent.classList.add("wish");
 
             // CSS pour lier la partie supérieure de la liste avec les nouvelles cartes
             if (dataCards.length !== 0) {
@@ -217,7 +220,7 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
             }
 
             // CSS pour différencier la couleur de fond des WL ou TL si l'utilisateur est différent du propriétaire
-            if (localStorage.getItem("typeList") === "WishList" || localStorage.getItem("typeList") === "TodoList") {
+            if (localStorage.getItem("userTypeList") === "WishList" || localStorage.getItem("typeList") === "TodoList") {
                 if (!canCreateCard) {
                     cardArticleContent.classList.add("third_party_wish");
                 } else{
@@ -229,20 +232,20 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
             for (const indexCard in dataCards) {
                 const objectCard = dataCards[indexCard];
 
-                const cardSectionContent = document.createElement("section");
+                const cardSectionContent = document.createElement("div");
                 cardSectionContent.id = `cardSectionContent-${objectCard.id}`;
                 cardSectionContent.classList.add("card");
                 cardSectionContent.classList.add("grid");
 
                 // CSS pour différencier la couleur des cartes si l'utilisateur est différent du propriétaire ou si c'est une TL
-                if ((!canCreateCard) || (localStorage.getItem("typeList") === "TodoList")) {
+                if ((!canCreateCard) || (localStorage.getItem("userTypeList") === "TodoList")) {
                     cardSectionContent.classList.add("third_party_todo_card");
                 } else {
                     cardSectionContent.classList.add("wish");
                 }
 
                 const titleH3 = document.createElement("h3");
-                titleH3.id = "titleH3";
+                titleH3.id = `title-${objectCard.id}`;
                 titleH3.classList.add("grid_titleH3_card")
 
                 const text = document.createElement("p");
@@ -315,7 +318,6 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
                 // Boutons réservation, priorités, édition et suppression des cartes cachés
                 createCardFormBtn.addEventListener("click", function (e) {
                     e.preventDefault();
-
                     manageBtns(createCardFormBtn, cardCancelBtn,'.edit', 'disableUpdate', 'edit');
                     manageBtns(createCardFormBtn, cardCancelBtn,'.delete', 'disableDelete', 'delete');
                     manageBtns(createCardFormBtn, cardCancelBtn,'.stars', 'disable_stars', 'stars');
@@ -328,7 +330,7 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
                         titleH3.innerText = `${objectCard.title}`;
                         cardSectionContent.appendChild(titleH3);
                     } else if (key === "updatedAt") {
-                        toolTip(cardSectionContent, objectCard.id, objectCard.updatedAt, response.data.user.login)
+                        dropDownMenu(cardSectionContent, objectCard.id, objectCard.updatedAt, response.data.user.login);
                     }
 
                     if (["id", "listId", "title", "priority", "reservationId", "login", "createdAt", "updatedAt"].includes(`${key}`)) {
@@ -514,7 +516,7 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
                                 localStorage.removeItem("csrfToken");
 
                                 if (response.status === "updateCard") {
-                                    if (localStorage.getItem("typeList") === "WishList") {
+                                    if (localStorage.getItem("userTypeList") === "WishList") {
                                         dialog({title: "Modification du souhait", content: "Votre souhait a bien été mis à jour."});
                                     } else {
                                         dialog({title: "Modification de la tâche", content: "Votre tâche a bien été mise à jour."});
@@ -531,6 +533,33 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
                                     redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
                                 }
                             })
+                        })
+                    }
+                })
+
+                // Gestion de la suppression de carte
+                deleteBtnCard.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    const dltBtnCardId = parseInt(e.target.value);
+
+                    if (dltBtnCardId !== objectCard.id) {
+                        console.warn("pas touche");
+                        return;
+                    } else if (confirm('Voulez-vous vraiment vous supprimer la carte ?') === true) {
+                        scroll();
+                        fetchDeleteCard(objectCard.id)
+                        .then((response) => {
+                            if (response.status === "deleteCard") {
+                                if (localStorage.getItem("userTypeList") === "WishList") {
+                                    dialog({title: "Suppression du souhait", content: "Votre souhait a bien été supprimé."});
+                                } else {
+                                    dialog({title: "Suppression de la tâche", content: "Votre tâche a bien été supprimée."});
+                                }
+
+                                const dialogMsg = document.querySelector("dialog");
+                                dialogMsg.classList.add("valid");
+                                redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                            }
                         })
                     }
                 })
@@ -748,7 +777,6 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
                             if (!canCreateCard) {
                                 priority.classList.remove("stars");
                                 priority.classList.add("disable_stars");
-                                priority.setAttribute("disabled", true);
                             } else {
                                 // Gestion de la modification de la priorité sur ordinateur
                                 priority.addEventListener("click", function (e) {
@@ -767,7 +795,7 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
                                 fetchUpdatePriority(e.target.dataset.star, objectCard.id)
                                 .then(response => {
                                     if (response.status === "updatePriority") {
-                                        if (localStorage.getItem("typeList") === "WishList") {
+                                        if (localStorage.getItem("userTypeList") === "WishList") {
                                             dialog({title: "Modification du souhait", content: "Votre priorité a bien été mis à jour."});
                                         } else {
                                             dialog({title: "Modification de la tâche", content: "Votre importance a bien été mise à jour."});
@@ -794,7 +822,6 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
                             // Etoile inutilisables
                             priority.classList.remove("stars");
                             priority.classList.add("disable_stars");
-                            priority.setAttribute("disabled", true);
 
                             // Modification inutilisable
                             updateBtnCard.disabled = true;
@@ -805,29 +832,19 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
                             // Si une réservation est faite, le bouton de réservation disparaît
                             reservationBtn.remove();
 
-                            // console.log("___________________________________");
-                            // console.log(userId, ": id du connecté");
-                            // console.log(userEmail, ": email du connecté");
-                            // console.log(dataUserId, ": id du proprio de la liste");
-                            // console.log(dataUserEmail, ": email du proprio de la liste");
-                            // console.log(dataReservation, "info du réservant");
-                            // console.log(dataReservation.id, ": ID de la réservation");
-                            // console.log(dataReservation.name, ": nom du réservant");
-                            // console.log(dataReservation.email, ": email du réservant");
-
                             let reservationLabel = null;
 
                             // CAS PROPRIETAIRE : Si le propriétaire de la carte est sur sa propre carte
                             // - il lit "Réservé" uniquement si qqun a réservé une carte et peut supprimer
                             if (userId === dataUserId && dataUserEmail !== dataReservation.email) {
-                                // console.log("ICI, je suis connecté, proprio, pas réservant");
+                                // On est connecté, proprio, pas réservant";
                                 reservationLabel = "Réservé"
                                 dltReservationBtn.classList.add("hidden");
                             }
 
                             // - il lit "Réservé par moi" s'il réserve sa propre carte et peut supprimer
                             if (userId === dataUserId && dataUserEmail === dataReservation.email) {
-                                // console.log("LA, je suis connecté, proprio, réservant ma propre carte");
+                                // On est connecté, proprio, réservant ma propre carte";
                                 reservationLabel = "Réservé par moi";
                             }
                             reservationTxt.innerText = reservationLabel;
@@ -843,14 +860,14 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
                             // CAS VISITEUR INSCRIT / CONNECTE est sur la carte d'un autre utilisateur
                             // - s'il n'est pas réservant, il lit "Réservé par ..." et ne peut supprimer la réservation
                             if (userId !== null && userId !== dataUserId && userEmail !== dataReservation.email) {
-                                // console.log("LA, je suis inscrit / connecté, invité et pas réservant");
+                                // On est inscrit / connecté, invité et pas réservant";
                                 reservationLabel = `Réservé par ${dataReservation.name}`;
                                 dltReservationBtn.classList.add("hidden");
                             }
 
                             // - s'il est réservant, il lit "Réservé par moi" et peut supprimer la réservation
                             if (userId !== null && userId !== dataUserId && userEmail === dataReservation.email) {
-                                // console.log("LA, je suis inscrit / connecté, invité et réservant");
+                                // On est inscrit / connecté, invité et réservant";
                                 reservationLabel = "Réservé par moi";
                             }
                             reservationTxt.innerText = reservationLabel;
@@ -859,7 +876,7 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
                             // CAS VISITEUR NON INSCRIT / CONNECTE est sur la carte d'un utilisateur
                             // - si l'userId est null et le GuestToken n'est pas lu en URL, il lit "Réservé par ..." et ne peut supprimer la réservation
                             if (userId === null && !response.decryptGuestToken) {
-                                // console.log("MAINTENANT, je ne suis pas connecté ni inscrit, invité, pas réservant");
+                                // On n'est pas connecté ni inscrit, invité, pas réservant";
                                 reservationLabel = `Réservé par ${dataReservation.name}`;
                                 dltReservationBtn.classList.add("hidden");
                             }
@@ -869,7 +886,7 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
                                 const decryptGuestToken = response.decryptGuestToken;
                                 // - et si son mail n'est pas celui du réservant, il lit "Réservé par ..." et ne peut supprimer la réservation
                                 if (dataReservation.email !== decryptGuestToken.value.email) {
-                                    // console.log("ENFIN, je ne suis pas connecté ni inscrit, invité et réservant");
+                                    // On n'est pas connecté ni inscrit, invité et réservant";
                                     reservationLabel = `Réservé par ${dataReservation.name}`;
                                     dltReservationBtn.classList.add("hidden");
                                 } else {
@@ -902,33 +919,6 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
                         }
                     })
 
-                })
-
-                // Gestion de la suppression de carte
-                deleteBtnCard.addEventListener("click", function(e) {
-                    e.preventDefault();
-                    const dltBtnCardId = parseInt(e.target.value);
-
-                    if (dltBtnCardId !== objectCard.id) {
-                        console.warn("pas touche");
-                        return;
-                    } else if (confirm('Voulez-vous vraiment vous supprimer la carte ?') === true) {
-                        scroll();
-                        fetchDeleteCard(objectCard.id)
-                        .then((response) => {
-                            if (response.status === "deleteCard") {
-                                if (localStorage.getItem("typeList") === "WishList") {
-                                    dialog({title: "Suppression du souhait", content: "Votre souhait a bien été supprimé."});
-                                } else {
-                                    dialog({title: "Suppression de la tâche", content: "Votre tâche a bien été supprimée."});
-                                }
-
-                                const dialogMsg = document.querySelector("dialog");
-                                dialogMsg.classList.add("valid");
-                                redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
-                            }
-                        })
-                    }
                 })
             }
         }

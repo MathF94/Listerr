@@ -188,6 +188,7 @@ class ListController
         try {
             if (!empty($this->user)) {
                 $model = new Lists();
+                // Dans la page profil.html
                 $lists = $model->AllListsByUser($this->user->id);
 
                 if (empty($userId)) {
@@ -204,15 +205,14 @@ class ListController
                     }
 
                 } else {
+                    // Dans la page profil.html?id=XXX
                     $lists = $model->AllListsByUser($userId);
-
                     if (!empty($userId)) {
                         if (empty($lists)) {
                             return json_encode([
                                 "status" => "standBy",
                                 "errors" => "no lists created yet"
                             ]);
-
                         } else {
                             return json_encode([
                                 "status" => "readAllListsByUser",

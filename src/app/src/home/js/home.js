@@ -1,12 +1,14 @@
 "use strict";
 
 import { fetchAllListsByUsers } from "../../actions/actions_home.js";
+
+import { dropDownMenu } from "../../layout/dropdown.js";
+
 import {
     configPath,
     allowedIds,
     redirect,
     dialog,
-    toolTip
 } from "../../services/utils.js";
 
 /**
@@ -39,7 +41,7 @@ function readAllLists() {
 
             const dialogMsg = document.querySelector("dialog");
             dialogMsg.classList.add("home");
-
+            localStorage.nav_active ="connexion";
             redirect(`${configPath.basePath}/user/pages/login.html`);
         });
         return;
@@ -48,6 +50,7 @@ function readAllLists() {
     if (user !== undefined && user !== null) {
         // Si l'utilisateur est connecté, ajoute un gestionnaire de clic pour rediriger vers la page de création de liste
         listBtn.addEventListener("click", function (e) {
+            localStorage.nav_active ="lists";
             redirect(`${configPath.basePath}/list/pages/lists.html`, 0);
         });
     }
@@ -77,6 +80,7 @@ function readAllLists() {
                 const articleList = document.createElement("article");
                 articleList.id = `homeList-${object.id}`;
                 articleList.classList.add("list");
+                articleList.classList.add("pointer");
                 articleList.classList.add("grid");
 
                 if(JSON.parse(localStorage.user).id !== object.userId) {
@@ -93,8 +97,7 @@ function readAllLists() {
                 const titleH4 = document.createElement("h4");
 
                 // N'affiche que les WishList
-                if(object.type === "WishList"){
-
+                if (object.type === "WishList") {
                     for (const key in object) {
                         const text = document.createElement("p");
 
@@ -106,7 +109,7 @@ function readAllLists() {
                         }
 
                         if (key === "updatedAt") {
-                            toolTip(articleList, object.id, object.updatedAt, object.user.login)
+                            dropDownMenu(articleList, object.id, object.updatedAt, object.user.login);
                         }
 
                         if (allowedIds.includes(`${key}`)) {
@@ -114,6 +117,7 @@ function readAllLists() {
                         }
 
                         text.innerText = `${object[key]}`;
+
                         titleLists.after(allListWrapper);
                         allListWrapper.appendChild(articleList);
                         articleList.appendChild(typeH3);

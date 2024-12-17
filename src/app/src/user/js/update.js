@@ -1,7 +1,9 @@
 "use strict";
 
 import { fetchRead, fetchUpdate } from "../../actions/actions_user.js";
+
 import { CSRFToken } from "../../services/CSRFToken.js";
+
 import {
     configPath,
     redirect,

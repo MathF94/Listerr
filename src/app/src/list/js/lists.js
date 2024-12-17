@@ -1,23 +1,27 @@
 "use strict";
 
+import { displayFormList } from "./form_list.js";
+
 import {
     fetchCreateList,
     fetchReadAllLists,
     fetchDeleteList
 } from "../../actions/actions_lists.js";
+
+import { dropDownMenu } from "../../layout/dropdown.js";
+
 import { CSRFToken } from "../../services/CSRFToken.js";
+
 import {
     configPath,
     allowedIds,
     type,
     redirect,
     dialog,
-    toolTip,
     notAllowedRedirection,
     scroll,
     validate
 } from "../../services/utils.js";
-import { displayFormList } from "./form_list.js";
 
 notAllowedRedirection();
 
@@ -104,7 +108,15 @@ function lists() {
     fetchReadAllLists()
     .then(response => {
         const data = response.data;
-        if (response.status === "readAllListsByUser"){
+        const listsSection = document.querySelector("#listsSection");
+        const emptyMessage = document.createElement("p");
+
+        if (response.status === "standBy") {
+            emptyMessage.innerText = "Aucune liste n'a encore été créée :)"
+            listsSection.firstElementChild.after(emptyMessage);
+        }
+        if (response.status === "readAllListsByUser") {
+            emptyMessage.remove();
             const listWrapper = document.querySelector('#listsWrapper');
 
             for (const index in data) {
@@ -114,6 +126,7 @@ function lists() {
                 articleList.classList.add("grid");
                 articleList.classList.add("grid_lists");
                 articleList.classList.add("list");
+                articleList.classList.add("pointer");
                 articleList.classList.add("little");
                 articleList.classList.add(type[objectList.type]);
 
@@ -124,17 +137,17 @@ function lists() {
 
                 const sectionList = document.createElement("section");
                 sectionList.classList.add("grid_section_lists");
-                sectionList.id ="sectionList";
+                sectionList.id = `sectionList-${objectList.id}`;
 
                 const typeH3 = document.createElement("h3");
-                typeH3.id = "typeList";
+                typeH3.id = `typeList-${objectList.id}`;
                 typeH3.classList.add("grid_typeH3");
 
                 const titleH4 = document.createElement("h4");
                 titleH4.classList.add("grid_titleH4_lists");
 
                 const actionBtnLists = document.createElement("div");
-                actionBtnLists.id = "actionBtnLists";
+                actionBtnLists.id = `actionBtnLists-${objectList.id}`;
                 actionBtnLists.classList.add("grid_action_btn_lists");
 
                 const deleteBtnLists = document.createElement("button");
@@ -157,10 +170,10 @@ function lists() {
                         typeH3.innerText = `${objectList.type} - ${objectList.title} `;
                     }
 
-                    // Affichage du tooltip
-                    if (key === "user" && typeof(value) === "object") {
-                        toolTip(articleList, objectList.id, objectList.updatedAt, objectList.user.login)
-                    }
+                    // Affichage du dropDownMenu
+                    // if (key === "user" && typeof(value) === "object") {
+                    //     dropDownMenu(articleList, objectList.id, objectList.updatedAt, objectList.user.login);
+                    // }
 
                     // Exclut certains éléments de la liste (id, userId, type, title, cards, createdAd)
                     if (allowedIds.includes(`${key}`)) {
@@ -168,11 +181,12 @@ function lists() {
                     }
 
                     listWrapper.appendChild(articleList);
-                    articleList.appendChild(actionBtnLists);
                     articleList.appendChild(typeH3);
-                    sectionList.appendChild(titleH4);
                     articleList.appendChild(sectionList);
-                    actionBtnLists.appendChild(deleteBtnLists);
+                    sectionList.appendChild(titleH4);
+                    dropDownMenu(articleList, objectList.id, objectList.updatedAt, objectList.user.login);
+                    // articleList.appendChild(actionBtnLists);
+                    // actionBtnLists.appendChild(deleteBtnLists);
                 }
 
                 // Redirige vers la page de détails de la liste en cliquant sur la liste.

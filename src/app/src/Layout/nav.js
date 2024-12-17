@@ -117,9 +117,10 @@ function navigation(template) {
                 link.innerText = linkData.text;
                 link.classList.remove("active");
 
-                if(localStorage.nav_active === linkData.id) {
+                if (localStorage.nav_active === linkData.id) {
                     link.classList.add("active");
                 }
+
             } else {
                 const noLink = document.createElement("div");
                 noLink.id = linkData.id;
@@ -127,11 +128,12 @@ function navigation(template) {
                 item.appendChild(link);
                 link.appendChild(noLink);
             }
+
             list.appendChild(item);
             item.appendChild(link);
 
             if (item.textContent === "Déconnexion") {
-                item.style.cursor = "pointer";
+                item.classList.add("pointer");
             }
         });
         template.appendChild(wrapDiv);

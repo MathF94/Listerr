@@ -1,11 +1,18 @@
 "use strict";
 
-import { fetchRead } from "../../actions/actions_user.js";
 import {
     fetchDeleteUser,
     fetchUpdateUser
 } from "../../actions/actions_admin.js";
+
 import { fetchReadAllLists } from "../../actions/actions_lists.js";
+
+import { fetchRead } from "../../actions/actions_user.js";
+
+import { displayFormUpdateUser } from "../../admin/js/form_user.js";
+
+import { CSRFToken } from "../../services/CSRFToken.js";
+
 import {
     allowedIds,
     configPath,
@@ -15,8 +22,6 @@ import {
     redirect,
     notAllowedRedirection,
 } from "../../services/utils.js";
-import { displayFormUpdateUser } from "../../admin/js/form_user.js";
-import { CSRFToken } from "../../services/CSRFToken.js";
 
 notAllowedRedirection();
 
@@ -203,11 +208,11 @@ function read() {
                         }
                     });
 
-                    // // Permet de revenir aux listes d'utilisateurs
-                    // returnBtn.addEventListener("click", function (e) {
-                    //     e.preventDefault();
-                    //     redirect(`${configPath.basePath}/admin/pages/profils.html`, 0);
-                    // });
+                    // Permet de revenir aux listes d'utilisateurs
+                    returnBtn.addEventListener("click", function (e) {
+                        e.preventDefault();
+                        redirect(`${configPath.basePath}/admin/pages/profils.html`, 0);
+                    });
                 }
 
                 // Affiche les listes de l'utilisateur vu par l'Admin
@@ -216,7 +221,16 @@ function read() {
                     listBtn.disabled = true;
                     fetchReadAllLists(id).then((response) => {
                         const data = response.data;
+                        const listsWrapper = document.querySelector("#listsWrapper");
+                        const emptyMessage = document.createElement("p");
+
+                        if (response.status === "standBy") {
+                            emptyMessage.innerText = "Aucune liste n'a encore été créée :)"
+                            listsWrapper.appendChild(emptyMessage);
+                        }
+
                         if (response.status === "readAllListsByUser") {
+                            emptyMessage.remove();
                             for (const index in data) {
                                 const objectList = data[index];
                                 const articleList = document.createElement("article");
