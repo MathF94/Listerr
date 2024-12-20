@@ -126,7 +126,6 @@ function lists() {
                 articleList.classList.add("grid");
                 articleList.classList.add("grid_lists");
                 articleList.classList.add("list");
-                articleList.classList.add("pointer");
                 articleList.classList.add("little");
                 articleList.classList.add(type[objectList.type]);
 
@@ -136,6 +135,7 @@ function lists() {
                 }
 
                 const sectionList = document.createElement("section");
+                sectionList.classList.add("pointer");
                 sectionList.classList.add("grid_section_lists");
                 sectionList.id = `sectionList-${objectList.id}`;
 
@@ -170,11 +170,6 @@ function lists() {
                         typeH3.innerText = `${objectList.type} - ${objectList.title} `;
                     }
 
-                    // Affichage du dropDownMenu
-                    // if (key === "user" && typeof(value) === "object") {
-                    //     dropDownMenu(articleList, objectList.id, objectList.updatedAt, objectList.user.login);
-                    // }
-
                     // Exclut certains éléments de la liste (id, userId, type, title, cards, createdAd)
                     if (allowedIds.includes(`${key}`)) {
                         continue;
@@ -190,7 +185,7 @@ function lists() {
                 }
 
                 // Redirige vers la page de détails de la liste en cliquant sur la liste.
-                articleList.addEventListener("click", function(){
+                sectionList.addEventListener("click", function(){
                     if (objectList.type === "TodoList" && objectList.user.id !== JSON.parse(localStorage.getItem("user")).id) {
                         return false;
                     } else {

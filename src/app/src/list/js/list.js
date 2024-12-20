@@ -16,6 +16,7 @@ import { CSRFToken } from "../../services/CSRFToken.js";
 
 import {
     configPath,
+    detail,
     dialog,
     notAllowedRedirection,
     redirect,
@@ -37,19 +38,19 @@ function list() {
         .then(response => {
             const sectionList = document.querySelector("#listSection");
 
-            const returnHome = document.createElement("a");
-            returnHome.id = "returnHome";
-            returnHome.innerText = "Revenir à la page d'accueil";
-            returnHome.title = "Revenir à la page d'accueil";
-            returnHome.href = `${configPath.basePath}/home/pages/home.html`;
+            // const returnHome = document.createElement("a");
+            // returnHome.id = "returnHome";
+            // returnHome.innerText = "Revenir à la page d'accueil";
+            // returnHome.title = "Revenir à la page d'accueil";
+            // returnHome.href = `${configPath.basePath}/home/pages/home.html`;
 
-            const returnLists = document.createElement("a");
-            returnLists.id = "returnLists";
-            returnLists.innerText = "Revenir à mes listes";
-            returnLists.title = "Revenir à mes listes";
-            returnLists.href = `${configPath.basePath}/list/pages/lists.html`;
+            // const returnLists = document.createElement("a");
+            // returnLists.id = "returnLists";
+            // returnLists.innerText = "Revenir à mes listes";
+            // returnLists.title = "Revenir à mes listes";
+            // returnLists.href = `${configPath.basePath}/list/pages/lists.html`;
 
-            const lineBreak = document.createElement("br");
+            // const lineBreak = document.createElement("br");
 
             if(response.message === "ID not numeric" || id === "") {
                 redirect(`${configPath.basePath}/home/pages/home.html`, 0)
@@ -98,15 +99,15 @@ function list() {
                 }
             }
 
-            sectionList.firstElementChild.after(returnLists);
-            sectionList.firstElementChild.after(lineBreak);
-            sectionList.firstElementChild.after(returnHome);
+            // sectionList.firstElementChild.after(returnLists);
+            // sectionList.firstElementChild.after(lineBreak);
+            // sectionList.firstElementChild.after(returnHome);
 
-            returnLists.addEventListener("click", e => {
-                e.preventDefault();
-                localStorage.nav_active ="lists";
-                redirect(`${configPath.basePath}/list/pages/lists.html`);
-            })
+            // returnLists.addEventListener("click", e => {
+            //     e.preventDefault();
+            //     localStorage.nav_active ="lists";
+            //     redirect(`${configPath.basePath}/list/pages/lists.html`);
+            // })
 
             if (response.status === "readOneList") {
                 notAllowedRedirection(data?.type);
@@ -185,12 +186,12 @@ function list() {
                 if (userId === data.user.id) {
                     const actions = [
                         {
-                            text : `Modifié par ${data.user.login} \n le ${data.updatedAt}`,
+                            text : detail(data.updatedAt, data.user.login),
                             onclick: false
                         },
                         {
                             // Gestion de la mise à jour de la liste
-                            text: "Modifier",
+                            text: "Modifier la liste",
                             onclick: function(e) {
                                 e.preventDefault();
                                 const updtBtnListId = parseInt(e.target.value);
@@ -299,7 +300,7 @@ function list() {
                         },
                         {
                             // Gestion de la suppression de la liste
-                            text: "Supprimer",
+                            text: "Supprimer la liste",
                             onclick: function(e){
                                 e.preventDefault();
                                 const dltBtnId = parseInt(e.target.value);

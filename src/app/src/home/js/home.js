@@ -80,7 +80,6 @@ function readAllLists() {
                 const articleList = document.createElement("article");
                 articleList.id = `homeList-${object.id}`;
                 articleList.classList.add("list");
-                articleList.classList.add("pointer");
                 articleList.classList.add("grid");
 
                 if(JSON.parse(localStorage.user).id !== object.userId) {
@@ -91,6 +90,8 @@ function readAllLists() {
                 }
 
                 const sectionList = document.createElement("section");
+                sectionList.id = `sectionList-${object.id}`;
+                sectionList.classList.add("pointer");
                 sectionList.classList.add("grid_section");
                 const typeH3 = document.createElement("h3");
                 typeH3.classList.add("grid_typeH3");
@@ -126,7 +127,7 @@ function readAllLists() {
                     }
                 }
 
-                articleList.addEventListener("click", function () {
+                sectionList.addEventListener("click", function () {
                     if (object.type === "TodoList" && object.user.id !== JSON.parse(localStorage.getItem("user")).id) {
                         return false;
                     }
