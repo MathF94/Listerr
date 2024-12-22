@@ -98,6 +98,35 @@ function manageBtns (anchor, cancelAnchor, selector, disableClass, firstClass) {
     });
 }
 
+function menu(dataId) {
+    const el = document.querySelector(`#dropDown-${dataId}`);
+    const btn = el.querySelector('.more__btn');
+    let visible = false;
+
+    function showMenu(e) {
+        e.preventDefault();
+        if (!visible) {
+            visible = true;
+            el.classList.add('show__more__menu');
+            document.addEventListener('mousedown', hideMenu, false);
+        }
+    }
+
+    function hideMenu(e) {
+        if (btn.contains(e.target)) {
+            return;
+        }
+        if (visible) {
+            if (!el.contains(e.target)) {
+                visible = false;
+                el.classList.remove('show__more__menu');
+                document.removeEventListener('mousedown', hideMenu);
+            }
+        }
+    }
+    el.addEventListener('click', showMenu, false);
+}
+
 /**
  * Redirige l'utilisateur invité vers la page d'accueil, si la liste n'est pas une wishlist.
  * @param {string} type - Le type de liste
@@ -151,32 +180,16 @@ function scroll() {
     });
 }
 
-/**
- * Création du tooltip pour informer de la dernière mis à jour d'une liste et par qui.
- * @param {HTMLFormElement, number, string} anchor - Element du DOM à quoi se rattache le tooltip.
- * @param {*} updatedAt - date de dernière mise à jour.
- * @param {*} login - login de l'utilisateur
- */
-function toolTip(anchor, id, updatedAt, login) {
-    let dateFromDatabase = updatedAt ;
-    let date = new Date(dateFromDatabase);
+function detail(time, login) {
+    let date = new Date(time);
     let day = date.getDate();
     let month = date.getMonth() + 1;
     let year = date.getFullYear();
     let formatedDate = (day < 10 ? '0' : '') + day + '/'
                         + (month < 10 ? '0' : '') + month + '/'
                         + year;
-
-    const toolTip = document.createElement("div");
-    toolTip.id = `tooltip-${id}`;
-    toolTip.classList.add("tooltip");
-    toolTip.classList.add("grid_tooltip");
-
-    const spanToolTip = document.createElement("span");
-    spanToolTip.classList.add("tooltiptext");
-    spanToolTip.innerText = `Modifié le ${formatedDate} par ${login}`;
-    toolTip.appendChild(spanToolTip);
-    anchor.prepend(toolTip);
+    const message = `Modifié par ${login}, \n le ${formatedDate}`
+    return message;
 }
 
 /**
@@ -214,12 +227,13 @@ export {
     configPath,
     mandatoryStar,
     type,
+    detail,
     dialog,
     manageBtns,
+    menu,
     notAllowedRedirection,
     redirect,
     reveal,
     scroll,
-    toolTip,
     validate
 };

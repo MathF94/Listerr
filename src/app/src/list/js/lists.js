@@ -136,7 +136,7 @@ function lists() {
 
                 const sectionList = document.createElement("section");
                 sectionList.classList.add("pointer");
-                sectionList.classList.add("grid_section_lists");
+                sectionList.classList.add("grid_section");
                 sectionList.id = `sectionList-${objectList.id}`;
 
                 const typeH3 = document.createElement("h3");

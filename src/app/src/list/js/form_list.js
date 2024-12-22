@@ -11,11 +11,11 @@ function displayFormList(elementDOM) {
     const sectionForm = document.createElement("section");
     sectionForm.id = "listFormSection";
 
-    const formList = document.createElement("form");
-    formList.id = "formList";
-
     const titleForm = document.createElement("h3");
     titleForm.id = "titleFormList";
+
+    const formList = document.createElement("form");
+    formList.id = "formList";
 
     const labelType = document.createElement("label");
     labelType.htmlFor  = "typeList";
@@ -53,30 +53,31 @@ function displayFormList(elementDOM) {
 
     const labelDescription = document.createElement("label");
     labelDescription.htmlFor  = "descriptionList";
-    labelDescription.innerText = "Description (facultative)";
+    labelDescription.innerText = "Description";
 
-    const inputDescription = document.createElement("input");
-    inputDescription.type = "text";
-    inputDescription.name = "descriptionList";
-    inputDescription.id = "descriptionList";
-    inputDescription.placeholder = "Votre description";
-    inputDescription.value = ``;
+    const textAreaDescription = document.createElement("textarea");
+    textAreaDescription.name = "descriptionList";
+    textAreaDescription.id = "descriptionList";
+    textAreaDescription.placeholder = "Votre description";
+    textAreaDescription.value = "";
 
-    const validListBtn = document.createElement("button");
-    validListBtn.id = "validForm";
-    validListBtn.classList.add("btn");
-    validListBtn.classList.add("valid");
-    validListBtn.type = "submit";
-    validListBtn.value = "validForm";
-    validListBtn.innerText = "Valider";
+    const actionBtnList = document.createElement("div");
 
-    const cancelListBtn = document.createElement("button");
-    cancelListBtn.id = "cancelForm";
-    cancelListBtn.classList.add("btn");
-    cancelListBtn.classList.add("cancel");
-    cancelListBtn.type = "button";
-    cancelListBtn.value = "cancelForm";
-    cancelListBtn.innerText = "Annuler";
+    const listValidFormBtn = document.createElement("button");
+    listValidFormBtn.id = "validForm";
+    listValidFormBtn.classList.add("btn");
+    listValidFormBtn.classList.add("valid");
+    listValidFormBtn.type = "submit";
+    listValidFormBtn.value = "validForm";
+    listValidFormBtn.innerText = "Valider";
+
+    const listCancelFormBtn = document.createElement("button");
+    listCancelFormBtn.id = "cancelForm";
+    listCancelFormBtn.classList.add("btn");
+    listCancelFormBtn.classList.add("cancel");
+    listCancelFormBtn.type = "button";
+    listCancelFormBtn.value = "cancelForm";
+    listCancelFormBtn.innerText = "Annuler";
 
     sectionForm.appendChild(titleForm);
     sectionForm.appendChild(formList);
@@ -88,9 +89,10 @@ function displayFormList(elementDOM) {
     labelTitle.appendChild(mandatoryStar);
     formList.appendChild(inputTitle);
     formList.appendChild(labelDescription);
-    formList.appendChild(inputDescription);
-    formList.appendChild(validListBtn);
-    formList.appendChild(cancelListBtn);
+    formList.appendChild(textAreaDescription);
+    formList.appendChild(actionBtnList);
+    actionBtnList.appendChild(listValidFormBtn);
+    actionBtnList.appendChild(listCancelFormBtn);
 
     elementDOM.appendChild(sectionForm);
 }

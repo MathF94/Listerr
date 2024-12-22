@@ -54,7 +54,7 @@ function dropDownMenu(template, dataId, updatedAt, login, actions) {
         }
     }
 
-    // CAS DE LA PAGE home/pages/home.html` 
+    // CAS DE LA PAGE home/pages/home.html`
     if (window.location.href === `${configPath.basePath}/user/pages/profil.html` + window.location.search) {
         if (JSON.parse(localStorage.user).role === 'Admin') {
             const action = [
@@ -67,21 +67,18 @@ function dropDownMenu(template, dataId, updatedAt, login, actions) {
     }
 
     // CAS DE LA PAGE list/pages/lists.html
-        if (window.location.href === `${configPath.basePath}/list/pages/lists.html`) {
-            if (localStorage.user !== null && localStorage.user !== undefined) {
-                const action = [
-                    {
-                        text : detail(updatedAt, login)
-                    }
-                ]
-                addActions(action)
-            }
+    if (window.location.href === `${configPath.basePath}/list/pages/lists.html`) {
+        if (localStorage.user !== null && localStorage.user !== undefined) {
+            const action = [
+                {
+                    text : detail(updatedAt, login)
+                }
+            ]
+            addActions(action)
         }
-    // console.log(`${configPath.basePath}/list/pages/list.html?id=XXX`);
-        // connectés propriétaires
-        // connectés visiteurs
-        // visiteurs non inscrits
+    }
 
+    // CAS DE LA PAGE list/pages/list.html?id=XXX
     if (window.location.href === `${configPath.basePath}/list/pages/list.html` + window.location.search) {
         if (localStorage.user === null || localStorage.token === null || localStorage.user === undefined || localStorage.token === undefined) {
             const action = [
@@ -124,7 +121,12 @@ function dropDownMenu(template, dataId, updatedAt, login, actions) {
                 actionData.onclick?actionData.onclick(e):null
             })
             moreMenuBtn.classList.add("more__menu__btn");
+            moreMenuBtn.classList.add("pointer");
             moreMenuBtn.innerText = actionData.text;
+
+            if (moreMenuBtn.tagName === "SMALL") {
+                moreMenuBtn.classList.remove("pointer");
+            }
 
             moreMenuListUl.appendChild(moreMenuItemLi);
             moreMenuItemLi.appendChild(moreMenuBtn);

@@ -77,12 +77,11 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
 
     // Création des éléments DOM pour le formulaire de création d'une carte
     const cardDivForm = document.createElement("div");
-    cardDivForm.id = "cardSectionForm";
+    cardDivForm.id = "cardDivForm";
     cardDivForm.classList.add("form");
     cardDivForm.classList.add("grid_create_card");
 
-    const titleForm = document.createElement("h3");
-    titleForm.id = "titleFormCard";
+    const popIn = document.querySelector("#popIn");
 
     const createCardFormBtn = document.createElement("button");
     createCardFormBtn.id = `cardFormBtn`;
@@ -107,26 +106,30 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
             return false;
         }
         // Titre caché
-        typeList.classList.add("hidden");
+        // typeList.classList.add("hidden");
 
         // Boutons création de carte, édition et suppression de liste cachés
-        createCardFormBtn.hidden = true;
+        // createCardFormBtn.hidden = true;
 
-        const actionBtnList = document.querySelector("#actionBtnList");
-        actionBtnList.classList.add("hidden");
+        // const actionBtnList = document.querySelector("#actionBtnList");
+        // actionBtnList.classList.add("hidden");
 
         // Description de liste cachée
-        const sectionTxt = document.querySelector("#sectionTxt");
-        sectionTxt.classList.add("hidden");
+        // const sectionTxt = document.querySelector("#sectionTxt");
+        // sectionTxt.classList.add("hidden");
 
         // Appel du formulaire de création d'une carte
-        cardDivForm.style.gridColumn = "1/7";
-        cardDivForm.style.gridRow = "1/3";
+        // cardDivForm.style.gridColumn = "1/7";
+        // cardDivForm.style.gridRow = "1/3";
 
-        cardDivForm.appendChild(titleForm);
+        popIn.style.visibility = "visible";
 
-        displayFormCard(cardDivForm);
-        titleForm.innerText = "Formulaire de création d'une carte";
+        displayFormCard(popIn);
+        const cardFormSection = document.querySelector('#cardFormSection');
+        const titleFormCard = document.querySelector("#titleFormCard");
+        titleFormCard.innerText = "Formulaire de création de la carte";
+        // cardDivForm.appendChild(titleForm);
+
         const cardCancelBtn = document.querySelector("#cardCancelBtn");
         cardCancelBtn.title = "Revenir aux listes";
         const cardForm = document.querySelector("#formCard");
@@ -134,20 +137,21 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
         // Suppression des éléments du formulaire d'édition au click du bouton "Annuler"
         cardCancelBtn.addEventListener("click", function() {
             // Titre visible
-            typeList.classList.remove("hidden");
+            // typeList.classList.remove("hidden");
+            popIn.style.visibility = "hidden";
+            cardForm.remove();
+            cardFormSection.remove();
 
             // Boutons création de carte, édition et suppression de liste visibles
             createCardFormBtn.hidden = false;
-            actionBtnList.classList.remove("hidden");
+            // actionBtnList.classList.remove("hidden");
 
             // Description de liste visible
             sectionTxt.classList.remove("hidden");
 
-            cardDivForm.style.gridColumn = "5/5";
+            cardDivForm.style.gridColumn = "6/6";
             cardDivForm.style.gridRow = "2/2";
 
-            titleForm.remove();
-            cardForm.remove();
         })
 
         // Création d'une nouvelle carte (souhait ou tâche)
@@ -206,8 +210,8 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
             const dataUserEmail = response.data.user.email
             const dataType = response.data.type;
             const dataCards = response.data.cards;
-            const cardArticleContent = document.createElement("article");
 
+            const cardArticleContent = document.createElement("article");
             cardArticleContent.id = "cardArticleContent";
             cardArticleContent.classList.add("list");
             cardArticleContent.classList.add("wish");
@@ -225,7 +229,7 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
                 if (!canCreateCard) {
                     cardArticleContent.classList.add("third_party_wish");
                 } else{
-                    cardArticleContent.classList.add(type[localStorage.getItem("typeList")]);
+                    cardArticleContent.classList.add(type[localStorage.getItem("userTypeList")]);
                 }
             }
 
@@ -319,10 +323,10 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
                 // Boutons réservation, priorités, édition et suppression des cartes cachés
                 createCardFormBtn.addEventListener("click", function (e) {
                     e.preventDefault();
-                    manageBtns(createCardFormBtn, cardCancelBtn,'.edit', 'disableUpdate', 'edit');
-                    manageBtns(createCardFormBtn, cardCancelBtn,'.delete', 'disableDelete', 'delete');
-                    manageBtns(createCardFormBtn, cardCancelBtn,'.stars', 'disable_stars', 'stars');
-                    manageBtns(createCardFormBtn, cardCancelBtn,'.reservation', 'cancel', 'reservation');
+                    // manageBtns(createCardFormBtn, cardCancelBtn,'.edit', 'disableUpdate', 'edit');
+                    // manageBtns(createCardFormBtn, cardCancelBtn,'.delete', 'disableDelete', 'delete');
+                    // manageBtns(createCardFormBtn, cardCancelBtn,'.stars', 'disable_stars', 'stars');
+                    // manageBtns(createCardFormBtn, cardCancelBtn,'.reservation', 'cancel', 'reservation');
                 })
 
                 // Affichage des données de la carte
@@ -351,81 +355,90 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
 
                                     } else {
                                         const updateCardSection = document.createElement("section");
-                                        const cardFormBtn = document.querySelector("#cardFormBtn");
-                                        titleForm.innerText = "Formulaire d'édition d'une carte";
-                                        titleForm.classList.add("width");
-                                        reservationBtn.style.width = "105px";
+                                        updateCardSection.id = `updateCardSection-${objectCard.id}`;
+                                        updateCardSection.classList.add("updateCard");
+                                        popIn.style.visibility = "visible";
+
+                                        const dropDown = document.querySelector(`#dropDown-${objectCard.id}`)
+                                        dropDown.classList.remove('show__more__menu');
+
+                                        // const cardFormBtn = document.querySelector("#cardFormBtn");
+                                        // titleForm.innerText = "Formulaire d'édition d'une carte";
+                                        // titleForm.classList.add("width");
+                                        // reservationBtn.style.width = "105px";
 
                                         // Gestion des boutons de la carte courante à modifier
                                         // Bouton de création de cartes inutilisable
-                                        cardFormBtn.classList.add("disable");
-                                        cardFormBtn.disabled = true;
+                                        // cardFormBtn.classList.add("disable");
+                                        // cardFormBtn.disabled = true;
 
                                         // Boutons édition et suppression des listes inutilisables
-                                        updateBtnList.classList.add("disableUpdate");
-                                        updateBtnList.classList.remove("edit");
-                                        updateBtnList.disabled = true;
-                                        deleteBtnList.classList.add("disableDelete");
-                                        deleteBtnList.classList.remove("delete");
-                                        deleteBtnList.disabled = true;
+                                        // updateBtnList.classList.add("disableUpdate");
+                                        // updateBtnList.classList.remove("edit");
+                                        // updateBtnList.disabled = true;
+                                        // deleteBtnList.classList.add("disableDelete");
+                                        // deleteBtnList.classList.remove("delete");
+                                        // deleteBtnList.disabled = true;
 
                                         // Boutons édition et suppression des cartes cachés
-                                        updateBtnCard.hidden = true;
-                                        deleteBtnCard.hidden = true;
+                                        // updateBtnCard.hidden = true;
+                                        // deleteBtnCard.hidden = true;
 
                                         // Réservation cachée
                                         reservationBtn.hidden = true;
 
                                         // Etoiles de priorité cachées
-                                        divStar.classList.add("hidden");
+                                        // divStar.classList.add("hidden");
 
-                                        updateCardSection.id = `updateCardSection-${objectCard.id}`;
-                                        updateCardSection.classList.add("updateCard");
-                                        actionBtnCard.classList.remove("grid_action_btn_lists");
-                                        actionBtnCard.classList.add("grid_edit_card");
-                                        deleteBtnCard.after(updateCardSection);
-                                        updateCardSection.appendChild(titleForm)
+                                        // actionBtnCard.classList.remove("grid_action_btn_lists");
+                                        // actionBtnCard.classList.add("grid_edit_card");
+                                        // deleteBtnCard.after(updateCardSection);
+                                        // updateCardSection.appendChild(titleForm)
+
+                                        popIn.appendChild(updateCardSection)
 
                                         // Affichage du formulaire d'édition + dissimulation de la carte
                                         displayFormCard(updateCardSection);
-
-                                        cardSectionContent.classList.add("hidden");
+                                        // cardSectionContent.classList.add("hidden");
+                                        const titleFormCard = document.querySelector("#titleFormCard");
+                                        titleFormCard.innerText = "Formulaire d'édition de la carte";
 
                                         // Affichage de la carte + suppression du formulaire d'édition
                                         const updateFormCard  = document.querySelector("#formCard");
                                         const cardCancelBtn = document.querySelector("#cardCancelBtn");
 
                                         cardCancelBtn.addEventListener("click", function() {
-                                            reservationBtn.removeAttribute("style");
+                                            popIn.style.visibility = "hidden";
+                                            // reservationBtn.removeAttribute("style");
                                             // Gestion des boutons de la carte courante à modifier
                                             // Bouton de création de cartes utilisable
-                                            cardFormBtn.classList.remove("disable");
-                                            cardFormBtn.disabled = false;
+                                            // cardFormBtn.classList.remove("disable");
+                                            // cardFormBtn.disabled = false;
 
                                             // Boutons édition et suppression des listes utilisables
-                                            updateBtnList.classList.remove("disableUpdate");
-                                            updateBtnList.classList.add("edit");
-                                            updateBtnList.disabled = false;
+                                            // updateBtnList.classList.remove("disableUpdate");
+                                            // updateBtnList.classList.add("edit");
+                                            // updateBtnList.disabled = false;
 
-                                            deleteBtnList.classList.remove("disableDelete");
-                                            deleteBtnList.classList.add("delete");
-                                            deleteBtnList.disabled = false;
+                                            // deleteBtnList.classList.remove("disableDelete");
+                                            // deleteBtnList.classList.add("delete");
+                                            // deleteBtnList.disabled = false;
 
                                             // Boutons édition et suppression des cartes réapparus
-                                            updateBtnCard.hidden = false;
-                                            deleteBtnCard.hidden = false;
+                                            // updateBtnCard.hidden = false;
+                                            // deleteBtnCard.hidden = false;
 
                                             // Réservation cachée
                                             reservationBtn.hidden = false;
 
                                             // Etoiles de priorité visibles
-                                            divStar.classList.remove("hidden");
+                                            // divStar.classList.remove("hidden");
 
-                                            actionBtnCard.classList.remove("grid_edit_card");
-                                            actionBtnCard.classList.add("grid_action_btn_lists");
+                                            // actionBtnCard.classList.remove("grid_edit_card");
+                                            // actionBtnCard.classList.add("grid_action_btn_lists");
 
                                             // Retrait titre et formulaire édition de cartes
-                                            titleForm.remove();
+                                            // titleForm.remove();
                                             updateFormCard.remove();
                                             cardSectionContent.classList.remove("hidden");
                                         })
@@ -440,8 +453,8 @@ function card(canCreateCard, updateBtnList, deleteBtnList) {
                                         const inputTitle = document.querySelector("#titleCard");
                                         inputTitle.value = objectCard.title;
 
-                                        const inputDescription = document.querySelector("#descriptionCard");
-                                        inputDescription.value = objectCard.description;
+                                        const textAreaDescription = document.querySelector("#descriptionCard");
+                                        textAreaDescription.value = objectCard.description;
 
                                         const inputPriority = document.querySelector("#priority");
                                         inputPriority.value = objectCard.priority;

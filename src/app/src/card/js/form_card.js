@@ -8,6 +8,12 @@ import { mandatoryStar } from "../../services/utils.js";
  * @param {HTMLElement} elementDOM - L'élément HTML dans lequel le formulaire de mise à jour sera généré.
  */
 function displayFormCard(elementDOM) {
+    const sectionForm = document.createElement("section");
+    sectionForm.id = "cardFormSection";
+
+    const titleForm = document.createElement("h3");
+    titleForm.id = "titleFormCard";
+
     const createFormCard = document.createElement("form");
     createFormCard.id = "formCard";
 
@@ -48,6 +54,8 @@ function displayFormCard(elementDOM) {
     inputPriority.max = 5;
     inputPriority.required = true;
 
+    const actionBtnCard = document.createElement("div");
+
     const cardValidFormBtn = document.createElement("button");
     cardValidFormBtn.id = "cardValidBtn";
     cardValidFormBtn.type = "submit";
@@ -66,6 +74,8 @@ function displayFormCard(elementDOM) {
     cardCancelFormBtn.classList.add("btn");
     cardCancelFormBtn.classList.add("cancel");
 
+    sectionForm.appendChild(titleForm);
+    sectionForm.appendChild(createFormCard)
     createFormCard.appendChild(labelTitle);
     labelTitle.appendChild(mandatoryStar.cloneNode(true));
     createFormCard.appendChild(inputTitle);
@@ -74,10 +84,11 @@ function displayFormCard(elementDOM) {
     createFormCard.appendChild(labelPriority);
     labelPriority.appendChild(mandatoryStar.cloneNode(true));
     createFormCard.appendChild(inputPriority);
-    createFormCard.appendChild(cardValidFormBtn);
-    createFormCard.appendChild(cardCancelFormBtn);
+    createFormCard.appendChild(actionBtnCard);
+    actionBtnCard.appendChild(cardValidFormBtn);
+    actionBtnCard.appendChild(cardCancelFormBtn);
 
-    elementDOM.appendChild(createFormCard);
+    elementDOM.appendChild(sectionForm);
 }
 
 export { displayFormCard };

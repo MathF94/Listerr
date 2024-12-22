@@ -246,16 +246,17 @@ function read() {
                                     articleList.classList.add(type.Common)
                                 }
 
-                                if(objectList.type === "TodoList") {
-                                    articleList.classList.add("disabled");
-                                }
-
                                 const sectionList = document.createElement("section");
                                 sectionList.classList.add("grid_section");
                                 sectionList.classList.add("pointer");
                                 const typeH3 = document.createElement("h3");
                                 typeH3.classList.add("grid_typeH3");
                                 const titleH4 = document.createElement("h4");
+
+                                if(objectList.type === "TodoList") {
+                                    articleList.classList.add("disabled");
+                                    sectionList.classList.remove("pointer");
+                                }
 
                                 for (const key in objectList) {
                                     const value = objectList[key];
