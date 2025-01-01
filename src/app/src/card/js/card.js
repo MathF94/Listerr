@@ -190,7 +190,7 @@ function card(canCreateCard) {
             }
 
             // CSS pour différencier la couleur de fond des WL ou TL si l'utilisateur est différent du propriétaire
-            if (localStorage.getItem("userTypeList") === "WishList" || localStorage.getItem("typeList") === "TodoList") {
+            if (localStorage.getItem("userTypeList") === "WishList" || localStorage.getItem("userTypeList") === "TodoList") {
                 if (!canCreateCard) {
                     cardArticleContent.classList.add("third_party_wish");
                 } else{
@@ -538,7 +538,7 @@ function card(canCreateCard) {
                             })
                         })
                     }
-                    
+
                     // L'utilisateur peut réserver des cartes dans sa propre liste
                     if (canCreateCard) {
                         // Bouton de création de cartes inutilisable

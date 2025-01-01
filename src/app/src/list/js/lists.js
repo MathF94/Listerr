@@ -13,13 +13,14 @@ import { dropDownMenu } from "../../layout/dropdown.js";
 import { CSRFToken } from "../../services/CSRFToken.js";
 
 import {
-    configPath,
     allowedIds,
-    type,
-    redirect,
+    configPath,
+    detail,
     dialog,
     notAllowedRedirection,
+    redirect,
     scroll,
+    type,
     validate
 } from "../../services/utils.js";
 
@@ -146,24 +147,7 @@ function lists() {
                 const titleH4 = document.createElement("h4");
                 titleH4.classList.add("grid_titleH4_lists");
 
-                const actionBtnLists = document.createElement("div");
-                actionBtnLists.id = `actionBtnLists-${objectList.id}`;
-                actionBtnLists.classList.add("grid_action_btn_lists");
-
-                const deleteBtnLists = document.createElement("button");
-                deleteBtnLists.id = `deleteProfilList-${objectList.id}`;
-                deleteBtnLists.title = "Supprimer la liste";
-                deleteBtnLists.name = "deleteProfilList";
-                deleteBtnLists.title = "Supprimer la liste";
-                deleteBtnLists.type = "submit";
-                deleteBtnLists.value = `${objectList.id}`;
-                deleteBtnLists.textContent = "";
-                deleteBtnLists.classList.add("btn");
-                deleteBtnLists.classList.add("delete");
-
                 for (const key in objectList) {
-                    const value = objectList[key];
-
                     if (key === "title") {
                         titleH4.innerText = `${objectList.description}`;
                     } else if (key === "type") {
@@ -179,9 +163,39 @@ function lists() {
                     articleList.appendChild(typeH3);
                     articleList.appendChild(sectionList);
                     sectionList.appendChild(titleH4);
-                    dropDownMenu(articleList, objectList.id, objectList.updatedAt, objectList.user.login);
-                    // articleList.appendChild(actionBtnLists);
-                    // actionBtnLists.appendChild(deleteBtnLists);
+
+                    const actions = [
+                        {
+                            id: `detailLists-${objectList.id}`,
+                            text : detail(objectList.updatedAt, objectList.user.login),
+                            onclick: false
+                        },
+                        {
+                            // Gestion de la suppression de liste
+                            id: `deleteLists-${objectList.id}`,
+                            text: "Supprimer la liste",
+                            onclick: function(e){
+                                e.preventDefault();
+                                e.stopPropagation();
+                                const btnListId = parseInt(e.target.value);
+
+                                if (btnListId !== objectList.id) {
+                                    console.warn("pas touche");
+                                    return;
+                                } else if (confirm('Voulez-vous vraiment vous supprimer la liste ?') === true) {
+                                    scroll();
+                                    fetchDeleteList(objectList.id)
+                                    .then(() => {
+                                        dialog({title: "Suppression de la liste", content: `Votre liste a bien été supprimée.`});
+                                        const dialogMsg = document.querySelector("dialog");
+                                        dialogMsg.classList.add("valid");
+                                        redirect(`${configPath.basePath}/list/pages/lists.html`);
+                                    });
+                                }
+                            }
+                        }
+                    ]
+                    dropDownMenu(articleList, objectList.id, objectList.updatedAt, objectList.user.login, actions);
                 }
 
                 // Redirige vers la page de détails de la liste en cliquant sur la liste.
@@ -192,28 +206,6 @@ function lists() {
                         redirect(`${configPath.basePath}/list/pages/list.html?id=${objectList.id}`, 0);
                     }
                 })
-
-                // Gestion de la suppression de liste
-                deleteBtnLists.addEventListener("click", function(e){
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const btnListId = parseInt(e.target.value);
-
-                    if (btnListId !== objectList.id) {
-                        console.warn("pas touche");
-                        return;
-                    } else if (confirm('Voulez-vous vraiment vous supprimer la liste ?') === true) {
-                        scroll();
-                        fetchDeleteList(objectList.id)
-                        .then(() => {
-                            dialog({title: "Suppression de la liste", content: `Votre liste a bien été supprimée.`});
-                            const dialogMsg = document.querySelector("dialog");
-                            dialogMsg.classList.add("valid");
-                            redirect(`${configPath.basePath}/list/pages/lists.html`);
-                        });
-                    }
-                })
-
             }
         }
     })

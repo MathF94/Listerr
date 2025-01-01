@@ -18,7 +18,6 @@ import {
     configPath,
     detail,
     dialog,
-    manageBtns,
     notAllowedRedirection,
     redirect,
     scroll,

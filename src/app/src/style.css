@@ -510,7 +510,7 @@ dialog.errors_fields > h2 {
   transform: translate(0, 15px) scale(0.95);
   transition: transform 0.1s ease-out, opacity 0.1s ease-out;
   -webkit-transform: translate(0, 15px) scale(0.95);
-  width: 125px;
+  width: 130px;
   z-index: 900;
 }
 .more__menu__btn {

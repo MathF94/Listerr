@@ -71,13 +71,7 @@ function dropDownMenu(template, dataId, updatedAt, login, actions) {
     // CAS DE LA PAGE list/pages/lists.html
     if (window.location.href === `${configPath.basePath}/list/pages/lists.html`) {
         if (localStorage.user !== null && localStorage.user !== undefined) {
-            const action = [
-                {
-                    id: `detailLists-${dataId}`,
-                    text : detail(updatedAt, login)
-                }
-            ]
-            addActions(action)
+            addActions(actions)
         }
     }
 
