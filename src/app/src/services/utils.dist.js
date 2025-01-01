@@ -1,5 +1,8 @@
 "use strict";
 
+/**
+ *
+ */
 const allowedIds = [
     "status",
     "id",
@@ -7,7 +10,6 @@ const allowedIds = [
     "user",
     "type",
     "title",
-    // "description",
     "cards",
     "createdAt",
     "updatedAt"
@@ -25,6 +27,9 @@ const mandatoryStar = document.createElement("span");
 mandatoryStar.innerText = "*";
 mandatoryStar.classList.add("mandatory");
 
+/**
+ *
+ */
 const type = {
     WishList: 'wish',
     TodoList: 'todo',
@@ -32,11 +37,30 @@ const type = {
 };
 
 /**
+ *
+ * @param {*} time
+ * @param {*} login
+ * @returns
+ */
+
+function detail(time, login) {
+    let date = new Date(time);
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    let formatedDate = (day < 10 ? '0' : '') + day + '/'
+                        + (month < 10 ? '0' : '') + month + '/'
+                        + year;
+    const message = `Modifié par ${login}, \n le ${formatedDate}`
+    return message;
+}
+
+/**
  * Affiche une boîte de dialogue modale.
  * @param {Object} options - Les options de la boîte de dialogue.
  * @param {string} [options.title="Notification"] - Le titre de la boîte de dialogue.
  * @param {string|Array|Object} options.content - Le contenu de la boîte de dialogue.
- */
+*/
 function dialog({title, content}) {
     const header = document.querySelector("#navWrapper");
     title = title || "Notification";
@@ -74,29 +98,32 @@ function dialog({title, content}) {
 
 /**
  * Permet de rendre inutilisable les boutons lors de la création d'une carte
- * @param {string} anchor - bouton pour la création de carte
- * @param {string} cancelAnchor - bouton pour l'annulation de carte
  * @param {string} selector - La classe pour sélectionner les boutons
  * @param {string} disableClass - la classe à ajouter pour rendre inutilisable le bouton visé
  * @param {string} firstClass - la classe initiale du bouton
+ * @param {string} cancelAnchor - bouton pour l'annulation de carte
  */
-function manageBtns (anchor, cancelAnchor, selector, disableClass, firstClass) {
+
+function manageBtns(selector, disableClass, firstClass, cancelAnchor) {
     const buttons = document.querySelectorAll(selector);
 
     buttons.forEach(button => {
-        if (anchor.hidden === true) {
-            button.classList.add(disableClass);
-            button.classList.remove(firstClass)
-            button.disabled = true;
-        }
+        button.classList.add(disableClass);
+        button.classList.remove(firstClass);
+        button.setAttribute("disabled", "true");
 
-        cancelAnchor.addEventListener("click", function() {
-            button.classList.remove(disableClass);
+        cancelAnchor.addEventListener("click", e => {
             button.classList.add(firstClass)
-            button.disabled = false;
+            button.classList.remove(disableClass);
+            button.removeAttribute("disabled");
         })
     });
 }
+
+/**
+ *
+ * @param {*} dataId
+ */
 
 function menu(dataId) {
     const el = document.querySelector(`#dropDown-${dataId}`);
@@ -173,23 +200,14 @@ function reveal() {
     })
 }
 
+/**
+ *
+ */
 function scroll() {
     window.scrollTo({
         top: 0,
         behavior: "smooth",
     });
-}
-
-function detail(time, login) {
-    let date = new Date(time);
-    let day = date.getDate();
-    let month = date.getMonth() + 1;
-    let year = date.getFullYear();
-    let formatedDate = (day < 10 ? '0' : '') + day + '/'
-                        + (month < 10 ? '0' : '') + month + '/'
-                        + year;
-    const message = `Modifié par ${login}, \n le ${formatedDate}`
-    return message;
 }
 
 /**

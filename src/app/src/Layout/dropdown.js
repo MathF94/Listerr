@@ -47,6 +47,7 @@ function dropDownMenu(template, dataId, updatedAt, login, actions) {
         if (localStorage.user !== null && localStorage.user !== undefined) {
             const action = [
                 {
+                    id: `detailHome-${dataId}`,
                     text : detail(updatedAt, login)
                 }
             ]
@@ -59,6 +60,7 @@ function dropDownMenu(template, dataId, updatedAt, login, actions) {
         if (JSON.parse(localStorage.user).role === 'Admin') {
             const action = [
                 {
+                    id: `detailProfil-${dataId}`,
                     text : detail(updatedAt, login)
                 }
             ]
@@ -71,6 +73,7 @@ function dropDownMenu(template, dataId, updatedAt, login, actions) {
         if (localStorage.user !== null && localStorage.user !== undefined) {
             const action = [
                 {
+                    id: `detailLists-${dataId}`,
                     text : detail(updatedAt, login)
                 }
             ]
@@ -83,6 +86,7 @@ function dropDownMenu(template, dataId, updatedAt, login, actions) {
         if (localStorage.user === null || localStorage.token === null || localStorage.user === undefined || localStorage.token === undefined) {
             const action = [
                 {
+                    id: `detailList-${dataId}`,
                     text : detail(updatedAt, login)
                 }
             ]
@@ -99,6 +103,7 @@ function dropDownMenu(template, dataId, updatedAt, login, actions) {
             if (userId !== userIDList) {
                 const action = [
                     {
+                        id: `detailList-${dataId}`,
                         text : detail(updatedAt, login)
                     }
                 ]
@@ -115,6 +120,7 @@ function dropDownMenu(template, dataId, updatedAt, login, actions) {
 
             const moreMenuBtn = document.createElement(actionData.onclick?"button":"small");
             moreMenuBtn.type = "button";
+            moreMenuBtn.id = actionData.id;
             moreMenuBtn.value = dataId;
             moreMenuBtn.addEventListener("click", (e)=>{
                 e.preventDefault()

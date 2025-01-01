@@ -421,9 +421,9 @@ dialog {
     color: var(--third-party-star);
     font-size: 25px;
 }
-.disable_stars {
+.disableStars {
     color: var(--disable-star);
-    cursor: not-allowed;
+    pointer-events: none;
     font-size: 25px;
 }
 .adminSection {
@@ -702,7 +702,7 @@ dialog {
     }
     &.disable {
         background-color: var(--disable-btn);
-
+        cursor: not-allowed;
         &:hover {
             background-color: var(--disable-btn-hover);
             color: var(--text-dark);
@@ -710,7 +710,6 @@ dialog {
     }
     &.disableUpdate {
         background-color: var(--disable-btn);
-
         &::before {
             content: "🖊";
         }

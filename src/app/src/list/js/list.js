@@ -18,6 +18,7 @@ import {
     configPath,
     detail,
     dialog,
+    manageBtns,
     notAllowedRedirection,
     redirect,
     scroll,
@@ -97,7 +98,7 @@ function list() {
                 oneList.classList.add("grid");
 
                 const typeList = document.createElement("h3");
-                typeList.id = "typeList";
+                typeList.id = `typeList-${data.id}`;
                 typeList.classList.add("grid_typeH3")
                 typeList.innerText = `${data.type} \n ${data.title}`;
 
@@ -138,11 +139,13 @@ function list() {
                 if (userId === data.user.id) {
                     const actions = [
                         {
+                            id: `detailList-${data.id}`,
                             text : detail(data.updatedAt, data.user.login),
                             onclick: false
                         },
                         {
                             // Gestion de la mise à jour de la liste
+                            id: `updateList-${data.id}`,
                             text: "Modifier la liste",
                             onclick: function(e) {
                                 e.preventDefault();
@@ -153,17 +156,19 @@ function list() {
                                     return;
 
                                 } else {
-                                    const updateListSection = document.createElement("section");
-                                    updateListSection.id = "updateListSection";
+                                    const cardsArray = data.cards
+                                    const updateListDiv = document.createElement("div");
+                                    updateListDiv.id = "updateListDiv";
                                     popIn.style.visibility = "visible";
 
                                     const dropDown = document.querySelector(`#dropDown-${data.id}`)
                                     dropDown.classList.remove('show__more__menu');
 
-                                    popIn.appendChild(updateListSection);
+                                    popIn.appendChild(updateListDiv);
 
                                     // Affichage du formulaire d'édition + dissimulation de la liste
-                                    displayFormList(updateListSection);
+                                    displayFormList(updateListDiv);
+
                                     const titleFormList = document.querySelector("#titleFormList");
                                     titleFormList.innerText = "Formulaire d'édition de la liste";
 
@@ -173,13 +178,30 @@ function list() {
                                     // Fermeture du formulaire d'édition + affichage de la liste
                                     cancelForm.addEventListener("click", function() {
                                         popIn.style.visibility = "hidden";
-                                        updateListSection.remove();
+                                        updateListDiv.remove();
 
                                         // Titre visible
                                         typeList.classList.remove("hidden");
 
                                         // Description de liste visible
                                         sectionList.classList.remove("hidden");
+
+                                        cardsArray.forEach(cardArray => {
+                                            const reservationBtns = document.querySelectorAll(`#reservationBtn-${cardArray.id}`);
+                                            const priorityBtns = document.querySelectorAll('.disableStars');
+
+                                            reservationBtns.forEach(reservationBtn => {
+                                                reservationBtn.classList.remove('disable');
+                                                reservationBtn.classList.add('reservation');
+                                                reservationBtn.disabled = false;
+                                            });
+
+                                            priorityBtns.forEach(priorityBtn => {
+                                                priorityBtn.classList.remove('disableStars');
+                                                priorityBtn.classList.add('stars');
+                                                priorityBtn.disabled = false;
+                                            })
+                                        });
                                     })
 
                                     // Insertion des éléments de la liste dans les inputs
@@ -237,6 +259,7 @@ function list() {
                         },
                         {
                             // Gestion de la suppression de la liste
+                            id: `deleteList-${data.id}`,
                             text: "Supprimer la liste",
                             onclick: function(e){
                                 e.preventDefault();

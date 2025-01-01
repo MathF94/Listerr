@@ -47,7 +47,6 @@ function displayFormList(elementDOM) {
     inputTitle.name = "titleList";
     inputTitle.id = "titleList";
     inputTitle.placeholder = "Votre titre";
-    inputTitle.setAttribute("max", 20);
     inputTitle.value = "";
     inputTitle.required = true;
 

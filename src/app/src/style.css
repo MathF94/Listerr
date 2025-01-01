@@ -418,9 +418,9 @@ dialog.errors_fields > h2 {
   font-size: 25px;
 }
 
-.disable_stars {
+.disableStars {
   color: var(--disable-star);
-  cursor: not-allowed;
+  pointer-events: none;
   font-size: 25px;
 }
 
@@ -691,6 +691,7 @@ dialog.errors_fields > h2 {
 }
 .btn.disable {
   background-color: var(--disable-btn);
+  cursor: not-allowed;
 }
 .btn.disable:hover {
   background-color: var(--disable-btn-hover);
