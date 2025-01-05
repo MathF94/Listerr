@@ -38,13 +38,25 @@ function lists() {
     const createListBtn = document.querySelector("#listCreater");
     createListBtn.title = "Créer une nouvelle liste";
 
+    const listWrapper = document.querySelector('#listsWrapper');
+    const popIn = document.createElement("div");
+    popIn.id = "popIn";
+    popIn.classList.add("popIn");
+
     // Affiche le formulaire de création de liste lorsqu'on clique sur le bouton "Créer une nouvelle liste".
     createListBtn.addEventListener("click", function(){
         if (createListBtn.value === "newList") {
             const divList = document.querySelector("#divList");
+            popIn.style.visibility = "visible";
+            listWrapper.appendChild(popIn);
+
+            const createListsDiv = document.createElement("div");
+            createListsDiv.id = "createListsDiv";
+
+            popIn.appendChild(createListsDiv);
 
             // Appelle le formulaire pour la création de la liste
-            displayFormList(divList)
+            displayFormList(createListsDiv)
             titleFormList.innerText = "Formulaire de création de la liste";
             createListBtn.disabled = true;
             createListBtn.classList.remove("way");
@@ -60,6 +72,7 @@ function lists() {
                 createListBtn.disabled = false;
                 createListBtn.classList.remove("disable");
                 createListBtn.classList.add("way");
+                popIn.style.visibility = "hidden";
             })
 
             // Gère la soumission du formulaire de création de liste.
