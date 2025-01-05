@@ -179,13 +179,18 @@ body {
   text-align: center;
 }
 
-.login, .register {
-  display: flex;
-  flex-direction: column;
+#headListsSection {
+  margin: 20px;
+  padding-top: 3px;
 }
 
 h3, h4 {
   margin: 10px auto;
+}
+
+.login, .register {
+  display: flex;
+  flex-direction: column;
 }
 
 a {
@@ -390,7 +395,7 @@ dialog.errors_fields > h2 {
   background: var(--third-party-wish-bg);
 }
 
-#createCardDiv, #updateListDiv, .updateCardDiv {
+#createListsDiv, #createCardDiv, #updateListDiv, .updateCardDiv {
   margin: 0 auto;
 }
 
@@ -399,7 +404,6 @@ dialog.errors_fields > h2 {
   border-radius: 8px;
   box-shadow: 0 0 5px var(--border);
   padding: 5px;
-  width: 100%;
 }
 
 .card {
@@ -751,6 +755,11 @@ form {
   margin: 0px auto;
   padding: 10px 20px;
   width: 85%;
+}
+form#registerForm, form#loginForm, form#updateForm, form.formUpdateUser {
+  background-color: var(--form-bg);
+  border-radius: 8px;
+  box-shadow: 0 0 5px var(--border);
 }
 form > div {
   margin: 10px 0;

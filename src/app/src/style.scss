@@ -201,12 +201,16 @@ body {
     min-height: 100vh;
     text-align: center;
 }
-.login, .register {
-    display: flex;
-    flex-direction: column;
+#headListsSection {
+    margin: 20px;
+    padding-top: 3px;
 }
 h3, h4 {
     margin: 10px auto;
+}
+.login, .register {
+    display: flex;
+    flex-direction: column;
 }
 a {
     color: var(--text-dark);
@@ -394,7 +398,7 @@ dialog {
         background: var(--third-party-wish-bg);
     }
 }
-#createCardDiv, #updateListDiv, .updateCardDiv {
+#createListsDiv, #createCardDiv, #updateListDiv, .updateCardDiv {
     margin: 0 auto;
 }
 #listFormSection, #cardFormSection {
@@ -402,7 +406,6 @@ dialog {
     border-radius: 8px;
     box-shadow: 0 0 5px var(--border);
     padding: 5px;
-    width: 100%;
 }
 .card {
     border-radius: 10px;
@@ -759,6 +762,11 @@ form {
     margin: 0px auto;
     padding: 10px 20px;
     width: 85%;
+    &#registerForm, &#loginForm, &#updateForm, &.formUpdateUser {
+        background-color: var(--form-bg);
+        border-radius: 8px;
+        box-shadow: 0 0 5px var(--border);
+    }
     &> div {
         margin: 10px 0;
     }
