@@ -1,8 +1,16 @@
 "use strict";
 
 import { fetchLogin } from "../../actions/actions_user.js";
+
 import { CSRFToken } from "../../services/CSRFToken.js";
-import { configPath, redirect, dialog, validate, reveal } from "../../services/utils.js";
+
+import {
+    configPath,
+    redirect,
+    dialog,
+    validate,
+    reveal
+} from "../../services/utils.js";
 
 /**
  * Gère le processus de connexion de l'utilisateur.
@@ -10,10 +18,8 @@ import { configPath, redirect, dialog, validate, reveal } from "../../services/u
 function login() {
     // Affiche ou cache le mot de passe
     reveal();
-
      // Obtient l'identifiant de la liste à partir des paramètres de l'URL.
     const urlParams = new URLSearchParams(document.location.search);
-
     const id = urlParams.get("id");
     const redirection = urlParams.get("redirection");
 
@@ -23,6 +29,11 @@ function login() {
     const noRegisterYet = document.querySelector("#noRegisterYet");
     noRegisterYet.title = "Redirection pour création de compte";
     noRegisterYet.setAttribute('href', `${configPath.basePath}/user/pages/registration.html`);
+    noRegisterYet.addEventListener("click", e => {
+        e.preventDefault();
+        localStorage.nav_active ="register";
+        redirect(`${configPath.basePath}/user/pages/registration.html`);
+    })
 
     // Validation de pattern du formulaire
     const inputLogin = document.querySelector("#login");
@@ -36,7 +47,6 @@ function login() {
 
     loginForm.addEventListener("submit", function(e){
         e.preventDefault();
-
         fetchLogin(loginForm)
         .then(response => {
             localStorage.removeItem("csrfToken");
@@ -47,19 +57,24 @@ function login() {
                 localStorage.setItem("user", JSON.stringify({
                     id: response.user_id,
                     login: response.user_login,
+                    email: response.user_email,
                     role: response.user_role,
                     is_admin: response.user_isAdmin
                 }));
 
                 const login = JSON.parse(localStorage.user).login;
+
                 dialog({title: `Bonjour ${login} !`, content: `Vous êtes bien connecté(e).`});
+
                 const dialogMsg = document.querySelector("dialog");
                 dialogMsg.classList.add("valid");
                 loginForm.classList.add("hidden");
 
-                if(redirection) {
+                if (redirection === "") {
+                    localStorage.nav_active ="home";
                     redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`)
                 } else {
+                    localStorage.nav_active ="home";
                     redirect(`${configPath.basePath}/home/pages/home.html`);
                 }
             };

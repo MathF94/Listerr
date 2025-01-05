@@ -1,7 +1,12 @@
 'use strict';
 
 import { fetchDelete } from "../../actions/actions_user.js";
-import { configPath, redirect, dialog } from "../../services/utils.js";
+
+import {
+    configPath,
+    redirect,
+    dialog
+} from "../../services/utils.js";
 
 /**
  * Supprime le compte de l'utilisateur.

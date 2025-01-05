@@ -1,8 +1,15 @@
 "use strict";
 
 import { fetchRegister } from "../../actions/actions_user.js";
+
 import { CSRFToken } from "../../services/CSRFToken.js";
-import { configPath, redirect, dialog, reveal} from "../../services/utils.js";
+
+import {
+    configPath,
+    redirect,
+    dialog,
+    reveal
+} from "../../services/utils.js";
 
 /**
  * Gère le processus d'inscription de l'utilisateur, y compris la soumission du formulaire d'inscription,
@@ -11,13 +18,17 @@ import { configPath, redirect, dialog, reveal} from "../../services/utils.js";
 function registration() {
     // Affiche ou cache le mot de passe
     reveal();
-
     const registerBtn = document.querySelector("#registerBtn");
     registerBtn.title = "Valider l'inscription";
 
     const alreadyRegistered = document.querySelector("#alreadyRegistered");
     alreadyRegistered.title = "Redirection vers la page de connexion";
     alreadyRegistered.setAttribute('href', `${configPath.basePath}/user/pages/login.html`);
+    alreadyRegistered.addEventListener("click", e => {
+        e.preventDefault();
+        localStorage.nav_active ="connexion";
+        redirect(`${configPath.basePath}/user/pages/login.html`);
+    })
 
     // Ajoute un gestionnaire d'événements pour soumettre le formulaire d'inscription.
     registerForm.addEventListener("submit", function(e){

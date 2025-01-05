@@ -80,7 +80,6 @@ class UserController
     {
         try {
             $validToken = $this->csrfToken->isValidToken($csrfToken, "registerForm");
-
             if (!$validToken) {
                 return json_encode([
                     "status" => "fail",
@@ -163,13 +162,15 @@ class UserController
                     ]);
                 }
                 $session = new Session();
-                $encryptToken = $session->encrypt($user->id, $user->login, $encrytedPassword);
+                $encryptToken = $session->encrypt($user->id, $user->login, $user->email, $encrytedPassword);
+
                 return json_encode([
                     "status" => "loginUser",
                     "connected" => true,
                     "token" => $encryptToken,
                     "user_id" => $user->id,
                     "user_login" => $user->login,
+                    "user_email" => $user->email,
                     "user_role" => $user->role,
                 ]);
             };
@@ -203,6 +204,7 @@ class UserController
                 $session = new Session();
                 $decrypt = $session->decrypt($tokenUser);
                 $login = $decrypt["login"];
+
                 $modelUser = new Users();
 
                 // $userId correspond à l'ID d'un autre utilisateur que l'admin, récupéré via l'URL

@@ -1,7 +1,13 @@
 "use strict";
 
 import { fetchLogout } from "../../actions/actions_user.js";
-import { configPath, redirect, dialog} from "../../services/utils.js";
+
+import {
+    configPath,
+    redirect,
+    dialog
+} from "../../services/utils.js";
+
 /**
  * Gère le processus de déconnexion de l'utilisateur.
  */
@@ -37,16 +43,17 @@ function logout() {
 
             localStorage.removeItem("token");
             localStorage.removeItem("user");
+            localStorage.nav_active ="home";
             redirect(`${configPath.basePath}/user/pages/login.html`, 3000);
         }
 
         anchorLogout.addEventListener("click", function (e) {
             e.preventDefault();
-
             if (confirm("Voulez-vous vraiment vous déconnecter ?") === true) {
                 if (response.status === "connected") {
                     localStorage.removeItem("token");
                     localStorage.removeItem("user");
+
                     dialog({
                         title: `A bientôt ${response.login} !`,
                         content: "Vous allez être redirigé(e) dans quelques instants vers la page de connexion..."
@@ -65,7 +72,7 @@ function logout() {
                     if (allListsSection) {
                         allListsSection.classList.add("hidden");
                     }
-
+                    localStorage.nav_active ="home";
                     redirect(`${configPath.basePath}/home/pages/home.html`);
                 }
             }

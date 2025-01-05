@@ -34,7 +34,7 @@
                 <div>
                     <label for="password">Votre mot de passe</label>
                     <div class="fieldIcon">
-                        <input type="password" name="password" id="password" pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).{12,}$" required/>
+                        <input type="password" name="password" id="password" pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*\(\)_\+=\-\.,;]).{12,}$" required/>
                         <div id="icon" class="icon"></div>
                     </div>
                     <small>Au moins 12 caractères dont une majuscule, un nombre, un caractère spécial</small>
@@ -43,7 +43,7 @@
                     <button id="registerBtn" class="btn valid" type="submit" title="Valider l'inscription">Valider</button>
                 </div>
             </form>
-            <a id="alreadyRegistered" title="Redirection vers la page de connexion">J'ai déjà un compte.</a>
+            <a id="alreadyRegistered" title="Redirection vers la page de connexion">J'ai déjà un compte</a>
         </section>
     </body>
 </html>

@@ -1,18 +1,27 @@
 "use strict";
 
+/**
+ * Clés autorisées dans les listes et cartes
+ */
 const allowedIds = [
-    "status",
-    "id",
-    "userId",
-    "user",
-    "type",
-    "title",
-    // "description",
     "cards",
     "createdAt",
-    "updatedAt"
+    "id",
+    "listId",
+    "login",
+    "priority",
+    "reservationId",
+    "status",
+    "title",
+    "type",
+    "updatedAt",
+    "userId",
+    "user",
 ];
 
+/**
+ * Chemin d'API et chemin d'APP
+ */
 const configPath = {
         basePath: "{{BASE_PATH}}",
         apiPath: "{{API_PATH}}"
@@ -25,6 +34,9 @@ const mandatoryStar = document.createElement("span");
 mandatoryStar.innerText = "*";
 mandatoryStar.classList.add("mandatory");
 
+/**
+ * Constantes utilisées pour le CSS des wish / todo
+ */
 const type = {
     WishList: 'wish',
     TodoList: 'todo',
@@ -32,11 +44,47 @@ const type = {
 };
 
 /**
+ * Permet de rendre utilisables les boutons lors de la modification d'une liste
+ * @param {string} selector - La classe pour sélectionner les boutons
+ * @param {string} disableClass - la classe à ajouter pour rendre inutilisable le bouton visé
+ * @param {string} firstClass - la classe initiale du bouton
+ */
+function buttonsOff(selector, disableClass, firstClass) {
+    const buttons = document.querySelectorAll(selector);
+
+    buttons.forEach(button => {
+        button.classList.add(disableClass);
+        button.classList.remove(firstClass);
+        button.disabled = false;
+    })
+}
+
+/**
+ * Permet de retirer les heures des mises à jours de listes / cartes par l'utilisateur
+ * Permet de retourner un message en intégrant la date sans heures avec le login de l'utilisateur
+ * @param {string} time
+ * @param {string} login
+ * @returns
+ */
+
+function detail(time, login) {
+    let date = new Date(time);
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    let formatedDate = (day < 10 ? '0' : '') + day + '/'
+                        + (month < 10 ? '0' : '') + month + '/'
+                        + year;
+    const message = `Modifié par ${login}, \n le ${formatedDate}`
+    return message;
+}
+
+/**
  * Affiche une boîte de dialogue modale.
  * @param {Object} options - Les options de la boîte de dialogue.
  * @param {string} [options.title="Notification"] - Le titre de la boîte de dialogue.
  * @param {string|Array|Object} options.content - Le contenu de la boîte de dialogue.
- */
+*/
 function dialog({title, content}) {
     const header = document.querySelector("#navWrapper");
     title = title || "Notification";
@@ -74,28 +122,60 @@ function dialog({title, content}) {
 
 /**
  * Permet de rendre inutilisable les boutons lors de la création d'une carte
- * @param {string} anchor - bouton pour la création de carte
- * @param {string} cancelAnchor - bouton pour l'annulation de carte
  * @param {string} selector - La classe pour sélectionner les boutons
  * @param {string} disableClass - la classe à ajouter pour rendre inutilisable le bouton visé
  * @param {string} firstClass - la classe initiale du bouton
+ * @param {string} cancelAnchor - bouton pour l'annulation de carte
  */
-function manageBtns (anchor, cancelAnchor, selector, disableClass, firstClass) {
+
+function manageBtns(selector, disableClass, firstClass, cancelAnchor) {
     const buttons = document.querySelectorAll(selector);
 
     buttons.forEach(button => {
-        if (anchor.hidden === true) {
-            button.classList.add(disableClass);
-            button.classList.remove(firstClass)
-            button.disabled = true;
-        }
+        button.classList.add(disableClass);
+        button.classList.remove(firstClass);
+        button.setAttribute("disabled", "true");
 
-        cancelAnchor.addEventListener("click", function() {
-            button.classList.remove(disableClass);
+        cancelAnchor.addEventListener("click", e => {
             button.classList.add(firstClass)
-            button.disabled = false;
+            button.classList.remove(disableClass);
+            button.removeAttribute("disabled");
         })
     });
+}
+
+/**
+ * Permet d'afficher / masquer le menu dans les listes / cartes
+ * @param {number} dataId
+ */
+
+function menu(dataId) {
+    const el = document.querySelector(`#dropDown-${dataId}`);
+    const btn = el.querySelector('.more__btn');
+    let visible = false;
+
+    function showMenu(e) {
+        e.preventDefault();
+        if (!visible) {
+            visible = true;
+            el.classList.add('show__more__menu');
+            document.addEventListener('mousedown', hideMenu, false);
+        }
+    }
+
+    function hideMenu(e) {
+        if (btn.contains(e.target)) {
+            return;
+        }
+        if (visible) {
+            if (!el.contains(e.target)) {
+                visible = false;
+                el.classList.remove('show__more__menu');
+                document.removeEventListener('mousedown', hideMenu);
+            }
+        }
+    }
+    el.addEventListener('click', showMenu, false);
 }
 
 /**
@@ -144,6 +224,9 @@ function reveal() {
     })
 }
 
+/**
+ * Permet de remonter en haut de page après Create Update Delete
+ */
 function scroll() {
     window.scrollTo({
         top: 0,
@@ -152,38 +235,9 @@ function scroll() {
 }
 
 /**
- * Création du tooltip pour informer de la dernière mis à jour d'une liste et par qui.
- * @param {HTMLFormElement, number, string} anchor - Element du DOM à quoi se rattache le tooltip.
- * @param {*} updatedAt - date de dernière mise à jour.
- * @param {*} login - login de l'utilisateur
- */
-function toolTip(anchor, id, updatedAt, login) {
-    let dateFromDatabase = updatedAt ;
-    let date = new Date(dateFromDatabase);
-    let day = date.getDate();
-    let month = date.getMonth() + 1;
-    let year = date.getFullYear();
-    let formatedDate = (day < 10 ? '0' : '') + day + '/'
-                        + (month < 10 ? '0' : '') + month + '/'
-                        + year;
-
-    const toolTip = document.createElement("div");
-    toolTip.id = `tooltip-${id}`;
-    toolTip.classList.add("tooltip");
-    toolTip.classList.add("grid_tooltip");
-
-    const spanToolTip = document.createElement("span");
-    spanToolTip.classList.add("tooltiptext");
-    spanToolTip.innerText = `Modifié le ${formatedDate} par ${login}`;
-    toolTip.appendChild(spanToolTip);
-    anchor.prepend(toolTip);
-}
-
-/**
  * Permet de renvoyer les messages d'erreur en cas de non validation des champs
  * @param {string} input
  */
-
 function validate(input) {
     const errors = {
         password: "Le mot de passe doit contenir au moins 12 caractères dont une majuscule, un chiffre et un caractère spécial.",
@@ -214,12 +268,14 @@ export {
     configPath,
     mandatoryStar,
     type,
+    buttonsOff,
+    detail,
     dialog,
     manageBtns,
+    menu,
     notAllowedRedirection,
     redirect,
     reveal,
     scroll,
-    toolTip,
     validate
 };

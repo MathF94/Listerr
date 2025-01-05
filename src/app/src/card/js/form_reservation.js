@@ -11,17 +11,27 @@ function displayFormReservation(elementDOM) {
     createFormGuest.classList.add("grid_form_guest");
 
     const labelGuestName = document.createElement("label");
-    labelGuestName.htmlFor  = "GuestName";
-    // labelGuestName.innerText = "par";
+    labelGuestName.htmlFor  = "name";
 
     const inputGuestName = document.createElement("input");
     inputGuestName.type = "text";
-    inputGuestName.name = "guestName";
-    inputGuestName.id = "guestName";
-    inputGuestName.placeholder = "Votre login";
+    inputGuestName.id = "name";
+    inputGuestName.name = "name";
+    inputGuestName.placeholder = "Votre pseudo";
     inputGuestName.setAttribute("max", 20);
-    inputGuestName.value = "";
-    // inputGuestName.required = true;
+    inputGuestName.required = true;
+
+    const labelGuestMail = document.createElement("label");
+    labelGuestMail.htmlFor  = "email";
+    labelGuestMail.innerText = "Votre mail";
+
+    const inputGuestMail = document.createElement("input");
+    inputGuestMail.type = "email";
+    inputGuestMail.id = "email";
+    inputGuestMail.name = "email";
+    inputGuestMail.placeholder = "Votre mail";
+    inputGuestMail.pattern = "[^@\s]+@[^@\s]+\.[a-zA-Z]{2,}";
+    inputGuestMail.required = true;
 
     const guestValidFormBtn = document.createElement("button");
     guestValidFormBtn.id = "guestValidBtn";
@@ -45,6 +55,8 @@ function displayFormReservation(elementDOM) {
 
     createFormGuest.appendChild(labelGuestName);
     createFormGuest.appendChild(inputGuestName);
+    createFormGuest.appendChild(labelGuestMail);
+    createFormGuest.appendChild(inputGuestMail);
     createFormGuest.appendChild(guestValidFormBtn);
     createFormGuest.appendChild(guestCancelFormBtn);
 

@@ -5,7 +5,13 @@ import {
     fetchUpdateUser,
     fetchDeleteUser
 } from "../../actions/actions_admin.js";
+
 import { displayFormUpdateUser } from "../../admin/js/form_user.js"
+
+import { dropDownMenu } from "../../layout/dropdown.js";
+
+import { CSRFToken } from "../../services/CSRFToken.js";
+
 import {
     configPath,
     redirect,
@@ -13,7 +19,6 @@ import {
     dialog,
     scroll
 } from "../../services/utils.js";
-import { CSRFToken } from "../../services/CSRFToken.js";
 
 notAllowedRedirection();
 /**
@@ -109,6 +114,7 @@ function readAdmin() {
                 deleteBtn.type = "button";
                 deleteBtn.textContent = "";
 
+                // dropDownMenu(tdBtn);
                 tdBtn.appendChild(readBtn);
                 tdBtn.appendChild(editBtn);
                 tdBtn.appendChild(deleteBtn);

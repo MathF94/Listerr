@@ -6,7 +6,8 @@ const urlParams = new URLSearchParams(document.location);
 const pathname = urlParams.get("pathname");
 const test = "home/pages/home.html";
 
-if(!pathname.match(test)) {
+if (!pathname.match(test)) {
+    localStorage.nav_active ="home";
     redirect(`${configPath.basePath}/home/pages/home.html`, 0);
 }
 

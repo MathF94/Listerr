@@ -11,10 +11,11 @@ import { configPath } from "../services/utils.js";
  * @param {number} id - L'identifiant de la carte à mettre à jour.
  * @returns {Promise<Object|null>} Une promesse résolue avec les données de la carte mise à jour ou null en cas d'erreur.
  */
-async function fetchCreateReservation(form, id) {
+async function fetchCreateReservation(form, listId, cardId) {
     try {
         const formData = new FormData(form);
-        formData.append('id', id);
+        formData.append('list_id', listId);
+        formData.append('card_id', cardId);
 
         const url = `${configPath.apiPath}/?route=create_reservation`;
         return await fetch(url, {
@@ -45,6 +46,7 @@ async function fetchReadAllReservationsByCard(id) {
         return null;
     }
 }
+
 async function fetchCancelReservation(id) {
     try {
         const formData = new FormData();
@@ -66,5 +68,5 @@ async function fetchCancelReservation(id) {
 export {
     fetchCreateReservation,
     fetchReadAllReservationsByCard,
-    fetchCancelReservation,
+    fetchCancelReservation
 }

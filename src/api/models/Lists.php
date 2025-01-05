@@ -46,7 +46,7 @@ class Lists extends Database
     public function getOneListById(int $id): ?Lister
     {
         try {
-            $req = "SELECT `l`.`id` AS `list_id`,
+                $req = "SELECT `l`.`id` AS `list_id`,
                             `l`.`type`,
                             `l`.`title`,
                             `l`.`description`,

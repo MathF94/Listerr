@@ -1,23 +1,28 @@
 "use strict";
 
+import { displayFormList } from "./form_list.js";
+
 import {
     fetchCreateList,
     fetchReadAllLists,
     fetchDeleteList
 } from "../../actions/actions_lists.js";
+
+import { dropDownMenu } from "../../layout/dropdown.js";
+
 import { CSRFToken } from "../../services/CSRFToken.js";
+
 import {
-    configPath,
     allowedIds,
-    type,
-    redirect,
+    configPath,
+    detail,
     dialog,
-    toolTip,
     notAllowedRedirection,
+    redirect,
     scroll,
+    type,
     validate
 } from "../../services/utils.js";
-import { displayFormList } from "./form_list.js";
 
 notAllowedRedirection();
 
@@ -104,7 +109,15 @@ function lists() {
     fetchReadAllLists()
     .then(response => {
         const data = response.data;
-        if (response.status === "readAllListsByUser"){
+        const listsSection = document.querySelector("#listsSection");
+        const emptyMessage = document.createElement("p");
+
+        if (response.status === "standBy") {
+            emptyMessage.innerText = "Aucune liste n'a encore été créée :)"
+            listsSection.firstElementChild.after(emptyMessage);
+        }
+        if (response.status === "readAllListsByUser") {
+            emptyMessage.remove();
             const listWrapper = document.querySelector('#listsWrapper');
 
             for (const index in data) {
@@ -123,43 +136,22 @@ function lists() {
                 }
 
                 const sectionList = document.createElement("section");
-                sectionList.classList.add("grid_section_lists");
-                sectionList.id ="sectionList";
+                sectionList.classList.add("pointer");
+                sectionList.classList.add("grid_section");
+                sectionList.id = `sectionList-${objectList.id}`;
 
                 const typeH3 = document.createElement("h3");
-                typeH3.id = "typeList";
+                typeH3.id = `typeList-${objectList.id}`;
                 typeH3.classList.add("grid_typeH3");
 
                 const titleH4 = document.createElement("h4");
                 titleH4.classList.add("grid_titleH4_lists");
 
-                const actionBtnLists = document.createElement("div");
-                actionBtnLists.id = "actionBtnLists";
-                actionBtnLists.classList.add("grid_action_btn_lists");
-
-                const deleteBtnLists = document.createElement("button");
-                deleteBtnLists.id = `deleteProfilList-${objectList.id}`;
-                deleteBtnLists.title = "Supprimer la liste";
-                deleteBtnLists.name = "deleteProfilList";
-                deleteBtnLists.title = "Supprimer la liste";
-                deleteBtnLists.type = "submit";
-                deleteBtnLists.value = `${objectList.id}`;
-                deleteBtnLists.textContent = "";
-                deleteBtnLists.classList.add("btn");
-                deleteBtnLists.classList.add("delete");
-
                 for (const key in objectList) {
-                    const value = objectList[key];
-
                     if (key === "title") {
-                        titleH4.innerText = `${objectList.title} ${objectList.description}`;
+                        titleH4.innerText = `${objectList.description}`;
                     } else if (key === "type") {
-                        typeH3.innerText = `${objectList.type}`;
-                    }
-
-                    // Affichage du tooltip
-                    if (key === "user" && typeof(value) === "object") {
-                        toolTip(articleList, objectList.id, objectList.updatedAt, objectList.user.login)
+                        typeH3.innerText = `${objectList.type} - ${objectList.title} `;
                     }
 
                     // Exclut certains éléments de la liste (id, userId, type, title, cards, createdAd)
@@ -168,43 +160,52 @@ function lists() {
                     }
 
                     listWrapper.appendChild(articleList);
-                    articleList.appendChild(actionBtnLists);
                     articleList.appendChild(typeH3);
-                    sectionList.appendChild(titleH4);
                     articleList.appendChild(sectionList);
-                    actionBtnLists.appendChild(deleteBtnLists);
+                    sectionList.appendChild(titleH4);
+
+                    const actions = [
+                        {
+                            id: `detailLists-${objectList.id}`,
+                            text : detail(objectList.updatedAt, objectList.user.login),
+                            onclick: false
+                        },
+                        {
+                            // Gestion de la suppression de liste
+                            id: `deleteLists-${objectList.id}`,
+                            text: "Supprimer la liste",
+                            onclick: function(e){
+                                e.preventDefault();
+                                e.stopPropagation();
+                                const btnListId = parseInt(e.target.value);
+
+                                if (btnListId !== objectList.id) {
+                                    console.warn("pas touche");
+                                    return;
+                                } else if (confirm('Voulez-vous vraiment vous supprimer la liste ?') === true) {
+                                    scroll();
+                                    fetchDeleteList(objectList.id)
+                                    .then(() => {
+                                        dialog({title: "Suppression de la liste", content: `Votre liste a bien été supprimée.`});
+                                        const dialogMsg = document.querySelector("dialog");
+                                        dialogMsg.classList.add("valid");
+                                        redirect(`${configPath.basePath}/list/pages/lists.html`);
+                                    });
+                                }
+                            }
+                        }
+                    ]
+                    dropDownMenu(articleList, objectList.id, objectList.updatedAt, objectList.user.login, actions);
                 }
 
                 // Redirige vers la page de détails de la liste en cliquant sur la liste.
-                articleList.addEventListener("click", function(){
+                sectionList.addEventListener("click", function(){
                     if (objectList.type === "TodoList" && objectList.user.id !== JSON.parse(localStorage.getItem("user")).id) {
                         return false;
                     } else {
                         redirect(`${configPath.basePath}/list/pages/list.html?id=${objectList.id}`, 0);
                     }
                 })
-
-                // Gestion de la suppression de liste
-                deleteBtnLists.addEventListener("click", function(e){
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const btnListId = parseInt(e.target.value);
-
-                    if (btnListId !== objectList.id) {
-                        console.warn("pas touche");
-                        return;
-                    } else if (confirm('Voulez-vous vraiment vous supprimer la liste ?') === true) {
-                        scroll();
-                        fetchDeleteList(objectList.id)
-                        .then(() => {
-                            dialog({title: "Suppression de la liste", content: `Votre liste a bien été supprimée.`});
-                            const dialogMsg = document.querySelector("dialog");
-                            dialogMsg.classList.add("valid");
-                            redirect(`${configPath.basePath}/list/pages/lists.html`);
-                        });
-                    }
-                })
-
             }
         }
     })

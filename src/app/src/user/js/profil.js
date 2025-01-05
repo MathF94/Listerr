@@ -1,22 +1,29 @@
 "use strict";
 
-import { fetchRead } from "../../actions/actions_user.js";
 import {
     fetchDeleteUser,
     fetchUpdateUser
 } from "../../actions/actions_admin.js";
+
 import { fetchReadAllLists } from "../../actions/actions_lists.js";
+
+import { fetchRead } from "../../actions/actions_user.js";
+
+import { displayFormUpdateUser } from "../../admin/js/form_user.js";
+
+import { dropDownMenu } from "../../layout/dropdown.js";
+
+import { CSRFToken } from "../../services/CSRFToken.js";
+
 import {
     allowedIds,
     configPath,
+    detail,
     type,
     dialog,
-    toolTip,
     redirect,
     notAllowedRedirection,
 } from "../../services/utils.js";
-import { displayFormUpdateUser } from "../../admin/js/form_user.js";
-import { CSRFToken } from "../../services/CSRFToken.js";
 
 notAllowedRedirection();
 
@@ -216,11 +223,19 @@ function read() {
                     listBtn.disabled = true;
                     fetchReadAllLists(id).then((response) => {
                         const data = response.data;
+                        const listsWrapper = document.querySelector("#listsWrapper");
+                        const emptyMessage = document.createElement("p");
+
+                        if (response.status === "standBy") {
+                            emptyMessage.innerText = "Aucune liste n'a encore été créée :)"
+                            listsWrapper.appendChild(emptyMessage);
+                        }
+
                         if (response.status === "readAllListsByUser") {
+                            emptyMessage.remove();
                             for (const index in data) {
                                 const objectList = data[index];
                                 const articleList = document.createElement("article");
-                                console.log(articleList);
                                 articleList.id = `profilList-${objectList.id}`;
                                 articleList.classList.add("list");
                                 articleList.classList.add("grid");
@@ -231,15 +246,17 @@ function read() {
                                     articleList.classList.add(type.Common)
                                 }
 
-                                if(objectList.type === "TodoList") {
-                                    articleList.classList.add("disabled");
-                                }
-
                                 const sectionList = document.createElement("section");
                                 sectionList.classList.add("grid_section");
+                                sectionList.classList.add("pointer");
                                 const typeH3 = document.createElement("h3");
                                 typeH3.classList.add("grid_typeH3");
                                 const titleH4 = document.createElement("h4");
+
+                                if(objectList.type === "TodoList") {
+                                    articleList.classList.add("disabled");
+                                    sectionList.classList.remove("pointer");
+                                }
 
                                 for (const key in objectList) {
                                     const value = objectList[key];
@@ -253,7 +270,7 @@ function read() {
                                     }
 
                                     if (key === "updatedAt") {
-                                        toolTip(articleList, objectList.updatedAt, objectList.user.login)
+                                        dropDownMenu(articleList, objectList.id, objectList.updatedAt, objectList.user.login);
                                     }
 
                                     // Exclut certains éléments de la liste

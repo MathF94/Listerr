@@ -273,7 +273,7 @@ class Validator
     private function isValidReservationParams(array $params): array
     {
         $errors = [];
-        $expectedKeys = ['guestName'];
+        $expectedKeys = ['name', 'email'];
         $paramKeys = array_keys($params);
 
         if (!empty(array_diff($expectedKeys, $paramKeys))) {
@@ -282,11 +282,17 @@ class Validator
             return $errors;
         }
 
-        if (empty(trim($params['guestName']))) {
+        if (empty(trim($params['name']))) {
             $errors[] = 'Le champ "Login" est requis.';
-        } elseif (strlen($params['guestName']) > 20) {
+        } elseif (strlen($params['name']) > 20) {
             $errors[] = 'Le champ "Login" ne doit pas dépasser 20 caractères.';
         }
         return $errors;
+
+        if (empty(trim($params['email']))) {
+            $errors[] = 'Le champ "Email" est requis.';
+        } elseif (!filter_var($params['email'], FILTER_VALIDATE_EMAIL)) {
+            $errors[] = 'L\'adresse mail n\'est pas valide.';
+        }
     }
 }
