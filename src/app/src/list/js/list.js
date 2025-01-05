@@ -15,6 +15,8 @@ import { dropDownMenu } from "../../layout/dropdown.js";
 import { CSRFToken } from "../../services/CSRFToken.js";
 
 import {
+    allowedIds,
+    buttonsOff,
     configPath,
     detail,
     dialog,
@@ -123,8 +125,8 @@ function list() {
                 for (const index in data) {
                     const object = data[index];
 
-                    // Exclut certains éléments de la liste (id, userId, type, title, cards, createdAd)
-                    if (["id", "userId", "user", "type", "title", "cards", "createdAt", "updatedAt"].includes(`${index}`)) {
+                    // Exclut certains éléments de la liste (id, userId, user, type, title, cards, createdAt, updatedAt)
+                    if (allowedIds.includes(`${index}`)) {
                         continue;
                     };
 
@@ -136,6 +138,7 @@ function list() {
 
                 // Rend visible les boutons "Supprimer" et "Modifier" pour l'utilisateur en cours uniquement
                 if (userId === data.user.id) {
+                    // Informations importées dans le menu de la liste
                     const actions = [
                         {
                             id: `detailList-${data.id}`,
@@ -186,20 +189,8 @@ function list() {
                                         sectionList.classList.remove("hidden");
 
                                         cardsArray.forEach(cardArray => {
-                                            const reservationBtns = document.querySelectorAll(`#reservationBtn-${cardArray.id}`);
-                                            const priorityBtns = document.querySelectorAll('.disableStars');
-
-                                            reservationBtns.forEach(reservationBtn => {
-                                                reservationBtn.classList.remove('disable');
-                                                reservationBtn.classList.add('reservation');
-                                                reservationBtn.disabled = false;
-                                            });
-
-                                            priorityBtns.forEach(priorityBtn => {
-                                                priorityBtn.classList.remove('disableStars');
-                                                priorityBtn.classList.add('stars');
-                                                priorityBtn.disabled = false;
-                                            })
+                                            buttonsOff('reservationBtn', 'disable', 'reservation');
+                                            buttonsOff('disableStars', 'disableStars', 'stars');
                                         });
                                     })
 

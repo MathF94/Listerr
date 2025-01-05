@@ -284,14 +284,18 @@ dialog {
     POPIN
 ***************************************************************** */
 .popIn {
-    background-color: var(--select);
+    background-color: rgba(0, 0, 0, 0.8);
     border: 1px solid transparent;
-    border-radius: 20px;
-    height: 430px;
-    position: absolute;
-    top: 250px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
     visibility: hidden;
-    width: 436px;
+    width: 100%;
+    padding-top: 10vh;
+    display: flex;
+    right: 0;
+    align-content: center;
+    margin: 0 auto;
 }
 
 /* *****************************************************************
@@ -376,9 +380,6 @@ dialog {
     width: 100%;
     &.wish {
         background: var(--wish-bg);
-        // &.pointer {
-        //     cursor: pointer;
-        // }
     }
     &.todo {
         background: var(--todo-bg);
@@ -392,6 +393,16 @@ dialog {
     &.third_party_wish {
         background: var(--third-party-wish-bg);
     }
+}
+#createCardDiv, #updateListDiv, .updateCardDiv {
+    margin: 0 auto;
+}
+#listFormSection, #cardFormSection {
+    background-color: var(--form-bg);
+    border-radius: 8px;
+    box-shadow: 0 0 5px var(--border);
+    padding: 5px;
+    width: 100%;
 }
 .card {
     border-radius: 10px;
@@ -742,9 +753,6 @@ dialog {
     FORMULAIRES
 ***************************************************************** */
 form {
-    background-color: var(--form-bg);
-    border-radius: 8px;
-    box-shadow: 0 0 5px var(--border);
     display: flex;
     flex-direction: column;
     justify-content: center;

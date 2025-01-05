@@ -23,6 +23,7 @@ import { dropDownMenu } from "../../layout/dropdown.js";
 import { CSRFToken } from "../../services/CSRFToken.js";
 
 import {
+    allowedIds,
     configPath,
     detail,
     dialog,
@@ -67,7 +68,6 @@ function card(canCreateCard) {
 
     const updateProfilList = document.querySelector(`#updateList-${id}`);
 
-
     // Création des éléments DOM pour le formulaire de création d'une carte
     const cardDivForm = document.createElement("div");
     cardDivForm.id = "cardDivForm";
@@ -98,14 +98,15 @@ function card(canCreateCard) {
         if (createCardFormBtn.value !== "cardFormBtn") {
             return false;
         }
+        const createCardDiv = document.createElement("div");
+        createCardDiv.id = "createCardDiv";
         // Boutons création de carte caché et popIn visible
         createCardFormBtn.hidden = true;
         popIn.style.visibility = "visible";
 
+        popIn.appendChild(createCardDiv);
         // Affichage du formulaire de création d'une carte
-        displayFormCard(popIn);
-
-        const cardFormSection = document.querySelector('#cardFormSection');
+        displayFormCard(createCardDiv);
         const cardForm = document.querySelector("#formCard");
         const titleFormCard = document.querySelector("#titleFormCard");
         titleFormCard.innerText = "Formulaire de création de la carte";
@@ -116,7 +117,7 @@ function card(canCreateCard) {
             createCardFormBtn.hidden = false;
             popIn.style.visibility = "hidden";
             cardForm.remove();
-            cardFormSection.remove();
+            createCardDiv.remove();
         })
 
         // Création d'une nouvelle carte (souhait ou tâche)
@@ -271,6 +272,7 @@ function card(canCreateCard) {
                         titleH3.innerText = `${objectCard.title}`;
                         cardSectionContent.appendChild(titleH3);
                     } else if (key === "updatedAt") {
+                        // Informations importées dans le menu des cartes
                         const actions = [
                             {
                                 id: `detailCard-${objectCard.id}`,
@@ -292,9 +294,9 @@ function card(canCreateCard) {
                                         return;
 
                                     } else {
-                                        const updateCardSection = document.createElement("section");
-                                        updateCardSection.id = `updateCardSection-${objectCard.id}`;
-                                        updateCardSection.classList.add("updateCard");
+                                        const updateCardDiv = document.createElement("div");
+                                        updateCardDiv.id = `updateCardDiv-${objectCard.id}`;
+                                        updateCardDiv.classList.add("updateCardDiv");
                                         popIn.style.visibility = "visible";
 
                                         const dropDown = document.querySelector(`#dropDown-${objectCard.id}`)
@@ -304,10 +306,10 @@ function card(canCreateCard) {
                                         cardFormBtn.classList.add("disable");
                                         cardFormBtn.disabled = true;
 
-                                        popIn.appendChild(updateCardSection)
+                                        popIn.appendChild(updateCardDiv)
 
                                         // Affichage du formulaire d'édition + dissimulation de la carte
-                                        displayFormCard(updateCardSection);
+                                        displayFormCard(updateCardDiv);
                                         // cardSectionContent.classList.add("hidden");
                                         const titleFormCard = document.querySelector("#titleFormCard");
                                         titleFormCard.innerText = "Formulaire d'édition de la carte";
@@ -322,8 +324,7 @@ function card(canCreateCard) {
                                             // Bouton de création de cartes utilisable
                                             cardFormBtn.classList.remove("disable");
                                             cardFormBtn.disabled = false;
-
-                                            updateCardSection.remove();
+                                            updateCardDiv.remove();
                                             cardSectionContent.classList.remove("hidden");
                                         })
 
@@ -405,7 +406,7 @@ function card(canCreateCard) {
                         dropDownMenu(cardSectionContent, objectCard.id, objectCard.updatedAt, response.data.user.login, actions);
                     }
 
-                    if (["id", "listId", "title", "priority", "reservationId", "login", "createdAt", "updatedAt"].includes(`${key}`)) {
+                    if (allowedIds.includes(`${key}`)) {
                         continue;
                     }
 
@@ -436,11 +437,14 @@ function card(canCreateCard) {
                         manageBtns('.reservation', 'disable', 'reservation', cancelForm)
                         manageBtns('.stars', 'disableStars', 'stars', cancelForm)
                         manageBtns('.delete', 'disableDelete', 'delete', cancelForm)
-
                     })
                 }
 
-                // Gestion de la réservation d'un souhait / tâche d'une carte dans une liste
+                /**
+                 * ______________________________________________________________________________________________________________
+                 * Gestion de la réservation d'un souhait / tâche d'une carte dans une liste
+                 * ______________________________________________________________________________________________________________
+                 */
                 reservationBtn.addEventListener("click", function(e) {
                     e.preventDefault();
                     // Affichage du formulaire pour réserver
