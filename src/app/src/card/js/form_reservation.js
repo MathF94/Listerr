@@ -8,7 +8,10 @@
 function displayFormReservation(elementDOM) {
     const createFormGuest = document.createElement("form");
     createFormGuest.id = "formGuest";
-    createFormGuest.classList.add("grid_form_guest");
+    createFormGuest.classList.add("formGuest");
+
+    const reservationTitle = document.createElement("h4");
+    reservationTitle.innerText = "Formulaire de réservation";
 
     const labelGuestName = document.createElement("label");
     labelGuestName.htmlFor  = "name";
@@ -53,6 +56,7 @@ function displayFormReservation(elementDOM) {
     guestCancelFormBtn.classList.add("form_guest");
     guestCancelFormBtn.classList.add("cancel");
 
+    createFormGuest.appendChild(reservationTitle);
     createFormGuest.appendChild(labelGuestName);
     createFormGuest.appendChild(inputGuestName);
     createFormGuest.appendChild(labelGuestMail);

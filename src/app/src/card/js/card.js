@@ -447,12 +447,21 @@ function card(canCreateCard) {
                  */
                 reservationBtn.addEventListener("click", function(e) {
                     e.preventDefault();
+                    const updateReservationDiv = document.createElement("div");
+                    updateReservationDiv.id = "updateReservationDiv";
+                    popIn.style.visibility = "visible";
+
+                    popIn.appendChild(updateReservationDiv);
+
                     // Affichage du formulaire pour réserver
-                    displayFormReservation(cardSectionContent);
+                    displayFormReservation(updateReservationDiv);
                     // Réservation cachée
-                    reservationBtn.hidden = true;
+                    // reservationBtn.hidden = true;
                     // Etoiles de priorité cachées
-                    divStar.classList.add("hidden");
+                    // divStar.classList.add("hidden");
+                    // Description cachée
+                    // text.classList.add("hidden");
+
                     const inputLogin = document.querySelector("#name");
                     const inputMail = document.querySelector("#email");
                     inputLogin.value = userLogin;
@@ -461,11 +470,15 @@ function card(canCreateCard) {
                     // Si invité n'a pas de compte, il peut quand même réserver
                     if (localStorage.user === null || localStorage.user === undefined || localStorage.token === null || localStorage.token === undefined) {
                         guestCancelBtn.addEventListener("click", function() {
-                            formGuest.remove();
+                            popIn.style.visibility = "hidden";
+                            updateReservationDiv.remove();
+                            // formGuest.remove();
                             // Réservation cachée
-                            reservationBtn.hidden = false;
+                            // reservationBtn.hidden = false;
                             // Etoiles de priorité visibles
-                            divStar.classList.remove("hidden");
+                            // divStar.classList.remove("hidden");
+                            // Description visible
+                            // text.classList.remove("hidden");
                         })
 
                         CSRFToken(formGuest.id);
@@ -504,11 +517,13 @@ function card(canCreateCard) {
                     // Si utilisateur est connecté, il peut réserver une carte d'un autre utilisateur
                     if (!canCreateCard && localStorage.user !== undefined && localStorage.token !== null && localStorage.user !== null && localStorage.token !== undefined) {
                         guestCancelBtn.addEventListener("click", function() {
-                            formGuest.remove();
+                            popIn.style.visibility = "hidden";
+                            updateReservationDiv.remove();
+                            // formGuest.remove();
                             // Réservation cachée
-                            reservationBtn.hidden = false;
+                            // reservationBtn.hidden = false;
                             // Etoiles de priorité visibles
-                            divStar.classList.remove("hidden");
+                            // divStar.classList.remove("hidden");
                         })
 
                         CSRFToken(formGuest.id);
@@ -550,7 +565,9 @@ function card(canCreateCard) {
                         cardFormBtn.disabled = true;
 
                         guestCancelBtn.addEventListener("click", function() {
-                            formGuest.remove();
+                            popIn.style.visibility = "hidden";
+                            updateReservationDiv.remove();
+                            // formGuest.remove();
                             // Bouton de création de cartes utilisable
                             cardFormBtn.classList.remove("disable");
                             cardFormBtn.disabled = false;

@@ -11,8 +11,6 @@ use Services\SendMail;
 use Services\Session;
 use Services\Validator;
 
-use function Ramsey\Uuid\v1;
-
 /**
  * Classe représentant un objet d'une carte.
  */
@@ -272,7 +270,7 @@ class ReservationController
             $modelSendMails = new SendMail();
 
             $session = new Session();
-            $encryptGuestToken = $session->encryptGuestToken($params['name'], $params['email'], $params['list_id'], $params['card_id']);
+            $encryptGuestToken = urlencode($session->encryptGuestToken($params['name'], $params['email'], $params['list_id'], $params['card_id']));
 
             $modelReservations = new Reservations();
             $modelReservations->createReservation($params);
@@ -284,20 +282,31 @@ class ReservationController
             $cards = $modelCards->getOneCardById($params['card_id']);
 
             $recipient = $_POST['email'];
-            $listUserLogin = $lists->user->login;
-            $listTitle = $lists->title;
-            $cardTitle = $cards->title;
+
+            $listUserLogin = htmlspecialchars($lists->user->login);
+            $listTitle = htmlspecialchars($lists->title);
+            $cardTitle = htmlspecialchars($cards->title);
+
+            $name = htmlspecialchars($_POST['name']);
+            $listId = urlencode($_POST['list_id']);
+
+            $domain = "https://listerr.tea-tux.fr";
+
+            if (in_array('http://localhost', [$_SERVER['HTTP_HOST'], $_SERVER['HTTP_REFERER'], $_SERVER['HTTP_ORIGIN']], true)) {
+                $domain = "http://localhost/listerr/src/app/src";
+            };
 
             $subject = 'Votre réservation a bien été pris en compte sur Listerr';
-            $message = '
-                <p>Bonjour ' . htmlspecialchars($_POST['name']) . ',</p>' .
-                '<p>Nous vous confirmons avoir bien pris en compte la réservation de ' . htmlspecialchars($cardTitle) . ' dans la liste ' . htmlspecialchars($listTitle) . ' de ' . htmlspecialchars($listUserLogin) . ' sur Listerr.</p>' .
-                '<p>Si vous souhaitez retrouver votre réservation, merci de cliquer sur le lien ci-dessous :</p>' .
-                '<p><a href="http://localhost/listerr/src/app/src/list/pages/list.html?id=' . urlencode($_POST['list_id']) . '&GuestToken=' . urlencode($encryptGuestToken) . '">Lien pour l\'annulation</a></p>' .
-                '<p>Toute l\'équipe de Listerr vous remercie et vous souhaite une bonne journée.</p>' .
-                '<p>Cordialement.</p>' .
-                '<p>Administrateur de Listerr.
-                ';
+
+            $message = <<< HTML
+                <p>Bonjour {$name},</p> .
+                <p>Nous vous confirmons avoir bien pris en compte la réservation de {$cardTitle} dans la liste {$listTitle} de {$listUserLogin} sur Listerr.</p>'
+                <p>Si vous souhaitez retrouver votre réservation, merci de cliquer sur le lien ci-dessous :</p>
+                <p><a href="{$domain}/list/pages/list.html?id={$listId}&GuestToken={$encryptGuestToken}">Lien pour l'annulation</a></p>
+                <p>Toute l'équipe de Listerr vous remercie et vous souhaite une bonne journée.</p>
+                <p>Cordialement.</p>
+                <p>Administrateur de Listerr.</p>
+                HTML;
 
                 // http://localhost/listerr/src/app/src/list/pages/  https://listerr.tea-tux.fr/list/pages/ ==> pour les tests
 
