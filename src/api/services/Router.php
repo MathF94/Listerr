@@ -21,7 +21,6 @@ class Router
             $headers = getallheaders();
             $csrfToken = $this->getCsrfToken($headers);
 
-
             switch ($_GET['route']) {
                 case 'csrf':
                     if ($this->isAllowedMethod('POST')) {
