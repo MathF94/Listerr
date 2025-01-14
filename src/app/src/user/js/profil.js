@@ -18,7 +18,6 @@ import { CSRFToken } from "../../services/CSRFToken.js";
 import {
     allowedIds,
     configPath,
-    detail,
     type,
     dialog,
     redirect,
@@ -33,20 +32,29 @@ notAllowedRedirection();
  */
 function read() {
     // Appelle la fonction fetchRead pour obtenir les informations du profil de l'utilisateur.
-    const urlParams = new URLSearchParams(document.location.search);
-    const deleteBtn = document.querySelector("#delete");
+    const listWrapper = document.querySelector("#listsWrapper");
+    const profilWrapper = document.querySelector("#profilWrapper");
+
     const updateBtn = document.querySelector("#update");
-    const listBtn = document.querySelector("#listsUser");
     updateBtn.title = "Modifier le profil";
     updateBtn.classList.add("listBtn");
 
+    const deleteBtn = document.querySelector("#delete");
     deleteBtn.title = "Supprimer le profil";
     deleteBtn.classList.add("listBtn");
 
+    const listBtn = document.querySelector("#listsUser");
     listBtn.title ="Accéder à mes listes";
 
+    const popIn = document.createElement("div");
+    popIn.id = "popIn";
+    popIn.classList.add("popIn");
+
+    profilWrapper.appendChild(popIn);
+
+    const urlParams = new URLSearchParams(document.location.search);
+
     function displayUser(response) {
-        const profilWrapper = document.querySelector("#profilWrapper");
         const list = document.createElement("ul");
 
         for (const index in response) {
@@ -73,9 +81,9 @@ function read() {
     if (urlParams.has("id")) {
         // Obtient l'identifiant de la liste à partir des paramètres de l'URL.
         const id = urlParams.get("id");
-        const listWrapper = document.querySelector("#listsWrapper");
 
         fetchRead(id).then((response) => {
+
             if (response.status === "[Admin]user" && localStorage.token && localStorage.user) {
                 displayUser(response);
 
@@ -99,34 +107,25 @@ function read() {
                         e.preventDefault();
                         const editBtnUser = document.querySelector("#update");
                         editBtnUser.value = response.id.value
+
                         if(parseInt(e.target.value) !== response.id.value) {
                             return;
                         }
 
-                        const sectionUser = document.querySelector("#profilSection")
-                        displayFormUpdateUser(sectionUser);
-                        sectionUser.classList.remove("profilSection");
-                        sectionUser.classList.add("grid");
+                        const updateProfilDiv = document.createElement("div");
+                        updateProfilDiv.id = "updateProfilDiv";
+                        popIn.appendChild(updateProfilDiv);
 
-                        const secondTitle = document.querySelector("#secondTitle");
-                        secondTitle.classList.add("hidden");
+                        // Affichage du formulaire d'édition du profil
+                        displayFormUpdateUser(updateProfilDiv);
+                        popIn.style.visibility = "visible";
 
-                        const divUser = document.querySelector("#profilWrapper");
-                        divUser.classList.add("hidden");
-                        listWrapper.classList.remove("listsWrapper");
-                        listWrapper.classList.add("hidden");
-
-                        titleFormUser.innerText = "Modification de l'utilisateur";
+                        titleFormUser.innerText = "Formulaire d'édition de l'utilisateur";
 
                         // Affichage de la liste d'utilisateur + suppression du formulaire d'édition
                         cancelForm.addEventListener("click", function() {
-                            userFormSection.remove();
-                            divUser.removeAttribute("class");
-                            secondTitle.classList.remove("hidden");
-                            listWrapper.classList.remove("hidden");
-                            listWrapper.classList.add("listsWrapper");
-                            sectionUser.classList.remove("grid");
-                            sectionUser.classList.add("profilSection");
+                            updateProfilDiv.remove();
+                            popIn.style.visibility = "hidden";
 
                         })
 

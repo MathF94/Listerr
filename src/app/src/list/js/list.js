@@ -40,7 +40,13 @@ function list() {
         .then(response => {
             const sectionList = document.querySelector("#listSection");
 
-            if(response.message === "ID not numeric" || id === "") {
+            // Si la réponse est null (liste supprimée par ex) ==> renvoi à la page d'accueil
+            if (response === null) {
+                redirect(`${configPath.basePath}/home/pages/home.html`, 0)
+            }
+
+            // Si l'ID est vide ou différent d'un numérique ==> renvoi à la page d'accueil
+            if (response.message === "ID not numeric" || id === "") {
                 redirect(`${configPath.basePath}/home/pages/home.html`, 0)
             }
 

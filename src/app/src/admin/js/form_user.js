@@ -12,7 +12,6 @@ function displayFormUpdateUser(elementDOM) {
 
     const updateFormUser = document.createElement("form");
     updateFormUser.id = "formUpdateUser";
-    updateFormUser.classList = "formUpdateUser";
 
     const titleForm = document.createElement("h3");
     titleForm.id = "titleFormUser";

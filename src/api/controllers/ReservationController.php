@@ -3,8 +3,6 @@
 namespace Controllers;
 
 use Models\Reservations;
-use Models\Lists;
-use Models\Cards;
 use Models\Users;
 use Services\CSRFToken;
 use Services\SendMail;
@@ -117,8 +115,10 @@ class ReservationController
                     'card_id' => (int)$_POST['card_id']
                 ];
 
-                $sendMail = $this->getElementMailReservation($params);
-                if ($sendMail) {
+                $sendMail = new SendMail();
+                $mail = $sendMail->getElementMailReservation($params);
+                
+                if ($mail) {
                     return json_encode([
                         "status" => "createReservation",
                         "message" => "la réservation a bien été créée et le mail envoyé."
@@ -165,8 +165,6 @@ class ReservationController
                         "message" => "no reservation found"
                     ]);
                 }
-
-
 
                 $url = $_SERVER['HTTP_REFERER'];
                 $query = parse_url($url, PHP_URL_QUERY);
@@ -241,80 +239,6 @@ class ReservationController
                 "status" => "CancelledReservation failed",
                 "message" => "no user found"
             ]);
-
-        } catch (\Exception $e) {
-            return json_encode([
-                "status" => "errors",
-                "message" => $e->getMessage()
-            ]);
-        }
-    }
-
-    /**
-     * Cette méthode permet de récupérer les éléments pour construire la notification par mail
-     * (nom de propriétaire de liste, nom de la liste, nom du souhait / tâche)
-     *
-     * @param array $params - Tableau contenant les informations nécessaires :
-     *                      - 'list_id' (int) : L'identifiant de la liste.
-     *                      - 'card_id' (int) : L'identifiant de la tâche/carte.
-     *                      - Autres paramètres requis pour la création d'une réservation.
-     *
-     * @return bool - Vrai si mail envoyé
-     * @return bool - Faux si mail pas envoyé
-     * @return string - Réponse JSON : "errors" avec un message d'erreur, en cas d'échec.
-     *
-     */
-    public function getElementMailReservation($params): mixed
-    {
-        try {
-            $modelSendMails = new SendMail();
-
-            $session = new Session();
-            $encryptGuestToken = urlencode($session->encryptGuestToken($params['name'], $params['email'], $params['list_id'], $params['card_id']));
-
-            $modelReservations = new Reservations();
-            $modelReservations->createReservation($params);
-
-            $modelLists = new Lists();
-            $lists = $modelLists->getOneListById($params['list_id']);
-
-            $modelCards = new Cards();
-            $cards = $modelCards->getOneCardById($params['card_id']);
-
-            $recipient = $_POST['email'];
-
-            $listUserLogin = htmlspecialchars($lists->user->login);
-            $listTitle = htmlspecialchars($lists->title);
-            $cardTitle = htmlspecialchars($cards->title);
-
-            $name = htmlspecialchars($_POST['name']);
-            $listId = urlencode($_POST['list_id']);
-
-            $domain = "https://listerr.tea-tux.fr";
-
-            if (in_array('http://localhost', [$_SERVER['HTTP_HOST'], $_SERVER['HTTP_REFERER'], $_SERVER['HTTP_ORIGIN']], true)) {
-                $domain = "http://localhost/listerr/src/app/src";
-            };
-
-            $subject = 'Votre réservation a bien été pris en compte sur Listerr';
-
-            $message = <<< HTML
-                <p>Bonjour {$name},</p> .
-                <p>Nous vous confirmons avoir bien pris en compte la réservation de {$cardTitle} dans la liste {$listTitle} de {$listUserLogin} sur Listerr.</p>'
-                <p>Si vous souhaitez retrouver votre réservation, merci de cliquer sur le lien ci-dessous :</p>
-                <p><a href="{$domain}/list/pages/list.html?id={$listId}&GuestToken={$encryptGuestToken}">Lien pour l'annulation</a></p>
-                <p>Toute l'équipe de Listerr vous remercie et vous souhaite une bonne journée.</p>
-                <p>Cordialement.</p>
-                <p>Administrateur de Listerr.</p>
-                HTML;
-
-                // http://localhost/listerr/src/app/src/list/pages/  https://listerr.tea-tux.fr/list/pages/ ==> pour les tests
-
-            if ($modelSendMails->sendReservationMail($recipient, $subject, $message, $listUserLogin, $listTitle, $cardTitle)) {
-                return true;
-            } else {
-                return false;
-            }
 
         } catch (\Exception $e) {
             return json_encode([
