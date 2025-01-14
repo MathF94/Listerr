@@ -28,6 +28,14 @@ notAllowedRedirection();
 function readAdmin() {
     fetchReadAll().then((response) => {
         if (response.status === "ReadAllUsers") {
+            const mainSection = document.querySelector("#mainSection");
+
+            const popIn = document.createElement("div");
+            popIn.id = "popIn";
+            popIn.classList.add("popIn");
+
+            mainSection.appendChild(popIn)
+
             const data = response.data;
             const tbody = document.querySelector("tbody");
             const table = document.querySelector("table");
@@ -94,25 +102,25 @@ function readAdmin() {
                 readBtn.classList.add("admin");
 
                 const editBtn = document.createElement("button");
-                editBtn.textContent = "";
-                editBtn.title = "Modifier le profil d'un utilisateur";
                 editBtn.id = `editUserProfil-${column.id}`;
-                editBtn.value = column.id;
                 editBtn.type = "button";
+                editBtn.title = "Modifier le profil d'un utilisateur";
+                editBtn.textContent = "";
+                editBtn.value = column.id;
                 editBtn.classList.add("btn");
                 editBtn.classList.add("valid");
                 editBtn.classList.add("edit");
                 editBtn.classList.add("admin");
 
                 const deleteBtn = document.createElement("button");
+                deleteBtn.id = `deleteUserProfil-${column.id}`;
+                deleteBtn.type = "button";
                 deleteBtn.title = "Supprimer le profil d'un utilisateur";
+                deleteBtn.textContent = "";
                 deleteBtn.value = column.id;
                 deleteBtn.classList.add("btn");
                 deleteBtn.classList.add("delete");
                 deleteBtn.classList.add("admin");
-                deleteBtn.id = `deleteUserProfil-${column.id}`;
-                deleteBtn.type = "button";
-                deleteBtn.textContent = "";
 
                 // dropDownMenu(tdBtn);
                 tdBtn.appendChild(readBtn);
@@ -137,19 +145,20 @@ function readAdmin() {
                         return;
                     }
 
-                    const divUser = document.querySelector("#createUser");
-                    const createBtn = document.querySelector("#newUser");
-                    createBtn.classList.add("hidden");
-                    table.classList.add("hidden");
+                    const updateProfilsDiv = document.createElement("div");
+                    updateProfilsDiv.id = "updateProfilsDiv";
+                    popIn.appendChild(updateProfilsDiv);
 
-                    displayFormUpdateUser(divUser);
-                    titleFormUser.innerText = "Modification de l'utilisateur";
+                    // Affichage du formulaire d'édition du profil
+                    displayFormUpdateUser(updateProfilsDiv);
+                    popIn.style.visibility = "visible";
+
+                    titleFormUser.innerText = "Formulaire d'édition de l'utilisateur";
 
                     // Affichage de la liste d'utilisateur + suppression du formulaire d'édition
                     cancelForm.addEventListener("click", function(){
-                        userFormSection.remove();
-                        createBtn.classList.remove("hidden");
-                        table.classList.remove("hidden");
+                        updateProfilsDiv.remove();
+                        popIn.style.visibility = "hidden";
                     })
 
                     // Insertion des éléments de la liste dans les inputs

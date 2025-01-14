@@ -16,6 +16,7 @@ import {
  * la validation des données et la redirection de l'utilisateur.
  */
 function registration() {
+    localStorage.nav_active ="register";
     // Affiche ou cache le mot de passe
     reveal();
     const registerBtn = document.querySelector("#registerBtn");
@@ -69,33 +70,34 @@ function registration() {
                 const email = e.target.email.value;
 
                 if (localStorage.user && JSON.parse(localStorage.user).role === 'Admin') {
-                    dialog({title: `<p>Inscription d'un utilisateur</p>`,
-                    content: `<p>Le compte de ${firstname} ${name}, lié à l'adresse ${email}, sous le login ${login} a bien été créé.</p>
-                    <p>Vous allez être redirigé(e) dans quelques secondes vers la page de connexion...</p>
-                    `});
+                    dialog({
+                        title: `<p>Inscription d'un utilisateur</p>`,
+                        content: `<p>Le compte de ${firstname} ${name}, lié à l'adresse ${email}, sous le login ${login} a bien été créé.</p>
+                                <p>Vous allez être redirigé(e) dans quelques secondes vers la page de connexion...</p>`
+                    });
 
                     const dialogMsg = document.querySelector("dialog");
                     dialogMsg.classList.add("valid");
                     dialogMsg.classList.add("register");
-                    registerForm.classList.add("hidden");
 
                     redirect(`${configPath.basePath}/admin/pages/profils.html`);
                 } else {
-                    dialog({title: `Bienvenue !`,
-                        content: `Bonjour ${firstname} ${name}.
-                            Votre compte lié à l'adresse ${email} est maintenant créé sous le login ${login}.
-                            Vous allez être redirigé(e) dans quelques secondes vers la page de connexion...
-                            `});
-                            const dialogMsg = document.querySelector("dialog");
+                    dialog({
+                        title: `<p>Bienvenue ${login} !</p>`,
+                        content: `<p>Vous êtes bien inscrit(e).</p>`
+                    });
+                    const dialogMsg = document.querySelector("dialog");
                     dialogMsg.classList.add("valid");
-                    registerForm.classList.add("hidden");
                     redirect(`${configPath.basePath}/user/pages/login.html`, 3000)
                 }
             }
 
             if (response.status === "errors") {
                 // En cas d'échec, affiche les erreurs rencontrées et redirige l'utilisateur vers la page d'inscription.
-                dialog({title: "Erreurs", content: response.errors});
+                dialog({
+                    title: "Erreurs",
+                    content: response.errors
+                });
                 const dialogMsg = document.querySelector("dialog");
                 dialogMsg.classList.add("errors");
                 registerForm.classList.add("hidden");

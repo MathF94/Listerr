@@ -22,13 +22,17 @@ function readAllLists() {
 
     // Vérifie si l'utilisateur est connecté
     if (token === undefined || token === null || user === null || user === undefined) {
-        const sectionText = document.querySelector("#createList");
+        const sectionText = document.querySelector("#presentation");
+
         const textUnsubscribed_1 = document.createElement("p");
         const textUnsubscribed_2 = document.createElement("p");
-        textUnsubscribed_1.innerHTML = `Seules les personnes inscrites peuvent utiliser cette web-app.`;
-        textUnsubscribed_2.innerHTML = `Pour en profiter, créez-vous un compte.`;
+        const textUnsubscribed_3 = document.createElement("p");
+        textUnsubscribed_1.innerHTML = `Listerr est une web-app qui permet la création et la gestion de listes de souhaits (wish-list) publiques et de tâches (todo-list) privées.`;
+        textUnsubscribed_2.innerHTML = `Seules les personnes inscrites peuvent en profiter.`;
+        textUnsubscribed_3.innerHTML = `N'hésitez plus et venez créer un compte.`;
         sectionText.appendChild(textUnsubscribed_1);
         sectionText.appendChild(textUnsubscribed_2);
+        sectionText.appendChild(textUnsubscribed_3);
 
         listBtn.addEventListener("click", function (e) {
             dialog({

@@ -6,6 +6,7 @@ use Entity\Lister;
 use Models\Lists;
 use Models\Users;
 use Services\CSRFToken;
+use Services\SendMail;
 use Services\Session;
 use Services\Validator;
 
@@ -95,11 +96,23 @@ class ListController
                 if (empty(count($errors))) {
                     $params = $_POST;
                     $model = new Lists();
-                    $model->create($params, $this->user->id);
+                    $create = $model->createList($params, $this->user->id);
 
+                    if ($create) {
+                        if ($params['typeList'] === 'WishList') {
+                            $sendMail = new SendMail();
+                            $mail = $sendMail->getElementMailList($params, $this->user);
+                            if ($mail) {
+                                return json_encode([
+                                    "status" => "createList",
+                                    "message" => "la liste a bien été créée."
+                                ]);
+                            }
+                        }
+                    }
                     return json_encode([
-                        "status" => "createList",
-                        "message" => "la liste a bien été créée."
+                        "status" => "no createList",
+                        "message" => "la liste ne s'est pas créée."
                     ]);
                 }
                 return json_encode([

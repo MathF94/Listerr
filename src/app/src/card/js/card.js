@@ -172,6 +172,7 @@ function card(canCreateCard) {
     fetchReadAllCardsByList(id)
     .then(response => {
         if (response.status === "readOneList") {
+
             const dataUserId = response.data.user.id;
             const dataUserEmail = response.data.user.email
             const dataType = response.data.type;

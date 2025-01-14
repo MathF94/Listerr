@@ -5,6 +5,7 @@ namespace Controllers;
 use Models\Cards;
 use Models\Users;
 use Services\CSRFToken;
+use Services\SendMail;
 use Services\Session;
 use Services\Validator;
 
@@ -103,12 +104,17 @@ class CardController
                 if (empty(count($errors))) {
                     $params = $_POST;
                     $model = new Cards();
-                    $model->create($params);
+                    $create = $model->createCard($params);
 
-                    return json_encode([
-                        "status" => "createCard",
-                        "message" => "la carte a bien été créée."
-                    ]);
+                    $sendMail = new SendMail();
+                    $mail = $sendMail->getElementMailCard($params);
+
+                    if ($create && $mail) {
+                        return json_encode([
+                            "status" => "createCard",
+                            "message" => "la carte a bien été créée."
+                        ]);
+                    }
                 }
                 return json_encode([
                     "status" => "errors",
@@ -205,7 +211,7 @@ class CardController
             if (!empty($this->user->id)) {
                 $model = new Cards();
                 $card = $model->getOneCardById($id);
-                
+
                 if (empty($card)) {
                     return json_encode([
                         "status" => "fail",
@@ -269,5 +275,10 @@ class CardController
                 "message" => $e->getMessage()
             ]);
         }
+    }
+
+    public function deleteAllCards()
+    {
+
     }
 }

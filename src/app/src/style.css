@@ -188,6 +188,16 @@ h3, h4 {
   margin: 10px auto;
 }
 
+#createList {
+  padding-top: 6px;
+}
+
+#presentation {
+  margin: 0 auto;
+  padding-top: 20px;
+  width: 52vh;
+}
+
 .login, .register {
   display: flex;
   flex-direction: column;
@@ -227,7 +237,7 @@ dialog {
   font-size: 10px;
   position: absolute;
   height: auto;
-  top: 55px;
+  top: 50px;
   width: 250px;
   z-index: 30;
 }
@@ -389,11 +399,19 @@ dialog.errors_fields > h2 {
   background: var(--third-party-wish-bg);
 }
 
-#createListsDiv, #createCardDiv, #updateListDiv, .updateCardDiv, #updateReservationDiv {
+#updateProfilDiv,
+#updateProfilsDiv,
+#createListsDiv,
+#createCardDiv,
+#updateListDiv,
+.updateCardDiv,
+#updateReservationDiv {
   margin: 0 auto;
 }
 
-#listFormSection, #cardFormSection {
+#userFormSection,
+#listFormSection,
+#cardFormSection {
   background-color: var(--form-bg);
   border-radius: 8px;
   box-shadow: 0 0 5px var(--border);
@@ -471,12 +489,17 @@ dialog.errors_fields > h2 {
   -webkit-transform: translate(-50%, -50%);
 }
 
+.more {
+  height: 10px;
+  width: 10px;
+}
 .more__menu {
   width: 145px;
 }
 .more__btn {
   background: none;
   border: 0 none;
+  height: 10px;
   line-height: normal;
   overflow: visible;
   outline: none;
@@ -494,10 +517,8 @@ dialog.errors_fields > h2 {
   border-radius: 50%;
   display: block;
   height: 7px;
-  left: 0px;
-  position: absolute;
+  position: relative;
   margin: 0 auto;
-  margin-right: 1px;
   top: 0px;
   transition: background-color 0.3s;
   width: 7px;
@@ -509,6 +530,7 @@ dialog.errors_fields > h2 {
 .more__btn > span::after {
   content: "";
   left: 13px;
+  top: -7px;
 }
 .more__menu {
   background-color: var(--select);
@@ -750,17 +772,13 @@ form {
   padding: 10px 20px;
   width: 85%;
 }
-form#registerForm, form#loginForm, form#updateForm, form.formUpdateUser, form#formGuest {
+form#registerForm, form#loginForm, form#updateForm, form#formGuest {
   background-color: var(--form-bg);
   border-radius: 8px;
   box-shadow: 0 0 5px var(--border);
 }
 form > div {
   margin: 10px 0;
-}
-
-.formUpdateUser {
-  margin-top: 32px;
 }
 
 .formGuest {
@@ -909,6 +927,20 @@ input[type=submit]:hover {
   body {
     min-height: 120vh;
   }
+  #homeDisplayLists,
+  #listsSection,
+  #listSection,
+  .profilSection {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  #homeDisplayLists > article,
+  #listsSection > article,
+  #listSection > article,
+  .profilSection > article {
+    width: 600px;
+  }
   .profil_name {
     display: none;
   }
@@ -935,6 +967,20 @@ input[type=submit]:hover {
   }
 }
 @media screen and (min-width: 619px) {
+  #homeDisplayLists,
+  #listsSection,
+  #listSection,
+  .profilSection {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  #homeDisplayLists > article,
+  #listsSection > article,
+  #listSection > article,
+  .profilSection > article {
+    width: 600px;
+  }
   .profil_btn {
     width: 20%;
   }

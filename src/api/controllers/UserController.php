@@ -4,9 +4,10 @@ namespace Controllers;
 
 use Entity\User;
 use Models\Users;
-use Services\Session;
 use Services\CSRFToken;
 use Services\Encryption;
+use Services\SendMail;
+use Services\Session;
 use Services\Validator;
 
 /**
@@ -92,10 +93,14 @@ class UserController
                 $params = $_POST;
                 $params["password"] = $this->encryption->encrypt($params["password"]);
                 $params["role_id"] = User::ROLE_USER;
+
                 $model = new Users();
                 $create = $model->createUser($params);
 
-                if ($create) {
+                $sendMail = new SendMail();
+                $mail = $sendMail->getElementMailRegistration($params);
+
+                if ($create && $mail) {
                     return json_encode([
                         "status" => "createUser",
                         "message" => "L'utilisateur a bien été créé."
@@ -571,4 +576,6 @@ class UserController
             ]);
         };
     }
+
+
 }

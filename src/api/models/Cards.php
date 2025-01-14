@@ -16,7 +16,7 @@ class Cards extends Database
      * @param array $params - Les paramètres de la carte à créer.
      * @return bool - Renvoie true en cas de succès, sinon false.
      */
-    public function create(array $params): bool
+    public function createCard(array $params): bool
     {
         try {
             $req = "INSERT INTO `card` (`title`, `description`, `priority`, `list_id`)

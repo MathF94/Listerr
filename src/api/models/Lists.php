@@ -17,7 +17,7 @@ class Lists extends Database
      * @param int $userId - L'ID de l'utilisateur associé à la liste.
      * @return bool - Renvoie true en cas de succès, sinon false.
      */
-    public function create(array $params, int $userId): bool
+    public function createList(array $params, int $userId): bool
     {
         try {
             $req = "INSERT INTO `list` (`type`, `title`, `description`, `user_id`)

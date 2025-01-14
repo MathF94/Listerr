@@ -64,11 +64,13 @@ function login() {
 
                 const login = JSON.parse(localStorage.user).login;
 
-                dialog({title: `Bonjour ${login} !`, content: `Vous êtes bien connecté(e).`});
+                dialog({
+                    title: `Bonjour ${login} !`,
+                    content: `Vous êtes bien connecté(e).`
+                });
 
                 const dialogMsg = document.querySelector("dialog");
                 dialogMsg.classList.add("valid");
-                loginForm.classList.add("hidden");
 
                 if (redirection === "") {
                     localStorage.nav_active ="home";
