@@ -443,7 +443,9 @@ function card(canCreateCard) {
 
                 /**
                  * ______________________________________________________________________________________________________________
+                 * ______________________________________________________________________________________________________________
                  * Gestion de la réservation d'un souhait / tâche d'une carte dans une liste
+                 * ______________________________________________________________________________________________________________
                  * ______________________________________________________________________________________________________________
                  */
                 reservationBtn.addEventListener("click", function(e) {
@@ -456,12 +458,6 @@ function card(canCreateCard) {
 
                     // Affichage du formulaire pour réserver
                     displayFormReservation(updateReservationDiv);
-                    // Réservation cachée
-                    // reservationBtn.hidden = true;
-                    // Etoiles de priorité cachées
-                    // divStar.classList.add("hidden");
-                    // Description cachée
-                    // text.classList.add("hidden");
 
                     const inputLogin = document.querySelector("#name");
                     const inputMail = document.querySelector("#email");
@@ -473,13 +469,6 @@ function card(canCreateCard) {
                         guestCancelBtn.addEventListener("click", function() {
                             popIn.style.visibility = "hidden";
                             updateReservationDiv.remove();
-                            // formGuest.remove();
-                            // Réservation cachée
-                            // reservationBtn.hidden = false;
-                            // Etoiles de priorité visibles
-                            // divStar.classList.remove("hidden");
-                            // Description visible
-                            // text.classList.remove("hidden");
                         })
 
                         CSRFToken(formGuest.id);
@@ -520,11 +509,6 @@ function card(canCreateCard) {
                         guestCancelBtn.addEventListener("click", function() {
                             popIn.style.visibility = "hidden";
                             updateReservationDiv.remove();
-                            // formGuest.remove();
-                            // Réservation cachée
-                            // reservationBtn.hidden = false;
-                            // Etoiles de priorité visibles
-                            // divStar.classList.remove("hidden");
                         })
 
                         CSRFToken(formGuest.id);
