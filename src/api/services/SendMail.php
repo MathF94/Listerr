@@ -156,6 +156,8 @@ class SendMail
     public function getElementMailRegistration(array $params): mixed
     {
         try {
+            $modelSendMails = new SendMail();
+
             $name = htmlspecialchars($params['name']);
             $firstname = htmlspecialchars($params['firstname']);
             $login = htmlspecialchars($params['login']);
@@ -189,7 +191,6 @@ class SendMail
                 <p>Administrateur de Listerr.</p>
             HTML;
 
-            $modelSendMails = new SendMail();
             $mailForUser = $modelSendMails->sendNotificationMailToUser($recipient, $subjectUser, $messageUser);
             $mailForAdmin = $modelSendMails->sendNotificationMailToAdmin($subjectAdmin, $messageAdmin);
 
@@ -208,32 +209,36 @@ class SendMail
         }
     }
 
-    public function getElementMailList(array $params, object $user)
+    public function getElementMailList(array $params, object $user): mixed
     {
         try {
             $users = new Users();
-            $allUsers = $users->readAll();
+            $modelIncludes = new Includes();
+            $modelSendMails = new SendMail();
 
-            $listTitle = $params['titleList'];
-            $listUserLogin = $user->login;
+            $allUsers = $users->readAll();
             $AllRecipients = [];
             foreach ($allUsers as $user) {
-                $AllRecipients[] = $user->email;
+                $AllRecipients[] = htmlspecialchars($user->email);
             }
 
+            $listUserLogin = htmlspecialchars($user->login);
+            $listTitle = htmlspecialchars($params['titleList']);
+            $domain = $modelIncludes->changeDomain();
+
             $subjectAll = <<< HTML
-            Listerr - Nouvelle création de liste par {$listUserLogin}
+            Listerr - Nouvelle création de liste de souhaits par {$listUserLogin}
             HTML;
             $messageAll = <<< HTML
             <p>Bonjour à tous,</p>
             <br>
-            <p>Pour information, une nouvelle liste "{$listTitle}" appartenant à {$listUserLogin} vient d'être créée.</p>
+            <p>Pour information, une nouvelle liste de souhaits "{$listTitle}" appartenant à {$listUserLogin} vient d'être créée.</p>
+            <p>Voici où la retrouver si besoin - <a href="{$domain}/list/pages/list.html">lien vers la liste</a>.</p>
             <br>
             <p>Bonne journée.</p>
             <p>Administrateur de Listerr.</p>
             HTML;
 
-            $modelSendMails = new SendMail();
             $mailForAllUsers = $modelSendMails->sendNotificationMailToUser($AllRecipients, $subjectAll, $messageAll);
 
             if ($mailForAllUsers) {
@@ -250,43 +255,41 @@ class SendMail
         }
     }
 
-    public function getElementMailCard($params)
+    public function getElementMailCard($params): mixed
     {
         try {
             $users = new Users();
+            $modelLists = new Lists();
+            $modelIncludes = new Includes();
+            $modelSendMails = new SendMail();
+
             $allUsers = $users->readAll();
+            $lists = $modelLists->getOneListById($params['list_id']);
 
             $AllRecipients = [];
             foreach ($allUsers as $user) {
-                $AllRecipients[] = $user->email;
+                $AllRecipients[] = htmlspecialchars($user->email);
             }
 
             $listId = urlencode($params['list_id']);
-
-            $modelLists = new Lists();
-            $lists = $modelLists->getOneListById($listId);
-
             $listTitle = htmlspecialchars($lists->title);
             $listUserLogin = htmlspecialchars($lists->user->login);
             $cardTitle = htmlspecialchars($params['titleCard']);
-
-            $modelIncludes = new Includes();
             $domain = $modelIncludes->changeDomain();
 
             $subjectAll = <<< HTML
-                Listerr - Nouvelle création de liste par {$listUserLogin};
+                Listerr - Nouvelle création d'un souhait par {$listUserLogin};
                 HTML;
             $messageAll = <<< HTML
             <p>Bonjour à tous,</p>
             <br>
-            <p>Pour information, un nouvel article "{$cardTitle}" de la liste "{$listTitle}" appartenant à {$listUserLogin} vient d'être créée.</p>
-            <p>Voici où la retrouver si besoin - <a href="{$domain}/list/pages/list.html?id={$listId}">lien vers l'article</a>.</p>
+            <p>Pour information, le nouveau souhait "{$cardTitle}" de la liste "{$listTitle}" appartenant à {$listUserLogin} vient d'être créée.</p>
+            <p>Voici où le retrouver si besoin - <a href="{$domain}/list/pages/list.html?id={$listId}">lien du souhait</a>.</p>
             <br>
             <p>Bonne journée.</p>
             <p>Administrateur de Listerr.</p>
             HTML;
 
-            $modelSendMails = new SendMail();
             $mailForAllUsers = $modelSendMails->sendNotificationMailToUser($AllRecipients, $subjectAll, $messageAll);
 
             if ($mailForAllUsers) {
@@ -321,36 +324,39 @@ class SendMail
     {
         try {
             $session = new Session();
-            $encryptGuestToken = urlencode($session->encryptGuestToken($params['name'], $params['email'], $params['list_id'], $params['card_id']));
-
             $users = new Users();
-            $allUsers = $users->readAll();
-
-            $modelReservations = new Reservations();
-            $modelReservations->createReservation($params);
-
             $modelLists = new Lists();
-            $lists = $modelLists->getOneListById($params['list_id']);
-
             $modelCards = new Cards();
+            $modelIncludes = new Includes();
+            $modelSendMails = new SendMail();
+
+            $allUsers = $users->readAll();
+            $lists = $modelLists->getOneListById($params['list_id']);
             $cards = $modelCards->getOneCardById($params['card_id']);
 
-            $name = htmlspecialchars($params['name']);
-            $recipient = htmlspecialchars($params['email']);
-
+            $listId = urlencode($params['list_id']);
             $listUserLogin = htmlspecialchars($lists->user->login);
+            $listUserEmail = htmlspecialchars($lists->user->email);
             $listTitle = htmlspecialchars($lists->title);
             $cardTitle = htmlspecialchars($cards->title);
-            $listId = urlencode($params['list_id']);
-
-            $modelIncludes = new Includes();
+            $ReservationUserName = htmlspecialchars($params['name']);
+            $ReservationUserEmail = htmlspecialchars($params['email']);
             $domain = $modelIncludes->changeDomain();
+
+            $encryptGuestToken = urlencode(
+                $session->encryptGuestToken(
+                    $params['name'],
+                    $params['email'],
+                    $params['list_id'],
+                    $params['card_id']
+                )
+            );
 
             $subjectUser = 'Listerr - Votre réservation a bien été prise en compte';
             $messageUser = <<< HTML
-                <p>Bonjour {$name},</p>
+                <p>Bonjour {$ReservationUserName},</p>
                 <br>
-                <p>Nous vous confirmons avoir bien pris en compte la réservation de {$cardTitle} dans la liste {$listTitle} de {$listUserLogin} sur Listerr.</p>
+                <p>Nous vous confirmons avoir bien pris en compte la réservation du souhait {$cardTitle} de {$listUserLogin} dans la liste {$listTitle} sur Listerr.</p>
                 <br>
                 <p>Si vous souhaitez retrouver votre réservation, merci de cliquer sur le lien ci-dessous :</p>
                 <p><a href="{$domain}/list/pages/list.html?id={$listId}&GuestToken={$encryptGuestToken}">Lien pour l'annulation</a></p>
@@ -363,39 +369,29 @@ class SendMail
 
             $AllRecipients = [];
             foreach ($allUsers as $user) {
-                $AllRecipients[] = $user->email;
+                $AllRecipients[] = htmlspecialchars($user->email);
             }
 
-            $indexOwner = array_search($lists->user->email, $AllRecipients);
-            // Si l'email du propriétaire de la liste existe dans le tableau (index !== false)
-            if ($indexOwner !== false) {
-                // Supprimer l'élément à cet index
-                array_splice($AllRecipients, $indexOwner, 1);
-            }
-
-            $indexReserver = array_search($recipient, $AllRecipients);
-            // Si l'email du propriétaire de la liste existe dans le tableau (index !== false)
-            if ($indexReserver !== false) {
-                // Supprimer l'élément à cet index
-                array_splice($AllRecipients, $indexReserver, 1);
-            }
+            // Filtre le mail du propriétaire
+            $AllRecipients = $modelIncludes->seekAndDestroy($listUserEmail, $AllRecipients);
+            // Filtre le mail du réservant du souhait
+            $AllRecipients = $modelIncludes->seekAndDestroy($ReservationUserEmail, $AllRecipients);
 
             $subjectAll = 'Listerr - Nouvelle réservation sur une liste';
             $messageAll = <<< HTML
             <p>Bonjour à tous,</p>
             <br>
-            <p>Pour information, la carte "{$cardTitle}" de la liste "{$listTitle}" appartenant à {$listUserLogin} a été réservée par {$name}.</p>
+            <p>Pour information, le souhait "{$cardTitle}" de la liste "{$listTitle}" appartenant à {$listUserLogin} a été réservée par {$ReservationUserName}.</p>
             <p>Voici où la retrouver si besoin - <a href="{$domain}/list/pages/list.html?id={$listId}">lien vers la liste</a>.</p>
             <br>
             <p>Bonne journée.</p>
             <p>Administrateur de Listerr.</p>
             HTML;
 
-            $modelSendMails = new SendMail();
-            $mailForRecipient = $modelSendMails->sendNotificationMailToUser($recipient, $subjectUser, $messageUser);
+            $mailForReservationUserEmail = $modelSendMails->sendNotificationMailToUser($ReservationUserEmail, $subjectUser, $messageUser);
             $mailForOthersUsers = $modelSendMails->sendNotificationMailToUser($AllRecipients, $subjectAll, $messageAll);
 
-            if ($mailForRecipient) {
+            if ($mailForReservationUserEmail) {
                 if ($mailForOthersUsers) {
                     return true;
                 }
@@ -410,4 +406,64 @@ class SendMail
             ]);
         }
     }
+
+    public function getElementMailDeleteReservation($reservation)
+    {
+        try {
+            $users = new Users();
+            $allUsers = $users->readAll();
+
+            $listId = htmlspecialchars($reservation->listId);
+            $cardId = htmlspecialchars($reservation->cardId);
+            $ReservationUserEmail = htmlspecialchars($reservation->email);
+
+            $AllRecipients = [];
+            foreach ($allUsers as $user) {
+                $AllRecipients[] = $user->email;
+            }
+
+            $modelLists = new Lists();
+            $lists = $modelLists->getOneListById($listId);
+
+            $modelCards = new Cards();
+            $cards = $modelCards->getOneCardById($cardId);
+
+            $listTitle = htmlspecialchars($lists->title);
+            $listUserLogin = htmlspecialchars($lists->user->login);
+            $cardTitle = htmlspecialchars($cards->title);
+
+            $modelIncludes = new Includes();
+            $domain = $modelIncludes->changeDomain();
+            $AllRecipients = $modelIncludes->seekAndDestroy($ReservationUserEmail, $AllRecipients);
+
+            $subjectAll = <<< HTML
+                Listerr - Annulation de réservation d'un souhait
+                HTML;
+            $messageAll = <<< HTML
+            <p>Bonjour à tous,</p>
+            <br>
+            <p>Pour information, le souhait "{$cardTitle}" de la liste "{$listTitle}" appartenant à {$listUserLogin} est de nouveau réservable.</p>
+            <p>Voici où le retrouver si besoin - <a href="{$domain}/list/pages/list.html?id={$listId}">lien vers l'article</a>.</p>
+            <br>
+            <p>Bonne journée.</p>
+            <p>Administrateur de Listerr.</p>
+            HTML;
+
+            $modelSendMails = new SendMail();
+            $mailForAllUsers = $modelSendMails->sendNotificationMailToUser($AllRecipients, $subjectAll, $messageAll);
+
+            if ($mailForAllUsers) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (\Exception $e) {
+            return json_encode([
+                "status" => "errors",
+                "message" => $e->getMessage()
+            ]);
+        }
+    }
+
 }

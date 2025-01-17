@@ -117,7 +117,7 @@ class ReservationController
 
                 $sendMail = new SendMail();
                 $mail = $sendMail->getElementMailReservation($params);
-                
+
                 if ($mail) {
                     return json_encode([
                         "status" => "createReservation",
@@ -222,7 +222,11 @@ class ReservationController
                 $reservation = $model->getOneReservationById($id);
 
                 if (!empty($reservation)) {
+                    $sendMail = new SendMail();
+                    $mail = $sendMail->getElementMailDeleteReservation($reservation);
+                    
                     $model->cancelReservation($reservation->id);
+
 
                     return json_encode([
                         "status" => "CancelledReservation",
