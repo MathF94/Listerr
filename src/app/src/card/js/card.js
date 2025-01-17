@@ -589,7 +589,7 @@ function card(canCreateCard) {
                                     dialog({title: "Création de la réservation", content: "Votre réservation a bien été prise en compte."});
                                     const dialogMsg = document.querySelector("dialog");
                                     dialogMsg.classList.add("valid");
-                                    // redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                                    redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
 
                                 }
                                 if (response.status === "errors") {
