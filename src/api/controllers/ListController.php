@@ -82,7 +82,6 @@ class ListController
     {
         try {
             $validToken = $this->csrfToken->isValidToken($csrfToken, "formList");
-
             if (!$validToken) {
                 return json_encode([
                     "status" => "fail",
@@ -92,7 +91,6 @@ class ListController
 
             if (!empty($this->user)) {
                 $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_CREATE_LIST);
-
                 if (empty(count($errors))) {
                     $params = $_POST;
                     $model = new Lists();

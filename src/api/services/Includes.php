@@ -20,7 +20,7 @@ Class Includes
             if ($index !== false) {
                 // Supprimer la valeur liée à cet index
                 array_splice($AllEmails, $index, 1);
-                return $AllEmails;
             }
+            return $AllEmails;
     }
 }
