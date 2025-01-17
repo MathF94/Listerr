@@ -115,15 +115,23 @@ class ReservationController
                     'card_id' => (int)$_POST['card_id']
                 ];
 
-                $sendMail = new SendMail();
-                $mail = $sendMail->getElementMailReservation($params);
+                $modelReservations = new Reservations();
+                $create = $modelReservations->createReservation($params);
 
-                if ($mail) {
-                    return json_encode([
-                        "status" => "createReservation",
-                        "message" => "la réservation a bien été créée et le mail envoyé."
-                    ]);
+                if ($create) {
+                    $sendMail = new SendMail();
+                    $mail = $sendMail->getElementMailReservation($params);
+                    if ($mail) {
+                        return json_encode([
+                            "status" => "createReservation",
+                            "message" => "la réservation a bien été créée et le mail envoyé."
+                        ]);
+                    }
                 }
+                return json_encode([
+                    "status" => "no createReservation",
+                    "message" => "la réservation n'est pas créée."
+                ]);
             }
             return json_encode([
                 "status" => "errors",
@@ -222,11 +230,11 @@ class ReservationController
                 $reservation = $model->getOneReservationById($id);
 
                 if (!empty($reservation)) {
-                    $sendMail = new SendMail();
-                    $mail = $sendMail->getElementMailDeleteReservation($reservation);
-                    
+
                     $model->cancelReservation($reservation->id);
 
+                    $sendMail = new SendMail();
+                    $mail = $sendMail->getElementMailDeleteReservation($reservation);
 
                     return json_encode([
                         "status" => "CancelledReservation",
