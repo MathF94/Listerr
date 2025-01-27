@@ -278,7 +278,7 @@ class SendMail
             $domain = $modelIncludes->changeDomain();
 
             $subjectAll = <<< HTML
-                Listerr - Nouvelle création d'un souhait par {$listUserLogin};
+                Listerr - Nouvelle création d'un souhait par {$listUserLogin}
                 HTML;
             $messageAll = <<< HTML
             <p>Bonjour à tous,</p>

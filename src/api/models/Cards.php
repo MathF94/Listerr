@@ -156,17 +156,34 @@ class Cards extends Database
      * @param int $id - L'ID de la carte à supprimer.
      * @return bool - Renvoie true en cas de succès, sinon false.
      */
-    public function deleteCard(int $id): bool
+    public function deleteCard(int $id)
     {
         try {
             $req = "DELETE FROM `card`
                     WHERE `id` = :id";
-
             $query = $this->db->prepare($req);
             return $query->execute(['id' => $id]);
         } catch (\Exception $e) {
             echo $e->getMessage();
             return [];
+        }
+    }
+
+    /**
+     * Cette méthode permet de supprimer une carte de la base de données.
+     *
+     * @return bool - Renvoie true en cas de succès, sinon false.
+     */
+    public function deleteAllCards(): bool
+    {
+        try {
+            $req = "DELETE FROM `card`";
+
+            $query = $this->db->prepare($req);
+            return $query->execute([]);
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return false;
         }
     }
 }

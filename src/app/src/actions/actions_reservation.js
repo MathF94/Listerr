@@ -39,6 +39,27 @@ async function fetchReadAllReservationsByCard(id) {
         return await fetch(`${url}&id=${id}`, {
             headers: {"X-Authorization": localStorage.getItem("token") || ""},
             method: "GET",
+            }).then(response => response?.json());
+
+    } catch (error) {
+        console.error("Erreur lors de la requête fetch :", error);
+        return null;
+    }
+}
+
+async function fetchUpdatePriority(priority, id) {
+    try {
+        const formData = new FormData();
+        formData.append('id', id);
+        formData.append('priority', priority);
+
+        const url = `${configPath.apiPath}/?route=update_priority`;
+        return await fetch(url, {
+            headers: {
+                "X-Authorization": localStorage.getItem("token")
+            },
+            method: "POST",
+            body: formData,
             }).then(response => response.json());
 
     } catch (error) {
@@ -68,5 +89,6 @@ async function fetchCancelReservation(id) {
 export {
     fetchCreateReservation,
     fetchReadAllReservationsByCard,
+    fetchUpdatePriority,
     fetchCancelReservation
 }

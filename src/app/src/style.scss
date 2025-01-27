@@ -58,8 +58,8 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
 
     // Dialog
     --dialog-bg: rgba(238, 234, 13, 1);
-    --dialog-bg-valid: rgba(89, 230, 60, 0.8);
-    --dialog-bg-errors: rgba(225, 31, 31, 0.9);
+    --dialog-bg-valid: rgba(89, 230, 60, 1);
+    --dialog-bg-errors: rgba(225, 31, 31, 1);
 
     // Star
     --disable-star: rgba(141, 125, 125, 1);
@@ -253,7 +253,7 @@ dialog {
     position: absolute;
     height: auto;
     top: 50px;
-    width: 250px;
+    width: 200px;
     z-index: 30;
     &.valid {
         background: var(--dialog-bg-valid);
@@ -921,7 +921,7 @@ input[type="submit"] {
         align-items: center;
         flex-direction: column;
         & > article {
-            width: 600px;
+            width: 325px;
         }
     }
     .profil {

@@ -277,8 +277,28 @@ class CardController
         }
     }
 
-    public function deleteAllCards()
+    public function deleteAllCards(): string
     {
+        try {
+            if (!empty($this->user->id)) {
+                $model = new Cards();
+                $model->deleteAllCards();
 
+                return json_encode([
+                    "status" => "deleteCard",
+                    "message" => "la carte a bien été supprimée."
+                ]);
+            }
+            return json_encode([
+                "status" => "fail",
+                "message" => "no card found"
+            ]);
+
+        } catch (\Exception $e) {
+            return json_encode([
+                "status" => "errors",
+                "message" => $e->getMessage()
+            ]);
+        }
     }
 }
