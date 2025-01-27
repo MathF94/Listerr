@@ -45,8 +45,8 @@
   --mandatory: rgba(225, 31, 31, 0.7);
   --select: rgba(255, 255, 255, 1);
   --dialog-bg: rgba(238, 234, 13, 1);
-  --dialog-bg-valid: rgba(89, 230, 60, 0.8);
-  --dialog-bg-errors: rgba(225, 31, 31, 0.9);
+  --dialog-bg-valid: rgba(89, 230, 60, 1);
+  --dialog-bg-errors: rgba(225, 31, 31, 1);
   --disable-star: rgba(141, 125, 125, 1);
   --star: rgba(255, 0, 0, 0.6);
   --third-party-star: rgba(255, 0, 0, 0.6);
@@ -238,7 +238,7 @@ dialog {
   position: absolute;
   height: auto;
   top: 50px;
-  width: 250px;
+  width: 200px;
   z-index: 30;
 }
 dialog.valid {
@@ -939,7 +939,7 @@ input[type=submit]:hover {
   #listsSection > article,
   #listSection > article,
   .profilSection > article {
-    width: 600px;
+    width: 325px;
   }
   .profil_name {
     display: none;

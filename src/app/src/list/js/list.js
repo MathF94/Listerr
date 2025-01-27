@@ -1,12 +1,19 @@
 "use strict";
 
+import { displayFormCard } from "../../card/js/form_card.js";
+
 import { displayFormList } from "./form_list.js";
 
 import {
     fetchReadOneListById,
+    fetchUpdateList,
     fetchDeleteList,
-    fetchUpdateList
 } from "../../actions/actions_lists.js";
+
+import {
+    fetchCreateCard,
+    fetchDeleteAllCards
+} from "../../actions/actions_cards.js";
 
 import { card } from "../../card/js/card.js";
 
@@ -31,6 +38,7 @@ import {
  * Fonction principale pour gérer la page de détails d'une liste.
  */
 function list() {
+
     // Obtient l'identifiant de la liste à partir des paramètres de l'URL.
     const urlParams = new URLSearchParams(document.location.search);
     if (urlParams.has("id")) {
@@ -257,7 +265,7 @@ function list() {
                             // Gestion de la suppression de la liste
                             id: `deleteList-${data.id}`,
                             text: "Supprimer la liste",
-                            onclick: function(e){
+                            onclick: function(e) {
                                 e.preventDefault();
                                 const dltBtnId = parseInt(e.target.value);
 
@@ -283,6 +291,109 @@ function list() {
                                 };
                             }
                         },
+                        {
+                            // Gestion de la création d'une carte
+                            id: `createCard-${data.id}`,
+                            text: "Créer un souhait",
+                            onclick: function(e) {
+                                const createCardDiv = document.createElement("div");
+                                createCardDiv.id = "createCardDiv";
+                                popIn.style.visibility = "visible";
+
+                                popIn.appendChild(createCardDiv);
+
+                                // Affichage du formulaire de création d'une carte
+                                displayFormCard(createCardDiv);
+
+                                const cardForm = document.querySelector("#formCard");
+                                const titleFormCard = document.querySelector("#titleFormCard");
+                                titleFormCard.innerText = "Formulaire de création de la carte";
+
+                                // Suppression des éléments du formulaire d'édition au click du bouton "Annuler"
+                                cardCancelBtn.addEventListener("click", function() {
+                                    // PopIn cachée
+                                    popIn.style.visibility = "hidden";
+                                    cardForm.remove();
+                                    createCardDiv.remove();
+                                })
+
+                                // Création d'une nouvelle carte (souhait ou tâche)
+                                CSRFToken(cardForm.id);
+                                cardForm.addEventListener("submit", function(e) {
+                                    e.preventDefault();
+
+                                    // Validation de pattern du formulaire
+                                    const inputTitle = document.querySelector("#titleCard");
+                                    const inputDescription = document.querySelector("#descriptionCard");
+                                    const inputPriority = document.querySelector("#priority");
+                                    inputTitle.addEventListener("invalid", function(e) {
+                                        validate(e.target)
+                                    });
+                                    inputDescription.addEventListener("invalid", function(e) {
+                                        validate(e.target)
+                                    });
+                                    inputPriority.addEventListener("invalid", function(e) {
+                                        validate(e.target)
+                                    });
+
+                                    // Retour en haut de page
+                                    scroll();
+
+                                    fetchCreateCard(cardForm, id)
+                                    .then(response => {
+                                        localStorage.removeItem("csrfToken");
+
+                                        if (response.status === "createCard") {
+                                            if (localStorage.getItem("userTypeList") === "WishList") {
+                                                dialog({title: "Création du souhait", content: "Votre souhait a bien été créé."});
+                                            } else {
+                                                dialog({title: "Création de la tâche", content: "Votre tâche a bien été créée."});
+                                            }
+                                            const dialogMsg = document.querySelector("dialog");
+                                            dialogMsg.classList.add("valid");
+                                            redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                                        }
+
+                                        if (response.status === "errors") {
+                                            dialog({title: "Erreurs", content: response.errors});
+                                            const dialogMsg = document.querySelector("dialog");
+                                            dialogMsg.classList.add("errors");
+                                            redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                                        }
+                                    })
+                                })
+                            }
+                        },
+                        {
+                            // Gestion de la suppression de tous les souhaits
+                            id: `deleteAllCards-${data.id}`,
+                            text: `Vider la liste`,
+                            onclick: function(e) {
+                                e.preventDefault();
+                                const dltBtnId = parseInt(e.target.value);
+
+                                if (dltBtnId !== data.id) {
+                                    console.warn("pas touche");
+                                    return;
+
+                                } else if (confirm('Voulez-vous vraiment vider la liste ?') === true) {
+                                    scroll();
+                                    fetchDeleteAllCards(data.id)
+                                    .then(() => {
+                                        if (localStorage.getItem("userTypeList") === "WishList"){
+                                            dialog({title: "Suppression des souhaits de la liste", content: "Votre liste a bien été supprimée."});
+                                        } else {
+                                            dialog({title: "Suppression des tâches de la liste", content: "Votre liste a bien été supprimée."});
+                                        }
+
+                                        const dialogMsg = document.querySelector("dialog");
+                                        dialogMsg.classList.add("valid");
+                                        document.body.scrollTop = 0;
+                                        redirect(`${configPath.basePath}/list/pages/list.html?id=${data.id}`);
+                                    });
+                                };
+                            }
+                        }
                     ]
                     dropDownMenu(oneList, data.id, data.updatedAt, data.user.login, actions);
                 };

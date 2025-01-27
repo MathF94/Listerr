@@ -75,26 +75,26 @@ async function fetchUpdateCard(form, id) {
     }
 };
 
-async function fetchUpdatePriority(priority, id) {
-    try {
-        const formData = new FormData();
-        formData.append('id', id);
-        formData.append('priority', priority);
+// async function fetchUpdatePriority(priority, id) {
+//     try {
+//         const formData = new FormData();
+//         formData.append('id', id);
+//         formData.append('priority', priority);
 
-        const url = `${configPath.apiPath}/?route=update_priority`;
-        return await fetch(url, {
-            headers: {
-                "X-Authorization": localStorage.getItem("token")
-            },
-            method: "POST",
-            body: formData,
-            }).then(response => response.json());
+//         const url = `${configPath.apiPath}/?route=update_priority`;
+//         return await fetch(url, {
+//             headers: {
+//                 "X-Authorization": localStorage.getItem("token")
+//             },
+//             method: "POST",
+//             body: formData,
+//             }).then(response => response.json());
 
-    } catch (error) {
-        console.error("Erreur lors de la requête fetch :", error);
-        return null;
-    }
-}
+//     } catch (error) {
+//         console.error("Erreur lors de la requête fetch :", error);
+//         return null;
+//     }
+// }
 
 /**
  * Effectue une requête pour supprimer une carte par son ID.
@@ -120,10 +120,34 @@ async function fetchDeleteCard(id){
     }
 }
 
+/**
+ * Effectue une requête pour supprimer une carte par son ID.
+ *
+ * @param {number} id - L'identifiant de la carte à supprimer.
+ * @returns {Promise<Object|null>} Une promesse résolue avec les données de la suppression ou null en cas d'erreur.
+ */
+async function fetchDeleteAllCards(id){
+    try {
+        const formData = new FormData();
+        formData.append('id', id);
+
+        const url = `${configPath.apiPath}/?route=delete_all_cards`;
+        return await fetch(url, {
+            headers: {"X-Authorization": localStorage.getItem("token")},
+            method: "POST",
+            body: formData
+            }).then(response => response.json());
+
+    } catch (error) {
+        console.error("Erreur lors de la requête fetch :", error);
+        return null;
+    }
+}
+
 export {
     fetchCreateCard,
     fetchReadAllCardsByList,
     fetchUpdateCard,
-    fetchUpdatePriority,
-    fetchDeleteCard
+    fetchDeleteCard,
+    fetchDeleteAllCards
 };

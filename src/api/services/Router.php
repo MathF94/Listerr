@@ -175,6 +175,13 @@ class Router
                     }
                     break;
 
+                case 'delete_all_cards':
+                    if ($this->isAllowedMethod('POST')) {
+                        $card = new CardController($headers['X-Authorization']);
+                        echo $card->deleteAllCards($_POST['id']); // deleteAllCards
+                    }
+                    break;
+
                 /**
                  * Route des réservations
                  */
