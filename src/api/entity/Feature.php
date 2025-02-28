@@ -12,12 +12,14 @@ class Feature
     public const TYPE_SUGGEST = 'Suggestion';
 
     public int $id;
-    public string $title;
     public string $type;
+    public string $title;
     public string $description;
     public string $status;
+    public int $userId;
     public string $createdAt;
     public string $updatedAt;
+    public User $user;
 
     /**
      * Initialise les propriétés de l'objet utilisateur à partir d'un tableau associatif de paramètres.
@@ -31,12 +33,16 @@ class Feature
             return;
         }
 
-        $this->id = $params['id'];
-        $this->title = $params['title'];
+        $this->id = $params['feature_id'];
         $this->type = $params['type'];
+        $this->title = $params['title'];
         $this->description = $params['description'];
         $this->status = $params['status'];
         $this->createdAt = $params['created_at'];
         $this->updatedAt = $params['updated_at'];
+        $this->userId = $params['user_id'];
+
+        $this->user = new User();
+        $this->user->populate($params);
     }
 }

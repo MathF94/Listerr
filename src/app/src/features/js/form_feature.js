@@ -46,8 +46,8 @@ function displayFormFeature(elementDOM) {
     const optionSuggest = document.createElement('option');
     optionSuggest.value = 'Type de mise à jour';
     optionSuggest.id = 'optSuggestion';
-    optionSuggest.setAttribute('value', 'Suggetion');
-    optionSuggest.innerText = 'Suggetion'
+    optionSuggest.setAttribute('value', 'Suggestion');
+    optionSuggest.innerText = 'Suggestion'
 
     const optionBug = document.createElement('option');
     optionBug.value = 'Type de mise à jour';
@@ -91,8 +91,8 @@ function displayFormFeature(elementDOM) {
     const optionSwitchOff = document.createElement('option');
     optionSwitchOff.value = 'Etat de mise à jour';
     optionSwitchOff.id = 'optSwitchOff';
-    optionSwitchOff.setAttribute('value', 'Eteint');
-    optionSwitchOff.innerText = 'Eteint'
+    optionSwitchOff.setAttribute('value', 'Non consulté');
+    optionSwitchOff.innerText = 'Non consulté'
 
     const optionWait = document.createElement('option');
     optionWait.value = 'Etat de mise à jour';
