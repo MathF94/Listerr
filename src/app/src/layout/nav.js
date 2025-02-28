@@ -80,6 +80,11 @@ function navigation(template) {
                 href: `${configPath.basePath}/list/pages/lists.html`,
                 id: "lists",
             },
+            {
+                text: "Mises à jour",
+                href: `${configPath.basePath}/features/pages/features.html`,
+                id: "features",
+            }
         ];
         addLinks(links);
     }
@@ -93,7 +98,7 @@ function navigation(template) {
                     text: "Utilisateurs",
                     href: `${configPath.basePath}/admin/pages/profils.html`,
                     id: "usersProfil",
-                },
+                }
             ];
             addLinks(links);
         }

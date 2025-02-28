@@ -221,7 +221,10 @@ class SendMail
             foreach ($allUsers as $user) {
                 $AllRecipients[] = htmlspecialchars($user->email);
             }
+            $listUserID = urlencode($params['id']);
+            var_dump($listUserID);
 
+            die();
             $listUserLogin = htmlspecialchars($user->login);
             $listTitle = htmlspecialchars($params['titleList']);
             $domain = $modelIncludes->changeDomain();
@@ -233,7 +236,6 @@ class SendMail
             <p>Bonjour à tous,</p>
             <br>
             <p>Pour information, une nouvelle liste de souhaits "{$listTitle}" appartenant à {$listUserLogin} vient d'être créée.</p>
-            <p>Voici où la retrouver si besoin - <a href="{$domain}/list/pages/list.html">lien vers la liste</a>.</p>
             <br>
             <p>Bonne journée.</p>
             <p>Administrateur de Listerr.</p>

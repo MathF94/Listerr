@@ -68,8 +68,9 @@ class ReservationController
         try {
             $formId = $_POST["formId"];
             $encryptedCSRFToken = $this->csrfToken->encrypt($formId);
+
             return json_encode([
-                "status" => "success",
+                "status" => "success Reservation csrfToken",
                 "csrfToken" => $encryptedCSRFToken,
             ]);
 

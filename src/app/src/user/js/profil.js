@@ -56,17 +56,18 @@ function read() {
 
     function displayUser(response) {
         const list = document.createElement("ul");
+        const role = JSON.parse(localStorage.user).role
 
         for (const index in response) {
             const item = document.createElement("li");
             const column = response[index];
 
-            if (JSON.parse(localStorage.user).role === "Admin") {
+            if (role === "Admin") {
                 if (["status", "id"].includes(index)) {
                     continue;
                 }
             }
-            if (JSON.parse(localStorage.user).role === "User") {
+            if (role === "User") {
                 if (["status", "id", "role"].includes(index)) {
                     continue;
                 }
@@ -108,7 +109,7 @@ function read() {
                         const editBtnUser = document.querySelector("#update");
                         editBtnUser.value = response.id.value
 
-                        if(parseInt(e.target.value) !== response.id.value) {
+                        if (parseInt(e.target.value) !== response.id.value) {
                             return;
                         }
 
@@ -130,7 +131,7 @@ function read() {
                         })
 
                         // Insertion des éléments de la liste dans les inputs
-                        if(response.role.value === "User") {
+                        if (response.role.value === "User") {
                             const selectType = document.querySelector("#role");
                             selectType.value = 0;
                             const optionUser = document.querySelector("#roleUser");
@@ -175,7 +176,7 @@ function read() {
                             fetchUpdateUser(formUpdateUser, response.id.value)
                             .then(response => {
                                 localStorage.removeItem("csrfToken");
-                                if(response.status === "[Admin]updateUser") {
+                                if (response.status === "[Admin]updateUser") {
                                     dialog({title: "Modification du profil par l'Admin", content: `Le profil de ${inputFirstame.value} ${inputName.value} a bien été mise à jour.`});
                                     const dialogMsg = document.querySelector("dialog");
                                     dialogMsg.classList.add("valid");
@@ -195,7 +196,7 @@ function read() {
                     // En tant qu'Admin, permet la suppression d'un utilisateur via son profil
                     deleteBtn.addEventListener("click", function (e) {
                         e.preventDefault();
-                        if(parseInt(id) !== response.id.value) {
+                        if (parseInt(id) !== response.id.value) {
                             return;
                         }
 
@@ -241,7 +242,7 @@ function read() {
                                 articleList.classList.add(type[objectList.type]);
 
                                 // Si suppression du type de liste, mettre une couleur grise aux listes
-                                if(!['WishList', 'TodoList'].includes(objectList.type)) {
+                                if (!['WishList', 'TodoList'].includes(objectList.type)) {
                                     articleList.classList.add(type.Common)
                                 }
 
@@ -252,7 +253,7 @@ function read() {
                                 typeH3.classList.add("grid_typeH3");
                                 const titleH4 = document.createElement("h4");
 
-                                if(objectList.type === "TodoList") {
+                                if (objectList.type === "TodoList") {
                                     articleList.classList.add("disabled");
                                     sectionList.classList.remove("pointer");
                                 }
@@ -287,7 +288,7 @@ function read() {
 
                                 // Redirige vers la page de détails de la liste en cliquant sur la liste.
                                 sectionList.addEventListener("click",  function () {
-                                    if (objectList.type === "TodoList" && objectList.user.id !== JSON.parse(localStorage.getItem("user")).id) {
+                                    if (objectList.type === "TodoList" && objectList.user.id !== JSON.parse(localStorage.user).id) {
                                         return false;
                                     }
                                     redirect(`${configPath.basePath}/list/pages/list.html?id=${objectList.id}`,0)

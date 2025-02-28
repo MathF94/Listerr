@@ -46,18 +46,18 @@ function displayFormList(elementDOM) {
     inputTitle.type = "text";
     inputTitle.name = "titleList";
     inputTitle.id = "titleList";
-    inputTitle.placeholder = "Votre titre";
+    inputTitle.placeholder = "Anniversaire, Noël, Outils, Autres, etc.";
     inputTitle.value = "";
     inputTitle.required = true;
 
     const labelDescription = document.createElement("label");
     labelDescription.htmlFor  = "descriptionList";
-    labelDescription.innerText = "Description";
+    labelDescription.innerText = "Description succinte";
 
     const textAreaDescription = document.createElement("textarea");
     textAreaDescription.name = "descriptionList";
     textAreaDescription.id = "descriptionList";
-    textAreaDescription.placeholder = "Votre description";
+    textAreaDescription.placeholder = "Livres, voyages, jouets, jeux de société, jeux vidéos, etc.";
     textAreaDescription.value = "";
 
     const actionBtnList = document.createElement("div");

@@ -59,8 +59,9 @@ class CardController
         try {
             $formId = $_POST["formId"];
             $encryptedCSRFToken = $this->csrfToken->encrypt($formId);
+
             return json_encode([
-                "status" => "success",
+                "status" => "success Card csrfToken",
                 "csrfToken" => $encryptedCSRFToken,
             ]);
 
@@ -237,7 +238,7 @@ class CardController
     }
 
     /**
-     * Cette méthode permet la suppression d'une carte d'une carte.
+     * Cette méthode permet la suppression d'une carte d'une liste.
      * @param int $id - L'ID de la carte à supprimer.
      *
      * @return string - Réponse JSON : "deletedCard" avec un message, en cas de succès.

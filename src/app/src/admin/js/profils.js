@@ -8,8 +8,6 @@ import {
 
 import { displayFormUpdateUser } from "../../admin/js/form_user.js"
 
-import { dropDownMenu } from "../../layout/dropdown.js";
-
 import { CSRFToken } from "../../services/CSRFToken.js";
 
 import {
@@ -37,9 +35,10 @@ function readAdmin() {
             mainSection.appendChild(popIn)
 
             const data = response.data;
-            const tbody = document.querySelector("tbody");
             const table = document.querySelector("table");
+            const tbody = document.querySelector("tbody");
             table.classList.add("userList");
+
             const listUser = document.querySelector("#newUser");
             listUser.title ="Créer un nouvel utilisateur";
 
@@ -141,7 +140,7 @@ function readAdmin() {
                  */
                 editBtn.addEventListener("click", function (e) {
                     e.preventDefault();
-                    if(parseInt(e.target.value) !== column.id) {
+                    if (parseInt(e.target.value) !== column.id) {
                         return;
                     }
 
@@ -162,7 +161,7 @@ function readAdmin() {
                     })
 
                     // Insertion des éléments de la liste dans les inputs
-                    if(column.role === "User") {
+                    if (column.role === "User") {
                         const selectType = document.querySelector("#role");
                         selectType.value = 0;
                         const optionUser = document.querySelector("#roleUser");
@@ -205,7 +204,7 @@ function readAdmin() {
                         fetchUpdateUser(formUpdateUser, column.id)
                         .then(response => {
                             localStorage.removeItem("csrfToken");
-                            if(response.status === "[Admin]updateUser") {
+                            if (response.status === "[Admin]updateUser") {
                                 dialog({title: "Modification du profil par l'Admin", content: `Le profil de ${column.firstname} ${column.name} a bien été mise à jour.`});
                                 const dialogMsg = document.querySelector("dialog");
                                 dialogMsg.classList.add("valid");
@@ -225,7 +224,7 @@ function readAdmin() {
                 // En tant qu'Admin, permet la suppression d'un utilisateur via la liste d'utilisateur
                 deleteBtn.addEventListener("click", function (e) {
                     e.preventDefault();
-                    if(parseInt(e.target.value) !== column.id) {
+                    if (parseInt(e.target.value) !== column.id) {
                         return;
                     }
 

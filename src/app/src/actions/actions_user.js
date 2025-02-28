@@ -56,7 +56,7 @@ async function fetchLogin(form) {
 async function fetchRead(id) {
     try {
         let url = `${configPath.apiPath}/?route=user_profil`;
-        if(id) {
+        if (id) {
             url += `&id=${id}`;
         }
         return await fetch(url, {
@@ -121,7 +121,7 @@ async function fetchUpdate(form) {
 async function fetchDelete(id) {
     try {
         let url = `${configPath.apiPath}/?route=user_delete`;
-        if(id) {
+        if (id) {
             url += `&id=${id}`;
         }
         return await fetch(url, {

@@ -44,9 +44,8 @@ function lists() {
     popIn.classList.add("popIn");
 
     // Affiche le formulaire de création de liste lorsqu'on clique sur le bouton "Créer une nouvelle liste".
-    createListBtn.addEventListener("click", function(){
+    createListBtn.addEventListener("click", function() {
         if (createListBtn.value === "newList") {
-            const divList = document.querySelector("#divList");
             popIn.style.visibility = "visible";
             listWrapper.appendChild(popIn);
 
@@ -69,6 +68,7 @@ function lists() {
             cancelForm.addEventListener("click", function(e){
                 e.preventDefault();
                 listForm.remove();
+                createListsDiv.remove();
                 createListBtn.disabled = false;
                 createListBtn.classList.remove("disable");
                 createListBtn.classList.add("way");
@@ -81,16 +81,16 @@ function lists() {
                 e.preventDefault();
 
                 // Validation de pattern du formulaire
+                const selectType = document.querySelector("#typeList")
                 const inputTitle = document.querySelector("#titleList");
                 const inputDescription = document.querySelector("#descriptionList");
-                const selectType = document.querySelector("#typeList")
+                selectType.addEventListener("invalid", function(e) {
+                    validate(e.target)
+                });
                 inputTitle.addEventListener("invalid", function(e) {
                     validate(e.target)
                 });
                 inputDescription.addEventListener("invalid", function(e) {
-                    validate(e.target)
-                });
-                selectType.addEventListener("invalid", function(e) {
                     validate(e.target)
                 });
 
@@ -144,7 +144,7 @@ function lists() {
                 articleList.classList.add(type[objectList.type]);
 
                 // Si suppression du type de liste, mettre une couleur grise aux listes
-                if(!['WishList', 'TodoList'].includes(objectList.type)) {
+                if (!['WishList', 'TodoList'].includes(objectList.type)) {
                     articleList.classList.add(type.Common)
                 }
 

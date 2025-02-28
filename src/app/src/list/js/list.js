@@ -38,7 +38,6 @@ import {
  * Fonction principale pour gérer la page de détails d'une liste.
  */
 function list() {
-
     // Obtient l'identifiant de la liste à partir des paramètres de l'URL.
     const urlParams = new URLSearchParams(document.location.search);
     if (urlParams.has("id")) {
@@ -58,7 +57,7 @@ function list() {
                 redirect(`${configPath.basePath}/home/pages/home.html`, 0)
             }
 
-            if(response.errors === "no list found") {
+            if (response.errors === "no list found") {
                 // Si aucune liste n'est retrouvée (type === null), redirection vers home.html
                 notAllowedRedirection();
             }
