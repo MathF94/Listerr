@@ -54,7 +54,7 @@ async function fetchReadOneListById(id) {
 async function fetchReadAllLists(id) {
     try {
         let url = `${configPath.apiPath}/?route=read_all_lists_by_user`;
-        if(id) {
+        if (id) {
             url += `&id=${id}`;
         }
         return await fetch(url, {

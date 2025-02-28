@@ -43,10 +43,6 @@ async function fetchReadAllCardsByList(id) {
     }
 }
 
-
-
-
-
 /**
  * Effectue une requête pour mettre à jour une carte en utilisant un formulaire.
  *
@@ -74,27 +70,6 @@ async function fetchUpdateCard(form, id) {
         return null;
     }
 };
-
-// async function fetchUpdatePriority(priority, id) {
-//     try {
-//         const formData = new FormData();
-//         formData.append('id', id);
-//         formData.append('priority', priority);
-
-//         const url = `${configPath.apiPath}/?route=update_priority`;
-//         return await fetch(url, {
-//             headers: {
-//                 "X-Authorization": localStorage.getItem("token")
-//             },
-//             method: "POST",
-//             body: formData,
-//             }).then(response => response.json());
-
-//     } catch (error) {
-//         console.error("Erreur lors de la requête fetch :", error);
-//         return null;
-//     }
-// }
 
 /**
  * Effectue une requête pour supprimer une carte par son ID.

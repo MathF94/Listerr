@@ -51,6 +51,7 @@ function readAllLists() {
         return;
     }
 
+
     if (user !== undefined && user !== null) {
         // Si l'utilisateur est connecté, ajoute un gestionnaire de clic pour rediriger vers la page de création de liste
         listBtn.addEventListener("click", function (e) {
@@ -86,7 +87,7 @@ function readAllLists() {
                 articleList.classList.add("list");
                 articleList.classList.add("grid");
 
-                if(JSON.parse(localStorage.user).id !== object.userId) {
+                if (JSON.parse(localStorage.user).id !== object.userId) {
                     articleList.classList.add("third_party_wish");
                 }
                 else {

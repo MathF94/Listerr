@@ -50,6 +50,11 @@
   --disable-star: rgba(141, 125, 125, 1);
   --star: rgba(255, 0, 0, 0.6);
   --third-party-star: rgba(255, 0, 0, 0.6);
+  --grey-status: rgba(83, 83, 83, 1);
+  --green-status: rgba(46, 210, 11, 1);
+  --orange-status: rgba(255, 166, 0, 1);
+  --red-status: rgba(255, 0, 0, 1);
+  --white-status: rgba(255, 255, 255, 1);
 }
 
 /* *****************************************************************
@@ -405,13 +410,16 @@ dialog.errors_fields > h2 {
 #createCardDiv,
 #updateListDiv,
 .updateCardDiv,
-#updateReservationDiv {
+#updateReservationDiv,
+#createFeatureDiv,
+#updateFeatureDiv {
   margin: 0 auto;
 }
 
 #userFormSection,
 #listFormSection,
-#cardFormSection {
+#cardFormSection,
+#featureFormSection {
   background-color: var(--form-bg);
   border-radius: 8px;
   box-shadow: 0 0 5px var(--border);
@@ -466,13 +474,17 @@ dialog.errors_fields > h2 {
   margin-top: 41px;
 }
 
-#createUser {
+#createUser, #feature {
   margin: 6px 0 30px 0;
 }
 
 #sectionLists,
 #contentSection {
   margin: 0 auto;
+}
+
+.sectionFeature {
+  margin: 30px auto;
 }
 
 /* *****************************************************************
@@ -706,7 +718,7 @@ dialog.errors_fields > h2 {
   color: var(--text-light);
 }
 .btn.edit.admin {
-  border-radius: 0px;
+  border-radius: 10px 0px 0px 10px;
 }
 .btn.edit.listBtn {
   border-radius: 10px 0px 0px 10px;
@@ -901,7 +913,8 @@ input[type=submit]:hover {
 /* *****************************************************************
     TABLEAU
 ***************************************************************** */
-.userList {
+.userList,
+.featureList {
   border-collapse: collapse;
   font-size: 80%;
   margin: 0 auto;
@@ -909,15 +922,52 @@ input[type=submit]:hover {
   text-align: center;
   width: 100%;
 }
-.userList > thead > tr {
+.userList > thead > tr,
+.featureList > thead > tr {
   height: 30px;
 }
-.userList > tbody > tr:nth-child(odd) {
+.userList > tbody > tr:nth-child(odd),
+.featureList > tbody > tr:nth-child(odd) {
   background-color: rgba(170, 170, 170, 0.5);
 }
-.userList > tbody td {
+.userList > tbody td,
+.featureList > tbody td {
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.featureList {
+  margin-top: 30px;
+}
+.featureList > thead > tr {
+  height: 3.5vh;
+}
+.featureList > thead > tr > th:nth-child(3) {
+  width: 45%;
+}
+.featureList > tbody tr {
+  height: 10.5vh;
+}
+.featureList > tbody td .divCercle {
+  border-radius: 20px;
+  height: 2vh;
+  margin: 0 auto;
+  width: 2vh;
+}
+.featureList > tbody td .divCercle.switchOff {
+  background-color: var(--grey-status);
+}
+.featureList > tbody td .divCercle.wait {
+  background-color: var(--red-status);
+  box-shadow: 0px 0px 10px 5px var(--red-status);
+}
+.featureList > tbody td .divCercle.wip {
+  background-color: var(--orange-status);
+  box-shadow: 0px 0px 10px 5px var(--orange-status);
+}
+.featureList > tbody td .divCercle.done {
+  background-color: var(--green-status);
+  box-shadow: 0px 0px 10px 5px var(--green-status);
 }
 
 /* *****************************************************************
@@ -984,7 +1034,7 @@ input[type=submit]:hover {
   .profil_btn {
     width: 20%;
   }
-  #createUser {
+  #createUser, #feature {
     margin: 25px 0 30px 0;
   }
 }
@@ -1059,7 +1109,7 @@ input[type=submit]:hover {
   .profilSection > article {
     width: 600px;
   }
-  #createUser {
+  #createUser, #feature {
     margin: 6px 0 30px 0;
   }
   .list {

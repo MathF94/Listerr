@@ -2,10 +2,11 @@
 
 namespace Services;
 
-use Controllers\UserController;
-use Controllers\ListController;
 use Controllers\CardController;
+use Controllers\FeatureController;
+use Controllers\ListController;
 use Controllers\ReservationController;
+use Controllers\UserController;
 
 /**
  * Classe pour le routage des demandes HTTP vers les contrôleurs appropriés.
@@ -183,6 +184,17 @@ class Router
                     break;
 
                 /**
+                 * Route des priorités
+                 */
+
+                case 'update_priority':
+                    if ($this->isAllowedMethod('POST')) {
+                        $card = new CardController($headers['X-Authorization']);
+                        echo $card->updatePriority($_POST['id'], $_POST['priority']); // update priority stars
+                    }
+                    break;
+
+                /**
                  * Route des réservations
                  */
 
@@ -208,13 +220,41 @@ class Router
                     break;
 
                 /**
-                 * Route des priorités
+                 * Route de gestion des features par Admin
                  */
 
-                case 'update_priority':
+                case 'create_feature':
                     if ($this->isAllowedMethod('POST')) {
-                        $card = new CardController($headers['X-Authorization']);
-                        echo $card->updatePriority($_POST['id'], $_POST['priority']); // update priority stars
+                        $feature = new FeatureController($headers['X-Authorization']);
+                        echo $feature->createFeature($csrfToken); // Create feature
+                    }
+                    break;
+
+                case 'read_all_features':
+                    if ($this->isAllowedMethod('GET')) {
+                        $feature = new FeatureController($headers['X-Authorization']);
+                        echo $feature->readAllFeatures(); // readAllFeatures sur features.html
+                    }
+                    break;
+
+                case 'update_feature':
+                    if ($this->isAllowedMethod('POST')) {
+                        $feature = new FeatureController($headers['X-Authorization']);
+                        echo $feature->updateFeature($_POST['id'], $csrfToken); // update sur features.html
+                    }
+                    break;
+
+                case 'update_status_feature':
+                    if ($this->isAllowedMethod('POST')) {
+                        $feature = new FeatureController($headers['X-Authorization']);
+                        echo $feature->updateStatusFeature($_POST['id']); // update sur features.html
+                    }
+                    break;
+
+                case 'delete_feature':
+                    if ($this->isAllowedMethod('POST')) {
+                        $card = new FeatureController($headers['X-Authorization']);
+                        echo $card->deleteFeature($_POST['id']); // deleteCard
                     }
                     break;
 

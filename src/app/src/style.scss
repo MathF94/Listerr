@@ -65,6 +65,14 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     --disable-star: rgba(141, 125, 125, 1);
     --star: rgba(255, 0, 0, 0.6);
     --third-party-star: rgba(255, 0, 0, 0.6);
+
+    // status
+    --grey-status: rgba(83, 83, 83, 1);
+    --green-status: rgba(46, 210, 11, 1);
+    --orange-status: rgba(255, 166, 0, 1);
+    --red-status: rgba(255, 0, 0, 1);
+    --white-status: rgba(255, 255, 255, 1);
+
 }
 
 /* *****************************************************************
@@ -407,12 +415,15 @@ dialog {
 #createCardDiv,
 #updateListDiv,
 .updateCardDiv,
-#updateReservationDiv {
+#updateReservationDiv,
+#createFeatureDiv,
+#updateFeatureDiv {
     margin: 0 auto;
 }
 #userFormSection,
 #listFormSection,
-#cardFormSection {
+#cardFormSection,
+#featureFormSection {
     background-color: var(--form-bg);
     border-radius: 8px;
     box-shadow: 0 0 5px var(--border);
@@ -459,12 +470,15 @@ dialog {
     grid-row: 2/2;
     margin-top: 41px;
 }
-#createUser {
+#createUser, #feature {
     margin: 6px 0 30px 0;
 }
 #sectionLists,
 #contentSection {
     margin: 0 auto;
+}
+.sectionFeature {
+    margin: 30px auto;
 }
 
 /* *****************************************************************
@@ -707,7 +721,7 @@ dialog {
             color: var(--text-light);
         }
         &.admin {
-            border-radius: 0px;
+            border-radius: 10px 0px 0px 10px;
         }
         &.listBtn {
             border-radius: 10px 0px 0px 10px;
@@ -881,7 +895,8 @@ input[type="submit"] {
 /* *****************************************************************
     TABLEAU
 ***************************************************************** */
-.userList {
+.userList,
+.featureList {
     border-collapse: collapse;
     font-size: 80%;
     margin: 0 auto;
@@ -896,7 +911,7 @@ input[type="submit"] {
     & > tbody {
         & > tr {
             &:nth-child(odd) {
-                background-color: rgb(170, 170, 170, 0.5);
+                background-color: rgba(170, 170, 170, 0.5);
             }
         }
         & td {
@@ -905,6 +920,47 @@ input[type="submit"] {
         }
     }
 }
+
+.featureList {
+    margin-top: 30px;
+    & > thead {
+        & > tr {
+            height: 3.5vh;
+            & > th:nth-child(3) {
+                width: 45%;
+            }
+        }
+    }
+    & > tbody {
+        & tr {
+            height: 10.5vh;
+        }
+        & td {
+            & .divCercle {
+                border-radius: 20px;
+                height: 2vh;
+                margin: 0 auto;
+                width: 2vh;
+                &.switchOff {
+                    background-color: var(--grey-status);
+                }
+                &.wait {
+                    background-color: var(--red-status);
+                    box-shadow: 0px 0px 10px 5px var(--red-status);
+                }
+                &.wip {
+                    background-color: var(--orange-status);
+                    box-shadow: 0px 0px 10px 5px var(--orange-status);
+                }
+                &.done {
+                    background-color: var(--green-status);
+                    box-shadow: 0px 0px 10px 5px var(--green-status);
+                }
+            }
+        }
+    }
+}
+
 
 /* *****************************************************************
     MEDIA
@@ -966,7 +1022,7 @@ input[type="submit"] {
     .profil_btn {
         width: 20%;
     }
-    #createUser {
+    #createUser, #feature {
         margin: 25px 0 30px 0;
     }
 }
@@ -1040,7 +1096,7 @@ input[type="submit"] {
             width: 600px;
         }
     }
-    #createUser {
+    #createUser, #feature  {
         margin: 6px 0 30px 0;
     }
     .list {

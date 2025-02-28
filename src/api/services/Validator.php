@@ -15,6 +15,8 @@ class Validator
     public const CONTEXT_CREATE_CARD = 'create_card';
     public const CONTEXT_UPDATE_CARD = 'update_card';
     public const CONTEXT_CREATE_RESERVATION = 'create_reservation';
+    public const CONTEXT_CREATE_FEATURE = 'create_feature';
+    public const CONTEXT_UPDATE_FEATURE = 'update_feature';
 
     /**
      * Valide les paramètres en fonction du contexte donné.
@@ -63,6 +65,16 @@ class Validator
 
             case self::CONTEXT_CREATE_RESERVATION:
                 $errors = $this->isValidReservationParams($params);
+                return $errors;
+                break;
+
+            case self::CONTEXT_CREATE_FEATURE:
+                $errors = $this->isValidFeatureParams($params);
+                return $errors;
+                break;
+
+            case self::CONTEXT_UPDATE_FEATURE:
+                $errors = $this->isValidFeatureParams($params);
                 return $errors;
                 break;
         }
@@ -294,5 +306,32 @@ class Validator
         } elseif (!filter_var($params['email'], FILTER_VALIDATE_EMAIL)) {
             $errors[] = 'L\'adresse mail n\'est pas valide.';
         }
+    }
+
+    /**
+     * Valide les paramètres lors de la création ou de la mise à jour d'une liste.
+     *
+     * @param array $params Les paramètres à valider.
+     * @return array Un tableau d'erreurs, le cas échéant. Chaque élément du tableau est une chaîne de caractères décrivant l'erreur.
+     */
+    private function isValidFeatureParams(array $params): array
+    {
+        $errors = [];
+        $expectedKeys = ['typeFeature', 'titleFeature', 'descriptionFeature'];
+        $paramKeys = array_keys($params);
+
+        if (!empty(array_diff($expectedKeys, $paramKeys))) {
+            $changedKey = array_diff($expectedKeys, $paramKeys);
+            $errors[] = "Le/les champs suivante(s) a/ont été modifiée(s) : " . implode(', ', $changedKey) . ". Merci de ne pas y toucher, merci !";
+            return $errors;
+        }
+
+        if (empty(trim($params['titleFeature']))) {
+            $errors[] = 'Le champ "titre" est requis.';
+        } elseif (strlen($params['titleFeature']) > 100) {
+            $errors[] = 'Le champ "titre" ne doit pas dépasser 100 caractères.';
+        }
+
+        return $errors;
     }
 }

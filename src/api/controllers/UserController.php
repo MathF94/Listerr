@@ -278,6 +278,7 @@ class UserController
         try {
             $model = new Users();
             $usersList = $model->readAll();
+
             if (empty($usersList)) {
                 return json_encode([
                     "status" => "ReadAllUsers failed",

@@ -57,7 +57,7 @@ class ListController
             $encryptedCSRFToken = $this->csrfToken->encrypt($formId);
 
             return json_encode([
-                "status" => "success",
+                "status" => "success List csrfToken",
                 "csrfToken" => $encryptedCSRFToken,
             ]);
 
@@ -78,7 +78,7 @@ class ListController
      *                                 "fail" avec un message d'erreur, si le jeton est invalide.
      *                                 "errors" avec un message d'erreur, en cas d'échec.
      */
-    public function createList($csrfToken): string
+    public function createList(string $csrfToken): string
     {
         try {
             $validToken = $this->csrfToken->isValidToken($csrfToken, "formList");
@@ -91,6 +91,7 @@ class ListController
 
             if (!empty($this->user)) {
                 $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_CREATE_LIST);
+                
                 if (empty(count($errors))) {
                     $params = $_POST;
                     $model = new Lists();

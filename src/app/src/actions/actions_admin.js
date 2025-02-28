@@ -56,4 +56,8 @@ async function fetchDeleteUser(id) {
     }
 }
 
-export { fetchReadAll, fetchUpdateUser, fetchDeleteUser };
+export {
+    fetchReadAll,
+    fetchUpdateUser,
+    fetchDeleteUser
+};
