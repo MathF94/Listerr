@@ -136,7 +136,7 @@ class FeatureController
     {
         try {
             $model = new Features();
-            $allFeatures = $model->readAllFeatures();
+            $allFeatures = $model->readAllFeaturesAllUsers();
 
             if (empty($allFeatures)) {
                 return json_encode([
@@ -196,11 +196,12 @@ class FeatureController
                         'type' => $_POST['typeFeature'],
                         'title' => $_POST['titleFeature'],
                         'description' => $_POST['descriptionFeature'],
-                        'status' => $_POST['statusFeature'],
+                        'status' => $_POST['statusFeature']
                     ];
+
                     $model->updateFeature($params, $featureId);
                     return json_encode([
-                        "status" => "[Admin]updateFeature",
+                        "status" => "updateFeature",
                         "message" => "la feature a bien été mise à jour."
                     ]);
                 }

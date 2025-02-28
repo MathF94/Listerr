@@ -17,16 +17,17 @@ class Features extends Database
      * @param int $userId - L'ID de l'utilisateur associé à la liste.
      * @return bool - Renvoie true en cas de succès, sinon false.
      */
-    public function createFeature(array $params): bool
+    public function createFeature(array $params, int $userId): bool
     {
         try {
-            $req = "INSERT INTO `feature` (`type`, `title`, `description`, `status`)
-            VALUES (:type, :title, :description, :status)";
+            $req = "INSERT INTO `feature` (`type`, `title`, `description`, `status`, `user_id`)
+            VALUES (:type, :title, :description, :status, :user_id)";
             $params = [
                 'type' => $params['typeFeature'],
                 'title' => $params['titleFeature'],
                 'description' => $params['descriptionFeature'],
-                'status' => $params['statusFeature']
+                'status' => $params['statusFeature'],
+                'user_id' => $userId
             ];
             $this->executeReq($req, $params);
             return true;
@@ -45,18 +46,27 @@ class Features extends Database
     public function getOneFeatureById(int $id): ?Feature
     {
         try {
-                $req = "SELECT `id`,
-                            `type`,
-                            `title`,
-                            `description`,
-                            `status`,
-                            `created_at`,
-                            `updated_at`
-                    FROM `feature`
-                    WHERE `id` = :id";
+                $req = "SELECT `f`.`id` AS `feature_id`,
+                            `f`.`type`,
+                            `f`.`title`,
+                            `f`.`description`,
+                            `f`.`status`,
+                            `u`.`id` AS `user_id`,
+                            `u`.`name`,
+                            `u`.`firstname`,
+                            `u`.`login`,
+                            `u`.`email`,
+                            `u`.`role_id`,
+                            '' AS `password`,
+                            `f`.`created_at`,
+                            `f`.`updated_at`
+                    FROM `feature` `f`
+                    INNER JOIN `user` `u` ON `u`.`id` = `f`.`user_id`
+                    WHERE `f`.`id` = :id";
 
             $result = $this->findOne($req, ['id' => $id]);
             $feature = new Feature();
+
             $feature->populate($result);
             return $feature;
         } catch (\Exception $e) {
@@ -70,18 +80,26 @@ class Features extends Database
      *
      * @return Feature[] - Un tableau d'objets Feature représentant toutes les évolutions.
      */
-    public function readAllFeatures(): array
+    public function readAllFeaturesAllUsers(): array
     {
         try {
-            $req = "SELECT `id`,
-                            `type`,
-                            `title`,
-                            `description`,
-                            `status`,
-                            `created_at`,
-                            `updated_at`
-                    FROM `feature`
-                    ORDER BY id DESC";
+            $req = "SELECT `f`.`id` AS `feature_id`,
+                            `f`.`type`,
+                            `f`.`title`,
+                            `f`.`description`,
+                            `f`.`status`,
+                            `u`.`id` AS `user_id`,
+                            `u`.`name`,
+                            `u`.`firstname`,
+                            `u`.`login`,
+                            `u`.`email`,
+                            `u`.`role_id`,
+                            '' AS `password`,
+                            `f`.`created_at`,
+                            `f`.`updated_at`
+                    FROM `feature` `f`
+                    INNER JOIN `user` `u` ON `u`.`id` = `f`.`user_id`
+                    ORDER BY feature_id DESC";
 
             $results = $this->findAll($req);
             $featuresArray = [];

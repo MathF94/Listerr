@@ -112,7 +112,7 @@ function features() {
         })
 
         if (role === 'Admin') {
-            titleFormFeature.innerText = `Formulaire de mise à jour`;
+            titleFormFeature.innerText = `Formulaire de mise à jour d'évolution / correction`;
             titleFeatureLabel.innerText = 'Votre évolution / correctif';
             titleFeature.placeholder = 'Votre évolution / correctif';
             const optionSuggest = formFeature[1][2];
@@ -190,6 +190,7 @@ function features() {
                 trHead.appendChild(thType);
                 trHead.appendChild(thTitle);
                 trHead.appendChild(thDescription);
+                trHead.appendChild(thAction);
                 trHead.appendChild(thstatus);
                 tHead.appendChild(trHead);
                 table.appendChild(tbody);
@@ -199,7 +200,11 @@ function features() {
                 const objectFeature = dataFeature[index];
                 const trBody = document.createElement('tr');
                 const tdType = document.createElement('td');
-                tdType.innerText = objectFeature.type;
+                if (objectFeature.user.login === 'admin') {
+                    tdType.innerText = objectFeature.type;
+                } else {
+                    tdType.innerText = `${objectFeature.type} par ${objectFeature.user.login}`;
+                }
 
                 const tdTitle = document.createElement('td');
                 tdTitle.innerText = objectFeature.title;
@@ -213,7 +218,7 @@ function features() {
                 const pStatus = document.createElement('p');
                 pStatus.innerText = objectFeature.status
 
-                if (objectFeature.status === 'Eteint') {
+                if (objectFeature.status === `Non consulté par l'Admin`) {
                     divStatus.classList.add('switchOff');
                 }
                 if (objectFeature.status === 'En cours de dév.') {
@@ -237,7 +242,6 @@ function features() {
                 editBtn.classList.add('btn');
                 editBtn.classList.add('valid');
                 editBtn.classList.add('edit');
-                editBtn.classList.add('admin');
 
                 const deleteBtn = document.createElement('button');
                 deleteBtn.id = `deleteFeature-${objectFeature.id}`;
@@ -249,116 +253,135 @@ function features() {
                 deleteBtn.classList.add('delete');
                 deleteBtn.classList.add('admin');
 
-                // Gestion de l'update de la feature uniquement pour l'Admin
-                if (role === 'Admin') {
-                    // Gestion de l'update de la feature
-                    editBtn.addEventListener('click', function(e) {
+                // Gestion de l'update de la feature
+                editBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    featureDiv.appendChild(popIn);
+                    if (parseInt(e.target.value) !== objectFeature.id) {
+                        return;
+                    }
+
+                    const updateFeatureDiv = document.createElement('div');
+                    updateFeatureDiv.id = 'updateFeatureDiv';
+                    popIn.appendChild(updateFeatureDiv);
+
+                    displayFormFeature(updateFeatureDiv);
+
+                    popIn.style.visibility = 'visible';
+                    const titleFormFeature = document.querySelector('#titleFormFeature');
+                    titleFormFeature.innerText = `Formulaire d'édition de la mise à jour`;
+                    const titleFeatureLabel = document.querySelector('#titleFeatureLabel')
+                    const titleFeature = document.querySelector('#titleFeature')
+
+                    if (role === 'Admin') {
+                        titleFeatureLabel.innerText = 'Votre évolution / correctif';
+                        titleFeature.placeholder = 'Votre évolution / correctif';
+                    }
+
+                    if (role === 'User') {
+                        const optionFeature = formFeature[1][0];
+                        const optionFix = formFeature[1][1];
+                        optionFeature.remove();
+                        optionFix.remove();
+                        titleFeatureLabel.innerText = 'Votre suggestion / bug (affichage ou blocage)';
+                        titleFeature.placeholder = 'Votre suggestion / bug (affichage ou blocage)';
+                        statusFeature.classList.add('hidden');
+                        statusFeatureSelect.classList.add('hidden');
+                    }
+
+                    const updateFormFeature = document.querySelector('#formFeature');
+
+                    // Affichage de la liste de features + suppression du formulaire d'édition
+                    cancelForm.addEventListener('click', function() {
+                        updateFeatureDiv.remove();
+                        popIn.style.visibility = 'hidden';
+                    })
+
+                    if (objectFeature.type === 'Evolution') {
+                        const selectType = document.querySelector('#typeFeature');
+                        selectType.value = 0;
+                        const optionFeature = document.querySelector('#optEvolution');
+                        optionFeature.setAttribute('value', 'Evolution');
+                        optionFeature.selected = true
+
+                    } else if (objectFeature.type === 'Correctif') {
+                        const selectType = document.querySelector('#typeFeature');
+                        selectType.value = 0;
+                        const optionFix = document.querySelector('#optCorrectif');
+                        optionFix.setAttribute('value', 'Correctif');
+                        optionFix.selected = true
+
+                    } else {
+                        const selectType = document.querySelector('#typeFeature');
+                        selectType.value = 0;
+                        const optionSuggest = document.querySelector('#optSuggestion');
+                        optionSuggest.setAttribute('value', 'Suggestion');
+                        optionSuggest.selected = true
+                    }
+
+                    const inputId = document.querySelector('#idFeature');
+                    inputId.value = objectFeature.id;
+                    const inputTitle = document.querySelector('#titleFeature');
+                    inputTitle.value = objectFeature.title;
+                    const inputDescription = document.querySelector('#descriptionFeature');
+                    inputDescription.value = objectFeature.description;
+                    const inputStatus = document.querySelector('#statusFeatureSelect');
+                    inputStatus.value = objectFeature.status;
+                    const selectType = document.querySelector('#typeFeature');
+
+                    updateFormFeature.id = 'formUpdateFeature';
+                    CSRFToken(updateFormFeature.id);
+
+                    updateFormFeature.addEventListener('submit', function(e) {
                         e.preventDefault();
-
-                        featureDiv.appendChild(popIn);
-                        if (parseInt(e.target.value) !== objectFeature.id) {
-                            return;
-                        }
-
-                        const updateFeatureDiv = document.createElement('div');
-                        updateFeatureDiv.id = 'updateFeatureDiv';
-                        popIn.appendChild(updateFeatureDiv);
-
-                        displayFormFeature(updateFeatureDiv);
-
-                        popIn.style.visibility = 'visible';
-                        const titleFormFeature = document.querySelector('#titleFormFeature');
-                        titleFormFeature.innerText = `Formulaire d'édition de la mise à jour`;
-
-                        const titleFeatureLabel = document.querySelector('#titleFeatureLabel')
-                        const titleFeature = document.querySelector('#titleFeature')
-                        titleFeatureLabel.innerText = 'Votre évolution / correctif / suggestion';
-                        titleFeature.placeholder = 'Votre évolution / correctif / suggestion';
-
-                        const updateFormFeature = document.querySelector('#formFeature');
-
-                        // Affichage de la liste de features + suppression du formulaire d'édition
-                        cancelForm.addEventListener('click', function() {
-                            updateFeatureDiv.remove();
-                            popIn.style.visibility = 'hidden';
+                        inputTitle.addEventListener('invalid', function(e) {
+                            validate(e.target)
+                        })
+                        inputDescription.addEventListener('invalid', function(e) {
+                            validate(e.target)
+                        })
+                        inputStatus.addEventListener('invalid', function(e) {
+                            validate(e.target)
+                        })
+                        selectType.addEventListener('invalid', function(e) {
+                            validate(e.target)
                         })
 
-                        if (objectFeature.type === 'Evolution') {
-                            const selectType = document.querySelector('#typeFeature');
-                            selectType.value = 0;
-                            const optionFeature = document.querySelector('#optEvolution');
-                            optionFeature.setAttribute('value', 'Evolution');
-                            optionFeature.selected = true
-
-                        } else if (objectFeature.type === 'Correctif') {
-                            const selectType = document.querySelector('#typeFeature');
-                            selectType.value = 0;
-                            const optionFix = document.querySelector('#optCorrectif');
-                            optionFix.setAttribute('value', 'Correctif');
-                            optionFix.selected = true
-
-                        } else {
-                            const selectType = document.querySelector('#typeFeature');
-                            selectType.value = 0;
-                            const optionSuggest = document.querySelector('#optSuggestion');
-                            optionSuggest.setAttribute('value', 'Suggetion');
-                            optionSuggest.selected = true
-                        }
-
-                        const inputId = document.querySelector('#idFeature');
-                        inputId.value = objectFeature.id;
-                        const inputTitle = document.querySelector('#titleFeature');
-                        inputTitle.value = objectFeature.title;
-                        const inputDescription = document.querySelector('#descriptionFeature');
-                        inputDescription.value = objectFeature.description;
-                        const inputStatus = document.querySelector('#statusFeatureSelect');
-                        inputStatus.value = objectFeature.status;
-                        const selectType = document.querySelector('#typeFeature');
-
-                        updateFormFeature.id = 'formUpdateFeature';
-                        CSRFToken(updateFormFeature.id);
-
-                        updateFormFeature.addEventListener('submit', function(e) {
-                            e.preventDefault();
-                            inputTitle.addEventListener('invalid', function(e) {
-                                validate(e.target)
-                            })
-                            inputDescription.addEventListener('invalid', function(e) {
-                                validate(e.target)
-                            })
-                            inputStatus.addEventListener('invalid', function(e) {
-                                validate(e.target)
-                            })
-                            selectType.addEventListener('invalid', function(e) {
-                                validate(e.target)
-                            })
-
-                            scroll();
-                            fetchUpdateFeature(updateFormFeature, objectFeature.id)
-                            .then(response => {
-                                localStorage.removeItem('csrfToken');
-                                if (response.status === '[Admin]updateFeature') {
+                        scroll();
+                        fetchUpdateFeature(updateFormFeature, objectFeature.id)
+                        .then(response => {
+                            localStorage.removeItem('csrfToken');
+                            if (response.status === 'updateFeature') {
+                                if (role === 'Admin') {
                                     dialog({title: `Modification de la mise à jour par l'Admin`, content: `La feature ${objectFeature.type} ${objectFeature.title} a bien été mise à jour.`});
-                                    const dialogMsg = document.querySelector('dialog');
-                                    dialogMsg.classList.add('valid');
-                                    redirect(`${configPath.basePath}/features/pages/features.html`);
-                                };
+                                } else {
+                                    dialog({title: `Modification de la mise à jour`, content: `La feature ${objectFeature.type} ${objectFeature.title} a bien été mise à jour.`});
+                                }
+                                const dialogMsg = document.querySelector('dialog');
+                                dialogMsg.classList.add('valid');
+                                redirect(`${configPath.basePath}/features/pages/features.html`);
+                            };
 
-                                if (response.status === 'errors') {
-                                    dialog({title: 'Erreurs', content: response.errors});
-                                    const dialogMsg = document.querySelector('dialog');
-                                    dialogMsg.classList.add('errors');
-                                    redirect(`${configPath.basePath}/features/pages/features.html`);
-                                };
-                            })
+                            if (response.status === 'errors') {
+                                dialog({title: 'Erreurs', content: response.errors});
+                                const dialogMsg = document.querySelector('dialog');
+                                dialogMsg.classList.add('errors');
+                                redirect(`${configPath.basePath}/features/pages/features.html`);
+                            };
                         })
                     })
+                })
+
+                // Gestion de l'update de la feature uniquement pour l'Admin
+                if (role === 'Admin') {
+                    editBtn.classList.add('admin');
 
                     // Gestion du statut de la mise à jour
                     divStatus.addEventListener('click', e => {
                         e.preventDefault();
 
-                        if (objectFeature.status === 'Eteint') {
+                        if (objectFeature.status === `Non consulté par l'Admin`) {
                             objectFeature.status = 'En attente'
                             pStatus.innerText = objectFeature.status
                             divStatus.classList.remove('switchOff');
@@ -519,15 +542,18 @@ function features() {
                 }
 
                 if (role === 'User') {
+                    if (objectFeature.type === 'Suggestion') {
+                        tdAction.appendChild(editBtn);
+                    }
                     trBody.appendChild(tdType);
                     trBody.appendChild(tdTitle);
                     trBody.appendChild(tdDescription);
                     trBody.appendChild(tdStatus);
+                    trBody.appendChild(tdAction);
                     tdStatus.appendChild(divStatus);
                     tdStatus.appendChild(pStatus);
                     tbody.appendChild(trBody);
                 }
-
             }
         }
     })
