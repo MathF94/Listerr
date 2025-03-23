@@ -14,7 +14,7 @@ class SendMails extends Database
      *
      * @param int $id - ID de la réservation à récupérer.
      */
-    public function getConfigMailById(int $id): array
+    public function getConfigMailById(int $id): ?array
     {
         try {
             $req = "SELECT `id`,

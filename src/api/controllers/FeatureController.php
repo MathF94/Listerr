@@ -237,14 +237,19 @@ class FeatureController
                 }
 
                 $featureId = $feature->id;
-                    $params = ['status' => $_POST['statusFeature']];
-                    $model->updateStatusFeature($params, $featureId);
-                    return json_encode([
-                        "status" => "[Admin]updateStatusFeature",
-                        "message" => "la feature a bien été mise à jour."
-                    ]);
+                $params = ['status' => $_POST['statusFeature']];
+                $model->updateStatusFeature($params, $featureId);
 
+                return json_encode([
+                    "status" => "[Admin]updateStatusFeature",
+                    "message" => "la feature a bien été mise à jour."
+                ]);
             }
+            return json_encode([
+                "status" => "Update feature failed",
+                "message" => "no user found"
+            ]);
+            
         } catch (\Exception $e) {
             return json_encode([
                 "status" => "errors",

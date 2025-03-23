@@ -138,9 +138,10 @@ class Features extends Database
             $params['id'] = $id;
 
             return $query->execute($params);
+
         } catch (\Exception $e) {
             echo $e->getMessage();
-            return [];
+            return false;
         }
     }
 
@@ -165,7 +166,7 @@ class Features extends Database
             return $query->execute($params);
         } catch (\Exception $e) {
             echo $e->getMessage();
-            return [];
+            return false;
         }
     }
 

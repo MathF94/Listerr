@@ -228,6 +228,10 @@ class CardController
                     "message" => "la priorité a bien été mise à jour."
                 ]);
             }
+            return json_encode([
+                "status" => "updatePriority failed",
+                "message" => "no user found"
+            ]);
 
         } catch (\Exception $e) {
             return json_encode([

@@ -198,56 +198,8 @@ class SendMail
                 if ($mailForAdmin) {
                     return true;
                 }
-            } else {
-                return false;
             }
-        } catch (\Exception $e) {
-            return json_encode([
-                "status" => "errors",
-                "message" => $e->getMessage()
-            ]);
-        }
-    }
-
-    public function getElementMailList(array $params, object $user): mixed
-    {
-        try {
-            $users = new Users();
-            $modelIncludes = new Includes();
-            $modelSendMails = new SendMail();
-
-            $allUsers = $users->readAll();
-            $AllRecipients = [];
-            foreach ($allUsers as $user) {
-                $AllRecipients[] = htmlspecialchars($user->email);
-            }
-            $listUserID = urlencode($params['id']);
-            var_dump($listUserID);
-
-            die();
-            $listUserLogin = htmlspecialchars($user->login);
-            $listTitle = htmlspecialchars($params['titleList']);
-            $domain = $modelIncludes->changeDomain();
-
-            $subjectAll = <<< HTML
-            Listerr - Nouvelle création de liste de souhaits par {$listUserLogin}
-            HTML;
-            $messageAll = <<< HTML
-            <p>Bonjour à tous,</p>
-            <br>
-            <p>Pour information, une nouvelle liste de souhaits "{$listTitle}" appartenant à {$listUserLogin} vient d'être créée.</p>
-            <br>
-            <p>Bonne journée.</p>
-            <p>Administrateur de Listerr.</p>
-            HTML;
-
-            $mailForAllUsers = $modelSendMails->sendNotificationMailToUser($AllRecipients, $subjectAll, $messageAll);
-
-            if ($mailForAllUsers) {
-                return true;
-            } else {
-                return false;
-            }
+            return false;
 
         } catch (\Exception $e) {
             return json_encode([
@@ -397,9 +349,8 @@ class SendMail
                 if ($mailForOthersUsers) {
                     return true;
                 }
-            } else {
-                return false;
             }
+            return false;
 
         } catch (\Exception $e) {
             return json_encode([

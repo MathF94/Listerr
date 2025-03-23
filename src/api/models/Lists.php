@@ -179,7 +179,7 @@ class Lists extends Database
             return $query->execute($params);
         } catch (\Exception $e) {
             echo $e->getMessage();
-            return [];
+            return false;
         }
     }
 
@@ -199,7 +199,7 @@ class Lists extends Database
             return $query->execute(['id' => $id]);
         } catch (\Exception $e) {
             echo $e->getMessage();
-            return [];
+            return false;
         }
     }
 }

@@ -31,52 +31,45 @@ class Validator
             case self::CONTEXT_REGISTER:
                 $errors = $this->isValidRegisterParams($params);
                 return $errors;
-                break;
 
             case self::CONTEXT_LOGIN:
                 $errors = $this->isValidLoginParams($params);
                 return $errors;
-                break;
 
             case self::CONTEXT_UPDATE_USER:
                 $errors = $this->isValidUpdateUserParams($params);
                 return $errors;
-                break;
 
             case self::CONTEXT_CREATE_LIST:
                 $errors = $this->isValidListParams($params);
                 return $errors;
-                break;
 
             case self::CONTEXT_UPDATE_LIST:
                 $errors = $this->isValidListParams($params);
                 return $errors;
-                break;
 
             case self::CONTEXT_CREATE_CARD:
                 $errors = $this->isValidCardParams($params);
                 return $errors;
-                break;
 
             case self::CONTEXT_UPDATE_CARD:
                 $errors = $this->isValidCardParams($params);
                 return $errors;
-                break;
 
             case self::CONTEXT_CREATE_RESERVATION:
                 $errors = $this->isValidReservationParams($params);
                 return $errors;
-                break;
 
             case self::CONTEXT_CREATE_FEATURE:
                 $errors = $this->isValidFeatureParams($params);
                 return $errors;
-                break;
 
             case self::CONTEXT_UPDATE_FEATURE:
                 $errors = $this->isValidFeatureParams($params);
                 return $errors;
-                break;
+
+            default:
+            return ["error" => "Invalid context"];
         }
     }
 

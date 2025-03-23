@@ -265,19 +265,19 @@ class Users extends Database
      * @param array $params - Les paramètres mis à jour, y compris le nouveau mot de passe.
      * @return bool - Renvoie true en cas de succès, sinon false.
      */
-    public function updatePassword(array $params): bool
-    {
-        try {
-            $req = "UPDATE `user`
-                    SET `password`= :password
-                    WHERE `login` = :login";
-            $query = $this->db->prepare($req);
-            return $query->execute($params);
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-            return [];
-        }
-    }
+    // public function updatePassword(array $params): bool
+    // {
+    //     try {
+    //         $req = "UPDATE `user`
+    //                 SET `password`= :password
+    //                 WHERE `login` = :login";
+    //         $query = $this->db->prepare($req);
+    //         return $query->execute($params);
+    //     } catch (\Exception $e) {
+    //         echo $e->getMessage();
+    //         return [];
+    //     }
+    // }
     /********************************************************/
 
     /**
@@ -294,9 +294,10 @@ class Users extends Database
 
             $query = $this->db->prepare($req);
             return $query->execute(['login' => $login]);
+
         } catch (\Exception $e) {
             echo $e->getMessage();
-            return [];
+            return false;
         }
     }
     /**
@@ -315,7 +316,7 @@ class Users extends Database
             return $query->execute(['id' => $id]);
         } catch (\Exception $e) {
             echo $e->getMessage();
-            return [];
+            return false;
         }
     }
 }
