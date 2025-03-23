@@ -21,8 +21,8 @@ import {
 
 function features() {
     const featureDiv = document.querySelector('#feature');
-
-    const role = JSON.parse(localStorage.user).role
+    const role = JSON.parse(localStorage.user).role;
+    const id = JSON.parse(localStorage.user).id;
 
     const popIn = document.createElement('div');
     popIn.id = 'popIn';
@@ -542,8 +542,10 @@ function features() {
                 }
 
                 if (role === 'User') {
-                    if (objectFeature.type === 'Suggestion') {
-                        tdAction.appendChild(editBtn);
+                    if (objectFeature.type === 'Suggestion' || objectFeature.type === 'Bug (affichage ou blocage)') {
+                        if (id === objectFeature.user.id) {
+                            tdAction.appendChild(editBtn);
+                        }
                     }
                     trBody.appendChild(tdType);
                     trBody.appendChild(tdTitle);
