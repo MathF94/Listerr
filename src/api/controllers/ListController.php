@@ -91,7 +91,7 @@ class ListController
 
             if (!empty($this->user)) {
                 $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_CREATE_LIST);
-                
+
                 if (empty(count($errors))) {
                     $params = $_POST;
                     $model = new Lists();
@@ -99,14 +99,10 @@ class ListController
 
                     if ($create) {
                         if ($params['typeList'] === 'WishList') {
-                            $sendMail = new SendMail();
-                            $mail = $sendMail->getElementMailList($params, $this->user);
-                            if ($mail) {
-                                return json_encode([
-                                    "status" => "createList",
-                                    "message" => "la liste a bien été créée."
-                                ]);
-                            }
+                            return json_encode([
+                                "status" => "createList",
+                                "message" => "la liste a bien été créée."
+                            ]);
                         }
                     }
                     return json_encode([

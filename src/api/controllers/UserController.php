@@ -316,12 +316,14 @@ class UserController
             // récupère les données de l'utilisateur (login, password... de la table)
             $user = $users->readOne($decryptToken["login"]);
 
+
             if (empty($user)) {
                 return json_encode([
                     "status" => "errors",
                     "message" => "unknown user"
                 ]);
             };
+
             $isExpired = $session->isExpired($decryptToken, $user);
 
             if (!$isExpired) {
@@ -332,9 +334,11 @@ class UserController
                     "login" => $decryptToken["login"],
                 ]);
             };
+
             if ($isExpired) {
                 $session = new Session();
                 $decryptToken = $session->decrypt($tokenUser);
+
                 return json_encode([
                     "status" => "disconnect",
                     "connected" => false,
@@ -342,12 +346,17 @@ class UserController
                     "login" => $decryptToken["login"],
                 ]);
             };
+
         } catch (\Exception $e) {
             return json_encode([
                 "status" => "errors",
                 "message" => $e->getMessage()
             ]);
         };
+        return json_encode([
+            "status" => "errors",
+            "message" => "Unexpected error"
+        ]);
     }
 
     /**

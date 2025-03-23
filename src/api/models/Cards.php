@@ -73,7 +73,7 @@ class Cards extends Database
      * @param int $listId - ID de la liste pour récupérer les cartes associées.
      * @return Card[] - Un tableau d'objets Card représentant tous les cartes.
      */
-    public function getAllCardsByList(int $listId): array
+    public function getAllCardsByList(int $listId): ?array
     {
         try {
             $req = "SELECT `c`.`id`,
@@ -113,7 +113,7 @@ class Cards extends Database
      * @param int $id - L'ID de la carte à mettre à jour.
      * @return bool - Renvoie true en cas de succès, sinon false.
      */
-    public function updateCard(array $params, int $id): bool
+    public function updateCard(array $params, int $id): ?bool
     {
         try {
             $req = "UPDATE `card`
@@ -129,7 +129,7 @@ class Cards extends Database
             return $query->execute($params);
         } catch (\Exception $e) {
             echo $e->getMessage();
-            return [];
+            return false;
         }
     }
 
@@ -146,7 +146,7 @@ class Cards extends Database
             return $query->execute($params);
         } catch (\Exception $e) {
             echo $e->getMessage();
-            return [];
+            return false;
         }
     }
 
