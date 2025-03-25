@@ -517,7 +517,7 @@ function features() {
                                     );
                                     const dialogMsg = document.querySelector("dialog");
                                     dialogMsg.classList.add("valid");
-                                    redirect(`${configPath.basePath}/features/pages/features`);
+                                    redirect(`${configPath.basePath}/features/pages/features.html`);
                                 }
 
                                 if (response.status === 'errors') {
