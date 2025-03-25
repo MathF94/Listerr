@@ -98,12 +98,10 @@ class ListController
                     $create = $model->createList($params, $this->user->id);
 
                     if ($create) {
-                        if ($params['typeList'] === 'WishList') {
-                            return json_encode([
-                                "status" => "createList",
-                                "message" => "la liste a bien été créée."
-                            ]);
-                        }
+                        return json_encode([
+                            "status" => "createList",
+                            "message" => "la liste a bien été créée."
+                        ]);
                     }
                     return json_encode([
                         "status" => "no createList",
@@ -119,6 +117,7 @@ class ListController
                 "status" => "createList failed",
                 "message" => "no user found"
             ]);
+            
         } catch (\Exception $e) {
             return json_encode([
                 "status" => "errors",
