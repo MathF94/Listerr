@@ -220,6 +220,9 @@ function features() {
                 if (objectFeature.status === `Non consulté par l'Admin`) {
                     divStatus.classList.add('switchOff');
                 }
+                if (objectFeature.status === `Soldé par l'Admin`) {
+                    divStatus.classList.add('closed');
+                }
                 if (objectFeature.status === 'En cours de dév.') {
                     divStatus.classList.add('wip');
                 }
