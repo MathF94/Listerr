@@ -242,7 +242,6 @@ function features() {
                 editBtn.classList.add('valid');
                 editBtn.classList.add('edit');
                 editBtn.classList.add('admin');
-                editBtn.classList.add('feature');
 
                 const deleteBtn = document.createElement('button');
                 deleteBtn.id = `deleteFeature-${objectFeature.id}`;
@@ -378,6 +377,7 @@ function features() {
                 // Gestion de l'update de la feature uniquement pour l'Admin
                 if (role === 'Admin') {
                     editBtn.classList.add('admin');
+                    editBtn.classList.add('feature');
 
                     // Gestion du statut de la mise à jour
                     divStatus.addEventListener('click', e => {
