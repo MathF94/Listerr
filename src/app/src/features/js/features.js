@@ -470,6 +470,62 @@ function features() {
                                 };
                             });
 
+                        } else if (objectFeature.status === 'En attente') {
+                            objectFeature.status = `Soldé par l'Admin`
+                            pStatus.innerText = objectFeature.status
+                            divStatus.classList.remove('wait');
+                            divStatus.classList.add('closed');
+
+                            fetchUpdateStatusFeature(objectFeature.id, objectFeature.status)
+                            .then(response => {
+                                if (response.status === '[Admin]updateStatusFeature') {
+                                    dialog(
+                                        {
+                                            title: `Modification du statut`,
+                                            content: `La feature ${objectFeature.type} - ${objectFeature.title} est ${objectFeature.status}.`
+                                        }
+                                    );
+                                    const dialogMsg = document.querySelector('dialog');
+                                    dialogMsg.classList.add('valid');
+                                    redirect(`${configPath.basePath}/features/pages/features.html`);
+                                };
+
+                                if (response.status === 'errors') {
+                                    dialog({title: 'Erreurs', content: response.errors});
+                                    const dialogMsg = document.querySelector('dialog');
+                                    dialogMsg.classList.add('errors');
+                                    redirect(`${configPath.basePath}/features/pages/features.html`);
+                                };
+                            });
+
+                        } else if (objectFeature.status === `Soldé par l'Admin`) {
+                            objectFeature.status = 'En cours de dév.'
+                            pStatus.innerText = objectFeature.status
+                            divStatus.classList.remove('closed');
+                            divStatus.classList.add('wip');
+
+                            fetchUpdateStatusFeature(objectFeature.id, objectFeature.status)
+                            .then(response => {
+                                if (response.status === '[Admin]updateStatusFeature') {
+                                    dialog(
+                                        {
+                                            title: `Modification du statut`,
+                                            content: `La feature ${objectFeature.type} - ${objectFeature.title} est ${objectFeature.status}.`
+                                        }
+                                    );
+                                    const dialogMsg = document.querySelector('dialog');
+                                    dialogMsg.classList.add('valid');
+                                    redirect(`${configPath.basePath}/features/pages/features.html`);
+                                };
+
+                                if (response.status === 'errors') {
+                                    dialog({title: 'Erreurs', content: response.errors});
+                                    const dialogMsg = document.querySelector('dialog');
+                                    dialogMsg.classList.add('errors');
+                                    redirect(`${configPath.basePath}/features/pages/features.html`);
+                                };
+                            });
+
                         } else {
                             objectFeature.status = 'En cours de dév.'
                             pStatus.innerText = objectFeature.status
