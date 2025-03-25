@@ -477,9 +477,6 @@ dialog {
 #contentSection {
     margin: 0 auto;
 }
-.sectionFeature {
-    margin: 30px auto;
-}
 
 /* *****************************************************************
     DROPDOWN MENU
@@ -664,7 +661,9 @@ dialog {
             color: var(--text-light);
         }
         &.admin {
-            border-radius: 10px 0px 0px 10px;
+            &.profilUsers {
+                border-radius: 10px 0px 0px 10px;
+            }
         }
     }
     &.way {
@@ -681,6 +680,29 @@ dialog {
         &:hover {
             color: var(--text-light);
             background-color: var(--valid-btn-hover);
+        }
+    }
+    &.edit {
+        background-color: var(--edit-btn);
+        color: var(--text-light);
+        &::before {
+            content: "🖊";
+        }
+        &:hover {
+            background-color: var(--edit-btn-hover);
+            color: var(--text-light);
+        }
+        &.admin {
+            &.profilUsers {
+                border-radius: 0px;
+            }
+            &.feature {
+                border-radius: 10px 0 0 10px;
+            }
+
+        }
+        &.listBtn {
+            border-radius: 10px 0px 0px 10px;
         }
     }
     &.delete {
@@ -710,23 +732,7 @@ dialog {
             }
         }
     }
-    &.edit {
-        background-color: var(--edit-btn);
-        color: var(--text-light);
-        &::before {
-            content: "🖊";
-        }
-        &:hover {
-            background-color: var(--edit-btn-hover);
-            color: var(--text-light);
-        }
-        &.admin {
-            border-radius: 10px 0px 0px 10px;
-        }
-        &.listBtn {
-            border-radius: 10px 0px 0px 10px;
-        }
-    }
+
     &.reservation {
         background-color: var(--resa-btn);
         &:hover {
@@ -905,7 +911,7 @@ input[type="submit"] {
     width: 100%;
     & > thead {
         & > tr {
-            height: 30px;
+            height: 4vh;
         }
     }
     & > tbody {
@@ -922,10 +928,10 @@ input[type="submit"] {
 }
 
 .featureList {
-    margin-top: 30px;
+    margin-top: 15px;
     & > thead {
         & > tr {
-            height: 3.5vh;
+            height: 5vh;
             & > th:nth-child(3) {
                 width: 50%;
             }
@@ -933,7 +939,9 @@ input[type="submit"] {
     }
     & > tbody {
         & tr {
-            height: 10.5vh;
+            height: 12vh;
+            border-top-width: 1px;
+            border-top-style: dashed;
         }
         & td {
             & .divCercle {
@@ -1008,6 +1016,74 @@ input[type="submit"] {
         grid-column: 6/7;
         grid-row: 2/2;
         width: 95px;
+    }
+    .btn {
+        &.edit {
+            background-color: var(--edit-btn);
+            color: var(--text-light);
+            &::before {
+                content: "🖊";
+            }
+            &:hover {
+                background-color: var(--edit-btn-hover);
+                color: var(--text-light);
+            }
+            &.admin {
+                &.profilUsers {
+                    border-radius: 0px;
+                }
+                &.feature {
+                    border-radius: 10px;
+                }
+            }
+        }
+        &.delete {
+            background-color: var(--delete-btn);
+            color: var(--text-light);
+            &::before {
+                content: "🗑";
+                margin: 0px 2px;
+            }
+            &:hover {
+                background-color: var(--delete-btn-hover);
+                color: var(--text-light);
+            }
+            &.admin {
+                &.profilUsers {
+                    border-radius: 0px 10px 10px 0;
+                }
+                &.feature {
+                    border-radius: 10px;
+                }
+            }
+            &.listBtn {
+                border-radius: 0px 10px 10px 0px;
+            }
+            &.reservation {
+                background-color: var(--delete-btn);
+                color: var(--text-light);
+                margin-left: 5px;
+                &:hover {
+                    background-color: var(--delete-btn-hover);
+                    color: var(--text-light);
+                }
+            }
+        }
+    }
+    .featureList {
+        & > thead {
+            & > tr {
+                & > th {
+                    height: 10vh;
+                    transform: rotate(-45deg)
+                }
+            }
+        }
+        & > tbody {
+            & tr {
+                height: 15vh;
+            }
+        }
     }
 }
 @media screen and (min-width: 619px) {
@@ -1100,7 +1176,7 @@ input[type="submit"] {
         }
     }
     #createUser, #feature  {
-        margin: 6px 0 30px 0;
+        margin-top: 6px;
     }
     .list {
         width: 45%;

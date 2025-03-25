@@ -99,6 +99,7 @@ function readAdmin() {
                 readBtn.classList.add("btn");
                 readBtn.classList.add("view");
                 readBtn.classList.add("admin");
+                readBtn.classList.add("profilUsers");
 
                 const editBtn = document.createElement("button");
                 editBtn.id = `editUserProfil-${column.id}`;
@@ -110,6 +111,7 @@ function readAdmin() {
                 editBtn.classList.add("valid");
                 editBtn.classList.add("edit");
                 editBtn.classList.add("admin");
+                editBtn.classList.add("profilUsers");
 
                 const deleteBtn = document.createElement("button");
                 deleteBtn.id = `deleteUserProfil-${column.id}`;
@@ -120,6 +122,7 @@ function readAdmin() {
                 deleteBtn.classList.add("btn");
                 deleteBtn.classList.add("delete");
                 deleteBtn.classList.add("admin");
+                deleteBtn.classList.add("profilUsers");
 
                 // dropDownMenu(tdBtn);
                 tdBtn.appendChild(readBtn);

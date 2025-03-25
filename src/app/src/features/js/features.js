@@ -147,7 +147,6 @@ function features() {
         if (response.status === 'ReadAllFeatures') {
             const sectionFeature = document.createElement('div');
             sectionFeature.id = 'sectionFeature';
-            sectionFeature.classList.add('sectionFeature');
 
             const table = document.createElement('table');
             table.classList.add('featureList');
@@ -242,6 +241,8 @@ function features() {
                 editBtn.classList.add('btn');
                 editBtn.classList.add('valid');
                 editBtn.classList.add('edit');
+                editBtn.classList.add('admin');
+                editBtn.classList.add('feature');
 
                 const deleteBtn = document.createElement('button');
                 deleteBtn.id = `deleteFeature-${objectFeature.id}`;
@@ -252,6 +253,7 @@ function features() {
                 deleteBtn.classList.add('btn');
                 deleteBtn.classList.add('delete');
                 deleteBtn.classList.add('admin');
+                deleteBtn.classList.add('feature');
 
                 // Gestion de l'update de la feature
                 editBtn.addEventListener('click', function(e) {

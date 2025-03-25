@@ -219,11 +219,17 @@ class SendMail
 
             $allUsers = $users->readAll();
             $lists = $modelLists->getOneListById($params['list_id']);
+            $listUserEmail = htmlspecialchars($lists->user->email);
 
             $AllRecipients = [];
             foreach ($allUsers as $user) {
                 $AllRecipients[] = htmlspecialchars($user->email);
             }
+
+            // Filtre l'email de l'admin
+            $AllRecipients = $modelIncludes->seekAndDestroy('fagot.mathieu@gmail.com', $AllRecipients);
+            // Filtre l'email du propriétaire
+            $AllRecipients = $modelIncludes->seekAndDestroy($listUserEmail, $AllRecipients);
 
             $listId = urlencode($params['list_id']);
             $listTitle = htmlspecialchars($lists->title);
@@ -326,9 +332,11 @@ class SendMail
                 $AllRecipients[] = htmlspecialchars($user->email);
             }
 
-            // Filtre le mail du propriétaire
+            // Filtre l'email de l'admin
+            $AllRecipients = $modelIncludes->seekAndDestroy('fagot.mathieu@gmail.com', $AllRecipients);
+            // Filtre l'email du propriétaire
             $AllRecipients = $modelIncludes->seekAndDestroy($listUserEmail, $AllRecipients);
-            // Filtre le mail du réservant du souhait
+            // Filtre l'email du réservant du souhait
             $AllRecipients = $modelIncludes->seekAndDestroy($ReservationUserEmail, $AllRecipients);
 
             $subjectAll = 'Listerr - Nouvelle réservation sur une liste';
@@ -377,6 +385,7 @@ class SendMail
 
             $modelLists = new Lists();
             $lists = $modelLists->getOneListById($listId);
+            $listUserEmail = htmlspecialchars($lists->user->email);
 
             $modelCards = new Cards();
             $cards = $modelCards->getOneCardById($cardId);
@@ -387,6 +396,12 @@ class SendMail
 
             $modelIncludes = new Includes();
             $domain = $modelIncludes->changeDomain();
+
+            // Filtre l'email de l'admin
+            $AllRecipients = $modelIncludes->seekAndDestroy('fagot.mathieu@gmail.com', $AllRecipients);
+            // Filtre l'email du propriétaire
+            $AllRecipients = $modelIncludes->seekAndDestroy($listUserEmail, $AllRecipients);
+            // Filtre l'email du réservant du souhait
             $AllRecipients = $modelIncludes->seekAndDestroy($ReservationUserEmail, $AllRecipients);
 
             $subjectAll = <<< HTML
