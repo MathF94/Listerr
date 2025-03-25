@@ -71,6 +71,7 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     --green-status: rgba(46, 210, 11, 1);
     --orange-status: rgba(255, 166, 0, 1);
     --red-status: rgba(255, 0, 0, 1);
+    --blue-status: rgba(22, 138, 238, 1);
     --white-status: rgba(255, 255, 255, 1);
 
 }
@@ -963,6 +964,10 @@ input[type="submit"] {
                 &.done {
                     background-color: var(--green-status);
                     box-shadow: 0px 0px 10px 5px var(--green-status);
+                }
+                &.closed {
+                    background-color: var(--blue-status);
+                    box-shadow: 0px 0px 10px 5px var(--blue-status);
                 }
             }
             & > p {

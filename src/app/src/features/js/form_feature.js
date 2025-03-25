@@ -91,8 +91,14 @@ function displayFormFeature(elementDOM) {
     const optionSwitchOff = document.createElement('option');
     optionSwitchOff.value = 'Etat de mise à jour';
     optionSwitchOff.id = 'optSwitchOff';
-    optionSwitchOff.setAttribute('value', 'Non consulté');
-    optionSwitchOff.innerText = 'Non consulté'
+    optionSwitchOff.setAttribute('value', `Non consulté par l'Admin`);
+    optionSwitchOff.innerText = `Non consulté par l'Admin`;
+
+    const optionClosed = document.createElement('option');
+    optionClosed.value = 'Etat de mise à jour';
+    optionClosed.id = 'optClosed';
+    optionClosed.setAttribute('value', `Soldé par l'Admin`);
+    optionClosed.innerText = `Soldé par l'Admin`;
 
     const optionWait = document.createElement('option');
     optionWait.value = 'Etat de mise à jour';
@@ -149,6 +155,7 @@ function displayFormFeature(elementDOM) {
     selectStatus.appendChild(optionWait);
     selectStatus.appendChild(optionWip);
     selectStatus.appendChild(optionDone);
+    selectStatus.appendChild(optionClosed);
     formFeature.appendChild(actionBtnfeature);
     actionBtnfeature.appendChild(featureValidFormBtn);
     actionBtnfeature.appendChild(featureCancelFormBtn);
