@@ -510,7 +510,7 @@ function features() {
                                     dialog(
                                         {
                                             title: `Modification du statut`,
-                                            content: `La feature ${objectFeature.type} - ${objectFeature.title} est ${objectFeature.status}.`
+                                            content: `La feature ${objectFeature.type} - ${objectFeature.title} est ${objectFeature.status}`
                                         }
                                     );
                                     const dialogMsg = document.querySelector('dialog');
