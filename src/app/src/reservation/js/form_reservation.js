@@ -33,7 +33,7 @@ function displayFormReservation(elementDOM) {
     inputGuestMail.id = "email";
     inputGuestMail.name = "email";
     inputGuestMail.placeholder = "Votre mail";
-    inputGuestMail.pattern = "[^@\s]+@[^@\s]+\.[a-zA-Z]{2,}";
+    inputGuestMail.pattern = "[^@\\s]+@[^@\\s]+\\.[a-zA-Z]{2,}";
     inputGuestMail.required = true;
 
     const guestValidFormBtn = document.createElement("button");
