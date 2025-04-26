@@ -192,111 +192,108 @@ function features() {
             trashMailBtn.classList.add('delete');
 
             let option = '';
-            
             const arrayRecipient = [];
             const arrayRecipients = [];
 
-            for (let index = 0; index < dataUsers.length; index++) {
-                if (dataUsers[index].role === 'Admin') {
-                    const dataSlice = dataUsers.slice(dataUsers[index].id)
+            // Filtrer les utilisateurs pour exclure l'admin
+            const usersWithoutAdmin = dataUsers.filter(user => user.role !== 'Admin');
 
-                    dataSlice.forEach(dataUser => {
-                        const allUsersId = dataUser.id;
-                        const allUsersLogin = dataUser.login;
-                        const allUsersEmail = dataUser.email;
-                        arrayRecipients.push(allUsersEmail);
+            // for (let index = 0; index < dataUsers.length; index++) {
+            //     if (dataUsers[index].role === 'Admin') {
+            //         const dataSlice = dataUsers.slice(dataUsers[index].id)
+            //     }
+            // }
+            usersWithoutAdmin.forEach(dataUser => {
+                const allUsersId = dataUser.id;
+                const allUsersLogin = dataUser.login;
+                const allUsersEmail = dataUser.email;
+                arrayRecipients.push(allUsersEmail);
 
-                        option = createOptionLoginMail(allUsersId, allUsersLogin, allUsersEmail)
-                        selectRecipients.appendChild(option);
-                    });
-                    const options = createOptionMails();
-                    selectRecipients.appendChild(options);
+                option = createOptionLoginMail(allUsersId, allUsersLogin, allUsersEmail)
+                selectRecipients.appendChild(option);
+            });
 
-                    // Ajoute les adresses emails pour envoyer un mail
-                    const validLoginBtn = document.querySelector('#validLoginBtn');
-                    validLoginBtn.addEventListener('click', function (e) {
-                        e.preventDefault();
-                        const optionsValue = recipients.value;
-                        recipientsListDiv.appendChild(trashMailBtn);
+            const allMembersOption = createOptionMails();
+            selectRecipients.appendChild(allMembersOption);
 
-                        if (optionsValue === "allMembers") {
-                            recipientsList.remove();
-                            // Complète la partie "Destinataire(s) retenu(es)"
-                            recipientsLists.innerText = "Tous les membres de Listerr";
-                            // Complète l'input hidden pour le formulaire
-                            inputRecipients.value = JSON.stringify(arrayRecipients);
+            // Ajoute les adresses emails pour envoyer un mail
+            const validLoginBtn = document.querySelector('#validLoginBtn');
+            validLoginBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                const optionsValue = recipients.value;
+                recipientsListDiv.appendChild(trashMailBtn);
 
-                        } else {
-                            recipientsLists.remove();
-                            if (!arrayRecipient.includes(optionsValue)) {
-                                arrayRecipient.push(optionsValue);
-                            }
-                            // Complète la partie "Destinataire(s) retenu(es)"
-                            recipientsList.innerText = arrayRecipient.join(", ");
-                            // Complète l'input hidden pour le formulaire
-                            inputRecipients.value =  JSON.stringify(arrayRecipient);
-                        }
-                    })
+                if (optionsValue === "allMembers") {
+                    recipientsList.remove();
+                    // Complète la partie "Destinataire(s) retenu(es)"
+                    recipientsLists.innerText = "Tous les membres de Listerr";
+                    // Complète l'input hidden pour le formulaire
+                    inputRecipients.value = JSON.stringify(arrayRecipients);
 
-                    // Supprime les emails en cas d'erreur d'insertion
-                    trashMailBtn.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        inputRecipients.value = '';
-                        arrayRecipient.length = 0;
-                        arrayRecipients.length = 0;
-                        if (recipientsList) {
-                            recipientsListDiv.appendChild(recipientsLists);
-                            recipientsList.innerText = '';
-                        }
-                        if (recipientsLists) {
-                            recipientsListDiv.appendChild(recipientsList);
-                            recipientsLists.innerText = '';
-                        }
-                        trashMailBtn.remove();
-                    })
-
-                    CSRFToken(mailForm.id);
-                    mailForm.addEventListener('submit', function(e) {
-                        e.preventDefault();
-                        // Validation de pattern du formulaire
-                        const inputRecipients = document.querySelector('#inputRecipients');
-                        const inputObjectMail = document.querySelector('#inputObjectMail');
-                        const textAreaMail = document.querySelector('#descriptionMail');
-                        inputRecipients.addEventListener('invalid', function(e) {
-                            validate(e.target)
-                        });
-                        inputObjectMail.addEventListener('invalid', function(e) {
-                            validate(e.target)
-                        });
-                        textAreaMail.addEventListener('invalid', function(e) {
-                            validate(e.target)
-                        });
-
-                        fetchSendMailFeature(mailForm)
-                        .then(response => {
-                            localStorage.removeItem('csrfToken');
-                                if (response.status === 'sendMail') {
-                                    dialog({title: 'Envoi de mail', content: `Le mail d'informations a bien été envoyé`});
-                                    const dialogMsg = document.querySelector('dialog');
-                                    dialogMsg.classList.add('valid');
-                                    redirect(`${configPath.basePath}/features/pages/features.html`, 3000);
-                                }
-
-                            if (response.status === 'errors') {
-                                dialog({title: 'Erreurs', content: response.errors});
-                                const dialogMsg = document.querySelector('dialog');
-                                dialogMsg.classList.add('errors');
-                                redirect(`${configPath.basePath}/features/pages/features.html`);
-                            };
-                        })
-                    })
+                } else {
+                    recipientsLists.remove();
+                    if (!arrayRecipient.includes(optionsValue)) {
+                        arrayRecipient.push(optionsValue);
+                    }
+                    // Complète la partie "Destinataire(s) retenu(es)"
+                    recipientsList.innerText = arrayRecipient.join(", ");
+                    // Complète l'input hidden pour le formulaire
+                    inputRecipients.value =  JSON.stringify(arrayRecipient);
                 }
-            }
+            })
 
+            // Supprime les emails en cas d'erreur d'insertion
+            trashMailBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                inputRecipients.value = '';
+                arrayRecipient.length = 0;
+                arrayRecipients.length = 0;
+                if (recipientsList) {
+                    recipientsListDiv.appendChild(recipientsLists);
+                    recipientsList.innerText = '';
+                }
+                if (recipientsLists) {
+                    recipientsListDiv.appendChild(recipientsList);
+                    recipientsLists.innerText = '';
+                }
+                trashMailBtn.remove();
+            })
 
+            CSRFToken(mailForm.id);
+            mailForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Validation de pattern du formulaire
+                const inputRecipients = document.querySelector('#inputRecipients');
+                const inputObjectMail = document.querySelector('#inputObjectMail');
+                const textAreaMail = document.querySelector('#descriptionMail');
+                inputRecipients.addEventListener('invalid', function(e) {
+                    validate(e.target)
+                });
+                inputObjectMail.addEventListener('invalid', function(e) {
+                    validate(e.target)
+                });
+                textAreaMail.addEventListener('invalid', function(e) {
+                    validate(e.target)
+                });
 
+                fetchSendMailFeature(mailForm)
+                .then(response => {
+                    localStorage.removeItem('csrfToken');
+                        if (response.status === 'sendMail') {
+                            dialog({title: 'Envoi de mail', content: `Le mail d'informations a bien été envoyé`});
+                            const dialogMsg = document.querySelector('dialog');
+                            dialogMsg.classList.add('valid');
+                            redirect(`${configPath.basePath}/features/pages/features.html`, 3000);
+                        }
 
-
+                    if (response.status === 'errors') {
+                        dialog({title: 'Erreurs', content: response.errors});
+                        const dialogMsg = document.querySelector('dialog');
+                        dialogMsg.classList.add('errors');
+                        redirect(`${configPath.basePath}/features/pages/features.html`);
+                    };
+                })
+            })
 
             createFeatureBtn.disabled = true;
             createFeatureBtn.classList.remove('way');
