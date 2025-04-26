@@ -192,7 +192,7 @@ function features() {
             trashMailBtn.classList.add('delete');
 
             let option = '';
-            let options = '';
+            
             const arrayRecipient = [];
             const arrayRecipients = [];
 
@@ -207,9 +207,9 @@ function features() {
                         arrayRecipients.push(allUsersEmail);
 
                         option = createOptionLoginMail(allUsersId, allUsersLogin, allUsersEmail)
-                        options = createOptionMails();
                         selectRecipients.appendChild(option);
                     });
+                    const options = createOptionMails();
                     selectRecipients.appendChild(options);
 
                     // Ajoute les adresses emails pour envoyer un mail
