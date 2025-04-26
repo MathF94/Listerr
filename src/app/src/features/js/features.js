@@ -207,7 +207,7 @@ function features() {
                         arrayRecipients.push(allUsersEmail);
 
                         option = createOptionLoginMail(allUsersId, allUsersLogin, allUsersEmail)
-                        options = createOptionMails(arrayRecipients);
+                        options = createOptionMails();
                         selectRecipients.appendChild(option);
                     });
                     selectRecipients.appendChild(options);
@@ -237,7 +237,7 @@ function features() {
                             inputRecipients.value =  JSON.stringify(arrayRecipient);
                         }
                     })
-                    
+
                     // Supprime les emails en cas d'erreur d'insertion
                     trashMailBtn.addEventListener('click', function(e) {
                         e.preventDefault();

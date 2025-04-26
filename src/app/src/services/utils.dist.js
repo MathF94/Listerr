@@ -62,7 +62,7 @@ function buttonsOff(selector, disableClass, firstClass) {
 /**
  * Permet de créer l'élément HTML option pour la création d'emails, peu importe le nombre d'utilisateurs
  */
-function createOptionMails () {
+function createOptionMails() {
     const optionMails = document.createElement('option');
     optionMails.value = 'Destinataire(s)';
     optionMails.id = `optMails`;
@@ -77,7 +77,7 @@ function createOptionMails () {
  * @param {string} login - le login d'un utilisateur
  * @param {string} email - l'email d'un utilisateur
  */
-function createOptionLoginMail (id, login, email) {
+function createOptionLoginMail(id, login, email) {
     const optionLoginMail = document.createElement('option');
     optionLoginMail.value = 'Destinataire(s)';
     optionLoginMail.id = `optLoginMail-${id}`;
