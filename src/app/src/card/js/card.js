@@ -1,6 +1,6 @@
 "use strict";
 
-import { displayFormCard } from "./form_card.js";
+import { fetchReadAll } from '../../actions/actions_admin.js'
 
 import {
     fetchReadAllCardsByList,
@@ -8,22 +8,28 @@ import {
     fetchDeleteCard,
 } from "../../actions/actions_cards.js";
 
+import { fetchSendMailCard } from '../../actions/actions_mails.js'
+
 import { dropDownMenu } from "../../layout/dropdown.js";
 
 import { reservation } from "../../reservation/js/reservation.js";
 
 import { CSRFToken } from "../../services/CSRFToken.js";
 
+import { displayFormCard } from "../../services/form_card.js";
+
+import { displayFormMail } from '../../services/form_mail.js';
+
 import {
     allowedIds,
     configPath,
+    createOptionLoginMail,
     detail,
     dialog,
     manageBtns,
     redirect,
     scroll,
-    type,
-    validate
+    type
 } from "../../services/utils.js";
 
 /**
@@ -60,19 +66,7 @@ function card(canCreateCard) {
 
     const updateProfilList = document.querySelector(`#updateList-${id}`);
 
-    // Création des éléments DOM pour le formulaire de création d'une carte
-    const cardDivForm = document.createElement("div");
-    cardDivForm.id = "cardDivForm";
-    cardDivForm.classList.add("form");
-    cardDivForm.classList.add("grid_create_card");
-
     const popIn = document.querySelector("#popIn");
-
-    // Rappel : "canCreateCard" retourne vrai si utilisateur courant = propriétaire de la liste/carte
-    // Si TRUE, l'utilisateur peut créer des "cartes" (souhaits / tâches)
-    if (canCreateCard) {
-        oneList.appendChild(cardDivForm);
-    }
 
     // Affichage des cartes de la liste
     fetchReadAllCardsByList(id)
@@ -82,12 +76,148 @@ function card(canCreateCard) {
             const dataUserId = response.data.user.id;
             const dataUserEmail = response.data.user.email
             const dataType = response.data.type;
+            const dataListTitle = response.data.title;
             const dataCards = response.data.cards;
+            const dataListID = response.data.id;
 
             const cardArticleContent = document.createElement("article");
             cardArticleContent.id = "cardArticleContent";
             cardArticleContent.classList.add("list");
             cardArticleContent.classList.add("wish");
+
+            const sendMailCardBtn = document.createElement("button");
+            sendMailCardBtn.id = 'sendMailCardBtn';
+            sendMailCardBtn.type = 'button';
+            sendMailCardBtn.innerText = '✉ Mail';
+            sendMailCardBtn.title = 'Envoyer un mail aux membres de Listerr';
+            sendMailCardBtn.classList.add('btn');
+            sendMailCardBtn.classList.add('way');
+            sendMailCardBtn.classList.add('grid_send_mail');
+
+            sendMailCardBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                const createMailCardDiv = document.createElement("div");
+                createMailCardDiv.id = "createMailCardDiv";
+                popIn.style.visibility = "visible";
+
+                popIn.appendChild(createMailCardDiv);
+
+                displayFormMail(createMailCardDiv);
+                const titleMail = document.querySelector('#titleMail');
+                titleMail.innerText = `Paramètres du mail d'information d'ajout de souhait(s)`;
+
+                const inputObjectMail = document.querySelector('#inputObjectMail');
+                inputObjectMail.value = `Nouveau(x) souhait(s) - ${dataListTitle}`;
+
+                const textAreaMail = document.querySelector('#descriptionMail');
+                textAreaMail.placeholder = `Description courte de l'ajout de souhait(s) \n "Dernière(s) envie(s) : nom du souhait n° 1, nom du souhait n° 2, etc."`;
+
+                recipientsLists.remove()
+
+                fetchReadAll()
+                .then((response) => {
+                    const dataUsers = response.usersList
+                    const recipientsListDiv = document.querySelector('#recipientsListDiv');
+                    const recipientsList = document.querySelector('#recipientsList');
+
+                    const trashMailBtn = document.createElement('button');
+                    trashMailBtn.id = 'trashMailBtn';
+                    trashMailBtn.type = 'button';
+                    trashMailBtn.innerText = '';
+                    trashMailBtn.classList.add('btn');
+                    trashMailBtn.classList.add('delete');
+
+                    let option = '';
+                    const arrayRecipients = [];
+                    dataUsers.forEach(dataUser => {
+                        const allUsersLogin = dataUser.login;
+                        const allUsersId = dataUser.id;
+                        const allUsersEmail = dataUser.email;
+
+                        option = createOptionLoginMail(allUsersId, allUsersLogin, allUsersEmail)
+                        const selectRecipients = document.querySelector('#recipients');
+                        selectRecipients.appendChild(option);
+                    });
+
+                    const validLoginBtn = document.querySelector('#validLoginBtn');
+                    validLoginBtn.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        const emailUser = recipients.value
+                        recipientsListDiv.appendChild(trashMailBtn);
+
+                        if (!arrayRecipients.includes(emailUser)) {
+                            arrayRecipients.push(emailUser);
+                        }
+                        // Complète la partie "Destinataire(s) retenu(es)"
+                        recipientsList.innerText = arrayRecipients;
+                        // Complète l'input hidden pour le formulaire
+                        inputRecipients.value =  JSON.stringify(arrayRecipients);
+                    })
+
+                    // Supprime les emails en cas d'erreur d'insertion
+                    trashMailBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        inputRecipients.value = '';
+
+                        arrayRecipients.length = 0;
+                        if (recipientsList) {
+                            recipientsList.innerText = '';
+                        }
+
+                        trashMailBtn.remove();
+                    })
+
+                    CSRFToken(mailForm.id);
+                    mailForm.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        // Validation de pattern du formulaire
+                        const inputRecipients = document.querySelector('#inputRecipients');
+                        const inputObjectMail = document.querySelector('#inputObjectMail');
+                        const textAreaMail = document.querySelector('#descriptionMail');
+                        inputRecipients.addEventListener('invalid', function(e) {
+                            validate(e.target)
+                        });
+                        inputObjectMail.addEventListener('invalid', function(e) {
+                            validate(e.target)
+                        });
+                        textAreaMail.addEventListener('invalid', function(e) {
+                            validate(e.target)
+                        });
+
+                        fetchSendMailCard(mailForm, dataListID)
+                        .then(response => {
+                            localStorage.removeItem('csrfToken');
+                                if (response.status === 'sendMail') {
+                                    dialog({title: 'Envoi de mail', content: `Le mail d'informations a bien été envoyé`});
+                                    const dialogMsg = document.querySelector('dialog');
+                                    dialogMsg.classList.add('valid');
+                                    redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`, 3000);
+                                }
+
+                            if (response.status === 'errors') {
+                                dialog({title: 'Erreurs', content: response.errors});
+                                const dialogMsg = document.querySelector('dialog');
+                                dialogMsg.classList.add('errors');
+                                redirect(`${configPath.basePath}/list/pages/list.html?id=${id}.html`);
+                            };
+                        })
+                    })
+
+                    sendMailCardBtn.disabled = true;
+                    sendMailCardBtn.classList.remove('way');
+                    sendMailCardBtn.classList.add('disable');
+
+                    cancelForm.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        createMailCardDiv.remove();
+                        sendMailCardBtn.disabled = false;
+                        sendMailCardBtn.classList.remove('disable');
+                        sendMailCardBtn.classList.add('way');
+
+                        popIn.style.visibility = 'hidden';
+                    })
+                })
+            })
 
             // CSS pour lier la partie supérieure de la liste avec les nouvelles cartes
             if (dataCards.length !== 0) {
@@ -95,13 +225,19 @@ function card(canCreateCard) {
                 oneList.style.marginBottom = "0";
                 cardArticleContent.style.borderRadius = "0 0 20px 20px";
                 cardArticleContent.style.marginTop = "0";
+
+                if (canCreateCard){
+                    if (dataType !== "TodoList") {
+                        oneList.appendChild(sendMailCardBtn);
+                    }
+                }
             }
 
             // CSS pour différencier la couleur de fond des WL ou TL si l'utilisateur est différent du propriétaire
             if (localStorage.getItem("userTypeList") === "WishList" || localStorage.getItem("userTypeList") === "TodoList") {
                 if (!canCreateCard) {
                     cardArticleContent.classList.add("third_party_wish");
-                } else{
+                } else {
                     cardArticleContent.classList.add(type[localStorage.getItem("userTypeList")]);
                 }
             }
@@ -182,7 +318,7 @@ function card(canCreateCard) {
                             {
                                 // Gestion de la modification d'une carte
                                 id: `updateCard-${objectCard.id}`,
-                                text: "Modifier la carte",
+                                text: "🖊 Modifier la carte",
                                 onclick: function(e) {
                                     e.preventDefault();
                                     // Sécurité pour permettre la modification => Value bouton = ID de la carte
@@ -269,7 +405,7 @@ function card(canCreateCard) {
                             {
                                 // Gestion de la suppression de carte
                                 id: `deleteCard-${objectCard.id}`,
-                                text: "Supprimer la carte",
+                                text: "🗑 Supprimer la carte",
                                 onclick: function(e) {
                                     e.preventDefault();
                                     const dltBtnCardId = parseInt(e.target.value);
@@ -287,13 +423,26 @@ function card(canCreateCard) {
                                                 } else {
                                                     dialog({title: "Suppression de la tâche", content: "Votre tâche a bien été supprimée."});
                                                 }
-
                                                 const dialogMsg = document.querySelector("dialog");
                                                 dialogMsg.classList.add("valid");
                                                 redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
                                             }
                                         })
                                     }
+                                }
+                            },
+                            {
+                                // Gestion du partage de la carte
+                                id: `shareCard-${objectCard.id}`,
+                                text: "🔗 Partager la carte",
+                                onclick: function(e) {
+                                    e.preventDefault();
+                                    const sharedURL = window.location.href;
+                                    navigator.clipboard.writeText(sharedURL);
+                                    dialog({title: "Copié dans le presse-papier", content: "Votre souhait a bien été copié."});
+                                    const dialogMsg = document.querySelector("dialog");
+                                    dialogMsg.classList.add("valid");
+                                    redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
                                 }
                             }
                         ]

@@ -12,11 +12,11 @@ async function fetchCreateList(form) {
     try {
         const url = `${configPath.apiPath}/?route=create_list`;
         return await fetch(url, {
+            method: "POST",
             headers: {
                 "X-Authorization": localStorage.getItem("token"),
                 "X-CSRFToken": localStorage.getItem("csrfToken")
             },
-            method: "POST",
             body: new FormData(form),
             }).then(response => response.json());
 
@@ -36,8 +36,8 @@ async function fetchReadOneListById(id) {
     try {
         const url = `${configPath.apiPath}/?route=read_one_list_by_id`;
         return await fetch(`${url}&id=${id}`, {
-            headers: {"X-Authorization": localStorage.getItem("token") || ""},
             method: "GET",
+            headers: {"X-Authorization": localStorage.getItem("token") || ""},
             }).then(response => response.json());
 
     } catch (error) {
@@ -58,8 +58,8 @@ async function fetchReadAllLists(id) {
             url += `&id=${id}`;
         }
         return await fetch(url, {
-            headers: {"X-Authorization": localStorage.getItem("token")},
             method: "GET",
+            headers: {"X-Authorization": localStorage.getItem("token")},
             }).then(response => response.json());
 
     } catch (error) {
@@ -82,11 +82,11 @@ async function fetchUpdateList(form, id) {
 
         const url = `${configPath.apiPath}/?route=update_list`;
         return await fetch(url, {
+            method: "POST",
             headers: {
                 "X-Authorization": localStorage.getItem("token"),
                 "X-CSRFToken": localStorage.getItem("csrfToken")
             },
-            method: "POST",
             body: formData,
             }).then(response => response.json());
 
@@ -109,8 +109,8 @@ async function fetchDeleteList(id) {
 
         const url = `${configPath.apiPath}/?route=delete_list`;
         return await fetch(url, {
-            headers: {"X-Authorization": localStorage.getItem("token")},
             method: "POST",
+            headers: {"X-Authorization": localStorage.getItem("token")},
             body: formData
             }).then(response => response.json());
 

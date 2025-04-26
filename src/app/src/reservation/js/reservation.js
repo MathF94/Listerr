@@ -7,7 +7,7 @@ import {
     fetchCancelReservation
 } from '../../actions/actions_reservation.js';
 
-import { displayFormReservation } from "./form_reservation.js";
+import { displayFormReservation } from "../../services/form_reservation.js";
 
 import { CSRFToken } from "../../services/CSRFToken.js";
 
@@ -38,6 +38,7 @@ function reservation(
     reservationTxt,
     dataUserId
 ) {
+
     const dataType = responseList.data.type;
     reservationBtn.addEventListener("click", function(e) {
         e.preventDefault();

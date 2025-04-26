@@ -327,6 +327,11 @@ dialog.errors_fields > h2 {
   grid-row: 2/2;
 }
 
+.grid_send_mail {
+  grid-column: 5/7;
+  grid-row: 2/2;
+}
+
 .grid_text_card {
   grid-column: 1/7;
   grid-row: 3/3;
@@ -413,18 +418,22 @@ dialog.errors_fields > h2 {
 .updateCardDiv,
 #updateReservationDiv,
 #createFeatureDiv,
-#updateFeatureDiv {
+#updateFeatureDiv,
+#createMailFeatureDiv,
+#createMailCardDiv {
   margin: 0 auto;
 }
 
 #userFormSection,
 #listFormSection,
 #cardFormSection,
-#featureFormSection {
+#featureFormSection,
+#MailSection {
   background-color: var(--form-bg);
   border-radius: 8px;
   box-shadow: 0 0 5px var(--border);
   padding: 5px;
+  width: 65vh;
 }
 
 .card {
@@ -555,7 +564,7 @@ dialog.errors_fields > h2 {
   transform: translate(0, 15px) scale(0.95);
   transition: transform 0.1s ease-out, opacity 0.1s ease-out;
   -webkit-transform: translate(0, 15px) scale(0.95);
-  width: 130px;
+  width: 140px;
   z-index: 900;
 }
 .more__menu__btn {
@@ -690,11 +699,11 @@ dialog.errors_fields > h2 {
 .btn.edit.admin.profilUsers {
   border-radius: 0px;
 }
-.btn.edit.admin.feature {
-  border-radius: 10px 0 0 10px;
-}
 .btn.edit.listBtn {
   border-radius: 10px 0px 0px 10px;
+}
+.btn.edit.feature {
+  border-radius: 10px 0 0 10px;
 }
 .btn.delete {
   background-color: var(--delete-btn);
@@ -723,6 +732,9 @@ dialog.errors_fields > h2 {
   background-color: var(--delete-btn-hover);
   color: var(--text-light);
 }
+.btn.delete.feature {
+  border-radius: 0px 10px 10px 0px;
+}
 .btn.reservation {
   background-color: var(--resa-btn);
 }
@@ -732,6 +744,7 @@ dialog.errors_fields > h2 {
 }
 .btn.cancel {
   background-color: var(--cancel-btn);
+  margin-left: 5px;
 }
 .btn.cancel:hover {
   background-color: var(--cancel-btn-hover);
@@ -852,11 +865,30 @@ input[type=password].pl {
 }
 
 textarea {
-  height: 75px;
+  height: 100px;
+  width: 100%;
 }
 
 textarea[placeholder] {
   font-size: 14px;
+}
+
+#optionDiv {
+  margin: 0px;
+}
+
+#recipients {
+  width: 90%;
+  margin-right: 10px;
+}
+
+#recipientsListDiv {
+  display: inline-flex;
+}
+
+#recipientsSmall {
+  width: 30%;
+  margin: 0px;
 }
 
 .fieldIcon {

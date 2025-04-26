@@ -71,7 +71,7 @@ async function fetchUpdateFeature(form, id) {
         console.error("Erreur lors de la requête fetch :", error);
         return null;
     }
-};
+}
 
 /**
  * Effectue une requête pour mettre à jour une feature en utilisant un formulaire.

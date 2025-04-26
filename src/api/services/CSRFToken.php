@@ -12,6 +12,7 @@ class CSRFToken
 {
     private const KEY = 'a2bc2fca-fef5-41b6-a1cc-6e53447b704e';
     private const IV = '0880-492f-998bA1';
+    private $csrfToken;
     private $encryption;
 
     public function __construct()
@@ -49,6 +50,7 @@ class CSRFToken
     public function isValidToken(string $csrfToken, string $formId): bool
     {
         $decryptedToken = $this->decrypt($csrfToken);
+
         if (empty($csrfToken)) {
             return false;
         }
@@ -75,5 +77,37 @@ class CSRFToken
     private function generateAPIToken(): string
     {
         return $_SESSION['token'] = bin2hex(random_bytes(24));
+    }
+
+    /**
+     * Aide au chiffrement du jeton CSRF en réponse à une requête.
+     *
+     * Cette méthode récupère le champ "formId" du $_POST, qui correspond à l'ID du formulaire renvoyé via le CSRFToken.js,
+     *               chiffre cette valeur et l'envoie en paramètre de la méthode encrypt() pour générer un CSRF Token.
+     *
+     * @return string - Réponse JSON : "success csrfToken" avec le jeton CSRF chiffré, en cas de succès.
+     *                                 "fail" avec un message d'erreur, en cas d'échec.
+     */
+    public function CSRFToken(): string
+    {
+        try {
+            $formId = $_POST["formId"];
+            $encryptedCSRFToken = $this->encrypt($formId);
+
+            return json_encode([
+                "status" => "success csrfToken",
+                "csrfToken" => $encryptedCSRFToken,
+            ]);
+
+            return json_encode([
+                "status" => "fail",
+                "errors" => "errors"
+            ]);
+        } catch (\Exception $e) {
+            return json_encode([
+                "status" => "error",
+                "message" => $e->getMessage()
+            ]);
+        }
     }
 }

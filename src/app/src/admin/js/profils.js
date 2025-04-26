@@ -6,9 +6,9 @@ import {
     fetchDeleteUser
 } from "../../actions/actions_admin.js";
 
-import { displayFormUpdateUser } from "../../admin/js/form_user.js"
-
 import { CSRFToken } from "../../services/CSRFToken.js";
+
+import { displayFormUpdateUser } from "../../services/form_user.js"
 
 import {
     configPath,
@@ -34,7 +34,7 @@ function readAdmin() {
 
             mainSection.appendChild(popIn)
 
-            const data = response.data;
+            const data = response.usersList;
             const table = document.querySelector("table");
             const tbody = document.querySelector("tbody");
             table.classList.add("userList");
@@ -52,11 +52,6 @@ function readAdmin() {
 
             for (const index in data) {
                 const column = data[index];
-
-                // Exclut les colonnes inutiles ou les utilisateurs avec le rôle "Admin"
-                // if (["id"].includes(column) || column.role === "Admin") {
-                //     continue;
-                // }
 
                 const tr = document.createElement("tr");
 

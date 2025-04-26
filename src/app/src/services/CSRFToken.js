@@ -10,10 +10,10 @@ import { configPath } from "./utils.js";
  */
 async function fetchCSRF(formId) {
     try {
+
         const formData = new FormData();
         formData.append("formId", formId);
         const url = `${configPath.apiPath}/?route=csrf`;
-
         return await fetch(url, {
             method: "POST",
             body: formData
@@ -34,7 +34,7 @@ async function fetchCSRF(formId) {
 function CSRFToken(formId) {
     fetchCSRF(formId)
     .then(response => {
-        if (response.status === "success") {
+        if (response.status === "success csrfToken") {
             localStorage.setItem("csrfToken", response.csrfToken);
         };
     });

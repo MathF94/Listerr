@@ -55,38 +55,6 @@ class ReservationController
     }
 
     /**
-     * Aide au chiffrement du jeton CSRF en réponse à une requête.
-     *
-     * Cette méthode récupère le champ "formId" du $_POST, qui correspond à l'ID du formulaire renvoyé via le CSRFToken.js,
-     *               chiffre cette valeur et l'envoie en paramètre de la méthode encrypt() pour générer un CSRF Token.
-     *
-     * @return string - Réponse JSON : "csrfTokenEncrypted" avec le jeton CSRF chiffré, en cas de succès.
-     *                                 "fail" avec un message d'erreur, en cas d'échec.
-     */
-    public function CSRFToken(): string
-    {
-        try {
-            $formId = $_POST["formId"];
-            $encryptedCSRFToken = $this->csrfToken->encrypt($formId);
-
-            return json_encode([
-                "status" => "success Reservation csrfToken",
-                "csrfToken" => $encryptedCSRFToken,
-            ]);
-
-            return json_encode([
-                "status" => "fail",
-                "errors" => "error encrypted csrfToken"
-            ]);
-        } catch (\Exception $e) {
-            return json_encode([
-                "status" => "error",
-                "message" => $e->getMessage()
-            ]);
-        }
-    }
-
-    /**
      * Cette méthode permet la création d'une nouvelle réservation, après validation du jeton CSRF.
      *
      * @param string $csrfToken - Jeton CSRF pour valider la requête.
@@ -122,6 +90,7 @@ class ReservationController
                 if ($create) {
                     $sendMail = new SendMail();
                     $mail = $sendMail->getElementMailReservation($params);
+
                     if ($mail) {
                         return json_encode([
                             "status" => "createReservation",
@@ -231,16 +200,17 @@ class ReservationController
                 $reservation = $model->getOneReservationById($id);
 
                 if (!empty($reservation)) {
-
                     $model->cancelReservation($reservation->id);
 
                     $sendMail = new SendMail();
                     $mail = $sendMail->getElementMailDeleteReservation($reservation);
 
-                    return json_encode([
-                        "status" => "CancelledReservation",
-                        "message" => "la réservation a bien été annulée."
-                    ]);
+                    if ($mail) {
+                        return json_encode([
+                            "status" => "CancelledReservation",
+                            "message" => "la réservation a bien été annulée."
+                        ]);
+                    }
                 }
                 return json_encode([
                     "status" => "fail",
