@@ -7,6 +7,8 @@ use Controllers\FeatureController;
 use Controllers\ListController;
 use Controllers\ReservationController;
 use Controllers\UserController;
+use Services\CSRFToken;
+use Services\SendMail;
 
 /**
  * Classe pour le routage des demandes HTTP vers les contrôleurs appropriés.
@@ -25,8 +27,8 @@ class Router
             switch ($_GET['route']) {
                 case 'csrf':
                     if ($this->isAllowedMethod('POST')) {
-                        $user = new UserController();
-                        echo $user->CSRFToken(); // token
+                        $csrfToken = new CSRFToken();
+                        echo $csrfToken->CSRFToken(); // token
                     }
                     break;
 
@@ -255,6 +257,24 @@ class Router
                     if ($this->isAllowedMethod('POST')) {
                         $card = new FeatureController($headers['X-Authorization']);
                         echo $card->deleteFeature($_POST['id']); // deleteCard
+                    }
+                    break;
+
+                /**
+                 * Route de gestion d'envoi de mail
+                 */
+
+                case 'send_mail_card':
+                    if ($this->isAllowedMethod('POST')) {
+                        $sendMail = new SendMail($headers['X-Authorization']);
+                        echo $sendMail->getElementMailCard($csrfToken, $_POST['listId'], $_POST['recipients'], $_POST['objectMail'], $_POST['descriptionMail']); // Send mail card
+                    }
+                    break;
+
+                case 'send_mail_feature':
+                    if ($this->isAllowedMethod('POST')) {
+                        $sendMail = new SendMail($headers['X-Authorization']);
+                        echo $sendMail->getElementMailFeature($csrfToken, $_POST['recipients'], $_POST['objectMail'], $_POST['descriptionMail']); // Send mail feature
                     }
                     break;
 

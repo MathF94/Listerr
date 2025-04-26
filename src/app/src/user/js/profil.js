@@ -9,7 +9,7 @@ import { fetchReadAllLists } from "../../actions/actions_lists.js";
 
 import { fetchRead } from "../../actions/actions_user.js";
 
-import { displayFormUpdateUser } from "../../admin/js/form_user.js";
+import { displayFormUpdateUser } from "../../services/form_user.js";
 
 import { dropDownMenu } from "../../layout/dropdown.js";
 

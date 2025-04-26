@@ -174,7 +174,7 @@ class Users extends Database
                             `password`,
                             `role_id`
                     FROM `user`
-                    ORDER BY created_at ASC";
+                    ORDER BY id ASC";
 
             $results = $this->findAll($req);
             $usersArray = [];

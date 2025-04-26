@@ -1,7 +1,5 @@
 "use strict";
 
-import { displayFormList } from "./form_list.js";
-
 import {
     fetchCreateList,
     fetchReadAllLists,
@@ -9,6 +7,8 @@ import {
 } from "../../actions/actions_lists.js";
 
 import { dropDownMenu } from "../../layout/dropdown.js";
+
+import { displayFormList } from "../../services/form_list.js";
 
 import { CSRFToken } from "../../services/CSRFToken.js";
 
@@ -30,6 +30,12 @@ notAllowedRedirection();
  * Fonction principale pour gérer la page des listes.
  */
 function lists() {
+    const titlePage = document.querySelector("h2");
+    const login = JSON.parse(localStorage.user).login
+
+    titlePage.innerText= `Les listes de ${login}`;
+
+
     const linkLists = document.querySelector("#lists");
     const linkProfil = document.querySelector("#profil");
     linkLists.classList.add("active");
@@ -186,7 +192,7 @@ function lists() {
                         {
                             // Gestion de la suppression de liste
                             id: `deleteLists-${objectList.id}`,
-                            text: "Supprimer la liste",
+                            text: "🗑 Supprimer la liste",
                             onclick: function(e){
                                 e.preventDefault();
                                 e.stopPropagation();

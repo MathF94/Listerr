@@ -75,7 +75,7 @@ function displayFormFeature(elementDOM) {
     const textAreaDescription = document.createElement('textarea');
     textAreaDescription.name = 'descriptionFeature';
     textAreaDescription.id = 'descriptionFeature';
-    textAreaDescription.placeholder = `Si cela concerne un bug (affichage ou blocage), précisez la page`;
+    textAreaDescription.placeholder = `S'il s'agit d'un bug (affichage ou blocage), merci de bien détailler : \n\n- le type de bug (affichage / blocage) ; \n- la page pour le problème d'affichage ; \n- l'action (création, modification, suppression) pour le blocage.`;
     textAreaDescription.value = '';
 
     const labelStatus = document.createElement('label');
@@ -118,7 +118,7 @@ function displayFormFeature(elementDOM) {
     optionDone.setAttribute('value', 'Produit');
     optionDone.innerText = 'Produit'
 
-    const actionBtnfeature = document.createElement('div');
+    const actionBtnFeature = document.createElement('div');
 
     const featureValidFormBtn = document.createElement('button');
     featureValidFormBtn.id = 'validForm';
@@ -156,9 +156,9 @@ function displayFormFeature(elementDOM) {
     selectStatus.appendChild(optionWip);
     selectStatus.appendChild(optionDone);
     selectStatus.appendChild(optionClosed);
-    formFeature.appendChild(actionBtnfeature);
-    actionBtnfeature.appendChild(featureValidFormBtn);
-    actionBtnfeature.appendChild(featureCancelFormBtn);
+    formFeature.appendChild(actionBtnFeature);
+    actionBtnFeature.appendChild(featureValidFormBtn);
+    actionBtnFeature.appendChild(featureCancelFormBtn);
 
     elementDOM.appendChild(sectionForm);
 }

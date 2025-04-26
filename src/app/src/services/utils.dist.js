@@ -60,6 +60,33 @@ function buttonsOff(selector, disableClass, firstClass) {
 }
 
 /**
+ * Permet de créer l'élément HTML option pour la création d'emails, peu importe le nombre d'utilisateurs
+ */
+function createOptionMails () {
+    const optionMails = document.createElement('option');
+    optionMails.value = 'Destinataire(s)';
+    optionMails.id = `optMails`;
+    optionMails.setAttribute('value', 'allMembers');
+    optionMails.innerText = `Tous les membres de Listerr`;
+    return optionMails;
+}
+
+/**
+ * Permet de créer l'élément HTML option pour la création d'emails, peu importe le nombre d'utilisateurs
+ * @param {number} id - l'ID d'un utilisateur
+ * @param {string} login - le login d'un utilisateur
+ * @param {string} email - l'email d'un utilisateur
+ */
+function createOptionLoginMail (id, login, email) {
+    const optionLoginMail = document.createElement('option');
+    optionLoginMail.value = 'Destinataire(s)';
+    optionLoginMail.id = `optLoginMail-${id}`;
+    optionLoginMail.setAttribute('value', `${email}`);
+    optionLoginMail.innerText = `${login} : ${email}`;
+    return optionLoginMail;
+}
+
+/**
  * Permet de retirer les heures des mises à jours de listes / cartes par l'utilisateur
  * Permet de retourner un message en intégrant la date sans heures avec le login de l'utilisateur
  * @param {string} time
@@ -269,6 +296,8 @@ export {
     mandatoryStar,
     type,
     buttonsOff,
+    createOptionMails,
+    createOptionLoginMail,
     detail,
     dialog,
     manageBtns,

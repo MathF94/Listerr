@@ -12,7 +12,6 @@ async function fetchCreateCard(form, listId) {
     try {
         const formData = new FormData(form);
         formData.append('list_id', listId);
-
         const url = `${configPath.apiPath}/?route=create_card`;
         return await fetch(url, {
             headers: {

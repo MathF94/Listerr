@@ -6,7 +6,6 @@ use Entity\Lister;
 use Models\Lists;
 use Models\Users;
 use Services\CSRFToken;
-use Services\SendMail;
 use Services\Session;
 use Services\Validator;
 
@@ -38,34 +37,6 @@ class ListController
             $decrypt = $session->decrypt($tokenUser);
             $model = new Users();
             $this->user = $model->auth($decrypt["login"], $decrypt["password"]);
-        }
-    }
-
-    /**
-     * Aide au chiffrement du jeton CSRF en réponse à une requête.
-     *
-     * Cette méthode récupère le champ "formId" du $_POST, qui correspond à l'ID du formulaire renvoyé via le CSRFToken.js,
-     *               chiffre cette valeur et l'envoie en paramètre de la méthode encrypt() pour générer un CSRF Token.
-     *
-     * @return string - Réponse JSON : "success" avec le jeton CSRF chiffré, en cas de succès.
-     *                                 "fail" avec un message d'erreur, en cas d'échec.
-     */
-    public function CSRFToken(): string
-    {
-        try {
-            $formId = $_POST["formId"];
-            $encryptedCSRFToken = $this->csrfToken->encrypt($formId);
-
-            return json_encode([
-                "status" => "success List csrfToken",
-                "csrfToken" => $encryptedCSRFToken,
-            ]);
-
-        } catch (\Exception $e) {
-            return json_encode([
-                "status" => "errors",
-                "message" => $e->getMessage()
-            ]);
         }
     }
 
@@ -117,7 +88,7 @@ class ListController
                 "status" => "createList failed",
                 "message" => "no user found"
             ]);
-            
+
         } catch (\Exception $e) {
             return json_encode([
                 "status" => "errors",

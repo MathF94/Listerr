@@ -1,6 +1,10 @@
 'use strict';
 
-import { displayFormFeature } from './form_feature.js';
+import { displayFormFeature } from '../../services/form_feature.js';
+
+import { displayFormMail } from '../../services/form_mail.js';
+
+import { fetchReadAll } from '../../actions/actions_admin.js'
 
 import {
     fetchCreateFeature,
@@ -10,10 +14,14 @@ import {
     fetchDeleteFeature
 } from '../../actions/actions_features.js';
 
+import { fetchSendMailFeature } from '../../actions/actions_mails.js'
+
 import { CSRFToken } from '../../services/CSRFToken.js';
 
 import {
     configPath,
+    createOptionMails,
+    createOptionLoginMail,
     redirect,
     dialog,
     scroll,
@@ -28,25 +36,39 @@ function features() {
     popIn.id = 'popIn';
     popIn.classList.add('popIn');
 
-    const featureBtn = document.createElement('button');
-    featureBtn.type = 'button';
-    featureBtn.classList.add('btn');
-    featureBtn.classList.add('way');
+    const createFeatureBtn = document.createElement('button');
+    createFeatureBtn.type = 'button';
+    createFeatureBtn.classList.add('btn');
+    createFeatureBtn.classList.add('way');
 
+    const mailFeatureBtn = document.createElement('button');
+    mailFeatureBtn.type = 'button';
+    mailFeatureBtn.classList.add('btn');
+    mailFeatureBtn.classList.add('way');
+
+    featureDiv.appendChild(createFeatureBtn);
+
+    // Personnalisation du bouton de création de mails si Admin ou User
     if (role === 'Admin') {
-        featureBtn.id = 'newFeature';
-        featureBtn.value = 'newFeature';
-        featureBtn.innerText = 'Apporter une nouvelle mise à jour';
+        createFeatureBtn.id = 'newFeature';
+        createFeatureBtn.value = 'newFeature';
+        createFeatureBtn.innerText = 'Apporter une nouvelle mise à jour';
+
+        mailFeatureBtn.id = 'mailFeature';
+        mailFeatureBtn.value = 'mailFeature';
+        mailFeatureBtn.innerText = 'Informer de la MAJ';
+
+        featureDiv.appendChild(mailFeatureBtn);
     }
 
     if (role === 'User') {
-        featureBtn.id = 'newSuggestion';
-        featureBtn.value = 'newSuggestion';
-        featureBtn.innerText = 'Proposer une nouvelle évolution';
+        createFeatureBtn.id = 'newSuggestion';
+        createFeatureBtn.value = 'newSuggestion';
+        createFeatureBtn.innerText = 'Proposer une nouvelle évolution';
     }
-    featureDiv.appendChild(featureBtn);
 
-    featureBtn.addEventListener('click', function(e) {
+    // Permet la création de features
+    createFeatureBtn.addEventListener('click', function(e) {
         e.preventDefault();
         featureDiv.appendChild(popIn);
         popIn.style.visibility = 'visible';
@@ -59,19 +81,41 @@ function features() {
         displayFormFeature(createFeatureDiv);
         const sectionForm = document.querySelector('#featureFormSection');
 
-        featureBtn.disabled = true;
-        featureBtn.classList.remove('way');
-        featureBtn.classList.add('disable');
+        createFeatureBtn.disabled = true;
+        createFeatureBtn.classList.remove('way');
+        createFeatureBtn.classList.add('disable');
 
         cancelForm.addEventListener('click', function(e){
             e.preventDefault();
             sectionForm.remove();
             createFeatureDiv.remove();
-            featureBtn.disabled = false;
-            featureBtn.classList.remove('disable');
-            featureBtn.classList.add('way');
+            createFeatureBtn.disabled = false;
+            createFeatureBtn.classList.remove('disable');
+            createFeatureBtn.classList.add('way');
             popIn.style.visibility = 'hidden';
         })
+
+        if (role === 'Admin') {
+            titleFormFeature.innerText = `Formulaire de mise à jour d'évolution / correction`;
+            titleFeatureLabel.innerText = 'Votre évolution / correctif';
+            titleFeature.placeholder = 'Votre évolution / correctif';
+            const optionSuggest = formFeature[1][2];
+            const optionBug = formFeature[1][3];
+            optionSuggest.remove();
+            optionBug.remove();
+        }
+
+        if (role === 'User') {
+            titleFormFeature.innerText = `Formulaire de suggestion / d'alerte de bug pour l'admin`;
+            const optionFeature = formFeature[1][0];
+            const optionFix = formFeature[1][1];
+            optionFeature.remove();
+            optionFix.remove();
+            titleFeatureLabel.innerText = 'Titre de la suggestion / du bug (affichage ou blocage)';
+            titleFeature.placeholder = 'Titre de la suggestion / du bug (affichage ou blocage)';
+            statusFeature.classList.add('hidden');
+            statusFeatureSelect.classList.add('hidden');
+        }
 
         CSRFToken(formFeature.id);
         formFeature.addEventListener('submit', function(e) {
@@ -91,13 +135,12 @@ function features() {
             fetchCreateFeature(formFeature)
             .then(response => {
                 localStorage.removeItem('csrfToken');
-                if (response.status === 'createFeature') {
+                if (response.status === 'mailFeature') {
                     if (role === 'Admin') {
-                        dialog({title: 'Création de la future évolution', content: 'Une de plus en moins'});
+                        dialog({title: 'Création de la future évolution', content: 'Une de plus à faire'});
                     } else {
-                        dialog({title: 'Proposition de suggestion', content: 'Merci de votre idée !'});
+                        dialog({title: 'Proposition de suggestion / alerte de bug', content: 'Merci de votre idée / alerte !'});
                     }
-
                     const dialogMsg = document.querySelector('dialog');
                     dialogMsg.classList.add('valid');
                     redirect(`${configPath.basePath}/features/pages/features.html`, 3000);
@@ -110,33 +153,178 @@ function features() {
                 };
             })
         })
-
-        if (role === 'Admin') {
-            titleFormFeature.innerText = `Formulaire de mise à jour d'évolution / correction`;
-            titleFeatureLabel.innerText = 'Votre évolution / correctif';
-            titleFeature.placeholder = 'Votre évolution / correctif';
-            const optionSuggest = formFeature[1][2];
-            const optionBug = formFeature[1][3];
-            optionSuggest.remove();
-            optionBug.remove();
-        }
-
-        if (role === 'User') {
-            titleFormFeature.innerText = `Formulaire de suggestion / d'alerte de bug`;
-            const optionFeature = formFeature[1][0];
-            const optionFix = formFeature[1][1];
-            optionFeature.remove();
-            optionFix.remove();
-            titleFeatureLabel.innerText = 'Votre suggestion / bug (affichage ou blocage)';
-            titleFeature.placeholder = 'Votre suggestion / bug (affichage ou blocage)';
-            statusFeature.classList.add('hidden');
-            statusFeatureSelect.classList.add('hidden');
-        }
     })
 
+    // Permet d'envoyer des mails aux utilisateurs pour alerter des MAJ soldées / produites, etc...
+    mailFeatureBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        featureDiv.appendChild(popIn);
+        popIn.style.visibility = 'visible';
+
+        const createMailFeatureDiv = document.createElement('div');
+        createMailFeatureDiv.id = 'createMailFeatureDiv';
+
+        popIn.appendChild(createMailFeatureDiv);
+
+        displayFormMail(createMailFeatureDiv);
+        const titleMail = document.querySelector('#titleMail');
+        titleMail.innerText = `Paramètres du mail d'information de MAJ`;
+
+        const inputObjectMail = document.querySelector('#inputObjectMail');
+        inputObjectMail.value = 'Listerr MAJ - ';
+
+        const textAreaMail = document.querySelector('#descriptionMail');
+        textAreaMail.placeholder = 'Description courte de la MAJ';
+
+        fetchReadAll()
+        .then((response) => {
+            const dataUsers = response.usersList
+            const selectRecipients = document.querySelector('#recipients');
+            const recipientsListDiv = document.querySelector('#recipientsListDiv');
+            const recipientsList = document.querySelector('#recipientsList');
+            const recipientsLists = document.querySelector('#recipientsLists');
+
+            const trashMailBtn = document.createElement('button');
+            trashMailBtn.id = 'trashMailBtn';
+            trashMailBtn.type = 'button';
+            trashMailBtn.innerText = '';
+            trashMailBtn.classList.add('btn');
+            trashMailBtn.classList.add('delete');
+
+            let option = '';
+            let options = '';
+            const arrayRecipient = [];
+            const arrayRecipients = [];
+
+            for (let index = 0; index < dataUsers.length; index++) {
+                if (dataUsers[index].role === 'Admin') {
+                    const dataSlice = dataUsers.slice(dataUsers[index].id)
+
+                    dataSlice.forEach(dataUser => {
+                        const allUsersId = dataUser.id;
+                        const allUsersLogin = dataUser.login;
+                        const allUsersEmail = dataUser.email;
+                        arrayRecipients.push(allUsersEmail);
+
+                        option = createOptionLoginMail(allUsersId, allUsersLogin, allUsersEmail)
+                        options = createOptionMails(arrayRecipients);
+                        selectRecipients.appendChild(option);
+                    });
+                    selectRecipients.appendChild(options);
+
+                    // Ajoute les adresses emails pour envoyer un mail
+                    const validLoginBtn = document.querySelector('#validLoginBtn');
+                    validLoginBtn.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        const optionsValue = recipients.value;
+                        recipientsListDiv.appendChild(trashMailBtn);
+
+                        if (optionsValue === "allMembers") {
+                            recipientsList.remove();
+                            // Complète la partie "Destinataire(s) retenu(es)"
+                            recipientsLists.innerText = "Tous les membres de Listerr";
+                            // Complète l'input hidden pour le formulaire
+                            inputRecipients.value = JSON.stringify(arrayRecipients);
+
+                        } else {
+                            recipientsLists.remove();
+                            if (!arrayRecipient.includes(optionsValue)) {
+                                arrayRecipient.push(optionsValue);
+                            }
+                            // Complète la partie "Destinataire(s) retenu(es)"
+                            recipientsList.innerText = arrayRecipient.join(", ");
+                            // Complète l'input hidden pour le formulaire
+                            inputRecipients.value =  JSON.stringify(arrayRecipient);
+                        }
+                    })
+                    
+                    // Supprime les emails en cas d'erreur d'insertion
+                    trashMailBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        inputRecipients.value = '';
+                        arrayRecipient.length = 0;
+                        arrayRecipients.length = 0;
+                        if (recipientsList) {
+                            recipientsListDiv.appendChild(recipientsLists);
+                            recipientsList.innerText = '';
+                        }
+                        if (recipientsLists) {
+                            recipientsListDiv.appendChild(recipientsList);
+                            recipientsLists.innerText = '';
+                        }
+                        trashMailBtn.remove();
+                    })
+
+                    CSRFToken(mailForm.id);
+                    mailForm.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        // Validation de pattern du formulaire
+                        const inputRecipients = document.querySelector('#inputRecipients');
+                        const inputObjectMail = document.querySelector('#inputObjectMail');
+                        const textAreaMail = document.querySelector('#descriptionMail');
+                        inputRecipients.addEventListener('invalid', function(e) {
+                            validate(e.target)
+                        });
+                        inputObjectMail.addEventListener('invalid', function(e) {
+                            validate(e.target)
+                        });
+                        textAreaMail.addEventListener('invalid', function(e) {
+                            validate(e.target)
+                        });
+
+                        fetchSendMailFeature(mailForm)
+                        .then(response => {
+                            localStorage.removeItem('csrfToken');
+                                if (response.status === 'sendMail') {
+                                    dialog({title: 'Envoi de mail', content: `Le mail d'informations a bien été envoyé`});
+                                    const dialogMsg = document.querySelector('dialog');
+                                    dialogMsg.classList.add('valid');
+                                    redirect(`${configPath.basePath}/features/pages/features.html`, 3000);
+                                }
+
+                            if (response.status === 'errors') {
+                                dialog({title: 'Erreurs', content: response.errors});
+                                const dialogMsg = document.querySelector('dialog');
+                                dialogMsg.classList.add('errors');
+                                redirect(`${configPath.basePath}/features/pages/features.html`);
+                            };
+                        })
+                    })
+                }
+            }
+
+
+
+
+
+
+            createFeatureBtn.disabled = true;
+            createFeatureBtn.classList.remove('way');
+            createFeatureBtn.classList.add('disable');
+
+            mailFeatureBtn.disabled = true;
+            mailFeatureBtn.classList.remove('way');
+            mailFeatureBtn.classList.add('disable');
+
+            cancelForm.addEventListener('click', function(e){
+                e.preventDefault();
+                createMailFeatureDiv.remove();
+                createFeatureBtn.disabled = false;
+                createFeatureBtn.classList.remove('disable');
+                createFeatureBtn.classList.add('way');
+
+                mailFeatureBtn.disabled = false;
+                mailFeatureBtn.classList.remove('disable');
+                mailFeatureBtn.classList.add('way');
+                popIn.style.visibility = 'hidden';
+            })
+        })
+    })
+
+    // Affichage des features
     fetchReadAllFeatures()
     .then((response) => {
-        const dataFeature = response.data;
+        const dataFeature = response.allFeatures;
         const featureDiv = document.querySelector('#feature');
         const emptyMessage = document.createElement('p');
 
@@ -195,6 +383,7 @@ function features() {
                 table.appendChild(tbody);
             }
 
+            // Création du tableau de features
             for (const index in dataFeature) {
                 const objectFeature = dataFeature[index];
                 const trBody = document.createElement('tr');
@@ -244,7 +433,7 @@ function features() {
                 editBtn.classList.add('btn');
                 editBtn.classList.add('valid');
                 editBtn.classList.add('edit');
-                editBtn.classList.add('admin');
+                editBtn.classList.add('feature');
 
                 const deleteBtn = document.createElement('button');
                 deleteBtn.id = `deleteFeature-${objectFeature.id}`;
@@ -254,7 +443,6 @@ function features() {
                 deleteBtn.value = objectFeature.id;
                 deleteBtn.classList.add('btn');
                 deleteBtn.classList.add('delete');
-                deleteBtn.classList.add('admin');
                 deleteBtn.classList.add('feature');
 
                 // Gestion de l'update de la feature
@@ -377,11 +565,43 @@ function features() {
                     })
                 })
 
+                 // Gestion de la suppression de la feature
+                deleteBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    if (parseInt(e.target.value) !== objectFeature.id) {
+                        console.warn("pas touche");
+                        return;
+                    } else if (confirm('Voulez-vous vraiment vous supprimer la feature ?') === true) {
+                        scroll();
+                        fetchDeleteFeature(objectFeature.id)
+                        .then((response) => {
+                            if (response.status === "deleteFeature") {
+                                dialog(
+                                    {
+                                        title: "Suppression de la feature",
+                                        content: `La feature ${objectFeature.type} ${objectFeature.title} a bien été supprimé.`
+                                    }
+                                );
+                                const dialogMsg = document.querySelector("dialog");
+                                dialogMsg.classList.add("valid");
+                                redirect(`${configPath.basePath}/features/pages/features.html`);
+                            }
+
+                            if (response.status === 'errors') {
+                                dialog({title: 'Erreurs', content: response.errors});
+                                const dialogMsg = document.querySelector('dialog');
+                                dialogMsg.classList.add('errors');
+                                redirect(`${configPath.basePath}/features/pages/features.html`);
+                            };
+                        })
+                    }
+                })
+
                 // Gestion de l'update de la feature uniquement pour l'Admin
                 if (role === 'Admin') {
-                    editBtn.classList.add('admin');
-                    editBtn.classList.add('feature');
-
+                    tdAction.appendChild(editBtn);
+                    tdAction.appendChild(deleteBtn);
                     // Gestion du statut de la mise à jour
                     divStatus.addEventListener('click', e => {
                         e.preventDefault();
@@ -555,68 +775,20 @@ function features() {
                             });
                         }
                     })
-
-                    // Gestion de la suppression de la feature
-                    deleteBtn.addEventListener('click', function (e) {
-                        e.preventDefault();
-
-                        if (parseInt(e.target.value) !== objectFeature.id) {
-                            console.warn("pas touche");
-                            return;
-                        } else if (confirm('Voulez-vous vraiment vous supprimer la feature ?') === true) {
-                            scroll();
-                            fetchDeleteFeature(objectFeature.id)
-                            .then((response) => {
-                                if (response.status === "deleteFeature") {
-                                    dialog(
-                                        {
-                                            title: "Suppression de la feature",
-                                            content: `La feature ${objectFeature.type} ${objectFeature.title} a bien été supprimé.`
-                                        }
-                                    );
-                                    const dialogMsg = document.querySelector("dialog");
-                                    dialogMsg.classList.add("valid");
-                                    redirect(`${configPath.basePath}/features/pages/features.html`);
-                                }
-
-                                if (response.status === 'errors') {
-                                    dialog({title: 'Erreurs', content: response.errors});
-                                    const dialogMsg = document.querySelector('dialog');
-                                    dialogMsg.classList.add('errors');
-                                    redirect(`${configPath.basePath}/features/pages/features.html`);
-                                };
-                            })
-                        }
-
-                    })
-
-                    trBody.appendChild(tdType);
-                    trBody.appendChild(tdTitle);
-                    trBody.appendChild(tdDescription);
-                    trBody.appendChild(tdStatus);
-                    trBody.appendChild(tdAction);
+                }
+                if (id === objectFeature.userId) {
                     tdAction.appendChild(editBtn);
                     tdAction.appendChild(deleteBtn);
-                    tdStatus.appendChild(divStatus);
-                    tdStatus.appendChild(pStatus);
-                    tbody.appendChild(trBody);
                 }
 
-                if (role === 'User') {
-                    if (objectFeature.type === 'Suggestion' || objectFeature.type === 'Bug (affichage ou blocage)') {
-                        if (id === objectFeature.user.id) {
-                            tdAction.appendChild(editBtn);
-                        }
-                    }
-                    trBody.appendChild(tdType);
-                    trBody.appendChild(tdTitle);
-                    trBody.appendChild(tdDescription);
-                    trBody.appendChild(tdStatus);
-                    trBody.appendChild(tdAction);
-                    tdStatus.appendChild(divStatus);
-                    tdStatus.appendChild(pStatus);
-                    tbody.appendChild(trBody);
-                }
+                trBody.appendChild(tdType);
+                trBody.appendChild(tdTitle);
+                trBody.appendChild(tdDescription);
+                trBody.appendChild(tdStatus);
+                trBody.appendChild(tdAction);
+                tdStatus.appendChild(divStatus);
+                tdStatus.appendChild(pStatus);
+                tbody.appendChild(trBody);
             }
         }
     })

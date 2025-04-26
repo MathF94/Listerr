@@ -5,7 +5,6 @@ namespace Controllers;
 use Models\Cards;
 use Models\Users;
 use Services\CSRFToken;
-use Services\SendMail;
 use Services\Session;
 use Services\Validator;
 
@@ -46,38 +45,6 @@ class CardController
     }
 
     /**
-     * Aide au chiffrement du jeton CSRF en réponse à une requête.
-     *
-     * Cette méthode récupère le champ "formId" du $_POST, qui correspond à l'ID du formulaire renvoyé via le CSRFToken.js,
-     *               chiffre cette valeur et l'envoie en paramètre de la méthode encrypt() pour générer un CSRF Token.
-     *
-     * @return string - Réponse JSON : "csrfTokenEncrypted" avec le jeton CSRF chiffré, en cas de succès.
-     *                                 "fail" avec un message d'erreur, en cas d'échec.
-     */
-    public function CSRFToken(): string
-    {
-        try {
-            $formId = $_POST["formId"];
-            $encryptedCSRFToken = $this->csrfToken->encrypt($formId);
-
-            return json_encode([
-                "status" => "success Card csrfToken",
-                "csrfToken" => $encryptedCSRFToken,
-            ]);
-
-            return json_encode([
-                "status" => "fail",
-                "errors" => "error encrypted csrfToken"
-            ]);
-        } catch (\Exception $e) {
-            return json_encode([
-                "status" => "error",
-                "message" => $e->getMessage()
-            ]);
-        }
-    }
-
-    /**
      * Cette méthode permet la création d'une nouvelle carte, après validation du jeton CSRF.
      *
      * @param string $csrfToken - Jeton CSRF pour valider la requête.
@@ -107,10 +74,7 @@ class CardController
                     $model = new Cards();
                     $create = $model->createCard($params);
 
-                    $sendMail = new SendMail();
-                    $mail = $sendMail->getElementMailCard($params);
-
-                    if ($create && $mail) {
+                    if ($create) {
                         return json_encode([
                             "status" => "createCard",
                             "message" => "la carte a bien été créée."
@@ -164,7 +128,6 @@ class CardController
             if (!empty($this->user->id)) {
                 $model = new Cards();
                 $card = $model->getOneCardById($id);
-
 
                 if (empty($card)) {
                     return json_encode([

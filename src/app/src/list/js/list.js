@@ -1,8 +1,11 @@
 "use strict";
 
-import { displayFormCard } from "../../card/js/form_card.js";
+import { fetchReadAll } from '../../actions/actions_admin.js'
 
-import { displayFormList } from "./form_list.js";
+import {
+    fetchCreateCard,
+    fetchDeleteAllCards
+} from "../../actions/actions_cards.js";
 
 import {
     fetchReadOneListById,
@@ -10,10 +13,7 @@ import {
     fetchDeleteList,
 } from "../../actions/actions_lists.js";
 
-import {
-    fetchCreateCard,
-    fetchDeleteAllCards
-} from "../../actions/actions_cards.js";
+import { fetchSendMailCard } from '../../actions/actions_mails.js'
 
 import { card } from "../../card/js/card.js";
 
@@ -21,10 +21,17 @@ import { dropDownMenu } from "../../layout/dropdown.js";
 
 import { CSRFToken } from "../../services/CSRFToken.js";
 
+import { displayFormCard } from "../../services/form_card.js";
+
+import { displayFormList } from "../../services/form_list.js";
+
+import { displayFormMail } from '../../services/form_mail.js';
+
 import {
     allowedIds,
     buttonsOff,
     configPath,
+    createOptionLoginMail,
     detail,
     dialog,
     notAllowedRedirection,
@@ -135,6 +142,7 @@ function list() {
 
                 const text = document.createElement("h4");
 
+
                 for (const index in data) {
                     const object = data[index];
 
@@ -161,7 +169,7 @@ function list() {
                         {
                             // Gestion de la mise à jour de la liste
                             id: `updateList-${data.id}`,
-                            text: "Modifier la liste",
+                            text: "🖊 Modifier la liste",
                             onclick: function(e) {
                                 e.preventDefault();
                                 const updtBtnListId = parseInt(e.target.value);
@@ -263,7 +271,7 @@ function list() {
                         {
                             // Gestion de la suppression de la liste
                             id: `deleteList-${data.id}`,
-                            text: "Supprimer la liste",
+                            text: "🗑 Supprimer la liste",
                             onclick: function(e) {
                                 e.preventDefault();
                                 const dltBtnId = parseInt(e.target.value);
@@ -291,10 +299,42 @@ function list() {
                             }
                         },
                         {
+                            // Gestion de la suppression de tous les souhaits
+                            id: `deleteAllCards-${data.id}`,
+                            text: `🗑 Vider la liste`,
+                            onclick: function(e) {
+                                e.preventDefault();
+                                const dltBtnId = parseInt(e.target.value);
+
+                                if (dltBtnId !== data.id) {
+                                    console.warn("pas touche");
+                                    return;
+
+                                } else if (confirm('Voulez-vous vraiment vider la liste ?') === true) {
+                                    scroll();
+                                    fetchDeleteAllCards(data.id)
+                                    .then(() => {
+                                        if (localStorage.getItem("userTypeList") === "WishList"){
+                                            dialog({title: "Suppression des souhaits de la liste", content: "Votre liste a bien été supprimée."});
+                                        } else {
+                                            dialog({title: "Suppression des tâches de la liste", content: "Votre liste a bien été supprimée."});
+                                        }
+
+                                        const dialogMsg = document.querySelector("dialog");
+                                        dialogMsg.classList.add("valid");
+                                        document.body.scrollTop = 0;
+                                        redirect(`${configPath.basePath}/list/pages/list.html?id=${data.id}`);
+                                    });
+                                };
+                            }
+                        },
+                        {
+
                             // Gestion de la création d'une carte
                             id: `createCard-${data.id}`,
-                            text: "Créer un souhait",
+                            text: "+ Créer une carte",
                             onclick: function(e) {
+                                e.preventDefault();
                                 const createCardDiv = document.createElement("div");
                                 createCardDiv.id = "createCardDiv";
                                 popIn.style.visibility = "visible";
@@ -361,36 +401,6 @@ function list() {
                                         }
                                     })
                                 })
-                            }
-                        },
-                        {
-                            // Gestion de la suppression de tous les souhaits
-                            id: `deleteAllCards-${data.id}`,
-                            text: `Vider la liste`,
-                            onclick: function(e) {
-                                e.preventDefault();
-                                const dltBtnId = parseInt(e.target.value);
-
-                                if (dltBtnId !== data.id) {
-                                    console.warn("pas touche");
-                                    return;
-
-                                } else if (confirm('Voulez-vous vraiment vider la liste ?') === true) {
-                                    scroll();
-                                    fetchDeleteAllCards(data.id)
-                                    .then(() => {
-                                        if (localStorage.getItem("userTypeList") === "WishList"){
-                                            dialog({title: "Suppression des souhaits de la liste", content: "Votre liste a bien été supprimée."});
-                                        } else {
-                                            dialog({title: "Suppression des tâches de la liste", content: "Votre liste a bien été supprimée."});
-                                        }
-
-                                        const dialogMsg = document.querySelector("dialog");
-                                        dialogMsg.classList.add("valid");
-                                        document.body.scrollTop = 0;
-                                        redirect(`${configPath.basePath}/list/pages/list.html?id=${data.id}`);
-                                    });
-                                };
                             }
                         }
                     ]

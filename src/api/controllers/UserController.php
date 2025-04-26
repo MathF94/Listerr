@@ -37,38 +37,6 @@ class UserController
     }
 
     /**
-     * Aide au chiffrement du jeton CSRF en réponse à une requête.
-     *
-     * Cette méthode récupère le champ "formId" du $_POST, qui correspond à l'ID du formulaire renvoyé via le CSRFToken.js,
-     *               chiffre cette valeur et l'envoie en paramètre de la méthode encrypt() pour générer un CSRF Token.
-     *
-     * @return string - Réponse JSON : "success" avec le jeton CSRF chiffré, en cas de succès.
-     *                                 "fail" avec un message d'erreur, en cas d'échec.
-     */
-    public function CSRFToken(): string
-    {
-        try {
-            $formId = $_POST["formId"];
-            $encryptedCSRFToken = $this->csrfToken->encrypt($formId);
-
-            return json_encode([
-                "status" => "success",
-                "csrfToken" => $encryptedCSRFToken,
-            ]);
-
-            return json_encode([
-                "status" => "fail",
-                "errors" => "errors"
-            ]);
-        } catch (\Exception $e) {
-            return json_encode([
-                "status" => "error",
-                "message" => $e->getMessage()
-            ]);
-        }
-    }
-
-    /**
      * Cette méthode permet la création d'un nouvel utilisateur, après validation du jeton CSRF.
      *
      * @param string - $csrfToken - Jeton CSRF pour valider l'utilisation du formulaire.
@@ -77,7 +45,7 @@ class UserController
      *                                 "errors" avec un message d'erreur, en cas d'échec.
      *                                 "errors" avec un message d'erreur, si le login existe déjà.
      */
-    public function register(string $csrfToken): string
+    public function register(string $csrfToken)//: string
     {
         try {
             $validToken = $this->csrfToken->isValidToken($csrfToken, "registerForm");
@@ -98,13 +66,15 @@ class UserController
                 $create = $model->createUser($params);
 
                 $sendMail = new SendMail();
-                $mail = $sendMail->getElementMailRegistration($params);
 
-                if ($create && $mail) {
-                    return json_encode([
-                        "status" => "createUser",
-                        "message" => "L'utilisateur a bien été créé."
-                    ]);
+                if ($create) {
+                    $mail = $sendMail->getElementMailRegistration($params);
+                    if ($mail) {
+                        return json_encode([
+                            "status" => "createUser",
+                            "message" => "L'utilisateur a bien été créé."
+                        ]);
+                    }
                 }
                 // si $create est false, il s'agit d'un duplicata d'un champ
                 return json_encode([
@@ -287,7 +257,7 @@ class UserController
             }
             return json_encode([
                 "status" => "ReadAllUsers",
-                "data" => $usersList
+                "usersList" => $usersList
             ]);
         } catch (\Exception $e) {
             return json_encode([
@@ -558,6 +528,15 @@ class UserController
         };
     }
 
+    /**
+     * Cette méthode permet la suppression d'un utilisateur par l'admin, après vérification de l'existence du jeton Utilisateur.
+     *
+     * @param string - $tokenUser - Jeton Utilisateur pour valider la requête.
+     * @param int - $user_id - ID de l'utilisateur à supprimer.
+     * @return string - Réponse JSON : "unsubscribed" avec un message, en cas de succès.
+     *                                 "fail" avec un message d'erreur, si l'utilisateur est introuvable.
+     *                                 "errors" avec un message d'erreur, en cas d'échec.
+     */
     public function deleteById(string $tokenUser, int $user_id): string
     {
         try {

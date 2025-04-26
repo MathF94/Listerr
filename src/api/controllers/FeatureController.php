@@ -42,34 +42,6 @@ class FeatureController
     }
 
     /**
-     * Aide au chiffrement du jeton CSRF en réponse à une requête.
-     *
-     * Cette méthode récupère le champ "formId" du $_POST, qui correspond à l'ID du formulaire renvoyé via le CSRFToken.js,
-     *               chiffre cette valeur et l'envoie en paramètre de la méthode encrypt() pour générer un CSRF Token.
-     *
-     * @return string - Réponse JSON : "success" avec le jeton CSRF chiffré, en cas de succès.
-     *                                 "fail" avec un message d'erreur, en cas d'échec.
-     */
-    public function CSRFToken(): string
-    {
-        try {
-            $formId = $_POST["formId"];
-            $encryptedCSRFToken = $this->csrfToken->encrypt($formId);
-
-            return json_encode([
-                "status" => "success Feature csrfToken",
-                "csrfToken" => $encryptedCSRFToken,
-            ]);
-
-        } catch (\Exception $e) {
-            return json_encode([
-                "status" => "errors",
-                "message" => $e->getMessage()
-            ]);
-        }
-    }
-
-    /**
      * Cette méthode permet la création d'une nouvelle liste, après validation du jeton CSRF.
      * @param string $csrfToken - Jeton CSRF pour valider la requête.
      *
@@ -92,20 +64,35 @@ class FeatureController
             if (!empty($this->user)) {
                 $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_CREATE_FEATURE);
                 if (empty(count($errors))) {
-                    $params = $_POST;
+                    $params = [
+                        'typeFeature' => $_POST['typeFeature'],
+                        'titleFeature' => $_POST['titleFeature'],
+                        'descriptionFeature' => $_POST['descriptionFeature'],
+                        'statusFeature' => $_POST['statusFeature']
+                    ];
                     $model = new Features();
                     $create = $model->createFeature($params, $this->user->id);
 
                     if ($create) {
+                        if ($params['typeFeature'] === 'Suggestion' || $params['typeFeature'] === 'Bug (affichage ou blocage)') {
+                            $sendMail = new SendMail();
+                            $mail = $sendMail->getElementMailFeatureToAdmin($params, $this->user->id);
+
+                            if ($mail) {
+                                return json_encode([
+                                    "status" => "mailFeature",
+                                    "message" => "la suggestion / alerte bug a bien été envoyée."
+                                ]);
+                            }
+                            return json_encode([
+                                "status" => "no mailFeature",
+                                "message" => "la suggestion / alerte bug n'a pas été envoyée."
+                            ]);
+                        }
                         return json_encode([
                             "status" => "createFeature",
                             "message" => "la feature a bien été créée."
                         ]);
-
-                        // $sendMail = new SendMail();
-                        // // $mail = $sendMail->getElementMailFeature($params, $this->user);
-                        // if ($mail) {
-                        // }
                     } else {
                         return json_encode([
                             "status" => "no createFeature",
@@ -146,7 +133,7 @@ class FeatureController
             }
             return json_encode([
                 "status" => "ReadAllFeatures",
-                "data" => $allFeatures
+                "allFeatures" => $allFeatures
             ]);
         } catch (\Exception $e) {
             return json_encode([
@@ -249,7 +236,7 @@ class FeatureController
                 "status" => "Update feature failed",
                 "message" => "no user found"
             ]);
-            
+
         } catch (\Exception $e) {
             return json_encode([
                 "status" => "errors",
