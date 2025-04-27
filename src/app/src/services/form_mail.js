@@ -78,6 +78,7 @@ function displayFormMail(elementDOM) {
     textAreaMail.required = true;
 
     const actionBtnMail = document.createElement('div');
+    actionBtnMail.id = 'actionBtnMail';
 
     const mailValidFormBtn = document.createElement('button');
     mailValidFormBtn.id = 'validForm';
