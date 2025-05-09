@@ -119,6 +119,7 @@ function displayFormFeature(elementDOM) {
     optionDone.innerText = 'Produit'
 
     const actionBtnFeature = document.createElement('div');
+    actionBtnFeature.id = "actionBtnFeature";
 
     const featureValidFormBtn = document.createElement('button');
     featureValidFormBtn.id = 'validForm';

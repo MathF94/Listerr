@@ -128,7 +128,7 @@ header > #mainTitle {
   left: -100%;
   list-style: none;
   margin: 0;
-  padding: 80px 0;
+  padding: 50px 0;
   position: fixed;
   top: 0;
   transition-duration: 0.25s;
@@ -181,7 +181,7 @@ body {
   font-family: "dyslexic";
   margin: 0 auto;
   max-width: 100%;
-  min-height: 100vh;
+  min-height: 120vh;
   text-align: center;
 }
 
@@ -556,14 +556,14 @@ dialog.errors_fields > h2 {
 }
 .more__menu {
   background-color: var(--select);
-  border-radius: 4px;
+  border-radius: 5px;
   float: left;
-  margin-top: 12px;
+  margin-top: 10px;
   opacity: 0;
-  padding: 5px 0;
+  padding: 2px 0;
   position: absolute;
   pointer-events: none;
-  right: -15px;
+  right: -16px;
   top: 100%;
   transform: translate(0, 15px) scale(0.95);
   transition: transform 0.1s ease-out, opacity 0.1s ease-out;
@@ -799,7 +799,7 @@ form {
   justify-content: center;
   margin: 0px auto;
   padding: 10px 20px;
-  width: 85%;
+  width: 90%;
 }
 form#registerForm, form#loginForm, form#updateForm, form#formGuest {
   background-color: var(--form-bg);
@@ -839,7 +839,7 @@ textarea {
   border-radius: 5px;
   box-sizing: border-box;
   font-family: "dyslexic";
-  margin: 10px 0;
+  margin: auto 0;
   padding: 10px;
   text-align: center;
   width: 100%;
@@ -869,7 +869,7 @@ input[type=password].pl {
 }
 
 textarea {
-  height: 100px;
+  height: 120px;
   width: 100%;
 }
 
@@ -883,7 +883,7 @@ textarea[placeholder] {
 
 #recipients {
   width: 90%;
-  margin-right: 10px;
+  margin-right: 5px;
 }
 
 #recipientsListDiv {
@@ -979,7 +979,7 @@ input[type=submit]:hover {
   height: 5vh;
 }
 .featureList > thead > tr > th:nth-child(3) {
-  width: 50%;
+  width: 45%;
 }
 .featureList > tbody tr {
   height: 12vh;
@@ -1018,26 +1018,12 @@ input[type=submit]:hover {
 /* *****************************************************************
     MEDIA
 ***************************************************************** */
-@media screen and (max-width: 619px) {
-  body {
-    min-height: 120vh;
-  }
+/* SMARTPHONE portrait : jusqu'à ~480px */
+@media screen and (max-width: 480px) {
   #presentation {
     margin: 0 auto;
     padding-top: 20px;
     width: 43vh;
-  }
-  #userFormSection,
-  #listFormSection,
-  #cardFormSection,
-  #featureFormSection,
-  #MailSection {
-    z-index: 10;
-    background-color: var(--form-bg);
-    border-radius: 8px;
-    box-shadow: 0 0 5px var(--border);
-    padding: 5px;
-    width: 40vh;
   }
   #homeDisplayLists,
   #listsSection,
@@ -1053,30 +1039,6 @@ input[type=submit]:hover {
   .profilSection > article {
     width: 325px;
   }
-  .profil_name {
-    display: none;
-  }
-  .profil_firstname {
-    display: none;
-  }
-  .profil_role {
-    display: none;
-  }
-  .list {
-    width: 350px;
-  }
-  .profil_btn {
-    width: 45%;
-  }
-  .grid_text_list {
-    grid-column: 1/6;
-    grid-row: 2/2;
-  }
-  .grid_action_btn_lists {
-    grid-column: 6/7;
-    grid-row: 2/2;
-    width: 95px;
-  }
   .btn.edit {
     background-color: var(--edit-btn);
     color: var(--text-light);
@@ -1091,7 +1053,7 @@ input[type=submit]:hover {
   .btn.edit.admin.profilUsers {
     border-radius: 0px;
   }
-  .btn.edit.admin.feature {
+  .btn.edit.feature {
     border-radius: 10px;
   }
   .btn.delete {
@@ -1109,7 +1071,7 @@ input[type=submit]:hover {
   .btn.delete.admin.profilUsers {
     border-radius: 0px 10px 10px 0;
   }
-  .btn.delete.admin.feature {
+  .btn.delete.feature {
     border-radius: 10px;
   }
   .btn.delete.listBtn {
@@ -1124,15 +1086,135 @@ input[type=submit]:hover {
     background-color: var(--delete-btn-hover);
     color: var(--text-light);
   }
+  .profil_name {
+    display: none;
+  }
+  .profil_firstname {
+    display: none;
+  }
+  .profil_role {
+    display: none;
+  }
+  .profil_btn {
+    width: 45%;
+  }
+  .list {
+    width: 350px;
+  }
+  .grid_text_list {
+    grid-column: 1/6;
+    grid-row: 2/2;
+  }
+  .grid_action_btn_lists {
+    grid-column: 6/7;
+    grid-row: 2/2;
+    width: 95px;
+  }
   .featureList > thead > tr > th {
-    height: 10vh;
-    transform: rotate(-45deg);
+    height: 5vh;
   }
   .featureList > tbody tr {
     height: 15vh;
   }
+  /** form */
+  #userFormSection,
+  #listFormSection,
+  #cardFormSection,
+  #featureFormSection,
+  #MailSection {
+    z-index: 10;
+    background-color: var(--form-bg);
+    border-radius: 8px;
+    box-shadow: 0 0 5px var(--border);
+    padding: 5px;
+    width: 45vh;
+  }
+  form {
+    margin: 0px auto;
+    padding: 5px;
+    width: 95%;
+  }
+  form > label {
+    margin: 10px auto;
+  }
+  form > div {
+    margin: 5px 0;
+  }
+  input[type=text],
+  input[type=password],
+  input[type=email],
+  input[type=number],
+  input[type=submit] {
+    width: 90%;
+  }
+  input[name=name],
+  input[name=firstname],
+  input[name=login],
+  input[name=email],
+  input[name=titleList],
+  input[name=titleFeature],
+  input[name=objectMail] {
+    margin: 10px 0px;
+    width: 100%;
+  }
+  textarea {
+    height: 135px;
+  }
+  .fieldIcon {
+    margin: 10px 0px;
+  }
+  #optionDiv {
+    width: 42vh;
+  }
+  #optionDiv > #recipients {
+    width: 80%;
+    margin: 5px 20px 5px 0;
+  }
+  #optionDiv > #validLoginBtn {
+    margin: 0px 0px 0px 5px;
+  }
+  #recipientsListDiv {
+    margin: 5px 0px 10px 0px;
+    width: 45vh;
+  }
+  #recipientsListDiv > #recipientsSmall {
+    margin: auto 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 25%;
+  }
+  #recipientsListDiv > #recipientsList {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 60%;
+  }
+  #recipientsListDiv > #trashMailBtn {
+    margin: 35px 15px 35px 5px;
+  }
 }
-@media screen and (min-width: 619px) {
+/* SMARTPHONE paysage ou petit appareil horizontal : 481px à 795px */
+@media screen and (min-width: 481px) and (max-width: 795px) {
+  body {
+    background-size: 770px;
+    background-repeat: repeat-y;
+    background-position: center;
+  }
+  h2, h3 {
+    margin: 10px auto;
+  }
+  .menu__btn {
+    position: absolute;
+  }
+  .menu__box {
+    border-radius: 20px;
+    padding: 75px 0;
+    position: absolute;
+  }
+  #presentation {
+    margin: 0 auto;
+    padding-top: 20px;
+    width: 100%;
+  }
   #homeDisplayLists,
   #listsSection,
   #listSection,
@@ -1145,16 +1227,288 @@ input[type=submit]:hover {
   #listsSection > article,
   #listSection > article,
   .profilSection > article {
+    margin: 0px auto;
     width: 600px;
   }
   .profil_btn {
     width: 20%;
   }
   #createUser, #feature {
-    margin: 25px 0 30px 0;
+    margin: 10px 0 30px 0;
+  }
+  /** form */
+  #userFormSection,
+  #listFormSection,
+  #cardFormSection,
+  #featureFormSection,
+  #MailSection {
+    background-color: var(--form-bg);
+    border-radius: 8px;
+    box-shadow: 0 0 5px var(--border);
+    padding: 5px;
+    width: 225vh;
+    height: 82vh;
+  }
+  form {
+    margin: 0px auto;
+    padding: 5px;
+    width: 95%;
+  }
+  form > input, form select {
+    height: 40px;
+    margin: auto 0;
+  }
+  form > div {
+    margin: 10px 0;
+  }
+  /** registerForm, loginFom */
+  #registerForm,
+  #loginForm,
+  #updateForm {
+    width: 60%;
+  }
+  #registerForm > div > input[name=login],
+  #registerForm > div input[name=name],
+  #registerForm > div input[name=firstname],
+  #registerForm > div input[name=email],
+  #loginForm > div > input[name=login],
+  #loginForm > div input[name=name],
+  #loginForm > div input[name=firstname],
+  #loginForm > div input[name=email],
+  #updateForm > div > input[name=login],
+  #updateForm > div input[name=name],
+  #updateForm > div input[name=firstname],
+  #updateForm > div input[name=email] {
+    margin: 10px 34px;
+    width: 130vh;
+  }
+  #registerForm > div > .fieldIcon,
+  #loginForm > div > .fieldIcon,
+  #updateForm > div > .fieldIcon {
+    margin: 10px 34px;
+  }
+  /** formList, formCard */
+  #formList,
+  #formCard {
+    display: grid;
+    grid-template: repeat(3, 1fr)/repeat(5, 1fr);
+    height: 85vh;
+    width: 95%;
+    padding: 0;
+  }
+  #formList > label,
+  #formCard > label {
+    margin: auto 0;
+  }
+  #formList > label[for=titleList],
+  #formList label[for=titleCard],
+  #formCard > label[for=titleList],
+  #formCard label[for=titleCard] {
+    grid-column: 1/2;
+    grid-row: 1/1;
+  }
+  #formList #titleList, #formList #titleCard,
+  #formCard #titleList,
+  #formCard #titleCard {
+    grid-column: 2/4;
+    grid-row: 1/1;
+  }
+  #formList > label[for=typeList],
+  #formList label[for=priority],
+  #formCard > label[for=typeList],
+  #formCard label[for=priority] {
+    grid-column: 4/5;
+    grid-row: 1/1;
+  }
+  #formList > input[name=typeList],
+  #formList input[name=priority],
+  #formCard > input[name=typeList],
+  #formCard input[name=priority] {
+    grid-column: 5/5;
+    grid-row: 1/1;
+  }
+  #formList > label[for=descriptionList],
+  #formList label[for=descriptionCard],
+  #formCard > label[for=descriptionList],
+  #formCard label[for=descriptionCard] {
+    grid-column: 1/2;
+    grid-row: 2/2;
+    margin: 15px 0;
+  }
+  #formList > textarea,
+  #formCard > textarea {
+    grid-column: 2/6;
+    grid-row: 2/2;
+    height: 140px;
+  }
+  #formList > #actionBtnList,
+  #formList #actionBtnCard,
+  #formCard > #actionBtnList,
+  #formCard #actionBtnCard {
+    grid-column: 1/1;
+    grid-row: 2/2;
+    margin-top: 35vh;
+    width: 60vh;
+  }
+  /** featureList & formFeature */
+  .featureList > thead > tr {
+    height: 10vh;
+  }
+  .featureList > tbody tr {
+    height: 25vh;
+    border-top-width: 1px;
+    border-top-style: dashed;
+  }
+  #formFeature {
+    display: grid;
+    grid-template: repeat(4, 1fr)/repeat(5, 1fr);
+    height: 70vh;
+    width: 95%;
+    padding: 0;
+  }
+  #formFeature > label {
+    margin: auto 0px;
+    width: 45vh;
+  }
+  #formFeature > input {
+    margin: 5px;
+  }
+  #formFeature > label[for=typeFeature] {
+    grid-column: 1/1;
+    grid-row: 1/1;
+    margin: 0 auto;
+  }
+  #formFeature > #typeFeature {
+    grid-column: 1/1;
+    grid-row: 2/2;
+  }
+  #formFeature > label[for=titleFeatureLabel] {
+    grid-column: 2/6;
+    grid-row: 1/1;
+    width: 154vh;
+  }
+  #formFeature > input[name=titleFeature] {
+    grid-column: 2/6;
+    grid-row: 2/2;
+    width: 152vh;
+  }
+  #formFeature > label[for=titleFeatureLabelAdmin] {
+    grid-column: 2/4;
+    grid-row: 1/1;
+    width: 109vh;
+  }
+  #formFeature > input[name=titleFeatureAdmin] {
+    grid-column: 2/5;
+    grid-row: 2/2;
+    width: 106vh;
+  }
+  #formFeature > label[for=descriptionFeature] {
+    grid-column: 1/1;
+    grid-row: 3/3;
+    margin: 0px auto;
+  }
+  #formFeature > #descriptionFeature {
+    grid-column: 2/6;
+    grid-row: 3/4;
+    height: 110px;
+  }
+  #formFeature > label[for=statusFeature] {
+    grid-column: 5/5;
+    grid-row: 1/1;
+  }
+  #formFeature > #statusFeatureSelect {
+    grid-column: 5/5;
+    grid-row: 2/2;
+  }
+  #formFeature > #actionBtnFeature {
+    grid-column: 1/1;
+    grid-row: 3/3;
+    width: 60vh;
+    margin-top: 60px;
+  }
+  /** mailForm */
+  #mailForm {
+    display: grid;
+    grid-template: repeat(4, 1fr)/repeat(5, 1fr);
+    height: 85vh;
+    width: 95%;
+    padding: 0;
+  }
+  #mailForm > label {
+    margin: auto 0;
+    width: 45vh;
+  }
+  #mailForm > label[for="recipient(s)"] {
+    grid-column: 1/1;
+    grid-row: 1/1;
+  }
+  #mailForm > #optionDiv {
+    grid-column: 2/3;
+    grid-row: 1/1;
+    width: 73vh;
+  }
+  #mailForm > #optionDiv > #recipients {
+    margin: 5px 0px;
+    width: 58vh;
+  }
+  #mailForm > #optionDiv > #validLoginBtn {
+    margin: 5px;
+  }
+  #mailForm > #recipientsListDiv {
+    border: 1px dashed black;
+    border-radius: 5px;
+    display: block;
+    grid-column: 3/4;
+    grid-row: 1/4;
+    margin: 5px 0px 0px 5px;
+    padding-top: 5px;
+    width: 75vh;
+  }
+  #mailForm > #recipientsListDiv > #recipientsSmall {
+    margin: auto 0;
+    width: 100%;
+  }
+  #mailForm > #recipientsListDiv > #recipientsList {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 60%;
+  }
+  #mailForm > #recipientsListDiv > #trashMailBtn {
+    margin: 5px 15px 165px 5px;
+  }
+  #mailForm > label[for=objectMail] {
+    grid-column: 1/1;
+    grid-row: 2/2;
+    margin: auto 0;
+  }
+  #mailForm > input[name=objectMail] {
+    font-size: 8.5px;
+    grid-column: 2/3;
+    grid-row: 2/2;
+    margin: 5px 0px;
+  }
+  #mailForm > label[for=descriptionMail] {
+    grid-column: 1/1;
+    grid-row: 3/4;
+  }
+  #mailForm > textarea {
+    grid-column: 2/3;
+    grid-row: 3/4;
+    height: 100px;
+  }
+  #mailForm > #actionBtnMail {
+    grid-column: 5/6;
+    grid-row: 3/4;
+  }
+  #mailForm > #actionBtnMail > #validForm {
+    margin-left: 5px;
+  }
+  #mailForm > #actionBtnMail > #cancelForm {
+    width: 28vh;
   }
 }
-@media screen and (min-width: 810px) {
+/* TABLETTE (portrait & paysage) : 796px à 1024px */
+@media screen and (min-width: 796px) and (max-width: 1024px) {
   body {
     background-size: 610px;
     background-repeat: repeat-y;
@@ -1166,13 +1520,9 @@ input[type=submit]:hover {
     position: absolute;
   }
   .menu__box {
-    height: 170vh;
+    border-radius: 20px;
+    padding: 40px 0;
     position: absolute;
-  }
-  #presentation {
-    margin: 0 auto;
-    padding-top: 20px;
-    width: 43vh;
   }
   #userFormSection,
   #listFormSection,
@@ -1261,9 +1611,14 @@ input[type=submit]:hover {
     margin: 0;
   }
 }
+/* PC et + : à partir de 1025px */
 @media screen and (min-width: 1025px) {
   body {
     min-height: 120vh;
+    background-size: 660px;
+    background-repeat: repeat-y;
+    background-position: center;
+    width: 660px;
   }
   .menu__btn {
     display: none;

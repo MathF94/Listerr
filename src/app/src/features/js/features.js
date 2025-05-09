@@ -99,6 +99,15 @@ function features() {
             titleFormFeature.innerText = `Formulaire de mise à jour d'évolution / correction`;
             titleFeatureLabel.innerText = 'Votre évolution / correctif';
             titleFeature.placeholder = 'Votre évolution / correctif';
+            const labelTitleFeature = document.querySelector('#titleFeatureLabel');
+            console.log(labelTitleFeature);
+            labelTitleFeature.id = 'titleFeatureLabelAdmin';
+            labelTitleFeature.setAttribute('for', 'titleFeatureLabelAdmin');
+            const inputTitleFeature = document.querySelector('#titleFeature');
+            console.log(inputTitleFeature);
+            inputTitleFeature.id = 'titleFeatureAdmin';
+            inputTitleFeature.name = 'titleFeatureAdmin';
+
             const optionSuggest = formFeature[1][2];
             const optionBug = formFeature[1][3];
             optionSuggest.remove();
@@ -107,6 +116,10 @@ function features() {
 
         if (role === 'User') {
             titleFormFeature.innerText = `Formulaire de suggestion / d'alerte de bug pour l'admin`;
+            const labelTitleFeature = document.querySelector('#titleFeatureLabel');
+            console.log(labelTitleFeature);
+            const inputTitleFeature = document.querySelector('#titleFeature');
+            console.log(inputTitleFeature);
             const optionFeature = formFeature[1][0];
             const optionFix = formFeature[1][1];
             optionFeature.remove();

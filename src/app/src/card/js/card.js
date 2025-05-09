@@ -107,7 +107,7 @@ function card(canCreateCard) {
                 titleMail.innerText = `Paramètres du mail d'information d'ajout de souhait(s)`;
 
                 const inputObjectMail = document.querySelector('#inputObjectMail');
-                inputObjectMail.value = `Nouveau(x) souhait(s) - ${dataListTitle}`;
+                inputObjectMail.value = `${dataListTitle} - Nouveau(x) souhait(s)`;
 
                 const textAreaMail = document.querySelector('#descriptionMail');
                 textAreaMail.placeholder = `Description courte de l'ajout de souhait(s) \n "Dernière(s) envie(s) : nom du souhait n° 1, nom du souhait n° 2, etc."`;
@@ -149,7 +149,7 @@ function card(canCreateCard) {
                             arrayRecipients.push(emailUser);
                         }
                         // Complète la partie "Destinataire(s) retenu(es)"
-                        recipientsList.innerText = arrayRecipients;
+                        recipientsList.innerText = arrayRecipients.join(', ');
                         // Complète l'input hidden pour le formulaire
                         inputRecipients.value =  JSON.stringify(arrayRecipients);
                     })
