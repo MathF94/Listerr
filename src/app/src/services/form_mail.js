@@ -56,7 +56,7 @@ function displayFormMail(elementDOM) {
     inputRecipients.value = recipientsList.textContent;
     inputRecipients.required = true;
 
-        const labelObject = document.createElement('label');
+    const labelObject = document.createElement('label');
     labelObject.htmlFor  = 'objectMail';
     labelObject.innerHTML = 'Objet du mail';
 
@@ -108,7 +108,6 @@ function displayFormMail(elementDOM) {
     recipientsListDiv.appendChild(recipientsList);
     recipientsListDiv.appendChild(recipientsLists);
     recipientsListDiv.appendChild(inputRecipients);
-    // recipientsListDiv.appendChild(trashMailBtn);
 
     mailForm.appendChild(labelObject);
     mailForm.appendChild(inputObjectMail);

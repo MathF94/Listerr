@@ -37,7 +37,7 @@ function displayFormCard(elementDOM) {
     const textAreaDescription = document.createElement("textarea");
     textAreaDescription.name = "descriptionCard";
     textAreaDescription.id = "descriptionCard";
-    textAreaDescription.placeholder = "Votre description";
+    textAreaDescription.placeholder = "Titre d'un livre, modèle de montre, n° lego, nom du jeux vidéos...";
     textAreaDescription.value = "";
 
     const labelPriority = document.createElement("label");
@@ -55,6 +55,7 @@ function displayFormCard(elementDOM) {
     inputPriority.required = true;
 
     const actionBtnCard = document.createElement("div");
+    actionBtnCard.id = 'actionBtnCard';
 
     const cardValidFormBtn = document.createElement("button");
     cardValidFormBtn.id = "cardValidBtn";

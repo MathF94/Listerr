@@ -52,7 +52,7 @@ function displayFormList(elementDOM) {
 
     const labelDescription = document.createElement("label");
     labelDescription.htmlFor  = "descriptionList";
-    labelDescription.innerText = "Description succinte";
+    labelDescription.innerText = "Description";
 
     const textAreaDescription = document.createElement("textarea");
     textAreaDescription.name = "descriptionList";
@@ -61,6 +61,7 @@ function displayFormList(elementDOM) {
     textAreaDescription.value = "";
 
     const actionBtnList = document.createElement("div");
+    actionBtnList.id = 'actionBtnList';
 
     const listValidFormBtn = document.createElement("button");
     listValidFormBtn.id = "validForm";
