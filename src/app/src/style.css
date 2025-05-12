@@ -1249,7 +1249,7 @@ input[type=submit]:hover {
     box-shadow: 0 0 5px var(--border);
     padding: 5px;
     width: 190vh;
-    height: 90vh;
+    height: 85vh;
   }
   form {
     margin: 0px auto;
@@ -1428,9 +1428,9 @@ input[type=submit]:hover {
   #formFeature > #descriptionFeature {
     grid-column: 2/6;
     grid-row: 4/6;
-    height: 100px;
+    height: 75px;
     margin: 0px;
-    font-size: 12px;
+    font-size: 10px;
   }
   #formFeature > label[for=statusFeature] {
     grid-column: 1/1;
@@ -1445,13 +1445,13 @@ input[type=submit]:hover {
     grid-column: 1/1;
     grid-row: 4/4;
     width: 60vh;
-    margin-top: 70px;
+    margin-top: 40px;
   }
   /** mailForm */
   #mailForm {
     display: grid;
     grid-template: repeat(4, 1fr)/repeat(5, 1fr);
-    height: 70vh;
+    height: 75vh;
     width: 95%;
     padding: 0;
   }
@@ -1482,6 +1482,7 @@ input[type=submit]:hover {
     display: block;
     grid-column: 3/4;
     grid-row: 1/4;
+    height: 58vh;
     margin: 5px 0px 0px 5px;
     padding-top: 5px;
     width: 75vh;
@@ -1507,7 +1508,6 @@ input[type=submit]:hover {
     font-size: 8.5px;
     grid-column: 2/3;
     grid-row: 2/2;
-    margin: 0px 0px 5px 0px;
   }
   #mailForm > label[for=descriptionMail] {
     grid-column: 1/1;
@@ -1517,12 +1517,12 @@ input[type=submit]:hover {
   #mailForm > textarea {
     grid-column: 2/3;
     grid-row: 3/4;
-    height: 100px;
+    height: 85px;
   }
   #mailForm > #actionBtnMail {
     grid-column: 1/1;
-    grid-row: 3/3;
-    margin-top: 30px;
+    grid-row: 4/4;
+    margin-top: -65px;
   }
 }
 /* TABLETTE (portrait & paysage) : 791px à 1024px */
