@@ -23,12 +23,13 @@ function displayFormFeature(elementDOM) {
     inputId.required = true;
 
     const labelType = document.createElement('label');
-    labelType.htmlFor  = 'typeFeature';
+    labelType.id  = 'typeFeatureLabel';
+    labelType.htmlFor  = 'typeFeatureLabel';
     labelType.innerText = 'Type de mise à jour';
 
     const selectType = document.createElement('select');
-    selectType.id = 'typeFeature';
-    selectType.name = 'typeFeature';
+    selectType.id = 'typeFeatureSelect';
+    selectType.name = 'typeFeatureSelect';
     selectType.value = 0;
 
     const optionFeature = document.createElement('option');

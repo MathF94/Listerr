@@ -99,12 +99,20 @@ function features() {
             titleFormFeature.innerText = `Formulaire de mise à jour d'évolution / correction`;
             titleFeatureLabel.innerText = 'Votre évolution / correctif';
             titleFeature.placeholder = 'Votre évolution / correctif';
-            const labelTitleFeature = document.querySelector('#titleFeatureLabel');
 
+            const labelTypeFeature = document.querySelector('#typeFeatureLabel');
+            labelTypeFeature.id = 'typeFeatureLabelAdmin';
+            labelTypeFeature.setAttribute('for', 'typeFeatureLabelAdmin');
+
+            const selectTypeFeature = document.querySelector('#typeFeatureSelect');
+            selectTypeFeature.id = 'typeFeatureSelectAdmin';
+            selectTypeFeature.name = 'typeFeatureSelectAdmin';
+
+            const labelTitleFeature = document.querySelector('#titleFeatureLabel');
             labelTitleFeature.id = 'titleFeatureLabelAdmin';
             labelTitleFeature.setAttribute('for', 'titleFeatureLabelAdmin');
-            const inputTitleFeature = document.querySelector('#titleFeature');
 
+            const inputTitleFeature = document.querySelector('#titleFeature');
             inputTitleFeature.id = 'titleFeatureAdmin';
             inputTitleFeature.name = 'titleFeatureAdmin';
 
@@ -117,9 +125,9 @@ function features() {
         if (role === 'User') {
             titleFormFeature.innerText = `Formulaire de suggestion / d'alerte de bug pour l'admin`;
             const labelTitleFeature = document.querySelector('#titleFeatureLabel');
-            
+
             const inputTitleFeature = document.querySelector('#titleFeature');
-            
+
             const optionFeature = formFeature[1][0];
             const optionFix = formFeature[1][1];
             optionFeature.remove();
