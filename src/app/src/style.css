@@ -568,7 +568,7 @@ dialog.errors_fields > h2 {
   transform: translate(0, 15px) scale(0.95);
   transition: transform 0.1s ease-out, opacity 0.1s ease-out;
   -webkit-transform: translate(0, 15px) scale(0.95);
-  width: 140px;
+  width: 150px;
   z-index: 900;
 }
 .more__menu__btn {
@@ -923,6 +923,7 @@ textarea[placeholder] {
 }
 .fieldIcon > .icon::before {
   color: var(--burger-item);
+  margin-top: 5px;
 }
 .fieldIcon > .closed_eye::before {
   color: var(--third-party-wish-bg);
@@ -1192,8 +1193,8 @@ input[type=submit]:hover {
     margin: 35px 15px 35px 5px;
   }
 }
-/* SMARTPHONE paysage ou petit appareil horizontal : 481px à 795px */
-@media screen and (min-width: 481px) and (max-width: 795px) {
+/* SMARTPHONE paysage ou petit appareil horizontal : 481px à 980px */
+@media screen and (min-width: 481px) and (max-width: 788px) {
   body {
     background-size: 770px;
     background-repeat: repeat-y;
@@ -1227,11 +1228,14 @@ input[type=submit]:hover {
   #listsSection > article,
   #listSection > article,
   .profilSection > article {
-    margin: 0px auto;
+    margin: 20px auto;
     width: 600px;
   }
   .profil_btn {
     width: 20%;
+  }
+  .popIn {
+    padding-top: 5vh;
   }
   #createUser, #feature {
     margin: 10px 0 30px 0;
@@ -1246,8 +1250,8 @@ input[type=submit]:hover {
     border-radius: 8px;
     box-shadow: 0 0 5px var(--border);
     padding: 5px;
-    width: 225vh;
-    height: 82vh;
+    width: 190vh;
+    height: 90vh;
   }
   form {
     margin: 0px auto;
@@ -1280,7 +1284,7 @@ input[type=submit]:hover {
   #updateForm > div input[name=firstname],
   #updateForm > div input[name=email] {
     margin: 10px 34px;
-    width: 130vh;
+    width: 109vh;
   }
   #registerForm > div > .fieldIcon,
   #loginForm > div > .fieldIcon,
@@ -1291,8 +1295,8 @@ input[type=submit]:hover {
   #formList,
   #formCard {
     display: grid;
-    grid-template: repeat(3, 1fr)/repeat(5, 1fr);
-    height: 85vh;
+    grid-template: repeat(4, 1fr)/repeat(3, 1fr);
+    height: 80vh;
     width: 95%;
     padding: 0;
   }
@@ -1312,43 +1316,44 @@ input[type=submit]:hover {
   #formCard #titleCard {
     grid-column: 2/4;
     grid-row: 1/1;
+    margin: 10px auto;
   }
   #formList > label[for=typeList],
   #formList label[for=priority],
   #formCard > label[for=typeList],
   #formCard label[for=priority] {
-    grid-column: 4/5;
-    grid-row: 1/1;
+    grid-column: 1/1;
+    grid-row: 2/2;
   }
-  #formList > input[name=typeList],
+  #formList > select[name=typeList],
   #formList input[name=priority],
-  #formCard > input[name=typeList],
+  #formCard > select[name=typeList],
   #formCard input[name=priority] {
-    grid-column: 5/5;
-    grid-row: 1/1;
+    grid-column: 2/2;
+    grid-row: 2/2;
+    margin: 10px auto;
   }
   #formList > label[for=descriptionList],
   #formList label[for=descriptionCard],
   #formCard > label[for=descriptionList],
   #formCard label[for=descriptionCard] {
     grid-column: 1/2;
-    grid-row: 2/2;
-    margin: 15px 0;
+    grid-row: 3/3;
   }
   #formList > textarea,
   #formCard > textarea {
     grid-column: 2/6;
-    grid-row: 2/2;
+    grid-row: 3/3;
     height: 140px;
   }
   #formList > #actionBtnList,
   #formList #actionBtnCard,
   #formCard > #actionBtnList,
   #formCard #actionBtnCard {
-    grid-column: 1/1;
-    grid-row: 2/2;
-    margin-top: 35vh;
-    width: 60vh;
+    grid-column: 5/5;
+    grid-row: 1/3;
+    margin: auto;
+    width: 30vh;
   }
   /** featureList & formFeature */
   .featureList > thead > tr {
@@ -1362,35 +1367,32 @@ input[type=submit]:hover {
   #formFeature {
     display: grid;
     grid-template: repeat(4, 1fr)/repeat(5, 1fr);
-    height: 70vh;
+    height: 75vh;
     width: 95%;
     padding: 0;
   }
   #formFeature > label {
     margin: auto 0px;
-    width: 45vh;
-  }
-  #formFeature > input {
-    margin: 5px;
+    width: 60vh;
   }
   #formFeature > label[for=typeFeature] {
     grid-column: 1/1;
     grid-row: 1/1;
-    margin: 0 auto;
   }
   #formFeature > #typeFeature {
     grid-column: 1/1;
     grid-row: 2/2;
+    width: 59vh;
   }
   #formFeature > label[for=titleFeatureLabel] {
     grid-column: 2/6;
     grid-row: 1/1;
-    width: 154vh;
+    width: 125vh;
   }
   #formFeature > input[name=titleFeature] {
     grid-column: 2/6;
     grid-row: 2/2;
-    width: 152vh;
+    width: 120vh;
   }
   #formFeature > label[for=titleFeatureLabelAdmin] {
     grid-column: 2/4;
@@ -1405,12 +1407,12 @@ input[type=submit]:hover {
   #formFeature > label[for=descriptionFeature] {
     grid-column: 1/1;
     grid-row: 3/3;
-    margin: 0px auto;
+    margin: 5px auto;
   }
   #formFeature > #descriptionFeature {
     grid-column: 2/6;
-    grid-row: 3/4;
-    height: 110px;
+    grid-row: 3/5;
+    height: 160px;
   }
   #formFeature > label[for=statusFeature] {
     grid-column: 5/5;
@@ -1422,7 +1424,7 @@ input[type=submit]:hover {
   }
   #formFeature > #actionBtnFeature {
     grid-column: 1/1;
-    grid-row: 3/3;
+    grid-row: 4/4;
     width: 60vh;
     margin-top: 60px;
   }
@@ -1430,13 +1432,13 @@ input[type=submit]:hover {
   #mailForm {
     display: grid;
     grid-template: repeat(4, 1fr)/repeat(5, 1fr);
-    height: 85vh;
+    height: 80vh;
     width: 95%;
     padding: 0;
   }
   #mailForm > label {
     margin: auto 0;
-    width: 45vh;
+    width: 40vh;
   }
   #mailForm > label[for="recipient(s)"] {
     grid-column: 1/1;
@@ -1497,18 +1499,12 @@ input[type=submit]:hover {
     height: 100px;
   }
   #mailForm > #actionBtnMail {
-    grid-column: 5/6;
-    grid-row: 3/4;
-  }
-  #mailForm > #actionBtnMail > #validForm {
-    margin-left: 5px;
-  }
-  #mailForm > #actionBtnMail > #cancelForm {
-    width: 28vh;
+    grid-column: 1/6;
+    grid-row: 4/4;
   }
 }
-/* TABLETTE (portrait & paysage) : 796px à 1024px */
-@media screen and (min-width: 796px) and (max-width: 1024px) {
+/* TABLETTE (portrait & paysage) : 981px à 1024px */
+@media screen and (min-width: 789px) and (max-width: 1024px) {
   body {
     background-size: 610px;
     background-repeat: repeat-y;
