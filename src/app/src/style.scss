@@ -1200,8 +1200,8 @@ input[type="submit"] {
     }
 
 }
-/* SMARTPHONE paysage ou petit appareil horizontal : 481px à 980px */
-@media screen and (min-width: 481px) and (max-width: 788px ) {
+/* SMARTPHONE paysage ou petit appareil horizontal : 481px à 790px */
+@media screen and (min-width: 481px) and (max-width: 790px ) {
     body {
         background-size: 770px;
         background-repeat: repeat-y;
@@ -1296,7 +1296,7 @@ input[type="submit"] {
     #formCard {
         display: grid;
         grid-template: repeat(4, 1fr) / repeat(3, 1fr);
-        height: 80vh;
+        height: 75vh;
         width: 95%;
         padding: 0;
         & > label {
@@ -1310,7 +1310,7 @@ input[type="submit"] {
         & #titleList, #titleCard {
             grid-column: 2/4;
             grid-row: 1/1;
-            margin: 10px auto;
+            margin: 5px auto;
         }
         & > label[for="typeList"],
         label[for="priority"] {
@@ -1321,7 +1321,7 @@ input[type="submit"] {
         input[name="priority"]{
             grid-column: 2/2;
             grid-row: 2/2;
-            margin: 10px auto;
+            margin: 5px auto;
         }
         & > label[for="descriptionList"],
         label[for="descriptionCard"] {
@@ -1331,7 +1331,8 @@ input[type="submit"] {
         & > textarea {
             grid-column: 2/6;
             grid-row: 3/3;
-            height: 140px;
+            height: 110px;
+            margin: 5px auto;
         }
         & > #actionBtnList,
         #actionBtnCard {
@@ -1418,7 +1419,9 @@ input[type="submit"] {
         & > #descriptionFeature {
             grid-column: 2/6;
             grid-row: 4/6;
-            height: 140px;
+            height: 100px;
+            margin: 0px;
+            font-size: 12px;
         }
         & > label[for="statusFeature"] {
             grid-column: 1/1;
@@ -1431,9 +1434,9 @@ input[type="submit"] {
         }
         & > #actionBtnFeature {
             grid-column: 1/1;
-            grid-row: 5/5;
+            grid-row: 4/4;
             width: 60vh;
-            margin-top: 60px;
+            margin-top: 70px;
         }
 
     }
@@ -1441,12 +1444,13 @@ input[type="submit"] {
     #mailForm {
         display: grid;
         grid-template: repeat(4, 1fr) / repeat(5, 1fr);
-        height: 80vh;
+        height: 70vh;
         width: 95%;
         padding: 0;
         & > label {
             margin: auto 0;
             width: 40vh;
+            font-size: 15px;
         }
         & > label[for="recipient(s)"]{
             grid-column: 1/1;
@@ -1495,11 +1499,12 @@ input[type="submit"] {
             font-size: 8.5px;
             grid-column: 2/3;
             grid-row: 2/2;
-            margin: 5px 0px;
+            margin: 0px 0px 5px 0px;
         }
         & > label[for="descriptionMail"] {
             grid-column: 1/1;
-            grid-row: 3/4;
+            grid-row: 3/3;
+            margin-bottom: 90px;
         }
         & > textarea {
             grid-column: 2/3;
@@ -1507,12 +1512,13 @@ input[type="submit"] {
             height: 100px;
         }
         & > #actionBtnMail {
-            grid-column: 1/6;
-            grid-row: 4/4;
+            grid-column: 1/1;
+            grid-row: 3/3;
+            margin-top: 30px;
         }
     }
 }
-/* TABLETTE (portrait & paysage) : 981px à 1024px */
+/* TABLETTE (portrait & paysage) : 791px à 1024px */
 @media screen and (min-width: 789px) and (max-width:1024px) {
     body {
         background-size: 610px;
