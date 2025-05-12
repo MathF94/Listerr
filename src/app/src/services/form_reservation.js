@@ -15,6 +15,7 @@ function displayFormReservation(elementDOM) {
 
     const labelGuestName = document.createElement("label");
     labelGuestName.htmlFor  = "name";
+    labelGuestName.innerText = 'Login';
 
     const inputGuestName = document.createElement("input");
     inputGuestName.type = "text";
