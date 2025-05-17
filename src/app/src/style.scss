@@ -73,7 +73,64 @@ $font-src: url(./resources/fonts/open-dyslexic.woff) format("woff");
     --red-status: rgba(255, 0, 0, 1);
     --blue-status: rgba(22, 138, 238, 1);
     --white-status: rgba(255, 255, 255, 1);
+}
 
+
+/* *****************************************************************
+    GENERALE
+***************************************************************** */
+body {
+    background-image: url(./resources/images/paper.webp);
+    background-size: 100%;
+    border-width: 0px 15px;
+    border-style: solid;
+    border-color: var(--border-color);
+    font-family: $font-family-name;
+    margin: 0 auto;
+    max-width: 100%;
+    min-height: 120vh;
+    text-align: center;
+}
+#headListsSection {
+    margin: 20px;
+    padding-top: 3px;
+}
+h3, h4 {
+    margin: 10px auto;
+}
+#createList {
+    padding-top: 6px;
+}
+#presentation {
+    margin: 0 auto;
+    padding-top: 20px;
+    width: 52vh;
+}
+.login, .register {
+    display: flex;
+    flex-direction: column;
+}
+a {
+    color: var(--text-dark);
+    &.active {
+        background-color: var(--burger-item);
+        color: var(--text-light);
+    }
+    &.cardLink {
+        color: var(--burger-item);
+    }
+    margin-top: 10px;
+}
+p {
+    & > a {
+    color: var(--text-link);
+}}
+.hidden {
+    display: none;
+}
+small {
+    display: block;
+    margin: 0 auto;
 }
 
 /* *****************************************************************
@@ -196,63 +253,6 @@ li {
 }
 
 /* *****************************************************************
-    GENERALE
-***************************************************************** */
-body {
-    background-image: url(./resources/images/paper.webp);
-    background-size: 100%;
-    border-width: 0px 15px;
-    border-style: solid;
-    border-color: var(--border-color);
-    font-family: $font-family-name;
-    margin: 0 auto;
-    max-width: 100%;
-    min-height: 120vh;
-    text-align: center;
-}
-#headListsSection {
-    margin: 20px;
-    padding-top: 3px;
-}
-h3, h4 {
-    margin: 10px auto;
-}
-#createList {
-    padding-top: 6px;
-}
-#presentation {
-    margin: 0 auto;
-    padding-top: 20px;
-    width: 52vh;
-}
-.login, .register {
-    display: flex;
-    flex-direction: column;
-}
-a {
-    color: var(--text-dark);
-    &.active {
-        background-color: var(--burger-item);
-        color: var(--text-light);
-    }
-    &.cardLink {
-        color: var(--burger-item);
-    }
-    margin-top: 10px;
-}
-p {
-    & > a {
-    color: var(--text-link);
-}}
-.hidden {
-    display: none;
-}
-small {
-    display: block;
-    margin: 0 auto;
-}
-
-/* *****************************************************************
     DIALOG
 ***************************************************************** */
 dialog {
@@ -307,7 +307,7 @@ dialog {
 .popIn {
     background-color: rgba(0, 0, 0, 0.8);
     border: 1px solid transparent;
-    height: 100vh;
+    height: 100%;
     position: fixed;
     top: 0;
     visibility: hidden;
@@ -1010,8 +1010,8 @@ input[type="submit"] {
 /* *****************************************************************
     MEDIA
 ***************************************************************** */
-/* SMARTPHONE portrait : jusqu'à ~480px */
-@media screen and (max-width: 480px) {
+/* SMARTPHONE portrait : jusqu'à 30em */
+@media screen and (max-width: 30em) {
     #presentation {
         margin: 0 auto;
         padding-top: 20px;
@@ -1200,8 +1200,8 @@ input[type="submit"] {
     }
 
 }
-/* SMARTPHONE paysage ou petit appareil horizontal : 481px à 790px */
-@media screen and (min-width: 481px) and (max-width: 790px ) {
+/* SMARTPHONE paysage ou petit appareil horizontal : 30.06em à 49.31em */
+@media screen and (min-width: 30.06em) and (max-width: 49.31em) {
     body {
         background-size: 770px;
         background-repeat: repeat-y;
@@ -1242,7 +1242,7 @@ input[type="submit"] {
         width: 20%;
     }
     .popIn {
-        padding-top: 5vh;
+        padding-top: 2vh;
     }
     #createUser, #feature {
         margin: 10px 0 30px 0;
@@ -1258,7 +1258,7 @@ input[type="submit"] {
         box-shadow: 0 0 5px var(--border);
         padding: 5px;
         width: 190vh;
-        height: 85vh;
+        height: 90vh;
     }
     form {
         margin: 0px auto;
@@ -1284,7 +1284,7 @@ input[type="submit"] {
             input[name="firstname"],
             input[name="email"] {
                 margin: 10px 34px;
-                width: 109vh;
+                width: 130vh;
             }
             & > .fieldIcon {
                 margin: 10px 34px;
@@ -1518,8 +1518,8 @@ input[type="submit"] {
         }
     }
 }
-/* TABLETTE (portrait & paysage) : 791px à 1024px */
-@media screen and (min-width: 789px) and (max-width:1024px) {
+/* TABLETTE (portrait & paysage) : 49.38em à 64em */
+@media screen and (min-width: 49.38em) and (max-width:64em) {
     body {
         background-size: 610px;
         background-repeat: repeat-y;
@@ -1624,8 +1624,8 @@ input[type="submit"] {
         }
     }
 }
-/* PC et + : à partir de 1025px */
-@media screen and (min-width: 1025px) {
+/* PC et + : à partir de 64.06em */
+@media screen and (min-width: 64.06em) {
     body {
         min-height: 120vh;
         background-size: 660px;
