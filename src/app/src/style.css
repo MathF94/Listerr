@@ -90,7 +90,7 @@ h3, h4 {
 #presentation {
   margin: 0 auto;
   padding-top: 20px;
-  width: 52vh;
+  width: 50vw;
 }
 
 .login, .register {
@@ -412,7 +412,7 @@ dialog.errors_fields > h2 {
   border-radius: 8px;
   box-shadow: 0 0 5px var(--border);
   padding: 5px;
-  width: 65vh;
+  width: 50vw;
 }
 
 .adminSection {
@@ -806,13 +806,10 @@ form#registerForm, form#loginForm, form#updateForm, form#formGuest {
   border-radius: 8px;
   box-shadow: 0 0 5px var(--border);
 }
-form > div {
-  margin: 10px 0;
-}
 
 #formGuest {
   display: inline-block;
-  width: 40vh;
+  width: 30vw;
 }
 
 .label-radio-container {
@@ -823,7 +820,6 @@ form > div {
 
 label {
   font-weight: bold;
-  margin: 5px auto;
 }
 
 select,
@@ -837,7 +833,7 @@ textarea {
   border-radius: 5px;
   box-sizing: border-box;
   font-family: "dyslexic";
-  margin: auto 0;
+  margin: 10px auto;
   padding: 10px;
   text-align: center;
   width: 100%;
@@ -988,7 +984,7 @@ input[type=submit]:hover {
   border-radius: 20px;
   height: 2vh;
   margin: 0 auto;
-  width: 2vh;
+  width: 1.5vw;
 }
 .featureList > tbody td .divCercle.switchOff {
   background-color: var(--grey-status);
@@ -1021,7 +1017,7 @@ input[type=submit]:hover {
   #presentation {
     margin: 0 auto;
     padding-top: 20px;
-    width: 43vh;
+    width: 75vw;
   }
   #homeDisplayLists,
   #listsSection,
@@ -1114,6 +1110,9 @@ input[type=submit]:hover {
   .featureList > tbody tr {
     height: 15vh;
   }
+  .featureList > tbody td .divCercle {
+    width: 3.5vw;
+  }
   /** form */
   #userFormSection,
   #listFormSection,
@@ -1125,7 +1124,7 @@ input[type=submit]:hover {
     border-radius: 8px;
     box-shadow: 0 0 5px var(--border);
     padding: 5px;
-    width: 45vh;
+    width: 87vw;
   }
   form {
     margin: 0px auto;
@@ -1163,7 +1162,7 @@ input[type=submit]:hover {
     margin: 10px 0px;
   }
   #optionDiv {
-    width: 42vh;
+    width: 85vw;
   }
   #optionDiv > #recipients {
     width: 80%;
@@ -1174,7 +1173,7 @@ input[type=submit]:hover {
   }
   #recipientsListDiv {
     margin: 5px 0px 10px 0px;
-    width: 45vh;
+    width: 83vw;
   }
   #recipientsListDiv > #recipientsSmall {
     margin: auto 0;
@@ -1212,7 +1211,7 @@ input[type=submit]:hover {
   #presentation {
     margin: 0 auto;
     padding-top: 20px;
-    width: 100%;
+    width: 75%;
   }
   #homeDisplayLists,
   #listsSection,
@@ -1248,7 +1247,7 @@ input[type=submit]:hover {
     border-radius: 8px;
     box-shadow: 0 0 5px var(--border);
     padding: 5px;
-    width: 190vh;
+    width: 85vw;
     height: 90vh;
   }
   form {
@@ -1282,7 +1281,7 @@ input[type=submit]:hover {
   #updateForm > div input[name=firstname],
   #updateForm > div input[name=email] {
     margin: 10px 34px;
-    width: 130vh;
+    width: 49vw;
   }
   #registerForm > div > .fieldIcon,
   #loginForm > div > .fieldIcon,
@@ -1295,12 +1294,12 @@ input[type=submit]:hover {
     display: grid;
     grid-template: repeat(4, 1fr)/repeat(3, 1fr);
     height: 75vh;
-    width: 95%;
     padding: 0;
   }
   #formList > label,
   #formCard > label {
     margin: auto 0;
+    width: 20vw;
   }
   #formList > label[for=titleList],
   #formList label[for=titleCard],
@@ -1352,12 +1351,12 @@ input[type=submit]:hover {
     grid-column: 5/5;
     grid-row: 1/3;
     margin: auto;
-    width: 30vh;
+    width: 20vw;
   }
   /** formGuest */
   #formGuest {
     display: inline-block;
-    width: 100vh;
+    width: 50vw;
   }
   #formGuest > input {
     margin: 10px auto;
@@ -1375,12 +1374,11 @@ input[type=submit]:hover {
     display: grid;
     grid-template: repeat(5, 1fr)/repeat(5, 1fr);
     height: 75vh;
-    width: 95%;
     padding: 0;
   }
   #formFeature > label {
     margin: auto 0px;
-    width: 60vh;
+    width: 24vw;
   }
   #formFeature > label[for=typeFeatureLabel] {
     grid-column: 1/1;
@@ -1388,8 +1386,8 @@ input[type=submit]:hover {
   }
   #formFeature > #typeFeatureSelect {
     grid-column: 1/1;
-    grid-row: 2/4;
-    width: 59vh;
+    grid-row: 3/4;
+    width: 24vw;
   }
   #formFeature > label[for=typeFeatureLabelAdmin] {
     grid-column: 1/1;
@@ -1398,7 +1396,7 @@ input[type=submit]:hover {
   #formFeature > #typeFeatureSelectAdmin {
     grid-column: 1/1;
     grid-row: 2/2;
-    width: 59vh;
+    width: 24vw;
   }
   #formFeature > label[for=titleFeatureLabel] {
     grid-column: 2/6;
@@ -1407,8 +1405,8 @@ input[type=submit]:hover {
   }
   #formFeature > input[name=titleFeature] {
     grid-column: 2/6;
-    grid-row: 2/4;
-    width: 120vh;
+    grid-row: 3/4;
+    width: 56vw;
   }
   #formFeature > label[for=titleFeatureLabelAdmin] {
     grid-column: 2/6;
@@ -1428,9 +1426,9 @@ input[type=submit]:hover {
   #formFeature > #descriptionFeature {
     grid-column: 2/6;
     grid-row: 4/6;
-    height: 75px;
-    margin: 0px;
-    font-size: 10px;
+    height: 40vh;
+    margin: 10px auto;
+    font-size: 12px;
   }
   #formFeature > label[for=statusFeature] {
     grid-column: 1/1;
@@ -1439,13 +1437,12 @@ input[type=submit]:hover {
   #formFeature > #statusFeatureSelect {
     grid-column: 2/4;
     grid-row: 3/3;
-    margin: 5px auto;
   }
   #formFeature > #actionBtnFeature {
     grid-column: 1/1;
-    grid-row: 4/4;
-    width: 60vh;
-    margin-top: 40px;
+    grid-row: 5/5;
+    width: 25vw;
+    margin-top: 50px;
   }
   /** mailForm */
   #mailForm {
@@ -1457,21 +1454,24 @@ input[type=submit]:hover {
   }
   #mailForm > label {
     margin: auto 0;
-    width: 40vh;
+    width: 15vw;
     font-size: 15px;
   }
   #mailForm > label[for="recipient(s)"] {
     grid-column: 1/1;
     grid-row: 1/1;
   }
+  #mailForm > input[name=text] {
+    margin: 5px auto;
+  }
   #mailForm > #optionDiv {
     grid-column: 2/3;
     grid-row: 1/1;
-    width: 73vh;
+    width: 36vw;
   }
   #mailForm > #optionDiv > #recipients {
     margin: 5px 0px;
-    width: 58vh;
+    width: 30vw;
   }
   #mailForm > #optionDiv > #validLoginBtn {
     margin: 5px;
@@ -1482,10 +1482,10 @@ input[type=submit]:hover {
     display: block;
     grid-column: 3/4;
     grid-row: 1/4;
-    height: 58vh;
+    height: 70vh;
     margin: 5px 0px 0px 5px;
     padding-top: 5px;
-    width: 75vh;
+    width: 34vw;
   }
   #mailForm > #recipientsListDiv > #recipientsSmall {
     margin: auto 0;
@@ -1505,7 +1505,7 @@ input[type=submit]:hover {
     margin: auto 0;
   }
   #mailForm > input[name=objectMail] {
-    font-size: 8.5px;
+    font-size: 10px;
     grid-column: 2/3;
     grid-row: 2/2;
   }
@@ -1514,15 +1514,16 @@ input[type=submit]:hover {
     grid-row: 3/3;
     margin-bottom: 90px;
   }
-  #mailForm > textarea {
+  #mailForm > #descriptionMail {
     grid-column: 2/3;
     grid-row: 3/4;
-    height: 85px;
+    height: 37vh;
+    margin: 0 auto;
   }
   #mailForm > #actionBtnMail {
     grid-column: 1/1;
     grid-row: 4/4;
-    margin-top: -65px;
+    margin-top: -75px;
   }
 }
 /* TABLETTE (portrait & paysage) : 49.38em à 64em */
@@ -1553,7 +1554,7 @@ input[type=submit]:hover {
     box-shadow: 0 0 5px var(--border);
     height: 80vh;
     padding: 5px;
-    width: 145vh;
+    width: 145vw;
   }
   .btn {
     font-size: 16px;
@@ -1571,7 +1572,7 @@ input[type=submit]:hover {
   #mailForm > #optionDiv {
     grid-column: 2/2;
     grid-row: 1/1;
-    width: 100vh;
+    width: 100vw;
   }
   #mailForm > #optionDiv > #recipients {
     width: 87%;
@@ -1585,7 +1586,7 @@ input[type=submit]:hover {
     grid-row: 2/2;
     height: 40px;
     margin: 5px 0px 10px 0px;
-    width: 138vh;
+    width: 138vw;
   }
   #mailForm > #recipientsListDiv > #recipientsSmall {
     width: 20%;

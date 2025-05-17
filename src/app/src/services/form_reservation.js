@@ -10,12 +10,12 @@ function displayFormReservation(elementDOM) {
     createFormGuest.id = "formGuest";
     createFormGuest.classList.add("formGuest");
 
-    const reservationTitle = document.createElement("h4");
+    const reservationTitle = document.createElement("h3");
     reservationTitle.innerText = "Formulaire de réservation";
 
     const labelGuestName = document.createElement("label");
     labelGuestName.htmlFor  = "name";
-    labelGuestName.innerText = 'Login';
+    labelGuestName.innerText = 'Votre Login';
 
     const inputGuestName = document.createElement("input");
     inputGuestName.type = "text";
