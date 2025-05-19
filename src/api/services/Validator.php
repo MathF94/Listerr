@@ -310,7 +310,10 @@ class Validator
     private function isValidFeatureParams(array $params): array
     {
         $errors = [];
-        $expectedKeys = ['typeFeature', 'titleFeature', 'descriptionFeature'];
+        $expectedKeys = [
+            'titleFeature',
+            'descriptionFeature'
+        ];
         $paramKeys = array_keys($params);
 
         if (!empty(array_diff($expectedKeys, $paramKeys))) {

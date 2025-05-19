@@ -127,10 +127,7 @@ function readAdmin() {
 
                 readBtn.addEventListener("click", function (e) {
                     e.preventDefault();
-                    redirect(
-                        `${configPath.basePath}/user/pages/profil.html?id=${column.id}`,
-                        0
-                    );
+                    redirect(`${configPath.basePath}/user/pages/profil.html?id=${column.id}`, 0);
                 });
 
                 /**

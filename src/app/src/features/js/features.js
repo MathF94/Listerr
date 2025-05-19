@@ -100,22 +100,6 @@ function features() {
             titleFeatureLabel.innerText = 'Votre évolution / correctif';
             titleFeature.placeholder = 'Votre évolution / correctif';
 
-            const labelTypeFeature = document.querySelector('#typeFeatureLabel');
-            labelTypeFeature.id = 'typeFeatureLabelAdmin';
-            labelTypeFeature.setAttribute('for', 'typeFeatureLabelAdmin');
-
-            const selectTypeFeature = document.querySelector('#typeFeatureSelect');
-            selectTypeFeature.id = 'typeFeatureSelectAdmin';
-            selectTypeFeature.name = 'typeFeatureSelectAdmin';
-
-            const labelTitleFeature = document.querySelector('#titleFeatureLabel');
-            labelTitleFeature.id = 'titleFeatureLabelAdmin';
-            labelTitleFeature.setAttribute('for', 'titleFeatureLabelAdmin');
-
-            const inputTitleFeature = document.querySelector('#titleFeature');
-            inputTitleFeature.id = 'titleFeatureAdmin';
-            inputTitleFeature.name = 'titleFeatureAdmin';
-
             const optionSuggest = formFeature[1][2];
             const optionBug = formFeature[1][3];
             optionSuggest.remove();
@@ -125,7 +109,6 @@ function features() {
         if (role === 'User') {
             titleFormFeature.innerText = `Formulaire de suggestion / d'alerte de bug pour l'admin`;
             const labelTitleFeature = document.querySelector('#titleFeatureLabel');
-
             const inputTitleFeature = document.querySelector('#titleFeature');
 
             const optionFeature = formFeature[1][0];
@@ -143,10 +126,10 @@ function features() {
             e.preventDefault();
             // Validation de pattern du formulaire
             const inputTitle = document.querySelector('#titleFeature');
-            const inputDescription = document.querySelector('#descriptionFeature');
             inputTitle.addEventListener('invalid', function(e) {
                 validate(e.target)
             });
+            const inputDescription = document.querySelector('#descriptionFeature');
             inputDescription.addEventListener('invalid', function(e) {
                 validate(e.target)
             });
@@ -170,7 +153,7 @@ function features() {
                     dialog({title: 'Erreurs', content: response.errors});
                     const dialogMsg = document.querySelector('dialog');
                     dialogMsg.classList.add('errors');
-                    redirect(`${configPath.basePath}/features/pages/features.html`);
+                    // redirect(`${configPath.basePath}/features/pages/features.html`);
                 };
             })
         })
