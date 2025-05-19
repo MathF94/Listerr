@@ -65,7 +65,7 @@ class FeatureController
                 $errors = $this->validator->isValidParams($_POST, Validator::CONTEXT_CREATE_FEATURE);
                 if (empty(count($errors))) {
                     $params = [
-                        'typeFeature' => $_POST['typeFeature'],
+                        'typeFeature' => $_POST['typeFeatureSelect'],
                         'titleFeature' => $_POST['titleFeature'],
                         'descriptionFeature' => $_POST['descriptionFeature'],
                         'statusFeature' => $_POST['statusFeature']

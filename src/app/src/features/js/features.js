@@ -142,7 +142,8 @@ function features() {
                 if (response.status === 'mailFeature') {
                     if (role === 'Admin') {
                         dialog({title: 'Création de la future évolution', content: 'Une de plus à faire'});
-                    } else {
+                    }
+                    if (role === 'User') {
                         dialog({title: 'Proposition de suggestion / alerte de bug', content: 'Merci de votre idée / alerte !'});
                     }
                     const dialogMsg = document.querySelector('dialog');
@@ -153,7 +154,7 @@ function features() {
                     dialog({title: 'Erreurs', content: response.errors});
                     const dialogMsg = document.querySelector('dialog');
                     dialogMsg.classList.add('errors');
-                    // redirect(`${configPath.basePath}/features/pages/features.html`);
+                    redirect(`${configPath.basePath}/features/pages/features.html`);
                 };
             })
         })
@@ -201,12 +202,6 @@ function features() {
 
             // Filtrer les utilisateurs pour exclure l'admin
             const usersWithoutAdmin = dataUsers.filter(user => user.role !== 'Admin');
-
-            // for (let index = 0; index < dataUsers.length; index++) {
-            //     if (dataUsers[index].role === 'Admin') {
-            //         const dataSlice = dataUsers.slice(dataUsers[index].id)
-            //     }
-            // }
             usersWithoutAdmin.forEach(dataUser => {
                 const allUsersId = dataUser.id;
                 const allUsersLogin = dataUser.login;
