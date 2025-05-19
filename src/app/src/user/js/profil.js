@@ -84,7 +84,6 @@ function read() {
         const id = urlParams.get("id");
 
         fetchRead(id).then((response) => {
-
             if (response.status === "[Admin]user" && localStorage.token && localStorage.user) {
                 displayUser(response);
 
