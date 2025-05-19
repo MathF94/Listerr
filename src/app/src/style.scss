@@ -1458,6 +1458,7 @@ input[type="submit"] {
             grid-row: 1/1;
             width: 36vw;
             & > #recipients {
+                font-size: 10px;
                 margin: 5px 0px;
                 width: 30vw;
             }
@@ -1471,7 +1472,7 @@ input[type="submit"] {
             border-left-width: 1px;
             display: block;
             grid-column: 3/4;
-            grid-row: 1/4;
+            grid-row: 1/6;
             height: 65vh;
             margin: 5px 0px 0px 5px;
             width: 36vw;
