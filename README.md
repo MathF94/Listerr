@@ -1,7 +1,7 @@
 # Présentation
 
-Je m'appelle Mathieu FAGOT et je travaille au sein d'AFNOR Certification depuis 2013.
-En 2023, j'ai décidé de faire une reconversion professionnelle (TransitionPro) pour être développeur Fullstack.
+Je m'appelle Mathieu FAGOT, développeur web en reconversion après 10 ans d'expérience dans un autre secteur.
+Ce projet a été créé pendant ma formation, puis continuellement amélioré depuis 2023.
 
 # Listerr
 
@@ -22,11 +22,6 @@ avec des options de partage et de réservation.
   - Envoi de suggestions d’améliorations
   - Signalement de bugs
 - Système d’e-mails entre utilisateurs (création de souhaits, mises à jour, etc.)
-
-# Présentation
-
-Je m'appelle Mathieu FAGOT, développeur web en reconversion après 10 ans d'expérience dans un autre secteur.
-Ce projet a été créé pendant ma formation, puis continuellement amélioré depuis 2023.
 
 ## Installation
 
