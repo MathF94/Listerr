@@ -1,6 +1,6 @@
 # Présentation
 
-Je m'appelle Mathieu FAGOT, développeur web en reconversion après 10 ans d'expérience dans un autre secteur.
+Je m'appelle Mathieu FAGOT, développeur web en reconversion après plus de 10 ans d'expérience dans un autre secteur.
 Ce projet a été créé pendant ma formation, puis continuellement amélioré depuis 2023.
 
 # Listerr
