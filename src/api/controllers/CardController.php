@@ -21,6 +21,7 @@
 namespace Controllers;
 
 use Models\Cards;
+use Models\Lists;
 use Models\Users;
 use Services\CSRFToken;
 use Services\Session;
@@ -263,16 +264,26 @@ class CardController
         }
     }
 
-    public function deleteAllCards(): string
+    public function deleteAllCards(int $listId): string
     {
         try {
             if (!empty($this->user->id)) {
+                $listModel = new Lists();
+                $list = $listModel->getOneListById($listId);
+
+                if (!$list || $list->userId !== $this->user->id) {
+                    return json_encode([
+                        "status" => "fail",
+                        "message" => "Cette liste ne vous appartient pas."
+                    ]);
+                }
+
                 $model = new Cards();
-                $model->deleteAllCards();
+                $model->deleteAllCardsByList($listId);
 
                 return json_encode([
-                    "status" => "deleteCard",
-                    "message" => "la carte a bien été supprimée."
+                    "status" => "deleteAllCard",
+                    "message" => "les cartes ont bien été supprimées."
                 ]);
             }
             return json_encode([

@@ -188,17 +188,18 @@ class Cards extends Database
     }
 
     /**
-     * Cette méthode permet de supprimer une carte de la base de données.
+     * Cette méthode permet de supprimer toutes les cartes d'une liste de la base de données.
      *
      * @return bool - Renvoie true en cas de succès, sinon false.
      */
-    public function deleteAllCards(): bool
+    public function deleteAllCardsByList(int $listId): bool
     {
         try {
-            $req = "DELETE FROM `card`";
-
+            // ? = $listId
+            $req = "DELETE FROM `card` WHERE `list_id` = ?";
             $query = $this->db->prepare($req);
-            return $query->execute([]);
+
+            return $query->execute([$listId]);
         } catch (\Exception $e) {
             echo $e->getMessage();
             return false;
