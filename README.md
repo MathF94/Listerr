@@ -1,18 +1,33 @@
 # Présentation
 
-Je m'appelle Mathieu FAGOT, 36 ans, né à Fontainebleau.
-Après 10 ans d'expérience, j'ai décidé de faire une reconversion professionnelle (TransitionPro) pour être développeur Fullstack.
+Je m'appelle Mathieu FAGOT, développeur web en reconversion, suite à une expérience professionnelle dans le secteur de la Qualité, depuis 2013.
+Ce projet a été créé pendant ma formation, puis continuellement amélioré depuis 2023.
 
 # Listerr
 
-Listerr est une application web écrite en PHP et Javascript sans framework.
-Le but de l'application est de gérer des listes de choses à faire (todolist) et des listes de souhaits (wishlist).
+**Listerr** est une application web écrite en **PHP** et **JavaScript vanilla** (sans framework).
+Elle permet de gérer :
+- des listes de tâches (todo)
+- des listes de souhaits (wishlist)
+avec des options de partage et de réservation.
+
+## 🔍 Fonctionnalités avancées
+
+- Gestion des comptes : rôles admin et utilisateur
+- En tant qu’admin :
+  - Suivi des évolutions demandées
+  - Validation / refus de suggestions
+  - Traitement des alertes de bug envoyées par les utilisateurs
+- En tant qu’utilisateur :
+  - Envoi de suggestions d’améliorations
+  - Signalement de bugs
+- Système d’e-mails entre utilisateurs (création de souhaits, mises à jour, etc.)
 
 ## Installation
 
 ### Pré-requis
 
-- Installation WAMP
+- Installation WAMP (recommandé)
 
 OU
 
@@ -25,7 +40,14 @@ Le projet doit être installé dans le répertoire `C:\wamp64\www\`.
 
 ### Installation des dépendances
 
-Pour l'instant, il n'y a aucune dépendance d'installée.
+Le projet utilise Composer pour gérer ses dépendances PHP.
+Assurez-vous d’avoir [Composer](https://getcomposer.org/) installé sur votre machine.
+
+Pour les installer, lancez la commande suivante dans le répertoire du projet :
+
+```bash
+composer install
+```
 
 ### Mise en place de la base de données
 
@@ -37,7 +59,7 @@ Pour la première connexion, il faut se rendre à la page home et se connecter e
 - login : Admin
 - password : passwordAdmin1+
 
-Un utilisateur est d’ors et déjà créé pour commencer à jouer avec les listes :
+Un utilisateur est d’ores et déjà créé pour commencer à jouer avec les listes :
 - login : User
 - password : passwordUser2+
 

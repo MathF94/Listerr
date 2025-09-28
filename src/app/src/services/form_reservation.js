@@ -18,6 +18,8 @@
 
 "use strict";
 
+import { mandatoryStar } from "../services/utils.js";
+
 /**
  * Génère un formulaire pour insérer le login du réservant d'une carte.
  *
@@ -33,13 +35,13 @@ function displayFormReservation(elementDOM) {
 
     const labelGuestName = document.createElement("label");
     labelGuestName.htmlFor  = "name";
-    labelGuestName.innerText = 'Votre Login';
+    labelGuestName.innerText = 'Votre login ou prénom';
 
     const inputGuestName = document.createElement("input");
     inputGuestName.type = "text";
     inputGuestName.id = "name";
     inputGuestName.name = "name";
-    inputGuestName.placeholder = "Votre pseudo";
+    inputGuestName.placeholder = "Votre login ou prénom";
     inputGuestName.setAttribute("max", 20);
     inputGuestName.required = true;
 
@@ -77,8 +79,10 @@ function displayFormReservation(elementDOM) {
 
     createFormGuest.appendChild(reservationTitle);
     createFormGuest.appendChild(labelGuestName);
+    labelGuestName.appendChild(mandatoryStar.cloneNode(true));
     createFormGuest.appendChild(inputGuestName);
     createFormGuest.appendChild(labelGuestMail);
+    labelGuestMail.appendChild(mandatoryStar.cloneNode(true));
     createFormGuest.appendChild(inputGuestMail);
     createFormGuest.appendChild(guestValidFormBtn);
     createFormGuest.appendChild(guestCancelFormBtn);

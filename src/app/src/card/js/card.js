@@ -124,6 +124,10 @@ function card(canCreateCard) {
                 const titleMail = document.querySelector('#titleMail');
                 titleMail.innerText = `Paramètres du mail d'information d'ajout de souhait(s)`;
 
+                const recipientsList = document.querySelector('#recipientsList');
+                recipientsList.innerText = "destinataire vide";
+                recipientsList.classList.add("italic");
+
                 const inputObjectMail = document.querySelector('#inputObjectMail');
                 inputObjectMail.value = `${dataListTitle} - Nouveau(x) souhait(s)`;
 
@@ -167,6 +171,7 @@ function card(canCreateCard) {
                             arrayRecipients.push(emailUser);
                         }
                         // Complète la partie "Destinataire(s) retenu(es)"
+                        recipientsList.classList.remove('italic');
                         recipientsList.innerText = arrayRecipients.join(', ');
                         // Complète l'input hidden pour le formulaire
                         inputRecipients.value =  JSON.stringify(arrayRecipients);
@@ -175,13 +180,13 @@ function card(canCreateCard) {
                     // Supprime les emails en cas d'erreur d'insertion
                     trashMailBtn.addEventListener('click', function(e) {
                         e.preventDefault();
-                        inputRecipients.value = '';
+                        inputRecipients.innerText = 'destinataire vide';
 
                         arrayRecipients.length = 0;
                         if (recipientsList) {
-                            recipientsList.innerText = '';
+                            recipientsList.innerText = 'destinataire vide';
+                            recipientsList.classList.add('italic');
                         }
-
                         trashMailBtn.remove();
                     })
 
@@ -205,18 +210,19 @@ function card(canCreateCard) {
                         fetchSendMailCard(mailForm, dataListID)
                         .then(response => {
                             localStorage.removeItem('csrfToken');
-                                if (response.status === 'sendMail') {
-                                    dialog({title: 'Envoi de mail', content: `Le mail d'informations a bien été envoyé`});
-                                    const dialogMsg = document.querySelector('dialog');
-                                    dialogMsg.classList.add('valid');
-                                    redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`, 3000);
-                                }
+
+                            if (response.status === 'sendMail') {
+                                dialog({title: 'Envoi de mail', content: `Le mail d'informations a bien été envoyé`});
+                                const dialogMsg = document.querySelector('dialog');
+                                dialogMsg.classList.add('valid');
+                                // redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`, 3000);
+                            }
 
                             if (response.status === 'errors') {
                                 dialog({title: 'Erreurs', content: response.errors});
                                 const dialogMsg = document.querySelector('dialog');
                                 dialogMsg.classList.add('errors');
-                                redirect(`${configPath.basePath}/list/pages/list.html?id=${id}.html`);
+                                // redirect(`${configPath.basePath}/list/pages/list.html?id=${id}.html`);
                             };
                         })
                     })

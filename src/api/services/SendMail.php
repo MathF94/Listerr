@@ -256,7 +256,14 @@ class SendMail
                     "message" => "no valid csrfToken"
                 ]);
             }
-            // Mettre validation CSRFToken !
+
+            if (empty($dataRecipients)) {
+                return json_encode([
+                    "status" => "errors",
+                    "errors" => "Merci de rentrer au moins une adresse e-mail svp :)"
+                ]);
+            }
+
             $modelIncludes = new Includes();
             $domain = $modelIncludes->changeDomain();
 
