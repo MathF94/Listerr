@@ -215,14 +215,14 @@ function card(canCreateCard) {
                                 dialog({title: 'Envoi de mail', content: `Le mail d'informations a bien été envoyé`});
                                 const dialogMsg = document.querySelector('dialog');
                                 dialogMsg.classList.add('valid');
-                                // redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`, 3000);
+                                redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`, 3000);
                             }
 
                             if (response.status === 'errors') {
                                 dialog({title: 'Erreurs', content: response.errors});
                                 const dialogMsg = document.querySelector('dialog');
                                 dialogMsg.classList.add('errors');
-                                // redirect(`${configPath.basePath}/list/pages/list.html?id=${id}.html`);
+                                redirect(`${configPath.basePath}/list/pages/list.html?id=${id}.html`);
                             };
                         })
                     })
