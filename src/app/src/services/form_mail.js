@@ -18,6 +18,8 @@
 
 "use strict";
 
+import { mandatoryStar } from "../services/utils.js";
+
 /**
  * Génère une fenêtre de création/envoi de mail pour envoyer les MAJ aux utilisateurs.
  *
@@ -123,13 +125,16 @@ function displayFormMail(elementDOM) {
 
     mailForm.appendChild(recipientsListDiv);
     recipientsListDiv.appendChild(recipientsSmall);
+    recipientsSmall.appendChild(mandatoryStar.cloneNode(true));
     recipientsListDiv.appendChild(recipientsList);
     recipientsListDiv.appendChild(recipientsLists);
     recipientsListDiv.appendChild(inputRecipients);
 
     mailForm.appendChild(labelObject);
+    labelObject.appendChild(mandatoryStar.cloneNode(true));
     mailForm.appendChild(inputObjectMail);
     mailForm.appendChild(labelMailBody);
+    labelMailBody.appendChild(mandatoryStar.cloneNode(true));
     mailForm.appendChild(textAreaMail);
 
     mailForm.appendChild(actionBtnMail);
