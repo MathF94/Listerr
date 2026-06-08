@@ -44,7 +44,8 @@ class Lists extends Database
                 'type' => $params['typeList'],
                 'title' => $params['titleList'],
                 'description' => $params['descriptionList'],
-                'user_id' => $userId
+                'user_id' => $userId,
+                'checked' => 0
             ];
 
             $this->executeReq($req, $params);
@@ -68,6 +69,7 @@ class Lists extends Database
                             `l`.`type`,
                             `l`.`title`,
                             `l`.`description`,
+                            `l`.`checked`,
                             `u`.`id` AS `user_id`,
                             `u`.`name`,
                             `u`.`firstname`,
@@ -104,6 +106,7 @@ class Lists extends Database
                             `l`.`type`,
                             `l`.`title`,
                             `l`.`description`,
+                            `l`.`checked`,
                             `u`.`id` AS `user_id`,
                             `u`.`name`,
                             `u`.`firstname`,
@@ -147,6 +150,7 @@ class Lists extends Database
                             `l`.`type`,
                             `l`.`title`,
                             `l`.`description`,
+                            `l`.`checked`,
                             `u`.`id` AS `user_id`,
                             `u`.`name`,
                             `u`.`firstname`,
@@ -189,6 +193,24 @@ class Lists extends Database
                         `type` = :type,
                         `description` = :description,
                         `updated_at` = NOW()
+                    WHERE `id` = :id";
+
+            $query = $this->db->prepare($req);
+            $params['id'] = $id;
+
+            return $query->execute($params);
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+
+    public function updateChecked(array $params, int $id): bool
+    {
+        try {
+            $req = "UPDATE `list`
+                    SET `checked` = :checked
                     WHERE `id` = :id";
 
             $query = $this->db->prepare($req);

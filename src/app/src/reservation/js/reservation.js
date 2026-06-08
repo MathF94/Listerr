@@ -33,9 +33,10 @@ import {
     configPath,
     dialog,
     manageBtns,
+    notAllowedRedirection,
     redirect,
     scroll,
-validate
+    validate
 } from '../../services/utils.js';
 
 /**
@@ -56,7 +57,6 @@ function reservation(
     reservationTxt,
     dataUserId
 ) {
-
     const dataType = responseList.data.type;
     reservationBtn.addEventListener("click", function(e) {
         e.preventDefault();
@@ -264,7 +264,7 @@ function reservation(
                             }
                             const dialogMsg = document.querySelector("dialog");
                             dialogMsg.classList.add("valid");
-                            redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                            // redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
                         }
 
                         if (response.status === "errors") {
@@ -378,5 +378,6 @@ function reservation(
         })
     })
 }
+
 
 export { reservation };

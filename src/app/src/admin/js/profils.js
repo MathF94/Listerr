@@ -57,11 +57,11 @@ function readAdmin() {
             const tbody = document.querySelector("tbody");
             table.classList.add("userList");
 
-            const listUser = document.querySelector("#newUser");
-            listUser.title ="Créer un nouvel utilisateur";
+            const newUser = document.querySelector("#newUser");
+            newUser.title ="Créer un nouvel utilisateur";
 
             // Bouton de redirection pour création d'utilisateur
-            listUser.addEventListener("click", function (e) {
+            newUser.addEventListener("click", function (e) {
                 redirect(
                     `${configPath.basePath}/user/pages/registration.html`,
                     0

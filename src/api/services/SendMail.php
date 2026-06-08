@@ -378,17 +378,17 @@ class SendMail
                 <p>Administrateur de Listerr.</p>
                 HTML;
 
-            $AllRecipients = [];
+            $allRecipients = [];
             foreach ($allUsers as $user) {
-                $AllRecipients[] = htmlspecialchars($user->email);
+                $allRecipients[] = htmlspecialchars($user->email);
             }
 
             // Filtre l'email de l'admin
-            $AllRecipients = $modelIncludes->seekAndDestroy('fagot.mathieu@gmail.com', $AllRecipients);
+            $allRecipients = $modelIncludes->seekAndDestroy('fagot.mathieu@gmail.com', $allRecipients);
             // Filtre l'email du propriétaire
-            $AllRecipients = $modelIncludes->seekAndDestroy($listUserEmail, $AllRecipients);
+            $allRecipients = $modelIncludes->seekAndDestroy($listUserEmail, $allRecipients);
             // Filtre l'email du réservant du souhait
-            $AllRecipients = $modelIncludes->seekAndDestroy($ReservationUserEmail, $AllRecipients);
+            $allRecipients = $modelIncludes->seekAndDestroy($ReservationUserEmail, $allRecipients);
 
             $subjectAll = 'Listerr - Nouvelle réservation sur une liste';
             $messageAll = <<< HTML
@@ -404,7 +404,7 @@ class SendMail
             // Convertie une string en json_encode
             $strRecipient = json_encode($ReservationUserEmail);
             // Convertie l'array en json_encode
-            $strAllRecipients = json_encode($AllRecipients);
+            $strAllRecipients = json_encode($allRecipients);
 
             // Envoie un mail de confirmation à l'utilisateur qui réserve
             $mailForUser = $this->sendNotificationMailToUser($strRecipient, $subjectUser, $messageUser);
@@ -415,6 +415,84 @@ class SendMail
                 "status" => "success",
                 "mailForUser" => json_decode($mailForUser, true),
                 "mailForOtherUsers" => json_decode($mailForOtherUsers, true)
+            ];
+
+        } catch (\Exception $e) {
+            return json_encode([
+                "status" => "errors",
+                "message" => $e->getMessage()
+            ]);
+        }
+    }
+
+        /**
+     * Cette méthode permet de récupérer les éléments pour construire la notification d'annulation de la réservation par mail
+     * @param array $params - Tableau contenant les informations nécessaires :
+     *                      - 'list_id' (int) : L'identifiant de la liste.
+     *                      - 'card_id' (int) : L'identifiant de la tâche/carte.
+     *                      - Autres paramètres requis pour la création d'une réservation.
+     *
+     * @return bool - Vrai si mail envoyé
+     * @return bool - Faux si mail pas envoyé
+     * @return string - Réponse JSON : "errors" avec un message d'erreur, en cas d'échec.
+     *
+     */
+    public function getElementMailDeleteReservation($reservation)
+    {
+        try {
+            $users = new Users();
+            $allUsers = $users->readAll();
+
+            $listId = htmlspecialchars($reservation->listId);
+            $cardId = htmlspecialchars($reservation->cardId);
+            $ReservationUserEmail = htmlspecialchars($reservation->email);
+
+            $allRecipients = [];
+            foreach ($allUsers as $user) {
+                $allRecipients[] = $user->email;
+            }
+
+            $modelLists = new Lists();
+            $lists = $modelLists->getOneListById($listId);
+            $listUserEmail = htmlspecialchars($lists->user->email);
+
+            $modelCards = new Cards();
+            $cards = $modelCards->getOneCardById($cardId);
+
+            $listTitle = htmlspecialchars($lists->title);
+            $listUserLogin = htmlspecialchars($lists->user->login);
+            $cardTitle = htmlspecialchars($cards->title);
+
+            $modelIncludes = new Includes();
+            $domain = $modelIncludes->changeDomain();
+
+            // Filtre l'email de l'admin
+            $allRecipients = $modelIncludes->seekAndDestroy('fagot.mathieu@gmail.com', $allRecipients);
+            // Filtre l'email du propriétaire
+            $allRecipients = $modelIncludes->seekAndDestroy($listUserEmail, $allRecipients);
+            // Filtre l'email du réservant du souhait
+            $allRecipients = $modelIncludes->seekAndDestroy($ReservationUserEmail, $allRecipients);
+
+            $subjectAll = <<< HTML
+                Listerr - Annulation de réservation d'un souhait
+                HTML;
+            $messageAll = <<< HTML
+            <p>Bonjour à tous,</p>
+            <br>
+            <p>Pour information, le souhait "{$cardTitle}" de la liste "{$listTitle}" appartenant à {$listUserLogin} est de nouveau réservable.</p>
+            <p>Voici où le retrouver si besoin - <a href="{$domain}/list/pages/list.html?id={$listId}">lien vers l'article</a>.</p>
+            <br>
+            <p>Bonne journée.</p>
+            <p>Administrateur de Listerr.</p>
+            HTML;
+
+            // Convertie l'array en json_encode
+            $strAllRecipients = json_encode($allRecipients);
+            $mailForAllUsers = $this->sendNotificationMailToUser($strAllRecipients, $subjectAll, $messageAll);
+
+            return [
+                "status" => "success",
+                "mailForAllUsers" => json_decode($mailForAllUsers, true)
             ];
 
         } catch (\Exception $e) {
@@ -554,81 +632,6 @@ class SendMail
             ]);
         }
     }
-    /**
-     * Cette méthode permet de récupérer les éléments pour construire la notification d'annulation de la réservation par mail
-     * @param array $params - Tableau contenant les informations nécessaires :
-     *                      - 'list_id' (int) : L'identifiant de la liste.
-     *                      - 'card_id' (int) : L'identifiant de la tâche/carte.
-     *                      - Autres paramètres requis pour la création d'une réservation.
-     *
-     * @return bool - Vrai si mail envoyé
-     * @return bool - Faux si mail pas envoyé
-     * @return string - Réponse JSON : "errors" avec un message d'erreur, en cas d'échec.
-     *
-     */
-    public function getElementMailDeleteReservation($reservation)
-    {
-        try {
-            $users = new Users();
-            $allUsers = $users->readAll();
 
-            $listId = htmlspecialchars($reservation->listId);
-            $cardId = htmlspecialchars($reservation->cardId);
-            $ReservationUserEmail = htmlspecialchars($reservation->email);
 
-            $AllRecipients = [];
-            foreach ($allUsers as $user) {
-                $AllRecipients[] = $user->email;
-            }
-
-            $modelLists = new Lists();
-            $lists = $modelLists->getOneListById($listId);
-            $listUserEmail = htmlspecialchars($lists->user->email);
-
-            $modelCards = new Cards();
-            $cards = $modelCards->getOneCardById($cardId);
-
-            $listTitle = htmlspecialchars($lists->title);
-            $listUserLogin = htmlspecialchars($lists->user->login);
-            $cardTitle = htmlspecialchars($cards->title);
-
-            $modelIncludes = new Includes();
-            $domain = $modelIncludes->changeDomain();
-
-            // Filtre l'email de l'admin
-            $AllRecipients = $modelIncludes->seekAndDestroy('fagot.mathieu@gmail.com', $AllRecipients);
-            // Filtre l'email du propriétaire
-            $AllRecipients = $modelIncludes->seekAndDestroy($listUserEmail, $AllRecipients);
-            // Filtre l'email du réservant du souhait
-            $AllRecipients = $modelIncludes->seekAndDestroy($ReservationUserEmail, $AllRecipients);
-
-            $subjectAll = <<< HTML
-                Listerr - Annulation de réservation d'un souhait
-                HTML;
-            $messageAll = <<< HTML
-            <p>Bonjour à tous,</p>
-            <br>
-            <p>Pour information, le souhait "{$cardTitle}" de la liste "{$listTitle}" appartenant à {$listUserLogin} est de nouveau réservable.</p>
-            <p>Voici où le retrouver si besoin - <a href="{$domain}/list/pages/list.html?id={$listId}">lien vers l'article</a>.</p>
-            <br>
-            <p>Bonne journée.</p>
-            <p>Administrateur de Listerr.</p>
-            HTML;
-
-            // Convertie l'array en json_encode
-            $strAllRecipients = json_encode($AllRecipients);
-            $mailForAllUsers = $this->sendNotificationMailToUser($strAllRecipients, $subjectAll, $messageAll);
-
-            return [
-                "status" => "success",
-                "mailForAllUsers" => json_decode($mailForAllUsers, true)
-            ];
-
-        } catch (\Exception $e) {
-            return json_encode([
-                "status" => "errors",
-                "message" => $e->getMessage()
-            ]);
-        }
-    }
 }

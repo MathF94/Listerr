@@ -27,11 +27,10 @@ import {
 
 import {
     fetchReadOneListById,
+    fetchCheckVisibility,
     fetchUpdateList,
     fetchDeleteList,
 } from "../../actions/actions_lists.js";
-
-import { fetchSendMailCard } from '../../actions/actions_mails.js'
 
 import { card } from "../../card/js/card.js";
 
@@ -43,13 +42,10 @@ import { displayFormCard } from "../../services/form_card.js";
 
 import { displayFormList } from "../../services/form_list.js";
 
-import { displayFormMail } from '../../services/form_mail.js';
-
 import {
     allowedIds,
     buttonsOff,
     configPath,
-    createOptionLoginMail,
     detail,
     dialog,
     notAllowedRedirection,
@@ -141,6 +137,8 @@ function list() {
                 typeList.classList.add("grid_typeH3")
                 typeList.innerText = `${data.type} \n ${data.title}`;
 
+                const text = document.createElement("h4");
+
                 if (userId !== data.userId) {
                     oneList.classList.add("grid");
                     oneList.classList.add("third_party_wish");
@@ -158,26 +156,71 @@ function list() {
                 sectionList.classList.add("grid_text_list");
                 sectionList.id = "sectionTxt";
 
-                const text = document.createElement("h4");
+                // Ajout du bouton checkbox pour gérer la visibilité de la liste sur home.html
+                const divCheck = document.createElement("div");
+                divCheck.classList.add("divCheck");
 
+                const labelCheckBox = document.createElement("label");
+                labelCheckBox.id = "checkBoxVisibility";
+                labelCheckBox.htmlFor = "checkBoxVisibility";
+                labelCheckBox.innerHTML = "Visibilité";
 
-                for (const index in data) {
-                    const object = data[index];
+                const checkBoxVisibility = document.createElement("input");
+                checkBoxVisibility.classList.add("grid_box_visibility");
+                checkBoxVisibility.id = "checkbox";
+                checkBoxVisibility.type = "checkbox";
+                checkBoxVisibility.name = "checkbox";
 
-                    // Exclut certains éléments de la liste (id, userId, user, type, title, cards, createdAt, updatedAt)
-                    if (allowedIds.includes(`${index}`)) {
-                        continue;
-                    };
+                divCheck.appendChild(labelCheckBox);
+                divCheck.appendChild(checkBoxVisibility);
 
-                    text.innerText = `${object}`;
-                    sectionList.appendChild(text);
-                    oneList.appendChild(typeList);
-                    oneList.appendChild(sectionList);
-                };
+                let textChecked = document.createElement("p");
+                data.checked === true ? textChecked.innerText = "(Public)" : textChecked.innerText = "(Brouillon)";
+
+                text.innerText = `${data.description}` ;
+
+                sectionList.appendChild(text);
+                sectionList.appendChild(textChecked);
+                oneList.appendChild(typeList);
+
+                oneList.appendChild(sectionList);
+
+                if (data.checked === true) {
+                    checkBoxVisibility.checked = true
+                }
+
+                checkBoxVisibility.addEventListener("change", function(e) {
+                    e.preventDefault()
+                    submitCheckVisibility(e)
+                })
+
+                function submitCheckVisibility(e) {
+                    const checked = e.target.checked ? 1 : 0;
+
+                    fetchCheckVisibility(data.id, checked)
+                    .then(response => {
+                        if (response.status === "checkVisibility") {
+                            checked === 1 ? dialog({title: "Modification de publication", content: "la liste est rendue public."}) : dialog({title: "Modification de publication", content: "la liste est en brouillon."});
+
+                            const dialogMsg = document.querySelector("dialog");
+                            dialogMsg.classList.add("valid");
+                            redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                        }
+
+                        if (response.status === "errors") {
+                            dialog({title: "Erreurs", content: response.errors});
+                            const dialogMsg = document.querySelector("dialog");
+                            dialogMsg.classList.add("errors");
+                            redirect(`${configPath.basePath}/list/pages/list.html?id=${id}`);
+                        }
+                    })
+                }
 
                 // Rend visible les boutons "Supprimer" et "Modifier" pour l'utilisateur en cours uniquement
-                if (userId === data.user.id) {
+                if (userId === data.user.id && data.type === "WishList") {
                     // Informations importées dans le menu de la liste
+                    oneList.appendChild(divCheck);
+
                     const actions = [
                         {
                             id: `detailList-${data.id}`,
@@ -347,7 +390,6 @@ function list() {
                             }
                         },
                         {
-
                             // Gestion de la création d'une carte
                             id: `createCard-${data.id}`,
                             text: "+ Créer une carte",

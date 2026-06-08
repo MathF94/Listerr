@@ -109,7 +109,7 @@ body {
     min-height: 120vh;
     text-align: center;
 }
-#headListsSection {
+#headListsSection, #headReservationsSection {
     margin: 20px;
     padding-top: 3px;
 }
@@ -238,7 +238,7 @@ header {
         position: fixed;
         top: 0;
         transition-duration: 0.25s;
-        width: 210px;
+        width: 225px;
         z-index: 10;
         & ul {
             position: relative;
@@ -356,12 +356,16 @@ dialog {
     grid-column: 1/6;
     grid-row: 1/2;
     }
-.grid_titleH3_card {
+.grid_titleH3_card, .grid_titleH3 {
     grid-column: 2/6;
     grid-row: 1/2;
 }
 .grid_text_list {
     grid-column: 2/5;
+    grid-row: 2/2;
+}
+.grid_box_visibility {
+    grid-column: 1/1;
     grid-row: 2/2;
 }
 .grid_send_mail {
@@ -375,6 +379,10 @@ dialog {
         overflow: hidden;
         text-overflow: ellipsis;
     }
+}
+.grid_reservations {
+    display: grid;
+    grid-template: repeat(1, 1fr) / repeat(5, 1fr);
 }
 .grid_text_reserved {
     cursor: context-menu;
@@ -456,7 +464,7 @@ dialog {
 #contentSection {
     margin: 0 auto;
 }
-.list {
+.list, .reservations {
     align-items: center;
     border-radius: 10px;
     margin: 20px auto;
@@ -479,6 +487,9 @@ dialog {
     &.third_party_wish {
         background: var(--third-party-wish-bg);
     }
+}
+.divCheck {
+    display: grid;
 }
 .card {
     border-radius: 10px;
@@ -1700,7 +1711,7 @@ input[type="submit"] {
             position: fixed;
             top: 0;
             transition-duration: 0.25s;
-            width: 203px;
+            width: 225px;
         }
         &__item {
             display: block;
@@ -1717,7 +1728,7 @@ input[type="submit"] {
             }
         }
     }
-    #allListsWrapper, .listsWrapper {
+    #allListsWrapper, .listsWrapper, #reservationsSection, .reservationsWrapper {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
@@ -1741,7 +1752,7 @@ input[type="submit"] {
     #createUser, #feature  {
         margin-top: 6px;
     }
-    .list {
+    .list, .reservations {
         width: 45%;
         margin: 10px;
         border-radius: 10px;

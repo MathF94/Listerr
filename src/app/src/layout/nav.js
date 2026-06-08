@@ -99,6 +99,11 @@ function navigation(template) {
                 id: "lists",
             },
             {
+                text: "Vos réservations",
+                href: `${configPath.basePath}/reservation/pages/reservations.html`,
+                id: "reservations",
+            },
+            {
                 text: "Mises à jour",
                 href: `${configPath.basePath}/features/pages/features.html`,
                 id: "features",

@@ -21,6 +21,7 @@
 namespace Entity;
 
 use Models\Cards;
+use Models\Reservations;
 /**
  * Classe représentant une liste, qui peut être de type "WishList" ou "TodoList".
  */
@@ -33,11 +34,13 @@ class Lister
     public string $type;
     public string $title;
     public string $description;
+    public bool $checked;
     public string $createdAt;
     public string $updatedAt;
     public int $userId;
     public User $user;
     public array $cards;
+    public array $reservations;
 
     /**
      * Initialise les propriétés de l'objet d'une liste à partir d'un tableau associatif de paramètres.
@@ -56,6 +59,7 @@ class Lister
         $this->type = $params['type'];
         $this->title = $params['title'];
         $this->description = $params['description'];
+        $this->checked = $params['checked'];
         $this->createdAt = $params['created_at'];
         $this->updatedAt = $params['updated_at'];
         $this->userId = $params['user_id'];
@@ -63,8 +67,12 @@ class Lister
         $this->user = new User();
         $this->user->populate($params);
 
-        $model = new Cards();
+        $modelCards = new Cards();
         // Récupère toutes les cartes d'une liste en fonction de son ID $this->id
-        $this->cards = $model->getAllCardsByList($this->id);
+        $this->cards = $modelCards->getAllCardsByList($this->id);
+
+        $modelReservations = new Reservations();
+        $this->reservations = $modelReservations->getAllReservationsByListId($this->id);
+
     }
 }

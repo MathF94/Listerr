@@ -25,6 +25,8 @@ import {
 
 import { fetchReadAllLists } from "../../actions/actions_lists.js";
 
+import { fetchReadAllReservations } from "../../actions/actions_reservation.js";
+
 import { fetchRead } from "../../actions/actions_user.js";
 
 import { displayFormUpdateUser } from "../../services/form_user.js";
@@ -36,10 +38,11 @@ import { CSRFToken } from "../../services/CSRFToken.js";
 import {
     allowedIds,
     configPath,
-    type,
+    detail,
     dialog,
-    redirect,
     notAllowedRedirection,
+    redirect,
+    type,
 } from "../../services/utils.js";
 
 notAllowedRedirection();
@@ -51,6 +54,7 @@ notAllowedRedirection();
 function read() {
     // Appelle la fonction fetchRead pour obtenir les informations du profil de l'utilisateur.
     const listWrapper = document.querySelector("#listsWrapper");
+    const reservationWrapper = document.querySelector("#reservationsWrapper");
     const profilWrapper = document.querySelector("#profilWrapper");
 
     const updateBtn = document.querySelector("#update");
@@ -63,6 +67,9 @@ function read() {
 
     const listBtn = document.querySelector("#listsUser");
     listBtn.title ="Accéder à mes listes";
+
+    const reservationBtn = document.querySelector("#reservationsUser");
+    reservationBtn.title ="Accéder à mes réservations";
 
     const popIn = document.createElement("div");
     popIn.id = "popIn";
@@ -104,6 +111,27 @@ function read() {
         fetchRead(id).then((response) => {
             if (response.status === "[Admin]user" && localStorage.token && localStorage.user) {
                 displayUser(response);
+                const userEmailProfil = response.email.value
+
+                const listsWrapper = document.querySelector("#listsWrapper");
+                const reservationsWrapper = document.querySelector("#reservationsWrapper");
+
+                function toggle() {
+                    listBtn.addEventListener("click", function (e) {
+                        if (reservationsWrapper.childElementCount > 0) {
+                            reservationsWrapper.innerHTML = ""
+                            reservationBtn.disabled = false;
+                        }
+                    })
+                    reservationBtn.addEventListener("click", function (e) {
+                        e.preventDefault();
+
+                        if (listsWrapper.childElementCount > 0) {
+                            listsWrapper.innerHTML = ""
+                            listBtn.disabled = false;
+                        }
+                    })
+                }
 
                 // Affiche le bouton "Retour..." uniquement pour l'Admin
                 if (JSON.parse(localStorage.user).role === "Admin") {
@@ -119,6 +147,10 @@ function read() {
                     listBtn.innerText = `Listes de ${response.login.value}`;
                     listBtn.title = `Listes de ${response.login.value}`;
                     listBtn.after(returnBtn);
+
+                    reservationBtn.innerText = `Réservations de ${response.login.value}`;
+                    reservationBtn.title = `Réservations de ${response.login.value}`;
+                    reservationBtn.after(returnBtn);
 
                     // Permet la modification de l'utilisateur par l'Admin
                     updateBtn.addEventListener("click", function (e) {
@@ -238,9 +270,11 @@ function read() {
                 listBtn.addEventListener("click", function (e) {
                     e.preventDefault();
                     listBtn.disabled = true;
+
+                    toggle()
+
                     fetchReadAllLists(id).then((response) => {
                         const data = response.data;
-                        const listsWrapper = document.querySelector("#listsWrapper");
                         const emptyMessage = document.createElement("p");
 
                         if (response.status === "standBy") {
@@ -250,8 +284,10 @@ function read() {
 
                         if (response.status === "readAllListsByUser") {
                             emptyMessage.remove();
+
                             for (const index in data) {
                                 const objectList = data[index];
+
                                 const articleList = document.createElement("article");
                                 articleList.id = `profilList-${objectList.id}`;
                                 articleList.classList.add("list");
@@ -266,6 +302,7 @@ function read() {
                                 const sectionList = document.createElement("section");
                                 sectionList.classList.add("grid_section");
                                 sectionList.classList.add("pointer");
+
                                 const typeH3 = document.createElement("h3");
                                 typeH3.classList.add("grid_typeH3");
                                 const titleH4 = document.createElement("h4");
@@ -296,7 +333,7 @@ function read() {
                                     }
                                     text.innerText = `${objectList[key]}`;
 
-                                    listWrapper.appendChild(articleList);
+                                    listsWrapper.appendChild(articleList);
                                     articleList.appendChild(typeH3);
                                     articleList.appendChild(sectionList);
                                     sectionList.appendChild(titleH4);
@@ -310,6 +347,77 @@ function read() {
                                     }
                                     redirect(`${configPath.basePath}/list/pages/list.html?id=${objectList.id}`,0)
                                 })
+                            }
+                        }
+                    })
+                })
+
+                // Affiche les réservations de l'utilisateur vu par l'Admin
+                reservationBtn.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    reservationBtn.disabled = true;
+
+                    fetchReadAllReservations(id)
+                    .then((response) => {
+                        if (response.status === "standBy") {
+                            emptyMessage.innerText = "Aucune liste n'a encore été créée :)"
+                            reservationsWrapper.appendChild(emptyMessage);
+                        }
+
+                        if (response.status === "readAllReservationsByUser") {
+                            const data = response.data
+                            const emailUser = JSON.parse(localStorage.user).email;
+                            const emptyMessage = document.createElement("p");
+
+                            for (const index in data) {
+                                emptyMessage.remove()
+                                const objectList = data[index];
+                                const objectListEmail = objectList.user.email
+                                const arrayCard = objectList.cards;
+                                const arrayReservation = objectList.reservations;
+
+                                if (arrayReservation.length > 0) {
+                                    for (const index in arrayReservation) {
+                                        const objectCards = arrayCard[index];
+                                        const objectReservation = arrayReservation[index];
+                                        if (objectReservation.email !== userEmailProfil) {
+                                            continue;
+                                        }
+
+                                        if (objectReservation.email === userEmailProfil) {
+                                            const articleReservation = document.createElement("article");
+                                            articleReservation.id = `profilReservation-${objectList.id}`;
+                                            articleReservation.classList.add("list");
+                                            articleReservation.classList.add("grid");
+                                            articleReservation.classList.add("wish");
+
+                                            const titleList = document.createElement("h3");
+                                            const descriptionList = document.createElement("h4");
+                                            const sectionReservation = document.createElement("section");
+                                            const textWish = document.createElement("p");
+                                            const detailReservation = document.createElement("small");
+
+                                            sectionReservation.id = `sectionReservation-${objectList.id}`
+                                            sectionReservation.classList.add("grid_section");
+                                            sectionReservation.classList.add("pointer");
+
+                                            titleList.id = `titleList-${objectList.id}`
+                                            titleList.classList.add("grid_titleH3");
+                                            titleList.innerText = `${objectList.title} \n ${objectList.description}`
+
+                                            descriptionList.innerText = `${objectCards.title}`;
+                                            descriptionList.classList.add("grid_text_list");
+
+                                            detailReservation.innerText = detail(objectReservation.createdAt, objectReservation.name);
+
+                                            reservationsWrapper.appendChild(articleReservation);
+                                            articleReservation.appendChild(titleList);
+                                            articleReservation.appendChild(sectionReservation);
+                                            sectionReservation.appendChild(descriptionList);
+                                            sectionReservation.appendChild(detailReservation);
+                                        }
+                                    }
+                                }
                             }
                         }
                     })
@@ -338,12 +446,18 @@ function read() {
                 }
                 displayUser(response);
 
-                // Redirige l'utilisateur vers la page de listes lorsqu'il clique sur le bouton "Listes d'utilisateurs".
+                // Redirige l'utilisateur vers la page de listes lorsqu'il clique sur le bouton "Listes de [user]".
                 listBtn.addEventListener("click", function (e) {
                     redirect(`${configPath.basePath}/list/pages/lists.html`, 0);
                 });
+
+                // Redirige l'utilisateur vers la page de réservations lorsqu'il clique sur le bouton "Réservations de [user]".
+                reservationBtn.addEventListener("click", function (e) {
+                    redirect(`${configPath.basePath}/reservation/pages/reservations.html`, 0);
+                });
+
                 // Redirige l'utilisateur vers la page de mise à jour de profil lorsqu'il clique sur le bouton "Mettre à jour".
-                updateBtn.addEventListener("click", function (e) {
+                updateBtn.addEventListener("click", function () {
                     redirect(
                         `${configPath.basePath}/user/pages/update.html`,
                         0

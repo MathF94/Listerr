@@ -177,7 +177,7 @@ class ListController
      * @return string - Réponse JSON : "readAllListsByUser" avec les data des listes, en cas de succès.
      *                                 "readAllListsByUser failed" avec un message d'erreur, si l'utilisateur est introuvable.
      *                                 "standBy" avec un message d'erreur, si aucune liste n'est encore créée.
-     *                                 "errors" avec un message d'erreur, en cas d'éch
+     *                                 "errors" avec un message d'erreur, en cas d'échec.
      */
     public function readAllListsByUser(?int $userId = null): string
     {
@@ -263,6 +263,41 @@ class ListController
                 "status" => "readAllListsAllUsers failed",
                 "message" => "no user found"
             ]);
+        } catch (\Exception $e) {
+            return json_encode([
+                "status" => "errors",
+                "message" => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function checkVisibilityList(int $id, bool $checked): string
+    {
+        try {
+            if (!empty($this->user)) {
+                $model = new Lists();
+                $list = $model->getOneListById((int)$id);
+
+                if (empty($list)) {
+                    return json_encode([
+                        "status" => "in pending visibility checked",
+                        "errors" => "no list found"
+                    ]);
+                };
+
+                $params = ["checked" => $checked];
+                $model->updateChecked($params, $list->id);
+
+                return json_encode([
+                    "status" => "checkVisibility",
+                    "message" => "la visibilité a bien été mise à jour."
+                ]);
+            }
+            return json_encode([
+                "status" => "errors",
+                "message" => "no user found"
+            ]);
+
         } catch (\Exception $e) {
             return json_encode([
                 "status" => "errors",

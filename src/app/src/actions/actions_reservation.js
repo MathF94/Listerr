@@ -51,6 +51,29 @@ async function fetchCreateReservation(form, listId, cardId) {
     }
 }
 
+/**
+ * Effectue une requête pour récupérer toutes les réservations faites par un utilisateur pour reservations.html
+ *
+ * @returns {Promise<Object|null>} Une promesse résolue avec les données de toutes les réservations faites par un utilisateur ou null en cas d'erreur.
+ */
+async function fetchReadAllReservations(id) {
+    try {
+        let url = `${configPath.apiPath}/?route=read_all_reservations_by_list`;
+        if (id) {
+            url += `&id=${id}`
+        }
+        return await fetch(url, {
+            headers: {"X-Authorization": localStorage.getItem("token")},
+            method: "GET",
+            }).then(response => response.json()
+            );
+
+    } catch (error) {
+        console.error("Erreur lors de la requête fetch :", error);
+        return null;
+    }
+};
+
 async function fetchReadAllReservationsByCard(id) {
     try {
         const url = `${configPath.apiPath}/?route=read_one_reservation_by_id`;
@@ -106,6 +129,7 @@ async function fetchCancelReservation(id) {
 
 export {
     fetchCreateReservation,
+    fetchReadAllReservations,
     fetchReadAllReservationsByCard,
     fetchUpdatePriority,
     fetchCancelReservation

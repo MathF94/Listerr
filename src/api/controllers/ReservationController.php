@@ -20,6 +20,8 @@
 
 namespace Controllers;
 
+use Models\Cards;
+use Models\Lists;
 use Models\Reservations;
 use Models\Users;
 use Services\CSRFToken;
@@ -198,6 +200,68 @@ class ReservationController
                 "message" => $e->getMessage()
             ]);
         }
+    }
+
+    /**
+     * Cette méthode récupère en fonction de l'ID de l'utilisateur, sur la page reservations.html :
+     *       ==> les détails de toutes les réservations,
+     *                       de l'utilisateur,
+     *                       des cartes associés à la liste.
+     *
+     * @return string - Réponse JSON : "readAllReservationsByUser" avec les data des réservation, en cas de succès.
+     *                                 "readAllReservationsByUser failed" avec un message d'erreur, si l'utilisateur est introuvable.
+     *                                 "standBy" avec un message d'erreur, si aucune réservation n'est encore faite.
+     *                                 "errors" avec un message d'erreur, en cas d'échec.
+     */
+    public function readAllReservationsByList(?int $userId = null): string
+    {
+        try {
+            if (!empty($this->user)) {
+                $modelLists = new Lists();
+                $lists = $modelLists->AllListsAllUsers();
+
+                if (empty($userId)) {
+                    // Dans la page reservations.html
+                    if (empty($lists)) {
+                        return json_encode([
+                            "status" => "standBy",
+                            "errors" => "no reservations created yet"
+                        ]);
+                    } else {
+                        return json_encode([
+                            "status" => "readAllReservationsByUser",
+                            "data" => $lists,
+                        ]);
+                    }
+
+                    } else {
+                        // Dans la page reservation.html?id=XXX
+                        if (!empty($userId)) {
+                            if (empty($lists)) {
+                                return json_encode([
+                                    "status" => "standBy",
+                                    "errors" => "no reservations created yet"
+                                ]);
+                            } else {
+                                return json_encode([
+                                    "status" => "readAllReservationsByUser",
+                                    "data" => $lists,
+                                ]);
+                            }
+                        }
+                    }
+            };
+
+            return json_encode([
+                "status" => "readAllReservationsByUser failed",
+                "message" => "no user found"
+            ]);
+        } catch (\Exception $e) {
+            return json_encode([
+                "status" => "errors",
+                "message" => $e->getMessage()
+            ]);
+        };
     }
 
     /**

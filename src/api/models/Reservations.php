@@ -61,7 +61,7 @@ class Reservations extends Database
      * @param int $id - ID de l'invité qui a réservé pour récupérer son login.
      * @return Reservation|null - L'objet Reservation correspondant à la réservation ou null si non trouvé.
      */
-    public function getAllReservationByListId(int $listId): ?array
+    public function getAllReservationsByListId(int $listId): ?array
     {
         try {
             $req = "SELECT `r`.`id`,
@@ -69,29 +69,28 @@ class Reservations extends Database
                             `r`.`email`,
                             `r`.`list_id`,
                             `r`.`card_id`,
+                            `l`.`id` AS `list_id`,
+                            `l`.`type`,
+                            `l`.`title`,
+                            `l`.`description`,
+                            `l`.`checked`,
                             `r`.`created_at`
                     FROM `reservation` `r`
-                    INNER JOIN `list` `l` ON `r`.`list_id` = `l`.`id`
-                    WHERE `l`.`id` = :id
+                    INNER JOIN `list` `l` ON `l`.`id` = `r`.`list_id`
+                    WHERE `list_id` = :list_id
                     ORDER BY created_at DESC";
 
-            $results = $this->findAll(
-                $req,
-                ['id' => $listId]
-            );
-
-            if (empty($results)) {
-                return null;
-            }
-
-            $reservationArray = [];
+            $results = $this->findAll($req, [
+                'list_id' => $listId
+            ]);
+            $reservationsArray = [];
 
             foreach($results as $result) {
                 $reservation = new Reservation();
                 $reservation->populate($result);
-                $reservationArray[] = $reservation;
+                $reservationsArray[] = $reservation;
             }
-            return $reservationArray;
+            return $reservationsArray;
         } catch (\Exception $e) {
             echo $e->getMessage();
             return null;
@@ -161,6 +160,7 @@ class Reservations extends Database
             return null;
         }
     }
+
     /**
      * Cette méthode permet d'annuler une réservation de la base de données.
      *
