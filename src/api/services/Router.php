@@ -146,7 +146,7 @@ class Router
                     if ($this->isAllowedMethod('GET')) {
                         $id = $_GET['id'] ?? null;
                         $list = new ListController($headers['X-Authorization']);
-                        echo $list->readAllListsByUser($id); // readOneByUser
+                        echo $list->readAllListsByUser($id); // readAllByUser
                     }
                     break;
 
@@ -154,6 +154,13 @@ class Router
                     if ($this->isAllowedMethod('GET')) {
                         $list = new ListController($headers['X-Authorization']);
                         echo $list->readAllListsAllUsers(); // readAllAllUser
+                    }
+                    break;
+
+                case 'check_visibility_list': // Toutes les listes de tous les utilisateurs sur home.html
+                    if ($this->isAllowedMethod('POST')) {
+                        $list = new ListController($headers['X-Authorization']);
+                        echo $list->checkVisibilityList($_POST['id'], $_POST['checked']); // checkVisibilityList
                     }
                     break;
 
@@ -229,6 +236,14 @@ class Router
                     if ($this->isAllowedMethod('GET')) {
                         $reservation = new ReservationController($headers['X-Authorization']);
                         echo $reservation->readOneReservationById(); // readOneById
+                    }
+                    break;
+
+                case 'read_all_reservations_by_list':
+                    if ($this->isAllowedMethod('GET')) {
+                        $userId = $_GET['id'] ?? null;
+                        $reservation = new ReservationController($headers['X-Authorization']);
+                        echo $reservation->readAllReservationsByList($userId); // readAllByListUser
                     }
                     break;
 

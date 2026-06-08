@@ -22,24 +22,19 @@
         <meta name="description" content="Listerr, le gestionnaire qui liste des listes">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Listerr</title>
-        <script type="module" src="../../actions/actions_user.js"></script>
+        <script type="module" src="../../actions/actions_reservation.js"></script>
         <script type="module" src="../../layout/header.js"></script>
-        <script type="module" src="../js/profil.js"></script>
-        <script type="module" src="../js/logout.js"></script>
-        <script type="module" src="../js/delete.js"></script>
+        <script type="module" src="../../user/js/logout.js"></script>
+        <script type="module" src="../js/reservations.js"></script>
         <link rel="stylesheet" href="../../style.css" />
         <link rel="icon" href="../../favicon.ico" />
     </head>
     <body>
-        <section id="profilSection" class="profilSection">
-            <h2 id="secondTitle">Profil utilisateur</h2>
-            <div id="profilWrapper">
-                <button class="btn edit" id="update" type="button" value="update"></button><!--
-                --><button class="btn delete" id="delete" type="button" value="delete"></button>
-                <button class="btn way" id="listsUser" type="button" value="">Accéder à mes listes</button><!--
-                --><button class="btn way" id="reservationsUser" type="button" value="">Accéder à mes réservations</button>
-            </div>
-            <div id="listsWrapper" class="listsWrapper"></div>
+        <section id="headReservationsSection">
+            <h2></h2>
+        </section>
+        <section id="reservationsSection">
+            <h3>Affichage des listes de souhaits et de tâches</h3>
             <div id="reservationsWrapper" class="reservationsWrapper"></div>
         </section>
     </body>

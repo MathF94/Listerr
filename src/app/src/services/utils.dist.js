@@ -23,12 +23,14 @@
  */
 const allowedIds = [
     "cards",
+    "checked",
     "createdAt",
     "id",
     "listId",
     "login",
     "priority",
     "reservationId",
+    "reservations",
     "status",
     "title",
     "type",

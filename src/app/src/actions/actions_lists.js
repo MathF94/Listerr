@@ -86,6 +86,28 @@ async function fetchReadAllLists(id) {
     }
 };
 
+async function fetchCheckVisibility(id, checked) {
+    try {
+        const formData = new FormData()
+        formData.append('id', id)
+        formData.append('checked', checked)
+
+        const url = `${configPath.apiPath}/?route=check_visibility_list`;
+
+        return await fetch(url, {
+            method: "POST",
+            headers: {
+                "X-Authorization": localStorage.getItem("token")
+            },
+            body: formData,
+            }).then(response => response.json());
+
+    } catch (error) {
+        // console.error("Erreur lors de la requête fetch :", error);
+        return {status: "error", message: error.message };
+    }
+}
+
 /**
  * Effectue une requête pour mettre à jour une liste en utilisant un formulaire.
  *
@@ -142,6 +164,7 @@ export {
     fetchCreateList,
     fetchReadOneListById,
     fetchReadAllLists,
+    fetchCheckVisibility,
     fetchUpdateList,
     fetchDeleteList
 };

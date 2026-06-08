@@ -81,7 +81,7 @@ function readAllLists() {
     // Récupère les listes depuis l'API et les affiche
     fetchAllListsByUsers().then((response) => {
         const data = response.data;
-        if (response.status === "readAllListsAllUsers") {
+        if (response.status === "readAllListsAllUsers" ) {
             const homeDisplayLists = document.querySelector("#homeDisplayLists");
 
             const allListsSection = document.createElement("section");
@@ -113,43 +113,51 @@ function readAllLists() {
                 }
 
                 const sectionList = document.createElement("section");
-                sectionList.id = `sectionList-${object.id}`;
-                sectionList.classList.add("pointer");
-                sectionList.classList.add("grid_section");
-                const typeH3 = document.createElement("h3");
-                typeH3.classList.add("grid_typeH3");
-                const titleH4 = document.createElement("h4");
 
-                // N'affiche que les WishList
-                if (object.type === "WishList") {
-                    for (const key in object) {
-                        const text = document.createElement("p");
+                if (object.checked === true) {
+                    sectionList.id = `sectionList-${object.id}`;
+                    sectionList.classList.add("pointer");
+                    sectionList.classList.add("grid_section");
 
-                        if (key === "title") {
-                            titleH4.innerText = `${object.title}`;
-                            sectionList.appendChild(titleH4);
-                        } else if (key === "type") {
-                            typeH3.innerText = `${object.type}  de ${object.user.login}`;
+                    const typeH3 = document.createElement("h3");
+                    typeH3.classList.add("grid_typeH3");
+
+                    const titleH4 = document.createElement("h4");
+
+                    // N'affiche que les WishList
+                    if (object.type === "WishList") {
+                        for (const key in object) {
+                            const text = document.createElement("p");
+
+                            if (key === "title") {
+                                titleH4.innerText = `${object.title}`;
+                                sectionList.appendChild(titleH4);
+                            } else if (key === "type") {
+                                typeH3.innerText = `${object.type}  de ${object.user.login}`;
+                            }
+
+                            if (key === "updatedAt") {
+                                dropDownMenu(articleList, object.id, object.updatedAt, object.user.login);
+                            }
+
+                            if (key === "checked" || key === "reservations") {
+                                continue;
+                            }
+
+                            if (allowedIds.includes(`${key}`)) {
+                                continue;
+                            }
+
+                            text.innerText = `${object[key]}`;
+
+                            titleLists.after(allListWrapper);
+                            allListWrapper.appendChild(articleList);
+                            articleList.appendChild(typeH3);
+                            articleList.appendChild(sectionList);
+                            sectionList.appendChild(text);
                         }
-
-                        if (key === "updatedAt") {
-                            dropDownMenu(articleList, object.id, object.updatedAt, object.user.login);
-                        }
-
-                        if (allowedIds.includes(`${key}`)) {
-                            continue;
-                        }
-
-                        text.innerText = `${object[key]}`;
-
-                        titleLists.after(allListWrapper);
-                        allListWrapper.appendChild(articleList);
-                        articleList.appendChild(typeH3);
-                        articleList.appendChild(sectionList);
-                        sectionList.appendChild(text);
                     }
                 }
-
                 sectionList.addEventListener("click", function () {
                     if (object.type === "TodoList" && object.user.id !== JSON.parse(localStorage.getItem("user")).id) {
                         return false;

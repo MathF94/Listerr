@@ -31,14 +31,14 @@ Class Includes
         }
     }
 
-    public function seekAndDestroy($EmailTarget, $AllEmails): array
+    public function seekAndDestroy($emailTarget, $allEmails): array
     {
-        $index = array_search($EmailTarget, $AllEmails);
+        $index = array_search($emailTarget, $allEmails);
             // Recherche l'index lié au mail ciblé dans le tableau d'emails
             if ($index !== false) {
                 // Supprimer la valeur liée à cet index
-                array_splice($AllEmails, $index, 1);
+                array_splice($allEmails, $index, 1);
             }
-            return $AllEmails;
+            return $allEmails;
     }
 }

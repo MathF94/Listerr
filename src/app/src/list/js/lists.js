@@ -24,9 +24,9 @@ import {
     fetchDeleteList
 } from "../../actions/actions_lists.js";
 
-import { dropDownMenu } from "../../layout/dropdown.js";
-
 import { displayFormList } from "../../services/form_list.js";
+
+import { dropDownMenu } from "../../layout/dropdown.js";
 
 import { CSRFToken } from "../../services/CSRFToken.js";
 
@@ -52,7 +52,6 @@ function lists() {
     const login = JSON.parse(localStorage.user).login
 
     titlePage.innerText= `Les listes de ${login}`;
-
 
     const linkLists = document.querySelector("#lists");
     const linkProfil = document.querySelector("#profil");
@@ -184,6 +183,9 @@ function lists() {
                 const titleH4 = document.createElement("h4");
                 titleH4.classList.add("grid_titleH4_lists");
 
+                let textChecked = document.createElement("p");
+                objectList.checked === true ? textChecked.innerText = "(Public)" : textChecked.innerText = "(Brouillon)";
+
                 for (const key in objectList) {
                     if (key === "title") {
                         titleH4.innerText = `${objectList.description}`;
@@ -201,6 +203,10 @@ function lists() {
                     articleList.appendChild(sectionList);
                     sectionList.appendChild(titleH4);
 
+                    if (objectList.type === "WishList") {
+                        sectionList.appendChild(textChecked);
+                    }
+
                     const actions = [
                         {
                             id: `detailLists-${objectList.id}`,
@@ -211,7 +217,7 @@ function lists() {
                             // Gestion de la suppression de liste
                             id: `deleteLists-${objectList.id}`,
                             text: "🗑 Supprimer la liste",
-                            onclick: function(e){
+                            onclick: function(e) {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 const btnListId = parseInt(e.target.value);
@@ -228,12 +234,12 @@ function lists() {
                                         dialogMsg.classList.add("valid");
                                         redirect(`${configPath.basePath}/list/pages/lists.html`);
                                     });
-                                }
-                            }
-                        }
-                    ]
+                                };
+                            },
+                        },
+                    ];
                     dropDownMenu(articleList, objectList.id, objectList.updatedAt, objectList.user.login, actions);
-                }
+                };
 
                 // Redirige vers la page de détails de la liste en cliquant sur la liste.
                 sectionList.addEventListener("click", function(){
