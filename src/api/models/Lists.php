@@ -130,7 +130,8 @@ class Lists extends Database
                 $lister = new Lister();
                 $lister->populate($result);
                 $listsArray[] = $lister;
-            }
+                }
+
             return $listsArray;
         } catch (\Exception $e) {
             echo $e->getMessage();

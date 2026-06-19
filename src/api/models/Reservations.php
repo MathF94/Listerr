@@ -58,8 +58,8 @@ class Reservations extends Database
     /**
      * Cette méthode permet de récupérer les détails d'une réservation en fonction de son ID.
      *
-     * @param int $id - ID de l'invité qui a réservé pour récupérer son login.
-     * @return Reservation|null - L'objet Reservation correspondant à la réservation ou null si non trouvé.
+     * @param int $listId - ID de l'invité qui a réservé pour récupérer son login.
+     * @return Reservation[] - L'objet Reservation correspondant à la réservation ou null si non trouvé.
      */
     public function getAllReservationsByListId(int $listId): ?array
     {
@@ -80,17 +80,19 @@ class Reservations extends Database
                     WHERE `list_id` = :list_id
                     ORDER BY created_at DESC";
 
-            $results = $this->findAll($req, [
-                'list_id' => $listId
-            ]);
+            $results = $this->findAll(
+                $req,
+                ['list_id' => $listId]
+            );
             $reservationsArray = [];
 
-            foreach($results as $result) {
+            foreach ($results as $result) {
                 $reservation = new Reservation();
                 $reservation->populate($result);
                 $reservationsArray[] = $reservation;
             }
             return $reservationsArray;
+
         } catch (\Exception $e) {
             echo $e->getMessage();
             return null;
