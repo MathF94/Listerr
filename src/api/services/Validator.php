@@ -277,8 +277,8 @@ class Validator
 
         if (empty(trim($params['titleCard']))) {
             $errors[] = 'Le champ "titre" est requis.';
-        } elseif (strlen($params['titleCard']) > 50) {
-            $errors[] = 'Le champ "titre" ne doit pas dépasser 20 caractères.';
+        } elseif (strlen($params['titleCard']) > 70) {
+            $errors[] = 'Le champ "titre" ne doit pas dépasser 70 caractères.';
         }
 
         if (empty(trim($params['priority']))) {

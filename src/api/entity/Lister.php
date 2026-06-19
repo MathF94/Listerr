@@ -73,6 +73,5 @@ class Lister
 
         $modelReservations = new Reservations();
         $this->reservations = $modelReservations->getAllReservationsByListId($this->id);
-
     }
 }

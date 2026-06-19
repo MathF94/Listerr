@@ -143,6 +143,7 @@ function features() {
         formFeature.addEventListener('submit', function(e) {
             e.preventDefault();
             // Validation de pattern du formulaire
+
             const inputTitle = document.querySelector('#titleFeature');
             inputTitle.addEventListener('invalid', function(e) {
                 validate(e.target)
@@ -157,17 +158,24 @@ function features() {
             fetchCreateFeature(formFeature)
             .then(response => {
                 localStorage.removeItem('csrfToken');
-                if (response.status === 'mailFeature') {
-                    if (role === 'Admin') {
+                if (role === 'Admin') {
+                    if (response.status === 'createFeature') {
                         dialog({title: 'Création de la future évolution', content: 'Une de plus à faire'});
+                        const dialogMsg = document.querySelector('dialog');
+                        dialogMsg.classList.add('valid');
+                        redirect(`${configPath.basePath}/features/pages/features.html`, 3000);
                     }
-                    if (role === 'User') {
-                        dialog({title: 'Proposition de suggestion / alerte de bug', content: 'Merci de votre idée / alerte !'});
-                    }
-                    const dialogMsg = document.querySelector('dialog');
-                    dialogMsg.classList.add('valid');
-                    redirect(`${configPath.basePath}/features/pages/features.html`, 3000);
                 }
+
+                if (role === 'User') {
+                    if (response.status === 'mailFeature') {
+                        dialog({title: 'Proposition de suggestion / alerte de bug', content: 'Merci de votre idée / alerte !'});
+                        const dialogMsg = document.querySelector('dialog');
+                        dialogMsg.classList.add('valid');
+                        redirect(`${configPath.basePath}/features/pages/features.html`, 3000);
+                    }
+                }
+
                 if (response.status === 'errors') {
                     dialog({title: 'Erreurs', content: response.errors});
                     const dialogMsg = document.querySelector('dialog');
@@ -505,21 +513,21 @@ function features() {
                     })
 
                     if (objectFeature.type === 'Evolution') {
-                        const selectType = document.querySelector('#typeFeature');
+                        const selectType = document.querySelector('#typeFeatureSelect');
                         selectType.value = 0;
                         const optionFeature = document.querySelector('#optEvolution');
                         optionFeature.setAttribute('value', 'Evolution');
                         optionFeature.selected = true
 
                     } else if (objectFeature.type === 'Correctif') {
-                        const selectType = document.querySelector('#typeFeature');
+                        const selectType = document.querySelector('#typeFeatureSelect');
                         selectType.value = 0;
                         const optionFix = document.querySelector('#optCorrectif');
                         optionFix.setAttribute('value', 'Correctif');
                         optionFix.selected = true
 
                     } else {
-                        const selectType = document.querySelector('#typeFeature');
+                        const selectType = document.querySelector('#typeFeatureSelect');
                         selectType.value = 0;
                         const optionSuggest = document.querySelector('#optSuggestion');
                         optionSuggest.setAttribute('value', 'Suggestion');
@@ -534,7 +542,7 @@ function features() {
                     inputDescription.value = objectFeature.description;
                     const inputStatus = document.querySelector('#statusFeatureSelect');
                     inputStatus.value = objectFeature.status;
-                    const selectType = document.querySelector('#typeFeature');
+                    const selectType = document.querySelector('#typeFeatureSelect');
 
                     updateFormFeature.id = 'formUpdateFeature';
                     CSRFToken(updateFormFeature.id);

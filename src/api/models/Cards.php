@@ -118,6 +118,7 @@ class Cards extends Database
                 $cardsArray[] = $card;
             }
             return $cardsArray;
+            
         } catch (\Exception $e) {
             echo $e->getMessage();
             return null;
