@@ -38,14 +38,14 @@ class Lists extends Database
     public function createList(array $params, int $userId): bool
     {
         try {
-            $req = "INSERT INTO `list` (`type`, `title`, `description`, `user_id`)
-            VALUES (:type, :title, :description, :user_id)";
+            $req = "INSERT INTO `list` (`type`, `title`, `description`, `checked`, `user_id`)
+            VALUES (:type, :title, :description, :checked, :user_id)";
             $params = [
                 'type' => $params['typeList'],
                 'title' => $params['titleList'],
                 'description' => $params['descriptionList'],
+                'checked' => 0,
                 'user_id' => $userId,
-                'checked' => 0
             ];
 
             $this->executeReq($req, $params);
