@@ -218,6 +218,7 @@ class Lists extends Database
             $params['id'] = $id;
 
             return $query->execute($params);
+
         } catch (\Exception $e) {
             echo $e->getMessage();
             return false;

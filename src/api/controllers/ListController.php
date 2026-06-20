@@ -285,7 +285,9 @@ class ListController
                     ]);
                 };
 
-                $params = ["checked" => $checked];
+                $params = [
+                    "checked" => $checked ? 1 : 0
+                    ];
                 $model->updateChecked($params, $list->id);
 
                 return json_encode([
